@@ -1,0 +1,12 @@
+{
+    "require": {
+        "flundr/core": "^2.0",
+        "google/apiclient": "2.0",
+        "plenigo/plenigo-php-sdk": "*@stable"
+    },
+    "autoload": {
+        "psr-4": {
+			"app\\": "app/"
+		}
+    }
+}

@@ -1,0 +1,75 @@
+/* Variables */
+:root {
+--text-color:#333;
+--blue: #05a5c8;
+}
+
+body, html {width:100%; height: 100%; display: grid;}
+body {margin:0; padding:0; align-content: center; justify-content: center;}
+body {background-color:#d7d7d7}
+
+.login-area {width:600px; height:400px; padding:2em 2em 2em 2em; background-color:white; border-radius:1em}
+
+/* Animations */
+
+
+ /* The animation code */
+@keyframes form-fade-in-with-highlight {
+    from {opacity:0}
+    to {opacity:1}
+}
+
+@keyframes fade-out {
+    from {opacity:1}
+    to {opacity:0}
+}
+
+@keyframes slide-in-out-bottom{
+  0% {
+    opacity:0;
+    transform: translate(0px,400px);
+  }
+  5% {
+    opacity:1;
+    transform: translate(0px,0px);
+  }
+  95% {
+    opacity:1;
+    transform: translate(0px,0px);
+  }
+  100% {
+    opacity:0;
+    transform: translate(0px,400px);
+  }
+}
+
+
+
+
+/* The element to apply the animation to */
+.fade-in {
+    animation-name: form-fade-in-with-highlight;
+    animation-duration: 400ms;
+}
+
+.fade-in-fast {
+    animation-name: form-fade-in-with-highlight;
+    animation-duration: 100ms;
+}
+
+.fade-out {
+    animation-name: fade-out;
+    animation-duration: 400ms;
+    animation-fill-mode: forwards
+}
+
+
+.slide-in-out {
+  animation: slide-in-out-bottom ease-in-out 10s;
+  animation-iteration-count: 1;
+  transform-origin: 50% 50%;
+  animation-fill-mode: forwards;
+}
+.slide-in-out:hover {
+	animation-play-state: paused;
+}

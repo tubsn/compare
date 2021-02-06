@@ -1,0 +1,434 @@
+<?php
+
+namespace app\models;
+use \flundr\database\SQLdb;
+use \flundr\mvc\Model;
+use \flundr\utility\Session;
+use flundr\cache\RequestCache;
+
+class Articles extends Model
+{
+
+	public $from = '0000-00-00';
+	public $to = '3000-01-01';
+
+	protected $db;
+	protected $orderby = 'conversions';
+
+	function __construct() {
+		$this->db = new SQLdb(DB_SETTINGS);
+		$this->db->table = 'articles';
+		$this->db->order = 'DESC';
+
+		if (Session::get('from')) {$this->from = Session::get('from');}
+		if (Session::get('to')) {$this->to = Session::get('to');}
+	}
+
+	public function list() {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+		$limit = 300;
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT *
+			 FROM `articles`
+			 WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			 ORDER BY pubdate DESC
+			 LIMIT 0, $limit"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall();
+		if (empty($output)) {return null;}
+		return $output;
+
+
+	}
+
+	public function list_all() {
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT * FROM `articles` ORDER BY pubdate DESC"
+		);
+		$SQLstatement->execute();
+		$output = $SQLstatement->fetchall();
+		return $output;
+	}
+
+	public function list_unset() {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT *
+			 FROM `articles`
+			 WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate AND type IS NULL
+			 ORDER BY pubdate DESC
+			 LIMIT 0, 5000"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall();
+		if (empty($output)) {return null;}
+		return $output;
+
+	}
+
+	public function list_by($searchterm, $column, $order = 'pubdate') {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT *
+			 FROM `articles`
+			 WHERE `$column` = :term
+			 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			 ORDER BY $order DESC
+			 LIMIT 0, 5000"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to, ':term' => $searchterm]);
+		$output = $SQLstatement->fetchall();
+		if (empty($output)) {return null;}
+		return $output;
+
+	}
+
+	public function sum_up($array, $key) {
+		if (empty($array)) {return 0;}
+		return array_sum(array_column($array,$key));
+	}
+
+	public function add_to_database($articles) {
+		$this->save_to_db($articles);
+	}
+
+
+	public function add_stats($gaData, $id) {
+		$stats = [
+			'pageviews' => $gaData['Pageviews'],
+			'sessions' => $gaData['Sessions'],
+			'conversions' => $gaData['Itemquantity'],
+			'ga_refresh' => date('Y-m-d H:i:s'),
+		];
+		$this->update($stats,$id);
+	}
+
+	public function plus_only(array $options = []) {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT *
+			 FROM `articles`
+			 WHERE `plus` = 1
+			 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			 ORDER BY `pubdate` DESC
+			 LIMIT 0, 500"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall();
+		if (empty($output)) {return null;}
+		return $output;
+
+	}
+
+	public function conversions_only(array $options = []) {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT *
+			 FROM `articles`
+			 WHERE `conversions` > 0
+			 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			 ORDER BY `conversions` DESC
+			 LIMIT 0, 1000"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall();
+		if (empty($output)) {return null;}
+		return $output;
+
+	}
+
+	public function pageviews_only($minimum = 1000) {
+
+		$minimum = intval($minimum);
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT *
+			 FROM `articles`
+			 WHERE `pageviews` > $minimum
+			 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			 ORDER BY `pageviews` DESC
+			 LIMIT 0, 1000"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall();
+		if (empty($output)) {return null;}
+		return $output;
+
+	}
+
+
+	public function by_date_range($start, $end = null) {
+
+		if (is_null($end)) {$end = $start;}
+
+		$start .= ' 00:00:00';
+		$end .= ' 23:59:59';
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT id,pubdate
+			 FROM `articles`
+			 WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			 ORDER BY `pubdate` ASC
+			 LIMIT 0, 300"
+		);
+
+		$SQLstatement->execute([':startDate' => $start, ':endDate' => $end]);
+		$output = $SQLstatement->fetchall();
+		if (empty($output)) {return null;}
+
+		return $output;
+
+	}
+
+	public function by_days_ago($daysAgo = 0) {
+
+		$daysAgo = intval($daysAgo);
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT id,pubdate
+			 FROM `articles`
+			 WHERE DATE(`pubdate`) = CURDATE() - INTERVAL $daysAgo DAY
+			 ORDER BY `pubdate` ASC
+			 LIMIT 0, 500"
+		);
+
+		$SQLstatement->execute();
+		$output = $SQLstatement->fetchall();
+		if (empty($output)) {return null;}
+
+		return $output;
+
+	}
+
+	public function by_weeks_ago($weeksAgo = 1) {
+
+		/* Date Stuff
+	 	#WHERE `pubdate` >= curdate() - INTERVAL DAYOFWEEK(curdate())+6 DAY
+		#AND `pubdate` < curdate() - INTERVAL DAYOFWEEK(curdate())-1 DAY
+
+		WHERE MONTH(columnName) = MONTH(CURRENT_DATE())
+		AND YEAR(columnName) = YEAR(CURRENT_DATE())
+
+		Vor 2 Wochen
+		WHERE YEARWEEK(`pubdate`,1) = YEARWEEK(NOW() - INTERVAL 2 WEEK,1)
+		*/
+
+		$weeksAgo = intval($weeksAgo);
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT id,pubdate
+			 FROM `articles`
+			 WHERE YEARWEEK(`pubdate`,1) = YEARWEEK(NOW() - INTERVAL $weeksAgo WEEK,1)
+
+			 ORDER BY `pubdate` ASC
+			 LIMIT 0, 500"
+		);
+
+		$SQLstatement->execute();
+		$output = $SQLstatement->fetchall();
+		if (empty($output)) {return null;}
+
+		return $output;
+
+	}
+
+
+	public function stats_grouped_by($column = 'ressort', $orderby = 'conversions DESC, ressort ASC') {
+
+		$column = strip_tags($column);
+		$orderby = strip_tags($orderby);
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$cacheExpireMinutes = 1;
+		$statsCache = new RequestCache($column, $cacheExpireMinutes * 60);
+		$cachedData = $statsCache->get();
+		if ($cachedData) {return $cachedData;}
+
+		$SQLstatement = $this->db->connection->prepare(
+
+			"SELECT $column,
+
+       		(SELECT count(id)
+        	FROM `articles` AS temptable
+        	WHERE temptable.$column = maintable.$column
+			AND DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			) as artikel,
+
+       		(SELECT count(id)
+        	FROM `articles` AS temptable
+        	WHERE temptable.$column = maintable.$column
+			AND `plus` IS NULL AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) AS free,
+
+       		(SELECT count(id)
+        	FROM `articles` AS temptable
+        	WHERE temptable.$column = maintable.$column
+			AND `plus` = 1 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as plus,
+
+       		(SELECT sum(pageviews)
+        	FROM `articles` AS temptable
+        	WHERE temptable.$column = maintable.$column
+			AND `pageviews` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as pageviews,
+
+       		(SELECT sum(sessions)
+        	FROM `articles` AS temptable
+        	WHERE temptable.$column = maintable.$column
+			AND `sessions` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as sessions,
+
+       		(SELECT sum(conversions)
+        	FROM `articles` AS temptable
+        	WHERE temptable.$column = maintable.$column
+			AND `conversions` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as conversions
+
+			FROM `articles` AS maintable
+			WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			GROUP BY $column ORDER BY $orderby");
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+
+		$output = $SQLstatement->fetchall(\PDO::FETCH_UNIQUE);
+		if (empty($output)) {return null;}
+
+		unset($output['']); // somehow there´s some null Type exported
+
+		$statsCache->save($output);
+
+		return $output;
+
+	}
+
+
+	public function free_articles_by_ressort() {
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT ressort, count(*)
+			 FROM `articles`
+			 WHERE `plus` IS NULL
+			 GROUP BY ressort
+			 ORDER BY count(*) DESC"
+		);
+
+		$SQLstatement->execute();
+		$output = $SQLstatement->fetchall(\PDO::FETCH_KEY_PAIR);
+		if (empty($output)) {return null;}
+		return $output;
+
+	}
+
+	public function paid_articles_by_ressort() {
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT ressort, count(*)
+			 FROM `articles`
+			 WHERE `plus` = 1
+			 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			 GROUP BY ressort
+			 ORDER BY count(*) DESC"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall(\PDO::FETCH_KEY_PAIR);
+		if (empty($output)) {return null;}
+		return $output;
+
+	}
+
+	public function count($field = '*') {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+		$field = strip_tags($field);
+
+		$SQLstatement = $this->db->connection->prepare("SELECT count($field) FROM `articles` WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate");
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+
+		$output = $SQLstatement->fetch();
+		if (empty($output)) {return null;}
+		return $output['count('.$field.')'];
+	}
+
+
+	public function sum($field) {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+		$field = strip_tags($field);
+
+		$SQLstatement = $this->db->connection->prepare("SELECT sum($field) FROM `articles` WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate");
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+
+		$output = $SQLstatement->fetch();
+		if (empty($output)) {return null;}
+		return $output['sum('.$field.')'];
+	}
+
+	private function save_to_db($articles) {
+
+		// Don't ask how... it works for now... :)
+
+		// Implode Fieldnames and add `Backticks`
+		$fieldNames = array_keys($articles[0]);
+		$PDOValueFieldNames = preg_filter('/^/', ':', $fieldNames);
+		$fieldNames = preg_filter('/^/', '`', $fieldNames);
+		$fieldNames = preg_filter('/$/', '`', $fieldNames);
+		$fields = '(' . implode($fieldNames,',') . ')';
+		$PDOValueFieldNames = '(' . implode($PDOValueFieldNames,', ') . ')';
+
+		$updateFields = [];
+		foreach ($fieldNames as $key => $name) {
+			$updateFields[$key] = $name . '=VALUES(' . $name . ')';
+		}
+
+		$updateFields = implode($updateFields,', ');
+
+		$db = $this->db->connection;
+		$stmt = $db->prepare(
+			"INSERT INTO `articles` $fields
+			VALUES $PDOValueFieldNames
+			ON DUPLICATE KEY UPDATE $updateFields"
+		);
+
+		foreach ($articles as $article) {
+
+			$valuesForBinding = [];
+			foreach ($article as $key => $value) {
+				if (empty($value)) {
+					$value = null;
+				}
+				$valuesForBinding[':'.$key] = $value;
+			}
+
+			try {
+				$stmt->execute($valuesForBinding);
+			} catch (\Exception $e) {
+				echo $e;
+			}
+
+		}
+
+		return $stmt->rowCount();
+	}
+
+}
