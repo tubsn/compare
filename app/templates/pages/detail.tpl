@@ -5,9 +5,11 @@
 	<h1><?=$article['title']?></h1>
 	<a class="noline" target="_blank" href="<?=$article['link']?>"><img style="border-radius:.2em;" src="<?=$article['image']?>"></a>
 	<p class="condensed">Ressort: <b><?=ucwords($article['ressort'])?></b> | Artikel-ID: <b><?=$article['id']?></b> | Publiziert: <b><?=formatDate($article['pubdate'],"d.m.Y</b> H:i")?>&thinsp;Uhr</p>
-	<p><?=$article['description']?><br/><br/> <a class="noline" target="_blank" href="<?=$article['link']?>">&#9657;&nbsp;Artikel auf LR-Online lesen</a></p>
+	<p><?=$article['description']?></p>
 
-	<p><a target="_blank" href="/retresco/<?=$article['id']?>">Retresco Info (Test!)</a></p>
+	<p><a class="button" href="/artikel/<?=$article['id']?>/conversions">Conversion Details (BETA!)</a>
+		&ensp;
+	<a class="button light mt" href="/retresco/<?=$article['id']?>">Retresco Info (auch BETA)</a></p>
 
 </article>
 

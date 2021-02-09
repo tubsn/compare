@@ -20,7 +20,6 @@
 		</li>
 		<?php if (auth_rights('type')): ?>
 		<li><a href="/unset">Unbestimmte Artikel</a></li>
-		<li><a href="/leser">Leserdaten</a></li>
 		<li><a href="/admin" title="Einstellungen">Einstellungen</a></li>
 		<?php endif; ?>
 		<li class="login-icon">

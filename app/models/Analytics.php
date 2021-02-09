@@ -52,6 +52,27 @@ class Analytics
 		];
 	}
 
+	public function conversions_by_article_id($articleID, $from = '30daysAgo', $to = 'today') {
+
+		$articleID = htmlspecialchars($articleID, ENT_QUOTES, 'UTF-8');
+		if (strlen($articleID) != 8) {return false;}
+
+		$this->metrics = 'ga:itemQuantity';
+		$this->from = $from;
+		$this->to = $to;
+		$this->dimensions = 'ga:transactionId,ga:source,ga:city,ga:sessionCount';
+		$this->sort = 'ga:transactionId';
+		$this->filters = 'ga:pagePath=@' . $articleID . ';ga:itemQuantity>0';
+		$this->maxResults = '365';
+
+		$this->makeRequest();
+
+		return $this->dataMergedWithHeaders();
+
+	}
+
+
+
 	public function analyze() {
 
 		$this->metrics = 'ga:pageViews,ga:sessions';

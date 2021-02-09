@@ -12,7 +12,7 @@ class Readers extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Readers,Articles,Plenigo');
+		$this->models('Articles,Plenigo');
 	}
 
 	public function index() {

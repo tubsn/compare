@@ -12,7 +12,7 @@ class Articles extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 		$this->view('DefaultLayout');
 		$this->view->navigation = 'navigation/article-menu';
-		$this->models('Articles,Analytics,Stats');
+		$this->models('Articles,Analytics,Stats,Conversions');
 	}
 
 
@@ -54,6 +54,33 @@ class Articles extends Controller {
 
 		$this->view->render('pages/detail', $viewData);
 	}
+
+	public function conversion_details($id) {
+
+		$viewData['article'] = $this->Articles->get($id);
+
+		$this->Conversions->articleID = $id;
+		$this->Conversions->pubDate = formatDate($viewData['article']['pubdate'],'Y-m-d');
+
+		$viewData['conversions'] = $this->Conversions->collect();
+		$viewData['sources'] = $this->Conversions->group_by('ga_source');
+		$viewData['cities'] = $this->Conversions->group_by('ga_city');
+		$viewData['cancelled'] = $this->Conversions->cancelled_orders();
+
+		$this->view->title = 'Conversion Übersicht';
+		$this->view->navigation = 'navigation/conversion-menu';
+		$this->view->render('pages/conversions', $viewData);
+
+	}
+
+	public function refresh_conversion_details($id) {
+		$article = $this->Articles->get($id);
+		$this->Conversions->articleID = $id;
+		$this->Conversions->pubDate = formatDate($article['pubdate'],'Y-m-d');
+		$this->Conversions->refresh();
+		$this->view->redirect('/artikel/' . $id . '/conversions');
+	}
+
 
 	public function refresh($id) {
 		$pubDate = $this->Articles->get($id,['pubdate'])['pubdate'];
@@ -126,7 +153,7 @@ class Articles extends Controller {
 			case 'vorletzter Monat':
 				Session::set('from', date('Y-m-d', strtotime('first day of this month -2month')));
 				Session::set('to', date('Y-m-d', strtotime('last day of this month -2month')));
-			break;			
+			break;
 			default:
 				Session::set('from', null);
 				Session::set('to', null);

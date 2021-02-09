@@ -5,6 +5,8 @@
 --light-blue: #d6e0eb;
 --light-orange: #f7dec3;
 --orange: #df886d;
+--red: #fddbdb;
+--dark-red: #f77474;
 }
 
 body {margin:0; font-size:1.15em;}
@@ -48,6 +50,8 @@ h3 + h1 {margin-top:-.5em;}
 
 .artikel-typen {min-height:300px; background-color:#f7dec3; margin-bottom:1em; padding:0.5em;}
 
+table.fancy.red th {background-color:#aa4747;}
+table.fancy.red th:hover {background-color:#822b2b;}
 table.fancy tr th:hover {background-color:#486f99}
 table th {cursor:pointer;}
 table th.dir-u {background-image: linear-gradient(to top, #4c739d 0%, #3b618c 82%, #d1d7dd 82%, #80b3ea 100%);}
@@ -65,10 +69,12 @@ th.text-left {text-align:left !important;}
 
 .orange {color: var(--orange)}
 .blue {color: var(--blue)}
+.redish {color: var(--dark-red)}
 
 .light-box {background-color: #eef0f2; display:inline-block; margin-bottom:2em; padding:1em;}
 
 .conversions { background-color: var(--light-orange); display:inline-block; padding:0.1em .3em; border-radius:1em;}
+.cancelled { background-color: var(--red); display:inline-block; padding:0.1em .3em; border-radius:1em;}
 .bluebg, .pageviews { background-color: var(--light-blue); display:inline-block; padding:0.1em .5em; border-radius:1em;}
 
 .pointer {cursor:pointer;}

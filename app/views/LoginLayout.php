@@ -11,7 +11,7 @@ class LoginLayout extends htmlView {
 	public $title = 'Login Bereich';
 	public $description = '';
 	public $css = ['/styles/css/defaults.css', '/styles/css/login.css'];
-	public $fonts = 'https://fonts.googleapis.com/css?family=Fira+Sans:400,400i,600|Fira+Sans+Condensed:400';
+	public $fonts = 'https://fonts.googleapis.com/css?family=Fira+Sans:400,400i,600|Fira+Sans+Condensed:400,600';
 	public $js = '/styles/js/main.js';
 	public $framework = '';
 	public $meta = [

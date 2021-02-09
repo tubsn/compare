@@ -13,7 +13,10 @@ $header = [
 	'Autor',
 	'Pageviews',
 	'Sessions',
-	'Conversions'];
+	'Conversions',
+	'Kündiger',
+	'Haltedauer'
+];
 
 // First Line of xls
 fputcsv($output, $header, ';');
@@ -32,6 +35,8 @@ foreach ($articles as $article) {
 		$article['pageviews'],
 		$article['sessions'],
 		$article['conversions'],
+		$article['cancelled'],
+		$article['retention_days'],
 	], ';');
 }
 

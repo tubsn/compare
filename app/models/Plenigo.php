@@ -16,6 +16,8 @@ class Plenigo
 
 	public function user($plenigoID) {
 
+		if (!$plenigoID) {return null;}
+
 		$user = CompanyService::getUserByIds($plenigoID);
 		$user = $user->getElements();
 		$user = $this->map_user_data($user[0]);
@@ -23,9 +25,48 @@ class Plenigo
 
 	}
 
+	public function order_with_details($orderID) {
+
+		if (!$orderID) {return null;}
+
+		$order = $this->order($orderID);
+
+		$subscriptions = $this->subscriptions($order['customerID']);
+
+		$order['subscription_count'] = count($subscriptions);
+
+		// Only interested in the latest Subscription
+		$order['subscription'] = $subscriptions[0];
+
+		// No use for Customer Products right now
+		// $order['products'] = $this->products($order['customerID']);
+
+		$user = $this->user($order['customerID']);
+		$order['user'] = $user;
+
+		return $order;
+
+	}
+
+	public function order($orderID) {
+
+		try {
+			$order = CompanyService::getOrder($orderID);
+			$order = $this->map_order_data($order);
+		} catch (\Exception $e) {
+			return null;
+		}
+
+		return $order;
+
+	}
+
 	public function products($plenigoID) {
 
+		if (!$plenigoID) {return null;}
+
 		$plenigoProducts = UserService::getProductsBought($plenigoID);
+		if (empty($plenigoProducts)) {return null;}
 
 		$products = [];
 
@@ -39,8 +80,12 @@ class Plenigo
 
 	public function subscriptions($plenigoID) {
 
+		if (!$plenigoID) {return null;}
+
 		$plenigoSubscriptions = UserService::getSubscriptions($plenigoID);
 		$plenigoSubscriptions = $plenigoSubscriptions->getElements();
+
+		if (empty($plenigoSubscriptions)) {return null;}
 
 		$subscriptions = [];
 
@@ -60,8 +105,16 @@ class Plenigo
 		$product['price'] = $plenigoProduct->price;
 		$product['currency'] = $plenigoProduct->currency;
 		$product['productType'] = $plenigoProduct->productType;
-		$product['startDate'] = strtotime($plenigoProduct->startDate);
-		$product['endDate'] = strtotime($plenigoProduct->endDate);
+
+		$product['startDate'] = null;
+		if ($plenigoProduct->startDate) {
+			$product['startDate'] = date('Y-m-d H:i:s', strtotime($plenigoProduct->startDate));
+		}
+
+		$product['endDate'] = null;
+		if ($plenigoProduct->endDate) {
+			$product['endDate'] = date('Y-m-d H:i:s', strtotime($plenigoProduct->endDate));
+		}
 
 		return $product;
 
@@ -74,8 +127,22 @@ class Plenigo
 		$subscription['price'] = $plenigoSubscription->getPrice();
 		$subscription['currency'] = $plenigoSubscription->getCurrency();
 		$subscription['paymentMethod'] = $plenigoSubscription->getPaymentMethod();
-		$subscription['startDate'] = strtotime($plenigoSubscription->getStartDate());
-		$subscription['cancellationDate'] = strtotime($plenigoSubscription->getCancellationDate());
+
+		$subscription['startDate'] = null;
+		if ($plenigoSubscription->getStartDate()) {
+			$subscription['startDate'] = date('Y-m-d H:i:s', strtotime($plenigoSubscription->getStartDate()));
+		}
+
+		$subscription['cancellationDate'] = null;
+		if ($plenigoSubscription->getCancellationDate()) {
+			$subscription['cancellationDate'] = date('Y-m-d H:i:s', strtotime($plenigoSubscription->getCancellationDate()));
+		}
+
+		$subscription['endDate'] = null;
+		if ($plenigoSubscription->getEndDate()) {
+			$subscription['endDate'] = date('Y-m-d H:i:s', strtotime($plenigoSubscription->getEndDate()));
+		}
+
 		$subscription['active'] = $plenigoSubscription->getActive(); // not working?
 		$subscription['term'] = $plenigoSubscription->getTerm();
 		$subscription['orderId'] = $plenigoSubscription->getOrderId();
@@ -85,8 +152,35 @@ class Plenigo
 
 	}
 
+	private function map_order_data($plenigoOrder) {
+
+		$order['orderID'] = $plenigoOrder->getOrderId();
+		$order['customerID'] = $plenigoOrder->getCustomerId();
+		$order['externalCustomerID'] = $plenigoOrder->getExternalCustomerId();
+
+		$order['orderDate'] = null;
+		if ($plenigoOrder->getOrderDate()) {
+			$order['orderDate'] = date('Y-m-d H:i:s', strtotime($plenigoOrder->getOrderDate()));
+		}
+
+		// Right now we only have Orders with one position
+		$productInfo = $plenigoOrder->getOrderItems()[0];
+
+		$order['productTitle'] = $productInfo->getTitle();
+		$order['productID'] = $productInfo->getProductId();
+		$order['productPrice'] = $productInfo->getPrice();
+		$order['orderStatus'] = $productInfo->getStatus();
+
+		return $order;
+
+	}
 
 	private function map_user_data($plenigoUser) {
+
+		$user['customerId'] = $plenigoUser->getCustomerId();
+		$user['externalCustomerId'] = $plenigoUser->getExternalCustomerId();
+		$user['agreementState'] = $plenigoUser->getAgreementState();
+		$user['userState'] = $plenigoUser->getUserState();
 
 		$user['firstname'] = $plenigoUser->getFirstName();
 		$user['lastname'] = $plenigoUser->getName();

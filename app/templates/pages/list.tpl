@@ -38,7 +38,7 @@
 <?php if (isset($pageviews) || isset($conversions)): ?>
 
 <p class="light-box" style="margin-bottom:2em;">
-Artikel: <b><?=$numberOfArticles?></b> &emsp; Klicks: <b class="blue"><?=number_format($pageviews,0,',','.')?></b> &emsp; Conversions: <b class="orange"><?=$conversions?></b>
+Artikel: <b><?=$numberOfArticles?></b> &emsp; Klicks: <b class="blue"><?=number_format($pageviews,0,',','.')?></b> &emsp; Conversions: <b class="orange"><?=$conversions?></b> &emsp; Kündiger: <b class="redish"><?=$cancelled ?? '0'?></b> 
 </p>
 
 <?php endif; ?>
@@ -61,6 +61,7 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Klicks: <b class="blue"><?=number_
 	<?php if (auth_rights('type')): ?><th>Autor</th><?php endif; ?>
 	<th>Klicks</th>
 	<th>Conv</th>
+	<th>Künd</th>
 	<th>Datum</th>
 </tr>
 </thead>
@@ -68,7 +69,7 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Klicks: <b class="blue"><?=number_
 <?php foreach ($articles as $article): ?>
 <tr>
 	<td class="narrower text-right"><?=$article['kicker']?> </td>
-	<td><?php if ($article['plus']): ?><div class="bluebg">+</div><?php endif; ?></td>
+	<td><?php if ($article['plus']): ?><div class="bluebg"><a class="noline" href="/artikel/<?=$article['id']?>/conversions/refresh">+</a></div><?php endif; ?></td>
 	<td><a href="/artikel/<?=$article['id']?>"><?=$article['title']?></a> </td>
 	<td class="type">
 		<?php if (auth_rights('type')): ?>
@@ -94,7 +95,8 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Klicks: <b class="blue"><?=number_
 	<?php endif ?>
 	<td class="text-right"><div<?php if ($article['pageviews'] > 2500): ?> class="pageviews"<?php endif; ?>><?=number_format($article['pageviews'],0,'.','.')?></div></td>
 	<td class="text-right"><div<?php if ($article['conversions'] > 0): ?> class="conversions"<?php endif; ?>><?=number_format($article['conversions'],0,'.','.')?></div></td>
-	<td data-sortdate="<?=$article['pubdate']?>" ><?=formatDate($article['pubdate'],"d.m.Y")?>&nbsp;<small><?=formatDate($article['pubdate'],"H:i")?>&nbsp;Uhr</small></td>
+	<td class="narrower"><div<?php if ($article['cancelled'] > 0): ?> class="cancelled"<?php endif; ?>><?=$article['cancelled'] ?? '-'?></div></td>
+	<td data-sortdate="<?=$article['pubdate']?>" ><?=formatDate($article['pubdate'],"d.m.Y")?></td>
 </tr>
 <?php endforeach; ?>
 </tbody>
