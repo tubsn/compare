@@ -6,9 +6,10 @@
 		<li><a href="/ressort">Ressorts</a></li>
 		<li><a href="/type">Inhalte</a></li>
 		<!--<li><a href="/plus">Plus-Artikel</a></li>-->
-		<li><a href="/pageviews">Klick-Highlights</a></li>
+		<li><a href="/pageviews">Klicks</a></li>
 		<li><a href="/conversions">Conversions</a></li>
 		<li><a href="/stats">Statistiken</a></li>
+		<li><a href="/stats/cancellations">Kündiger</a></li>
 	</ul>
 
 	<ul>

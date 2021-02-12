@@ -1,31 +1,6 @@
 <main>
 
-<div class="calendar-container">
-	<div class="calendar-picker">
-		<form action="/settimeframe" method="post">
-			<select name="timeframe" class="js-timeframe">
-				<?php if (session('timeframe') == 'Zeitraum'): ?>
-				<option>gewählter Zeitraum</option>
-				<?php endif; ?>
-				<?php foreach (TIMEFRAMES as $timeframe): ?>
-				<?php if (session('timeframe') == $timeframe): ?>
-				<option selected><?=session('timeframe')?></option>
-				<?php else: ?>
-				<option><?=$timeframe?></option>
-				<?php endif; ?>
-				<?php endforeach ?>
-			</select>
-		</form>
-		&thinsp;
-		<form method="post" action="/settimeframe">
-			<fieldset>
-				<input type="date" name="from" value="<?=session('from')?>"> -
-				<input type="date" name="to" value="<?=session('to')?>">
-			</fieldset>
-			<button class="calendar-button" type="submit"></button>
-		</form>
-	</div>
-</div>
+<?php include tpl('navigation/date-picker');?>
 
 <?php if ($page['title']): ?>
 <h1><?=$page['title']?></h1>
@@ -38,7 +13,7 @@
 <?php if (isset($pageviews) || isset($conversions)): ?>
 
 <p class="light-box" style="margin-bottom:2em;">
-Artikel: <b><?=$numberOfArticles?></b> &emsp; Klicks: <b class="blue"><?=number_format($pageviews,0,',','.')?></b> &emsp; Conversions: <b class="orange"><?=$conversions?></b> &emsp; Kündiger: <b class="redish"><?=$cancelled ?? '0'?></b> 
+Artikel: <b><?=$numberOfArticles?></b> &emsp; Klicks: <b class="blue"><?=number_format($pageviews,0,',','.')?></b> &emsp; Conversions: <b class="orange"><?=$conversions?></b> &emsp; Kündiger: <b class="redish"><?=$cancelled ?? '0'?></b>
 </p>
 
 <?php endif; ?>
@@ -58,7 +33,7 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Klicks: <b class="blue"><?=number_
 	<th>Titel</th>
 	<th>Inhaltstyp</th>
 	<th>Ressort</th>
-	<?php if (auth_rights('type')): ?><th>Autor</th><?php endif; ?>
+	<?php if (auth_rights('author')): ?><th>Autor</th><?php endif; ?>
 	<th>Klicks</th>
 	<th>Conv</th>
 	<th>Künd</th>
@@ -90,7 +65,7 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Klicks: <b class="blue"><?=number_
 		<?php endif; ?>
 	</td>
 	<td class="nowrap"><a href="/ressort/<?=urlencode(str_replace('/', '-slash-', $article['ressort']))?>"><?=ucwords($article['ressort'])?></a></td>
-	<?php if (auth_rights('type')): ?>
+	<?php if (auth_rights('author')): ?>
 	<td class="narrow"><a href="/author/<?=urlencode(str_replace('/', '-slash-', $article['author']))?>"><?=$article['author']?></a></td>
 	<?php endif ?>
 	<td class="text-right"><div<?php if ($article['pageviews'] > 2500): ?> class="pageviews"<?php endif; ?>><?=number_format($article['pageviews'],0,'.','.')?></div></td>

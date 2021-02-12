@@ -109,7 +109,7 @@
 		<td>Kündigungsdatum:</td>
 		<td>
 			<?php if ($conversion['cancelled']): ?>
-			<?=formatDate($conversion['subscription_cancellation_date'], 'd.m.Y H:i')?> Uhr 
+			<?=formatDate($conversion['subscription_cancellation_date'], 'd.m.Y H:i')?> Uhr
 			<br/>(Haltedauer: <?=$conversion['retention'];?> Tage)
 			<?php else: ?>
 			-
@@ -135,7 +135,7 @@
 	</tr>
 	<tr>
 		<td>Bezahlmethode:</td>
-		<td><?=$conversion['subscription_paymentMethod'];?></td>
+		<td><?=$conversion['subscription_payment_method'];?></td>
 	</tr>
 	<tr>
 		<td>Consent:</td>

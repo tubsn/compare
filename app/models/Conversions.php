@@ -9,6 +9,9 @@ use flundr\cache\RequestCache;
 class Conversions extends Model
 {
 
+	public $from = '0000-00-00';
+	public $to = '3000-01-01';
+
 	public $articleID = null;
 	public $pubDate = '30daysAgo';
 
@@ -20,6 +23,7 @@ class Conversions extends Model
 		$this->db = new SQLdb(DB_SETTINGS);
 		$this->db->table = 'conversions';
 		$this->db->primaryIndex = 'transaction_id';
+		$this->db->orderby = 'order_date';
 		$this->analytics = new Analytics();
 		$this->plenigo = new Plenigo();
 	}
@@ -48,7 +52,6 @@ class Conversions extends Model
 
 	}
 
-
 	public function update_article() {
 		$article = new Articles();
 		$data['cancelled'] = count($this->cancelled_orders());
@@ -58,9 +61,37 @@ class Conversions extends Model
 
 	public function group_by($index) {
 		$data = array_column($this->transactions,$index);
-		$data = array_count_values($data);
+		$data = @array_count_values($data); // @ Surpresses Warnings with Null Values
 		arsort($data);
 		return $data;
+	}
+
+	public function group_cancelled_orders_by($index) {
+		$data = array_column($this->cancelled_orders(),$index);
+		$data = @array_count_values($data); // @ Surpresses Warnings with Null Values
+		arsort($data);
+		return $data;
+	}
+
+	public function group_by_combined($index) {
+
+		$combined = [];
+		$active = $this->group_by($index);
+		$cancelled = $this->group_cancelled_orders_by($index);
+
+		foreach ($active as $key => $value) {
+
+			$combined[$key]['active'] = $value;
+
+			if (isset($cancelled[$key])) {
+				$combined[$key]['cancelled'] = $cancelled[$key];
+			}
+			else {
+				$combined[$key]['cancelled'] = 0;
+			}
+
+		}
+		return $combined;
 	}
 
 
@@ -81,13 +112,20 @@ class Conversions extends Model
 
 	}
 
+	public function list() {
+
+		$this->transactions = $this->combined_with_article_data();
+		return $this->transactions;
+
+	}
 
 	private function load_from_db() {
 
 		$SQLstatement = $this->db->connection->prepare(
 			"SELECT *
 			 FROM `conversions`
-			 WHERE `article_id` = :id"
+			 WHERE `article_id` = :id
+			 ORDER BY `order_date` DESC"
 		);
 
 		$SQLstatement->execute([':id' => $this->articleID]);
@@ -109,6 +147,37 @@ class Conversions extends Model
 		}
 	}
 
+
+	private function combined_with_article_data() {
+
+		if (Session::get('from')) {$this->from = Session::get('from');}
+		if (Session::get('to')) {$this->to = Session::get('to');}
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT `conversions`.*,
+
+			 Articles.ressort as article_ressort,
+			 Articles.type as article_type,
+			 Articles.author as article_author
+
+			 FROM `conversions`
+
+			 LEFT JOIN `articles` AS Articles
+	 		 ON `conversions`.article_id = Articles.id
+
+			 WHERE DATE(`order_date`) BETWEEN :startDate AND :endDate
+
+			 ORDER BY `order_date` DESC"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall();
+		return $output;
+
+	}
 
 	private function collect_analytics_data() {
 
@@ -178,7 +247,7 @@ class Conversions extends Model
 				if ($plenigo['subscription']) {
 					$data['subscription_title']				= $plenigo['subscription']['title'];
 					$data['subscription_price']				= $plenigo['subscription']['price'];
-					$data['subscription_paymentMethod']		= $plenigo['subscription']['paymentMethod'];
+					$data['subscription_payment_method']		= $plenigo['subscription']['paymentMethod'];
 					$data['subscription_start_date']		= $plenigo['subscription']['startDate'];
 					$data['subscription_cancellation_date']	= $plenigo['subscription']['cancellationDate'];
 					$data['subscription_end_date']			= $plenigo['subscription']['endDate'];

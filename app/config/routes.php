@@ -16,12 +16,14 @@ $routes->get('/type', 'Lists@type');
 $routes->get('/plus', 'Lists@plus');
 $routes->get('/conversions', 'Lists@conversions');
 $routes->get('/pageviews', 'Lists@pageviews');
-$routes->get('/stats', 'Stats@index');
 $routes->post('/settimeframe', 'Articles@set_timeframe');
 
 $routes->get('/retresco/{id:\d+}', 'Articles@retresco');
-
 $routes->get('/cards', 'Lists@cards');
+
+$routes->get('/stats', 'Stats@index');
+$routes->get('/stats/cancellations', 'Stats@cancellations');
+$routes->get('/conv', 'Stats@cancellations');
 
 $routes->get('/artikel/{id:\d+}', 'Articles@detail');
 $routes->get('/artikel/{id:\d+}/refresh', 'Articles@refresh');
@@ -29,6 +31,9 @@ $routes->get('/artikel/{id:\d+}/delete', 'Articles@delete');
 $routes->post('/artikel/{id:\d+}', 'Articles@edit');
 $routes->get('/artikel/{id:\d+}/conversions', 'Articles@conversion_details');
 $routes->get('/artikel/{id:\d+}/conversions/refresh', 'Articles@refresh_conversion_details');
+$routes->get('/artikel/{id:\d+}/refresh_all', 'Articles@refresh_overview');
+
+
 
 $routes->get('/search', 'Search@show');
 

@@ -1,16 +1,6 @@
 <main>
 
-<form action="/settimeframe" method="post" style="float:right">
-	<select name="timeframe" class="js-timeframe">
-		<?php foreach (TIMEFRAMES as $timeframe): ?>
-		<?php if (session('timeframe') == $timeframe): ?>
-		<option selected><?=session('timeframe')?></option>
-		<?php else: ?>
-		<option><?=$timeframe?></option>
-		<?php endif; ?>
-		<?php endforeach ?>
-	</select>
-</form>
+<?php include tpl('navigation/date-picker');?>
 
 
 
@@ -30,7 +20,7 @@
 		</h1>
 
 		<?=$article['type']?>
-		
+
 		<a href="/ressort/<?=urlencode(str_replace('/', '-slash-', $article['ressort']))?>"><?=ucwords($article['ressort'])?></a>
 		<a href="/author/<?=urlencode(str_replace('/', '-slash-', $article['author']))?>"><?=$article['author']?></a>
 		<div<?php if ($article['pageviews'] > 2500): ?> class="pageviews"<?php endif; ?>><?=number_format($article['pageviews'],0,'.','.')?></div>

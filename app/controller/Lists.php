@@ -85,7 +85,7 @@ class Lists extends Controller {
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
-		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');		
+		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
 		$viewData['numberOfArticles'] = $count;
 
 		$this->view->title = 'Klick-Highlights: ' . $count;
@@ -95,7 +95,7 @@ class Lists extends Controller {
 
 	public function author($author) {
 
-		if (!Auth::has_right('type')) {
+		if (!Auth::has_right('author')) {
 			throw new \Exception("Keine Berechtigung", 403);
 		}
 
@@ -109,7 +109,7 @@ class Lists extends Controller {
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
-		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');		
+		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
 		$viewData['numberOfArticles'] = $count;
 
 		$this->view->title = 'Autorenseite - '. $author . ' - Artikel: ' . $count;
@@ -129,7 +129,7 @@ class Lists extends Controller {
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
-		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');		
+		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
 		$viewData['numberOfArticles'] = $count;
 
 		$this->view->navigation = 'navigation/ressort-menu';
@@ -149,7 +149,7 @@ class Lists extends Controller {
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
-		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');		
+		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
 		$viewData['numberOfArticles'] = $count;
 
 		$this->view->navigation = 'navigation/type-menu';

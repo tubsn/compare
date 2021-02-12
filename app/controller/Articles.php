@@ -163,13 +163,18 @@ class Articles extends Controller {
 	}
 
 
-
 	private function refresh_stats($id, $pubDate = '30daysAgo') {
 		$gaData = $this->Analytics->byArticleID($id, $pubDate);
 		$dailyStats = $gaData['details'];
 		$lifeTimeStats = $gaData['stats'];
 		$this->Articles->add_stats($lifeTimeStats,$id);
 		$this->Stats->add($dailyStats,$id);
+
+		// Transaction Stats
+		$this->Conversions->articleID = $id;
+		$this->Conversions->pubDate = $pubDate;
+		$this->Conversions->refresh();
+
 	}
 
 }
