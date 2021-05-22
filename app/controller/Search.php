@@ -18,17 +18,22 @@ class Search extends Controller {
 
 		$query = $_GET['q'] ?? null;
 		$query = htmlspecialchars($query);
-		Session::set('referer', '/search' . '?=' . $query);
+		Session::set('referer', '/search' . '?q=' . $query);
 
 		if (empty($query)) {
 			throw new \Exception("Bitte Suchbegriff eingeben", 400);
 		}
 
-		$articles = $this->Articles->search($query, ['title','kicker','description']);
+		if (preg_match("/^[0-9]{8}$/", $query)) {
+			$this->view->redirect('/artikel/' . $query);
+		}
+
+		$articles = $this->Articles->search($query, ['id','title','kicker','description']);
 		$viewData['articles'] = $articles;
 		$viewData['query'] = $query;
 		$viewData['pageviews'] = $this->Articles->sum_up($articles,'pageviews');
 		$viewData['conversions'] = $this->Articles->sum_up($articles,'conversions');
+		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
 		$viewData['numberOfArticles'] = 0;
 
 		if (is_array($articles)) {

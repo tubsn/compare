@@ -8,16 +8,31 @@ class ArticleImport
 
 	function __construct() {
 
+		$this->portalURL = PORTAL_URL;
+
 	}
 
 	public function rss($url) {
 
-		$xml = simplexml_load_string($this->curl($url));
+		$rssData = $this->curl($url);
 		$adapter = new LR_RSS_Adapter;
-		return $adapter->convert($xml);
+		return $adapter->convert($rssData);
 
 	}
 
+	public function detail_rss($articleID) {
+
+		$url = $this->portalURL . '/' . $articleID . '?_XML=RSS';
+		$curlData = $this->curl_with_redirect($url);
+
+		$url = $curlData['url'];
+
+		$rssData = $curlData['data'];
+
+		$adapter = new LR_RSS_Adapter;
+		return $adapter->convert_news_markup($rssData, $url);
+
+	}
 
 	private function curl($url) {
 
@@ -33,16 +48,40 @@ class ArticleImport
 		}
 
 		$recievedData = curl_exec($ch);
+
 		curl_close ($ch);
 
 		return $recievedData;
 
 	}
 
+	private function curl_with_redirect($url) {
 
+		$ch = curl_init();
+		curl_setopt ($ch, CURLOPT_URL, $url);
+		curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, 0);
+		curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt ($ch, CURLOPT_HEADER, 0);
+		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
 
+		if (curl_exec($ch) === false) {
+			dd(curl_error($ch));
+		}
 
+		$recievedData = curl_exec($ch);
+		$lastUrl = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+		$responseCode = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
 
+		curl_close ($ch);
+
+		if ($responseCode == 404) {
+			throw new \Exception("Artikel nicht gefunden oder kann nicht importiert werden", 404);
+		}
+
+		return ['data' => $recievedData, 'url' => $lastUrl];
+
+	}
 
 
 }

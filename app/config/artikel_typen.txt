@@ -2,7 +2,6 @@ Sport
 Kultur
 Politik/Wirtschaft
 Crime/Blaulicht
-Verkehr/Infrastruktur
 Soziales
 Gesundheit
 Bildung
@@ -10,3 +9,8 @@ Tourismus
 Geschichte
 Landwirtschaft
 Sonstiges
+Familien
+Sportfans
+Gesundheitsbewusste
+Foodies
+Berufstätige

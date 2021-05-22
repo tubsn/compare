@@ -2,195 +2,172 @@
 
 namespace app\models;
 
-use \plenigo\PlenigoManager;
-use \plenigo\services\CompanyService;
-use \plenigo\services\UserService;
-
+use app\importer\PlenigoImport;
 
 class Plenigo
 {
 
-	function __construct($jsonFileName = null) {
-		PlenigoManager::configure(PLENIGO_SECRET, PLENIGO_CUSTOMER_ID);
+	private $plenigo;
+
+	function __construct() {
+		$this->plenigo = new PlenigoImport();
 	}
 
-	public function user($plenigoID) {
-
-		if (!$plenigoID) {return null;}
-
-		$user = CompanyService::getUserByIds($plenigoID);
-		$user = $user->getElements();
-		$user = $this->map_user_data($user[0]);
-		return $user;
-
-	}
 
 	public function order_with_details($orderID) {
 
+
 		if (!$orderID) {return null;}
 
-		$order = $this->order($orderID);
+		$order = $this->plenigo->order($orderID);
 
-		$subscriptions = $this->subscriptions($order['customerID']);
+		if (isset($order['errorCode'])) {return null;}
 
-		$order['subscription_count'] = count($subscriptions);
+		$subscription = $this->active_subscription($order);
+		$subscription = $this->map_subscription_data($subscription);
 
-		// Only interested in the latest Subscription
-		$order['subscription'] = $subscriptions[0];
+		$customer = $this->map_customer($order);
+		$order = $this->map_order($order);
 
-		// No use for Customer Products right now
-		// $order['products'] = $this->products($order['customerID']);
+		$data = array_merge($order, $subscription, $customer);
 
-		$user = $this->user($order['customerID']);
-		$order['user'] = $user;
-
-		return $order;
+		return $data;
 
 	}
 
-	public function order($orderID) {
 
-		try {
-			$order = CompanyService::getOrder($orderID);
-			$order = $this->map_order_data($order);
-		} catch (\Exception $e) {
+	private function map_order($org) {
+
+		$product = $org['items'][0];
+
+		//$new['order_id'] = $org['orderId'];
+		$new['order_product_id'] = $product['productId'];
+		$new['order_date'] = formatDate($org['orderDate'], 'Y-m-d H:i:s');
+		$new['order_title'] = $product['title'];
+		$new['order_price'] = $product['price'];
+		$new['order_status'] = $org['status'];
+
+		return $new;
+
+	}
+
+
+	private function map_customer($org) {
+
+
+		if (empty($org['invoiceAddress'])) {
+			$address = $org['items'][0]['deliveryAddress'];
+		}
+
+		else {$address = $org['invoiceAddress'];}
+
+		$new['customer_id'] = $org['invoiceCustomerId'];
+		$new['customer_city'] = $address['city'];
+
+		switch ($address['salutation']) {
+			case 'MRS':
+				$new['customer_gender'] = 'female';
+				break;
+			case 'MR':
+				$new['customer_gender'] = 'male';
+				break;
+			case 'FIRM':
+				$new['customer_gender'] = 'company';
+				break;
+			default:
+				$new['customer_gender'] = null;
+				break;
+		}
+
+		return $new;
+
+	}
+
+
+	private function map_subscription_data($org) {
+
+		$new['cancelled'] = 0;
+		$new['retention'] = null;
+
+		$new['subscription_title'] = $org['items'][0]['title'];
+		$new['subscription_price'] = $org['items'][0]['price'];
+		$new['subscription_payment_method'] = $org['paymentMethod'];
+		$new['subscription_start_date'] = formatDate($org['startDate'], 'Y-m-d H:i:s');
+		$new['subscription_cancellation_date'] = formatDate($org['cancellationDate'], 'Y-m-d H:i:s');
+		$new['subscription_end_date'] = formatDate($org['endDate'], 'Y-m-d H:i:s');
+
+		if ($new['subscription_cancellation_date']) {
+			$new['cancelled'] = 1;
+
+			$start = new \DateTime(formatDate($org['startDate'], 'Y-m-d'));
+			$end = new \DateTime(formatDate($org['cancellationDate'], 'Y-m-d'));
+			$interval = $start->diff($end);
+			$new['retention'] = $interval->format('%r%a');
+		}
+
+		return $new;
+
+	}
+
+
+	private function active_subscription($order) {
+
+		if (!isset($order['items'][0])) {
 			return null;
 		}
 
-		return $order;
+		$subscriptionID = $order['items'][0]['subscriptionItemId'];
+		$subscription = $this->plenigo->subscription($subscriptionID);
 
-	}
+		if (empty($subscription['cancellationDate']) && $subscription['status'] == 'INACTIVE') {
 
-	public function products($plenigoID) {
-
-		if (!$plenigoID) {return null;}
-
-		$plenigoProducts = UserService::getProductsBought($plenigoID);
-		if (empty($plenigoProducts)) {return null;}
-
-		$products = [];
-
-		foreach ($plenigoProducts['subscriptions'] as $key => $product) {
-			$products[$key] = $this->map_product_data($product);
+			$subscription = $this->plenigo->chain($subscription['chainId']);
+			$subscription = $subscription['items'][0];
 		}
-
-		return $products;
-
-	}
-
-	public function subscriptions($plenigoID) {
-
-		if (!$plenigoID) {return null;}
-
-		$plenigoSubscriptions = UserService::getSubscriptions($plenigoID);
-		$plenigoSubscriptions = $plenigoSubscriptions->getElements();
-
-		if (empty($plenigoSubscriptions)) {return null;}
-
-		$subscriptions = [];
-
-		foreach ($plenigoSubscriptions as $key => $subscription) {
-			$subscriptions[$key] = $this->map_subscription_data($subscription);
-		}
-
-		return $subscriptions;
-
-	}
-
-	private function map_product_data($plenigoProduct) {
-
-		$product['id'] = $plenigoProduct->productId;
-		$product['title'] = $plenigoProduct->title;
-		$product['paymentMethod'] = $plenigoProduct->paymentMethod;
-		$product['price'] = $plenigoProduct->price;
-		$product['currency'] = $plenigoProduct->currency;
-		$product['productType'] = $plenigoProduct->productType;
-
-		$product['startDate'] = null;
-		if ($plenigoProduct->startDate) {
-			$product['startDate'] = date('Y-m-d H:i:s', strtotime($plenigoProduct->startDate));
-		}
-
-		$product['endDate'] = null;
-		if ($plenigoProduct->endDate) {
-			$product['endDate'] = date('Y-m-d H:i:s', strtotime($plenigoProduct->endDate));
-		}
-
-		return $product;
-
-	}
-
-	private function map_subscription_data($plenigoSubscription) {
-
-		$subscription['title'] = $plenigoSubscription->getTitle();
-		$subscription['productId'] = $plenigoSubscription->getProductId();
-		$subscription['price'] = $plenigoSubscription->getPrice();
-		$subscription['currency'] = $plenigoSubscription->getCurrency();
-		$subscription['paymentMethod'] = $plenigoSubscription->getPaymentMethod();
-
-		$subscription['startDate'] = null;
-		if ($plenigoSubscription->getStartDate()) {
-			$subscription['startDate'] = date('Y-m-d H:i:s', strtotime($plenigoSubscription->getStartDate()));
-		}
-
-		$subscription['cancellationDate'] = null;
-		if ($plenigoSubscription->getCancellationDate()) {
-			$subscription['cancellationDate'] = date('Y-m-d H:i:s', strtotime($plenigoSubscription->getCancellationDate()));
-		}
-
-		$subscription['endDate'] = null;
-		if ($plenigoSubscription->getEndDate()) {
-			$subscription['endDate'] = date('Y-m-d H:i:s', strtotime($plenigoSubscription->getEndDate()));
-		}
-
-		$subscription['active'] = $plenigoSubscription->getActive(); // not working?
-		$subscription['term'] = $plenigoSubscription->getTerm();
-		$subscription['orderId'] = $plenigoSubscription->getOrderId();
-		$subscription['subscriptionId'] = $plenigoSubscription->getSubscriptionId();
 
 		return $subscription;
 
 	}
 
-	private function map_order_data($plenigoOrder) {
 
-		$order['orderID'] = $plenigoOrder->getOrderId();
-		$order['customerID'] = $plenigoOrder->getCustomerId();
-		$order['externalCustomerID'] = $plenigoOrder->getExternalCustomerId();
+	private function map_fields($data) {
 
-		$order['orderDate'] = null;
-		if ($plenigoOrder->getOrderDate()) {
-			$order['orderDate'] = date('Y-m-d H:i:s', strtotime($plenigoOrder->getOrderDate()));
+
+		$data['cancelled'] = 0;
+		$data['retention'] = null;
+
+		$data['customer_id']			= $plenigo['customerID'];
+		$data['external_customer_id']	= $plenigo['externalCustomerID'];
+
+		$data['order_product_id']		= $plenigo['productID'];
+		$data['order_date']				= $plenigo['orderDate'];
+		$data['order_title']			= $plenigo['productTitle'];
+		$data['order_price']			= $plenigo['productPrice'];
+		$data['order_status']			= $plenigo['orderStatus'];
+
+		$data['subscription_title']				= $plenigo['subscription']['title'];
+		$data['subscription_price']				= $plenigo['subscription']['price'];
+		$data['subscription_payment_method']	= $plenigo['subscription']['paymentMethod'];
+		$data['subscription_start_date']		= $plenigo['subscription']['startDate'];
+		$data['subscription_cancellation_date']	= $plenigo['subscription']['cancellationDate'];
+		$data['subscription_end_date']			= $plenigo['subscription']['endDate'];
+		$data['subscription_count']				= $plenigo['subscription_count'];
+
+		if ($plenigo['subscription']['cancellationDate']) {
+			$data['cancelled'] = 1;
+
+			$start = new \DateTime(formatDate($plenigo['subscription']['startDate'], 'Y-m-d'));
+			$end = new \DateTime(formatDate($plenigo['subscription']['cancellationDate'], 'Y-m-d'));
+			$interval = $start->diff($end);
+			$data['retention'] = $interval->format('%r%a');
 		}
 
-		// Right now we only have Orders with one position
-		$productInfo = $plenigoOrder->getOrderItems()[0];
+		$data['customer_consent'] = $plenigo['user']['agreementState'];
+		$data['customer_status'] = $plenigo['user']['userState'];
+		$data['customer_gender'] = $plenigo['user']['gender'];
+		$data['customer_city'] = $plenigo['user']['city'];
 
-		$order['productTitle'] = $productInfo->getTitle();
-		$order['productID'] = $productInfo->getProductId();
-		$order['productPrice'] = $productInfo->getPrice();
-		$order['orderStatus'] = $productInfo->getStatus();
-
-		return $order;
 
 	}
-
-	private function map_user_data($plenigoUser) {
-
-		$user['customerId'] = $plenigoUser->getCustomerId();
-		$user['externalCustomerId'] = $plenigoUser->getExternalCustomerId();
-		$user['agreementState'] = $plenigoUser->getAgreementState();
-		$user['userState'] = $plenigoUser->getUserState();
-
-		$user['firstname'] = $plenigoUser->getFirstName();
-		$user['lastname'] = $plenigoUser->getName();
-		$user['email'] = $plenigoUser->getEmail();
-		$user['gender'] = $plenigoUser->getGender();
-		$user['city'] = $plenigoUser->getCity();
-
-		return $user;
-
-	}
-
 
 }

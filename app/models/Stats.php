@@ -17,6 +17,10 @@ class Stats extends Model
 	function __construct() {
 		$this->db = new SQLdb(DB_SETTINGS);
 		$this->db->table = 'stats';
+
+		$this->from = date('Y-m-d', strtotime('monday this week'));
+		$this->to = date('Y-m-d', strtotime('sunday this week'));
+
 	}
 
 	public function by_id($id) {
@@ -68,71 +72,56 @@ class Stats extends Model
 		array_unshift($sessions, '0');
 		array_unshift($conversions, '0');
 
-		$dates = implode($dates, ',');
-		$pageviews = implode($pageviews,',');
-		$sessions = implode($sessions,',');
-		$conversions = implode($conversions,',');
+		$dates = implode(',', $dates);
+		$pageviews = implode(',', $pageviews);
+		$sessions = implode(',', $sessions);
+		$conversions = implode(',', $conversions);
 
 		return ['dates' => $dates, 'pageviews' => $pageviews, 'sessions' => $sessions, 'conversions' => $conversions];
 
 	}
 
 
-	public function get_grouped_chart_data($filter, $groupByColumn = 'ressort') {
+	public function get_grouped_chart_data($filter, $column = 'ressort') {
 
 		$articles = $this->with_article_data();
-		$groupedData = $this->group_by_column_and_date($articles, $groupByColumn);
 
-		if (!isset($groupedData[$filter])) {return null;}
+		$articles = array_filter($articles, function($article) use ($filter, $column) {
+			return $article[$column] == $filter;
+		});
 
-		$output['pageviews'] = implode(array_column($groupedData[$filter],'pageviews'),',');
-		$output['sessions'] = implode(array_column($groupedData[$filter],'sessions'),',');
-		$output['conversions'] = implode(array_column($groupedData[$filter],'conversions'),',');
-		$output['dates'] = "'".implode(array_keys($groupedData[$filter]),"','") ."'";
+		$dailyStats = $this->sum_stats_by_date($articles);
 
-		return $output;
+		if (!isset($dailyStats)) {return null;}
 
-	}
-
-
-	public function group_by_column_and_date($data, $column) {
-
-		if (!isset($data)) {return null;}
-
-		$columns = array_unique(array_column($data, $column));
-		$columns = array_filter($columns); // Removes Empty or '' stuff
-		sort($columns);
-
-		$output = [];
-		foreach ($columns as $key => $columnName) {
-			$output[$columnName] = $this->extract_stats_by_date($data, $column, $columnName);
-		}
+		$output['pageviews'] = implode(',', array_column($dailyStats,'pageviews'));
+		$output['sessions'] = implode(',', array_column($dailyStats,'sessions'));
+		$output['conversions'] = implode(',', array_column($dailyStats,'conversions'));
+		$output['dates'] = "'".implode("','", array_keys($dailyStats)) ."'";
 
 		return $output;
 
 	}
 
 
-	private function extract_stats_by_date($data, $column, $filtername) {
+	private function sum_stats_by_date($stats) {
 
+		$days = [];
+		foreach ($stats as $item) {
 
-		$output = [];
-		foreach ($data as $item) {
-
-			if ($item[$column] == $filtername) {
-
-				if (!isset($output[$item['date']]['pageviews'])) {
-					$output[$item['date']]['pageviews'] = 0;
-					$output[$item['date']]['sessions'] = 0;
-					$output[$item['date']]['conversions'] = 0;
-				}
-
-				$output[$item['date']]['pageviews'] += $item['pageviews'];
-				$output[$item['date']]['sessions'] += $item['sessions'];
-				$output[$item['date']]['conversions'] += $item['conversions'];
+			if (!isset($days[$item['date']]['pageviews'])) {
+				$days[$item['date']]['pageviews'] = 0;
+				$days[$item['date']]['sessions'] = 0;
+				$days[$item['date']]['conversions'] = 0;
 			}
+
+			$days[$item['date']]['pageviews'] += $item['pageviews'];
+			$days[$item['date']]['sessions'] += $item['sessions'];
+			$days[$item['date']]['conversions'] += $item['conversions'];
+
 		}
-		return array_reverse($output);
+
+		return array_reverse($days);
 
 	}
 
@@ -150,6 +139,7 @@ class Stats extends Model
 
 			 Articles.ressort as ressort,
 			 Articles.type as type,
+			 Articles.tag as tag,
 			 Articles.author as author
 
 			 FROM `stats`

@@ -26,22 +26,24 @@ class Conversions extends Model
 		$this->db->orderby = 'order_date';
 		$this->analytics = new Analytics();
 		$this->plenigo = new Plenigo();
+
+		$this->from = date('Y-m-d', strtotime('monday this week'));
+		$this->to = date('Y-m-d', strtotime('sunday this week'));
 	}
 
 
 	public function collect() {
 
 		$this->transactions = $this->load_from_db();
-
-		if (count($this->transactions) <= 0) {
-			$this->refresh();
-		}
-
 		return $this->transactions;
 
 	}
 
 	public function refresh() {
+
+		$this->transactions = [];
+		$this->transactionIDs = [];
+		$this->analyticsData = [];
 
 		$this->collect_analytics_data();
 		$this->merge_archived_transactions();
@@ -54,10 +56,21 @@ class Conversions extends Model
 
 	public function update_article() {
 		$article = new Articles();
+
+		// Set Conversions based on the Transactions after Plenigo V3 Update...
+		$plenigoUpdateDate = date("2021-02-23");
+		if ($this->pubDate > $plenigoUpdateDate) {
+			$data['conversions'] = count($this->transactions);
+		}
+
 		$data['cancelled'] = count($this->cancelled_orders());
 		$data['retention_days'] = $this->average_retention_days();
+		$data['refresh'] = date('Y-m-d H:i:s');
 		$article->update($data, $this->articleID);
 	}
+
+
+
 
 	public function group_by($index) {
 		$data = array_column($this->transactions,$index);
@@ -141,6 +154,8 @@ class Conversions extends Model
 			$id = $transaction['transaction_id'];
 			$item = $this->get($id,['article_id']);
 
+			//dd($transaction);
+
 			if (empty($item)) { $this->create($transaction);}
 			else {$this->update($transaction, $id);}
 
@@ -159,8 +174,12 @@ class Conversions extends Model
 		$SQLstatement = $this->db->connection->prepare(
 			"SELECT `conversions`.*,
 
+			 Articles.pubdate as article_pubdate,
+			 Articles.title as article_title,
+			 Articles.kicker as article_kicker,
 			 Articles.ressort as article_ressort,
 			 Articles.type as article_type,
+			 Articles.tag as article_tag,
 			 Articles.author as article_author
 
 			 FROM `conversions`
@@ -191,7 +210,9 @@ class Conversions extends Model
 
 		$analyticsTransactionIDs = array_column($this->analyticsData, 'Transactionid');
 		$analyticsTransactionIDs = array_fill_keys($analyticsTransactionIDs, []);
-		$this->transactionIDs = array_merge($this->archived_transaction_ids($this->articleID), $analyticsTransactionIDs);
+
+		$articlesInDB = $this->archived_transaction_ids($this->articleID);
+		$this->transactionIDs = array_replace($articlesInDB, $analyticsTransactionIDs);
 
 	}
 
@@ -213,8 +234,14 @@ class Conversions extends Model
 
 		foreach ($this->transactionIDs as $transactionID => $voidValue) {
 
+			// New Plenigo IDs should only be numbers
+			// We are ignoring old GA transaction IDs
+			if (!is_numeric($transactionID)) {continue;}
+
 			$data['transaction_id'] = $transactionID;
 			$data['article_id'] = $this->articleID;
+			$data['cancelled'] = 0;
+			$data['retention'] = null;
 
 			if (!empty($this->analyticsData[$transactionID])) {
 
@@ -231,45 +258,7 @@ class Conversions extends Model
 			$plenigo = $this->plenigo->order_with_details($transactionID);
 
 			if (!empty($plenigo)) {
-
-				$data['cancelled'] = false;
-				$data['retention'] = null;
-
-				$data['customer_id']			= $plenigo['customerID'];
-				$data['external_customer_id']	= $plenigo['externalCustomerID'];
-
-				$data['order_product_id']		= $plenigo['productID'];
-				$data['order_date']				= $plenigo['orderDate'];
-				$data['order_title']			= $plenigo['productTitle'];
-				$data['order_price']			= $plenigo['productPrice'];
-				$data['order_status']			= $plenigo['orderStatus'];
-
-				if ($plenigo['subscription']) {
-					$data['subscription_title']				= $plenigo['subscription']['title'];
-					$data['subscription_price']				= $plenigo['subscription']['price'];
-					$data['subscription_payment_method']		= $plenigo['subscription']['paymentMethod'];
-					$data['subscription_start_date']		= $plenigo['subscription']['startDate'];
-					$data['subscription_cancellation_date']	= $plenigo['subscription']['cancellationDate'];
-					$data['subscription_end_date']			= $plenigo['subscription']['endDate'];
-					$data['subscription_count']				= $plenigo['subscription_count'];
-
-					if ($plenigo['subscription']['cancellationDate']) {
-						$data['cancelled'] = true;
-
-						$start = new \DateTime(formatDate($plenigo['subscription']['startDate'], 'Y-m-d'));
-						$end = new \DateTime(formatDate($plenigo['subscription']['cancellationDate'], 'Y-m-d'));
-						$interval = $start->diff($end);
-						$data['retention'] = $interval->format('%r%a');
-
-					}
-				}
-
-				if ($plenigo['user']) {
-					$data['customer_consent'] = $plenigo['user']['agreementState'];
-					$data['customer_status'] = $plenigo['user']['userState'];
-					$data['customer_gender'] = $plenigo['user']['gender'];
-					$data['customer_city'] = $plenigo['user']['city'];
-				}
+				$data = array_merge($data, $plenigo);
 			}
 
 			array_push($this->transactions, $data);
@@ -277,9 +266,5 @@ class Conversions extends Model
 		}
 
 	}
-
-
-
-
 
 }

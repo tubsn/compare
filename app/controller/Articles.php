@@ -1,6 +1,7 @@
 <?php
 
 namespace app\controller;
+use app\importer\ArticleImport;
 use flundr\mvc\Controller;
 use flundr\auth\Auth;
 use flundr\utility\Session;
@@ -12,103 +13,221 @@ class Articles extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 		$this->view('DefaultLayout');
 		$this->view->navigation = 'navigation/article-menu';
-		$this->models('Articles,Analytics,Stats,Conversions');
+		$this->models('Articles,Analytics,Stats,Conversions,Linkpulse,Plenigo');
 	}
 
+	public function test($id) {
 
-	public function retresco($id) {
+	$id = 'LBIQCRx4J6B5q1507142B9i3663106u1';
 
-		// Test Stuff
-		$import = new \app\importer\RetrescoImport();
-		$output = $import->collect($id);
-		dd($output);
+		dd($this->Plenigo->order_with_details($id));
 
 	}
+
 
 	public function detail($id) {
 		$viewData['article'] = $this->Articles->get($id);
 
 		if (empty($viewData['article'])) {
-			throw new \Exception("Artikel nicht gefunden oder noch nicht importiert", 404);
+			$this->quick_import($id);
+			$viewData['article'] = $this->Articles->get($id);
+		}
+
+		if (empty($viewData['article'])) {
+			throw new \Exception('Artikel nicht gefunden', 404);
 		}
 
 		if ($viewData['article']['pageviews'] == null) {
 			$pubDate = formatDate($viewData['article']['pubdate'], 'Y-m-d');
-			$this->refresh_stats($id, $pubDate);
-			// Reload Article Data
-			$viewData['article'] = $this->Articles->get($id);
+			$this->collect_data($id, $pubDate);
+			$viewData['article'] = $this->Articles->get($id); // Reload fresh Article Data
 		}
 
 		// Returns Stats aggregated by Day for this ID
 		$viewData['stats'] = $this->Stats->by_id($id);
 		$viewData['chart'] = $this->Stats->convert_to_chart_data($viewData['stats']);
 
-		$ressortStats = $this->Articles->stats_grouped_by('ressort')[$viewData['article']['ressort']];
-		//$typeStats = $this->Articles->stats_grouped_by('type')[$viewData['article']['type']] ?? null;
+		// Ressort Starts
+		$ressortStats = $this->Articles->stats_grouped_by('ressort')[$viewData['article']['ressort']] ?? null;
 
-		$ressortPageviewsAverage = $ressortStats['pageviews'] / $ressortStats['artikel'];
+		if ($ressortStats['pageviews'] > 0) {$ressortPageviewsAverage = $ressortStats['pageviews'] / $ressortStats['artikel'];}
+		else {$ressortPageviewsAverage = 1;}
+
 		$pageViewsToRessort = ($viewData['article']['pageviews'] / $ressortPageviewsAverage * 100);
 
 		$viewData['ressortAverage'] = round($ressortPageviewsAverage);
 		$viewData['ressortRank'] = round($pageViewsToRessort);
 
-		$this->view->render('pages/detail', $viewData);
-	}
-
-	public function conversion_details($id) {
-
-		$viewData['article'] = $this->Articles->get($id);
-
+		// Detailled Conversion / Transaction Stats
 		$this->Conversions->articleID = $id;
 		$this->Conversions->pubDate = formatDate($viewData['article']['pubdate'],'Y-m-d');
 
 		$viewData['conversions'] = $this->Conversions->collect();
-		$viewData['sources'] = $this->Conversions->group_by('ga_source');
-		$viewData['cities'] = $this->Conversions->group_by('ga_city');
+		$viewData['sources'] = $this->Conversions->group_by_combined('ga_source');
+		$viewData['cities'] = $this->Conversions->group_by_combined('ga_city');
+		$viewData['gender'] = $this->Conversions->group_by_combined('customer_gender');
+		$viewData['payments'] = $this->Conversions->group_by_combined('subscription_payment_method');
 		$viewData['cancelled'] = $this->Conversions->cancelled_orders();
 
-		$this->view->title = 'Conversion Übersicht';
-		$this->view->navigation = 'navigation/conversion-menu';
-		$this->view->render('pages/conversions', $viewData);
+		// Rendering
+		$this->view->title = htmlentities($viewData['article']['title']);
+		$this->view->render('pages/detail', $viewData);
+	}
+
+	public function edit($id) {
+
+		$viewData['article'] = $this->Articles->get($id);
+		$this->view->backlink = '/artikel/' . $id;
+		$this->view->render('pages/edit', $viewData);
 
 	}
 
-	public function refresh_conversion_details($id) {
-		$article = $this->Articles->get($id);
-		$this->Conversions->articleID = $id;
-		$this->Conversions->pubDate = formatDate($article['pubdate'],'Y-m-d');
-		$this->Conversions->refresh();
-		$this->view->redirect('/artikel/' . $id . '/conversions');
+	public function save($id) {
+
+		if (!auth_rights('type')) {throw new \Exception("Sie haben keine Berechtitung um diesen Inhalt zu Bearbeiten", 403);}
+
+		if (isset($_POST['pubdate'])) {
+			$this->Articles->update(['pubdate' => $_POST['pubdate']], $id);
+		}
+
+		if (isset($_POST['kicker'])) {
+			$this->Articles->update(['kicker' => $_POST['kicker']], $id);
+		}
+
+		$this->view->redirect('/artikel/' . $id);
+
+	}
+
+	public function medium($id) {
+
+		$viewData['article'] = $this->Articles->get($id);
+		$pubDate = $viewData['article']['pubdate'];
+
+		$mediumCache = new RequestCache('ArticleMedium' . $id, 60 * 60);
+		$mediumStats = $mediumCache->get();
+
+		if (!$mediumStats) {
+			$mediumStats = $this->Analytics->sources_by_article_id($id, formatDate($pubDate, 'Y-m-d'), 'today');
+			$mediumCache->save($mediumStats);
+		}
+
+		$viewData['medium'] = $mediumStats;
+
+		$this->view->backlink = '/artikel/' . $id;
+		$this->view->render('pages/medium', $viewData);
+
+	}
+
+	public function retresco($id) {
+		// Test Stuff
+		$import = new \app\importer\RetrescoImport();
+		$output = $import->collect($id);
+		dd($output);
+	}
+
+	public function favilink() {
+		$this->view->navigation = null;
+		$this->view->render('pages/favilink');
 	}
 
 
 	public function refresh($id) {
 		$pubDate = $this->Articles->get($id,['pubdate'])['pubdate'];
 		$pubDate = formatDate($pubDate, 'Y-m-d');
-		$this->refresh_stats($id, $pubDate);
+		$this->collect_data($id, $pubDate);
 		$this->view->redirect('/artikel/' . $id);
 	}
 
+
+	private function days_since($date) {
+		$interval = date_diff(date_create($date), new \DateTime());
+		return $interval->days;
+	}
+
+	private function collect_data($id, $pubDate = '30daysAgo') {
+
+		// Don't refresh Stuff older then a Year
+		if ($this->days_since($pubDate) > 365) {return;}
+
+		// show Realtime Linkpulse Data for Todays articles
+		if ($pubDate == date('Y-m-d')) {
+			$stats = $this->Linkpulse->stats_today($id);
+			$stats['refresh'] = date('Y-m-d H:i:s');
+				$this->Articles->update($stats,$id);
+			return;
+		}
+
+		// GA Pageviews and Sessions
+		$gaData = $this->Analytics->by_article_id($id, $pubDate);
+
+		$dailyStats = $gaData['details'];
+		$lifeTimeTotals = $gaData['totals'];
+
+		// Buying intent
+		$lifeTimeTotals['buyintent'] = $this->Analytics->buy_intention_by_article_id($id, $pubDate);
+
+		// Subscribed Readers
+		$subscribers = $this->Linkpulse->subscribers($id, $pubDate);
+		$lifeTimeTotals['subscribers'] = $subscribers;
+
+		$this->Articles->add_stats($lifeTimeTotals,$id);
+		$this->Stats->add($dailyStats,$id);
+
+		if ($lifeTimeTotals['Itemquantity'] < 0) { return; }
+
+		// Transaction Stats
+		$this->Conversions->articleID = $id;
+		$this->Conversions->pubDate = $pubDate;
+		$this->Conversions->refresh();
+	}
+
+	private function quick_import($articleID) {
+		$import = new ArticleImport();
+		$newArticle = $import->detail_rss($articleID);
+
+		if (empty($newArticle)) {
+			throw new \Exception('Artikel konnte nicht importiert werden', 404);
+		}
+
+		if ($this->days_since($newArticle['pubdate']) >= 365) {
+			throw new \Exception('Artikel zu alt zum Importieren', 404);
+		}
+
+		$articles = [$newArticle]; // this has to be an Array of articles
+		return $this->Articles->add_to_database($articles);
+	}
+
 	public function delete($id) {
-		if (!Auth::logged_in()) {$this->view->redirect('/login');}
+		if (!auth_rights('type')) {$this->view->redirect('/login');}
 		$this->Articles->delete($id);
 		$this->Stats->delete($id);
 		$this->view->redirect('/');
 	}
 
-	public function edit($id) {
-		$type = strip_tags($_POST['type']);
-		if ($type == '0') {$type = null;}
-		$this->Articles->set(['type' => $type], $id);
+	public function set_type($id) {
+		if (!auth_rights('type')) {return;}
+
+		if (isset($_POST['type']) && $_POST['type'] != '') {
+			$type = strip_tags($_POST['type']);
+			if ($type == '0') {$type = null;}
+			$this->Articles->set(['type' => $type], $id);
+		}
+
+		if (isset($_POST['tag']) && $_POST['tag'] != '') {
+			$tag = strip_tags($_POST['tag']);
+			if ($tag == '0') {$tag = null;}
+			$this->Articles->set(['tag' => $tag], $id);
+		}
+
 	}
 
 	public function set_timeframe() {
 
-		if ($_POST['timeframe']) {
+		if (isset($_POST['timeframe'])) {
 			$this->dates_from_timeframe($_POST['timeframe']);
 		}
 
-		if ($_POST['from'] && $_POST['to']) {
+		if (isset($_POST['from']) && isset($_POST['to'])) {
 			Session::set('timeframe', 'Zeitraum'); // for the Select Box
 
 			Session::set('from', strip_tags($_POST['from']));
@@ -154,6 +273,11 @@ class Articles extends Controller {
 				Session::set('from', date('Y-m-d', strtotime('first day of this month -2month')));
 				Session::set('to', date('Y-m-d', strtotime('last day of this month -2month')));
 			break;
+			case 'alle Daten':
+				Session::set('from', '2000-01-01');
+				Session::set('to', '2050-01-01');
+			break;
+
 			default:
 				Session::set('from', null);
 				Session::set('to', null);
@@ -162,19 +286,5 @@ class Articles extends Controller {
 
 	}
 
-
-	private function refresh_stats($id, $pubDate = '30daysAgo') {
-		$gaData = $this->Analytics->byArticleID($id, $pubDate);
-		$dailyStats = $gaData['details'];
-		$lifeTimeStats = $gaData['stats'];
-		$this->Articles->add_stats($lifeTimeStats,$id);
-		$this->Stats->add($dailyStats,$id);
-
-		// Transaction Stats
-		$this->Conversions->articleID = $id;
-		$this->Conversions->pubDate = $pubDate;
-		$this->Conversions->refresh();
-
-	}
 
 }

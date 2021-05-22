@@ -6,6 +6,10 @@ class Artikel {
 		this.typeSelectors = document.querySelectorAll('.js-type-selector');
 		this.listenToTypeSelector(this.typeSelectors);
 
+		// Tagselectors
+		this.ttagSelectors = document.querySelectorAll('.js-tag-selector');
+		this.listenToTagSelector(this.ttagSelectors);
+
 		// Timeselector Submit on Change
 		let timeframe = document.querySelector('.js-timeframe');
 		if (timeframe) {
@@ -18,10 +22,6 @@ class Artikel {
 		if (this.sortableTables) {this.tableSort(this.sortableTables);}
 
 	}
-
-
-
-
 
 
 	listenToTypeSelector(selectElements) {
@@ -59,6 +59,44 @@ class Artikel {
 				console.error(`Oops: ${error}`);
 			});
 	}
+
+
+	listenToTagSelector(selectElements) {
+		if (!selectElements) {return;}
+		let _this = this;
+		Array.from(selectElements).forEach(selectBox => {
+		    selectBox.addEventListener('change', (e) => {
+				let id = selectBox.getAttribute('data-id');
+				_this.saveTag(e.target.value, id);
+		    });
+		});
+	}
+
+	saveTag(articleType, id) {
+
+		let data = new FormData();
+		data.append('tag', articleType);
+
+		fetch('/artikel/'+id, {
+			method: 'POST',
+			credentials: 'same-origin',
+			body: data
+		})
+			.then(response => {
+				if(response.status === 404) {
+					console.log(response.text()); return null;
+				}
+				return response.text();
+			})
+			.then(phpresponse => {
+				console.log(phpresponse);
+				//window.location.reload();
+			})
+			.catch(error => {
+				console.error(`Oops: ${error}`);
+			});
+	}
+
 
 
 

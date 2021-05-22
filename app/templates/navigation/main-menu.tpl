@@ -1,10 +1,15 @@
 <header>
 
+<!--
+<div style="text-align:center; color:white; background-color:#3e6693; font-size:14px; "><small>Achtung: seit der Plenigo Umstellung werden die Google Analytics Conversions leider mehrfach getrackt. Ich hoffe auf baldige Lösung.</small></div>
+-->
+
 <nav class="main-nav">
 	<ul>
-		<li><a href="/">Neue Artikel</a></li>
+		<li><a href="/">Home</a></li>
 		<li><a href="/ressort">Ressorts</a></li>
 		<li><a href="/type">Inhalte</a></li>
+		<li><a href="/tag">#Tags</a></li>
 		<!--<li><a href="/plus">Plus-Artikel</a></li>-->
 		<li><a href="/pageviews">Klicks</a></li>
 		<li><a href="/conversions">Conversions</a></li>
@@ -24,7 +29,7 @@
 		<li><a href="/admin" title="Einstellungen">Einstellungen</a></li>
 		<?php endif; ?>
 		<li class="login-icon">
-			<a href="/profil" title="Nutzer">
+			<a href="/profile" title="Nutzer">
 				<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 					 width="15px" height="18px" viewBox="0 0 15 18" enable-background="new 0 0 15 18" xml:space="preserve">
 				<path id="loginHeadIcon" fill="#ffffff" d="M7.5,10.017c-2.772,0-5.018-2.242-5.018-5.009S4.728,0,7.5,0c2.772,0,5.017,2.241,5.017,5.008
@@ -36,9 +41,10 @@
 		</li>
 	</ul>
 
+
 </nav>
 
-<a href="/" title="flundr!!!1"><img class="main-logo" src="/styles/img/flundr/flundr-logo.svg"></a>
+<a href="/" title="Max die Datenkrake lässt sich nicht gern kitzeln!"><img class="main-logo" src="/styles/img/datenkrake.svg"></a>
 
 <?php if (isset($navigation)): ?>
 <?php include tpl($navigation) ?>

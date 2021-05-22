@@ -17,7 +17,8 @@ class Lists extends Controller {
 	public function index() {
 		Session::set('referer', '/');
 		$viewData['articles'] = $this->Articles->list();
-		$this->view->title = 'Neuste Artikel';
+		$this->view->title = 'Artikel-Übersicht';
+		$this->view->info = '(Es werden maximal 2000 Artikel dargestellt)' ;
 		$this->view->render('pages/list', $viewData);
 	}
 
@@ -117,8 +118,12 @@ class Lists extends Controller {
 		$this->view->render('pages/list', $viewData);
 	}
 
-	public function ressort($ressort = 'cottbus') {
+	public function ressort($ressort = null) {
 		Session::set('referer', '/ressort/'.$ressort);
+
+		$ressortList = $this->Articles->list_distinct('ressort');
+		if ($ressort == null) {$ressort = $ressortList[0];}
+
 		$ressort = $this->decode_url($ressort);
 
 		$viewData['articles'] = $this->Articles->list_by($ressort, 'ressort');
@@ -131,6 +136,7 @@ class Lists extends Controller {
 		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
 		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
 		$viewData['numberOfArticles'] = $count;
+		$viewData['ressorts'] = $ressortList;
 
 		$this->view->navigation = 'navigation/ressort-menu';
 		$this->view->title = 'Artikel aus ' . ucwords($ressort) . ': ' . $count;
@@ -154,6 +160,27 @@ class Lists extends Controller {
 
 		$this->view->navigation = 'navigation/type-menu';
 		$this->view->title = $type . ' - Artikel: ' . $count;
+		$this->view->render('pages/list', $viewData);
+	}
+
+	public function tag($tag = ARTICLE_TAGS[0]) {
+		Session::set('referer', '/tag/'.$tag);
+		$tag = $this->decode_url($tag);
+
+		$viewData['articles'] = $this->Articles->list_by($tag, 'tag');
+		$viewData['chart'] = $this->Stats->get_grouped_chart_data($tag, 'tag');
+
+		$count = 0;
+		if (is_array($viewData['articles'])) {$count = count($viewData['articles']);}
+
+		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
+		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
+		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
+		$viewData['numberOfArticles'] = $count;
+
+		$this->view->navigation = 'navigation/tag-menu';
+		$this->view->title = '#Tag - ' . ucwords($tag) . ': ' . $count;
+		$this->view->info = null;
 		$this->view->render('pages/list', $viewData);
 	}
 

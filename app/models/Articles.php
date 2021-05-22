@@ -20,6 +20,9 @@ class Articles extends Model
 		$this->db->table = 'articles';
 		$this->db->order = 'DESC';
 
+		$this->from = date('Y-m-d', strtotime('monday this week'));
+		$this->to = date('Y-m-d', strtotime('sunday this week'));
+
 		if (Session::get('from')) {$this->from = Session::get('from');}
 		if (Session::get('to')) {$this->to = Session::get('to');}
 	}
@@ -28,7 +31,7 @@ class Articles extends Model
 
 		$from = strip_tags($this->from);
 		$to = strip_tags($this->to);
-		$limit = 300;
+		$limit = 2000;
 
 		$SQLstatement = $this->db->connection->prepare(
 			"SELECT *
@@ -96,6 +99,25 @@ class Articles extends Model
 
 	}
 
+
+	public function list_distinct($column) {
+
+		$column = strip_tags($column);
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT DISTINCT $column FROM `articles`
+			 WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			 AND $column is not null
+			 ORDER BY $column ASC"
+		);
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		return $SQLstatement->fetchall(\PDO::FETCH_COLUMN);
+
+	}
+
+
 	public function sum_up($array, $key) {
 		if (empty($array)) {return 0;}
 		return array_sum(array_column($array,$key));
@@ -108,11 +130,17 @@ class Articles extends Model
 
 	public function add_stats($gaData, $id) {
 		$stats = [
-			'pageviews' => $gaData['Pageviews'],
-			'sessions' => $gaData['Sessions'],
-			'conversions' => $gaData['Itemquantity'],
-			'ga_refresh' => date('Y-m-d H:i:s'),
+			'pageviews' => $gaData['Pageviews'] ?? 0,
+			'sessions' => $gaData['Sessions'] ?? 0,
+			'subscribers' => $gaData['subscribers'] ?? 0,
+			'buyintent ' => $gaData['buyintent'] ?? null,
+			'conversions' => $gaData['Itemquantity'] ?? 0,
+			'refresh' => date('Y-m-d H:i:s'),
 		];
+
+		// Fix for Google Analytics Bug of 23. Mrz
+		//if ($stats['conversions'] == 0) {unset($stats['conversions']);}
+
 		$this->update($stats,$id);
 	}
 
@@ -192,6 +220,30 @@ class Articles extends Model
 			"SELECT id,pubdate
 			 FROM `articles`
 			 WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			 ORDER BY `pubdate` ASC
+			 LIMIT 0, 300"
+		);
+
+		$SQLstatement->execute([':startDate' => $start, ':endDate' => $end]);
+		$output = $SQLstatement->fetchall();
+		if (empty($output)) {return null;}
+
+		return $output;
+
+	}
+
+	public function conversions_only_by_date_range($start, $end = null) {
+
+		if (is_null($end)) {$end = $start;}
+
+		$start .= ' 00:00:00';
+		$end .= ' 23:59:59';
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT id,pubdate
+			 FROM `articles`
+			 WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			 AND `conversions` > 0
 			 ORDER BY `pubdate` ASC
 			 LIMIT 0, 300"
 		);
@@ -292,12 +344,17 @@ class Articles extends Model
         	WHERE temptable.$column = maintable.$column
 			AND `pageviews` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as pageviews,
 
+       		(SELECT sum(subscribers)
+        	FROM `articles` AS temptable
+        	WHERE temptable.$column = maintable.$column
+			AND `subscribers` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as subscribers,
+
        		(SELECT sum(sessions)
         	FROM `articles` AS temptable
         	WHERE temptable.$column = maintable.$column
 			AND `sessions` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as sessions,
 
-       		(SELECT count(cancelled)
+       		(SELECT sum(cancelled)
         	FROM `articles` AS temptable
         	WHERE temptable.$column = maintable.$column
 			AND `cancelled` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as cancelled,
@@ -386,12 +443,13 @@ class Articles extends Model
 
 		$output = $SQLstatement->fetch();
 		if (empty($output)) {return null;}
+
 		return $output['sum('.$field.')'];
 	}
 
-	private function save_to_db($articles) {
+	private function save_to_db(array $articles) {
 
-		// Don't ask how... it works for now... :)
+		if (count($articles) < 1 ) {return null;}
 
 		// Implode Fieldnames and add `Backticks`
 		$fieldNames = array_keys($articles[0]);

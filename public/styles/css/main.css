@@ -4,6 +4,7 @@
 --blue: #6088b4;
 --light-blue: #d6e0eb;
 --light-orange: #f7dec3;
+--light-gray: #e6e6e6;
 --orange: #df886d;
 --red: #fddbdb;
 --dark-red: #f77474;
@@ -46,12 +47,15 @@ h3 + h1 {margin-top:-.5em;}
 .sub-nav {position:relative; left:-.5em; display:flex; justify-content:space-between; width:90%; margin:0 auto;}
 .sub-nav {margin-bottom:2em;}
 
+.sub-nav a {color: #333}
+
 .sub-nav ul:last-child {position:relative; right:-1em;}
 
 .artikel-typen {min-height:300px; background-color:#f7dec3; margin-bottom:1em; padding:0.5em;}
+.artikel-tags {min-height:180px; background-color:#f7dec3; margin-bottom:1em; padding:0.5em;}
 
-table.fancy.red th {background-color:#aa4747;}
-table.fancy.red th:hover {background-color:#822b2b;}
+table.fancy.red th {background-color:#b46060;}
+table.fancy.red th:hover {background-color:#aa4747;}
 table.fancy tr th:hover {background-color:#486f99}
 table th {cursor:pointer;}
 table th.dir-u {background-image: linear-gradient(to top, #4c739d 0%, #3b618c 82%, #d1d7dd 82%, #80b3ea 100%);}
@@ -59,10 +63,13 @@ table th.dir-d {background-image: linear-gradient(#4c739d 0%, #3b618c 82%, #d1d7
 
 table td.narrow {white-space: nowrap; max-width:200px; overflow: hidden; text-overflow: ellipsis;}
 table td.narrower {white-space: nowrap; max-width:250px; overflow: hidden; text-overflow: ellipsis;}
-table td.type {white-space: nowrap; min-width:140px; overflow: hidden; text-overflow: ellipsis;}
+table td.type {white-space: nowrap; min-width:160px; overflow: hidden; text-overflow: ellipsis;}
 
 tr.text-right th {text-align:right;}
 th.text-left {text-align:left !important;}
+
+.dropdown-selectors {display:grid; grid-template-columns: .6fr .4fr; grid-gap:.5em;}
+.dropdown-selectors select {font-size:0.8em}
 
 .condensed {font-family: 'fira sans condensed'}
 .nowrap {white-space: nowrap;}
@@ -73,26 +80,39 @@ th.text-left {text-align:left !important;}
 
 .light-box {background-color: #eef0f2; display:inline-block; margin-bottom:2em; padding:1em;}
 
+.indicator {background-color:#e4e4e4; border-radius:4px; color: rgba(0, 0, 0, 0);}
+.indicator div {display:block; width:0%; height:.8em; border-radius:4px}
+.indicator.plusleser div {background-color:#7d9ec2;}
+.indicator.plusartikel div {background-color:#f2cdc2;}
+
 .conversions { background-color: var(--light-orange); display:inline-block; padding:0.1em .3em; border-radius:1em;}
 .cancelled { background-color: var(--red); display:inline-block; padding:0.1em .3em; border-radius:1em;}
 .bluebg, .pageviews { background-color: var(--light-blue); display:inline-block; padding:0.1em .5em; border-radius:1em;}
+.type-link {background-color: var(--light-gray); display:inline-block; padding:0.1em .5em; border-radius:1em}
+.type-link:hover {background-color:white;}
+
+a.type-link {text-decoration: none; color: var(--text-color)}
 
 .pointer {cursor:pointer;}
 
 .detail-layout {display:grid; grid-template-columns: 1fr 1fr 1fr; grid-gap:2em;}
 .settings-layout {display:grid; grid-template-columns: .3fr .3fr .3fr; grid-gap:2em; justify-content: space-between; }
 .stats-layout {display:grid; grid-template-columns: 1fr; grid-gap:2em; align-items:start;}
-/*.stats-layout div:nth-child(3) {grid-column: 1 / span 3;} */
+
+.conversion-tables-layout {display:grid; grid-template-columns: 1fr 1fr 1fr; grid-gap:2em; align-items: start}
+
 
 @media only screen and (max-width: 1600px) {
 .detail-layout {display:grid; grid-template-columns: 1fr min-content; grid-gap:2em;}
 .settings-layout {display:grid; grid-template-columns: 1fr 1fr; grid-gap:2em; justify-content: left; }
 .stats-layout {display:block;}
+.conversion-tables-layout {grid-template-columns: 1fr 1fr;}
 }
 
 @media only screen and (max-width: 960px) {
 .detail-layout {grid-template-columns: 1fr;}
 .settings-layout {grid-template-columns: 1fr;}
+.conversion-tables-layout {grid-template-columns: 1fr;}
 }
 
 
@@ -150,10 +170,12 @@ background-repeat: no-repeat; transition: opacity 0.4s
 
 .lifetime-stats-table tr td:first-child {text-align:right}
 .lifetime-stats-table tr:last-child td:first-child { text-align:right}
-.lifetime-stats-table tr td:last-child {color:#6088b4; padding-left: .5em; text-align:left;vertical-align: bottom}
+.lifetime-stats-table tr td:last-child {color:#b46060; padding-left: .5em; text-align:left;vertical-align: bottom}
 
 
 .icon-delete {opacity:0.2; position:relative;top:4px;}
+.icon-edit {opacity:0.2; position:relative;top:2px; width:23px;}
+
 
 footer {margin-top:2em; margin-bottom:3em; text-align:center; font-size:0.8em; color:#666}
 footer i {color: #f7c3c3}

@@ -10,7 +10,8 @@ class Error extends Controller {
 
 		$this->view('DefaultLayout');
 
-		$viewData['error']['code'] = $errorData->getCode();
+		$errorCode = $errorData->getCode();
+		$viewData['error']['code'] = $errorCode;
 		$viewData['error']['message'] = $errorData->getMessage();
 
 		if (!ENV_PRODUCTION) {
@@ -19,7 +20,8 @@ class Error extends Controller {
 			$viewData['error']['file'] = $errorData->getFile();
 		}
 
-		http_response_code(intval($viewData['error']['code']) ?? 404);
+		if (preg_match('/^\d{3}$/', $errorCode)) { http_response_code(intval($errorCode)); }
+		else { http_response_code(404); }
 
 		$this->view->navigation = null;
 		$this->view->render('pages/error', $viewData);

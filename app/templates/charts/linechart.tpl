@@ -1,3 +1,28 @@
+	<details>
+		<summary style="position:absolute; right:0; top:0; cursor:pointer;">Einzeltage einblenden</summary>
+			<table class="fancy wide js-sortable" style="margin-bottom:3em">
+			<thead>
+			<tr>
+				<th>Date</th>
+				<th>Klicks</th>
+				<th>Besuche</th>
+				<th>Conversions</th>
+			</tr>
+			</thead>
+			<tbody>
+			<?php foreach ($stats as $day): ?>
+			<tr>
+				<td><?=$day['date']?></td>
+				<td><?=$day['pageviews']?></td>
+				<td><?=$day['sessions']?></td>
+				<td><?=$day['conversions']?></td>
+			</tr>
+			<?php endforeach; ?>
+			</tbody>
+			</table>
+	</details>
+
+
 <div id="chart"></div>
 
 <script>
@@ -65,7 +90,7 @@ chart.render();
 </script>
 
 
-<h3>Conversions:</h3>
+<h3>Conversions nach Zeit:</h3>
 <div id="conversionChart"></div>
 
 <script>
@@ -109,5 +134,3 @@ grid: {
 let conversionChart = new ApexCharts(document.querySelector("#conversionChart"), conversionChartOptions);
 conversionChart.render();
 </script>
-
-

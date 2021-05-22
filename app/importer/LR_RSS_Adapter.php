@@ -9,12 +9,40 @@ class LR_RSS_Adapter
 
 	}
 
-	public function convert($xml) {
+	public function convert($data) {
+
+		$xml = simplexml_load_string($data);
 
 		$items = $xml->channel->xpath('item');
 		$articles = array_map([$this,'map_article_fields'], $items);
 
 		return $articles;
+
+	}
+
+	public function convert_news_markup($data, $url) {
+
+		$xml = simplexml_load_string($data);
+		$components = $xml->NewsItem->NewsComponent;
+
+		$article['id'] = $this->extract_id($url);
+		$article['ressort'] = $this->extract_ressort($url);
+		//$newsMLRessort = $components[0]->DescriptiveMetadata->xpath('Property[@FormalName="Department"]')[0]['Value']->__toString();
+
+		$article['title'] = $components[0]->NewsLines->HeadLine->__toString();
+		$article['kicker'] = null; // Not available in Detail RSS :/
+		$article['description'] = $components[0]->NewsLines->SubHeadLine->__toString();
+		$article['author'] = $components[0]->AdministrativeMetadata->xpath('Property[@FormalName="Author"]')[0]['Value']->__toString();
+		$article['plus'] = $xml->NewsItem->NewsManagement->accessRights->__toString()  == 'available to subscribers only' ? true : false;
+
+		// This is the last Edit timestamp - Pubdate is not available
+		$timestamp = $xml->NewsItem->NewsManagement->ThisRevisionCreated->__toString();
+		$article['pubdate'] = date('Y-m-d H:i:s', strtotime($timestamp));
+
+		$article['image'] = $xml->NewsItem->xpath('NewsComponent[@Duid="leadImage"]//NewsComponent')[0]->ContentItem['Href']->__toString();
+		$article['link'] = $url;
+
+		return $article;
 
 	}
 
@@ -28,7 +56,7 @@ class LR_RSS_Adapter
 		$article['kicker'] = $item->kicker->__toString();
 		$article['description'] = $item->description->__toString();
 		$article['author'] = $item->author->__toString();
-		$article['plus'] = $item->freemium->__toString() == 'free' ? false : true; //Converts Freemiuminfo to boolean
+		$article['plus'] = $item->freemium->__toString() == 'free' ? false : true; // Converts Freemiuminfo to boolean
 		$article['pubdate'] = date('Y-m-d H:i:s', strtotime($item->pubDate));
 		$article['image'] = $this->get_image($item->enclosure['url']);
 		$article['link'] = $url;

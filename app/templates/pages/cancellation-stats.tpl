@@ -4,8 +4,17 @@
 
 <h1>Kündigungsquoten nach Kategorien</h1>
 
-<p><b>Kündigungsdaten sind NICHT Live</b> und beziehen sich auf den Tag der letzten manuellen Aktualisierung des Artikels.<br />
+<p><b>Kündigungsdaten sind NICHT Live</b> und beziehen sich auf den Tag der letzten Statistik-Aktualisierung des Artikels.<br />
 Die Kündigerraten sind vor Februar 2021 nicht relevant, da hier zuviele Daten fehlen!</p>
+
+<p>Die Kündigerdaten beziehen sich hier auf den ausgewählten Zeitraum und <b>nicht auf das Publikationsdatum</b> des Artikels.<br/>Es kommt daher zu <b>Abweichungen im Vergleich zur Statistik-Seite</b> (dort wird nach Artikel Publikationsdatum gemessen).</p>
+
+<p class="light-box" style="margin-bottom:2em;">
+
+Conversions: <b class="orange"><?=count($conversions)?></b>
+&emsp; Gekündigt: <b class="redish"><?=count($cancelled)?></b>
+&emsp; Kündigungsquote: <b class=""><?=round($quote,2)?> %</b>
+</p>
 
 <hr>
 
@@ -73,10 +82,10 @@ Die Kündigerraten sind vor Februar 2021 nicht relevant, da hier zuviele Daten f
 	</tbody>
 </table>
 
-
-<table class="fancy js-sortable">
+<div>
+<table class="fancy wide js-sortable">
 	<thead><tr>
-		<th>Artikel-Cluster</th>
+		<th>Artikel-Kategorien</th>
 		<th>Aktiv</th>
 		<th>Gekündigt</th>
 		<th>Quote</th>
@@ -93,6 +102,25 @@ Die Kündigerraten sind vor Februar 2021 nicht relevant, da hier zuviele Daten f
 	</tbody>
 </table>
 
+<table class="fancy wide js-sortable">
+	<thead><tr>
+		<th>Artikel-Tags</th>
+		<th>Aktiv</th>
+		<th>Gekündigt</th>
+		<th>Quote</th>
+	</tr></thead>
+	<tbody>
+<?php foreach ($tags as $index => $count): ?>
+	<tr>
+		<td><a href="/type/<?=urlencode(str_replace('/', '-slash-', $index))?>"><?=$index?></a></td>
+		<td><?=$count['active']?></td>
+		<td><?=$count['cancelled']?></td>
+		<td><?=round($count['cancelled'] / $count['active'] *100,2)?> %</td>
+	</tr>
+<?php endforeach; ?>
+	</tbody>
+</table>
+</div>
 
 </section>
 
@@ -176,6 +204,7 @@ Die Kündigerraten sind vor Februar 2021 nicht relevant, da hier zuviele Daten f
 <table class="fancy mb wide js-sortable">
 <thead>
 <tr class="text-right">
+	<th>Art-ID</th>
 	<th>Artikel-Typ</th>
 	<th>Ressort</th>
 	<?php if (auth_rights('author')): ?><th>Author</th><?php endif; ?>
@@ -196,6 +225,7 @@ Die Kündigerraten sind vor Februar 2021 nicht relevant, da hier zuviele Daten f
 
 <?php foreach ($conversions as $conversion): ?>
 <tr class="text-right">
+	<td><a href="/artikel/<?=$conversion['article_id']?>"><?=$conversion['article_id']?></a></td>
 	<td><?=$conversion['article_type']?></td>
 	<td><?=$conversion['article_ressort']?></td>
 	<?php if (auth_rights('author')): ?><td><a href="/author/<?=urlencode(str_replace('/', '-slash-', $conversion['article_author']))?>"><?=$conversion['article_author']?></a></td><?php endif; ?>

@@ -9,14 +9,6 @@ class RetrescoAdapter
 
 	}
 
-	public function convert($retrescoJson) {
-
-		$dossierInfo = $this->dossier_info($data);
-
-		return $dossierInfo;
-
-	}
-
 	public function extract_article_data($rawJson) {
 
 		$data = json_decode($rawJson, true);

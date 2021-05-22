@@ -6,8 +6,6 @@ use app\importer\RetrescoAdapter;
 class RetrescoImport
 {
 
-	private $username = 'lausitzer-rundschau-tms';
- 	private $password = '***REMOVED***';
 	private $apiURL = 'https://lausitzer-rundschau-tms.rtrsupport.de/api/';
 
 	function __construct() {
@@ -34,9 +32,12 @@ class RetrescoImport
 
 	private function curl($url) {
 
+		$username = RETRESCO_APIKEY;
+		$password = RETRESCO_SECRET;
+
 		$ch = curl_init();
 		curl_setopt ($ch, CURLOPT_URL, $url);
-		curl_setopt ($ch, CURLOPT_USERPWD, $this->username . ":" . $this->password);
+		curl_setopt ($ch, CURLOPT_USERPWD, $username . ":" . $password);
 		curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, 0);
 		curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, 0);
 		curl_setopt ($ch, CURLOPT_HEADER, 0);

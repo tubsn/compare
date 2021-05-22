@@ -3,7 +3,14 @@
 $typen = file_get_contents(CONFIGPATH . '/artikel_typen.txt');
 $typen = explode_and_trim("\n", $typen);
 
+$tags = file_get_contents(CONFIGPATH . '/artikel_tags.txt');
+$tags = explode_and_trim("\n", $tags);
+
 define('ARTICLE_TYPES', $typen);
+define('ARTICLE_TAGS', $tags);
+
+define('PORTAL_URL', 'https://www.lr-online.de');
+define('PORTAL_NAME', 'LR');
 
 define('IMPORT_FEEDS', [
 	'https://www.lr-online.de/?_XML=RSS',
@@ -22,17 +29,17 @@ define('IMPORT_FEEDS', [
 	'https://www.lr-online.de/lausitz/luebben/?_XML=RSS',
 	'https://www.lr-online.de/lausitz/luebbenau/?_XML=RSS',
 	'https://www.lr-online.de/lausitz/luckau/?_XML=RSS',
+	'https://www.lr-online.de/nachrichten/brandenburg/?_XML=RSS',
+	'https://www.lr-online.de/nachrichten/polen/?_XML=RSS',
+	'https://www.lr-online.de/nachrichten/wirtschaft/?_XML=RSS',
 ]);
 
 define('TIMEFRAMES', [
-	'alle Daten',
 	'aktuelle Woche',
 	'letzte Woche',
 	'vorletzte Woche',
 	'aktueller Monat',
 	'letzter Monat',
 	'vorletzter Monat',
+	'alle Daten',
 ]);
-
-define('PLENIGO_CUSTOMER_ID', '***REMOVED***');
-define('PLENIGO_SECRET', '***REMOVED***');
