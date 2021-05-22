@@ -359,6 +359,11 @@ class Articles extends Model
         	WHERE temptable.$column = maintable.$column
 			AND `cancelled` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as cancelled,
 
+       		(SELECT sum(buyintent)
+        	FROM `articles` AS temptable
+        	WHERE temptable.$column = maintable.$column
+			AND `buyintent` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as buyintents,
+
        		(SELECT sum(conversions)
         	FROM `articles` AS temptable
         	WHERE temptable.$column = maintable.$column

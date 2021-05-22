@@ -14,6 +14,9 @@ class Analytics
 
 	public function by_article_id($articleID, $from = '30daysAgo', $to = 'today') {
 
+		$articleID = htmlspecialchars($articleID, ENT_QUOTES, 'UTF-8');
+		if (strlen($articleID) != 8) {return false;}
+
 		$this->ga->metrics = 'ga:pageViews,ga:sessions,ga:itemQuantity';
 		$this->ga->from = $from;
 		$this->ga->to = $to;

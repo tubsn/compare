@@ -83,11 +83,15 @@ th.text-left {text-align:left !important;}
 .indicator {background-color:#e4e4e4; border-radius:4px; color: rgba(0, 0, 0, 0);}
 .indicator div {display:block; width:0%; height:.8em; border-radius:4px}
 .indicator.plusleser div {background-color:#7d9ec2;}
+.indicator.buyintent div {background-color:#df886d;}
 .indicator.plusartikel div {background-color:#f2cdc2;}
 
 .conversions { background-color: var(--light-orange); display:inline-block; padding:0.1em .3em; border-radius:1em;}
 .cancelled { background-color: var(--red); display:inline-block; padding:0.1em .3em; border-radius:1em;}
-.bluebg, .pageviews { background-color: var(--light-blue); display:inline-block; padding:0.1em .5em; border-radius:1em;}
+.bluebg, .orangebg, .pageviews { background-color: var(--light-blue); display:inline-block; padding:0.1em .5em; border-radius:1em;}
+.orangebg {background-color: var(--light-orange);}
+
+
 .type-link {background-color: var(--light-gray); display:inline-block; padding:0.1em .5em; border-radius:1em}
 .type-link:hover {background-color:white;}
 

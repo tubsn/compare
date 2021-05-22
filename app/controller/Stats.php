@@ -22,6 +22,7 @@ class Stats extends Controller {
 		$viewData['subscribers'] = $this->Articles->sum('subscribers');
 		$viewData['sessions'] = $this->Articles->sum('sessions');
 		$viewData['conversions'] = $this->Articles->sum('conversions');
+		$viewData['buyintents'] = $this->Articles->sum('buyintent');
 		$viewData['cancelled'] = $this->Articles->sum('cancelled');
 
 		$viewData['ressortStats'] = $this->Articles->stats_grouped_by($column = 'ressort', $order = 'conversions DESC, ressort ASC');

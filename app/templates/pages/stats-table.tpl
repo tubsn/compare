@@ -8,11 +8,11 @@
 			<th>Klicks</th>
 			<th>⌀-Klicks</th>
 			<th style="text-align:center">Plusleser %</th>
+			<th>Kaufimpulse</th>
 			<th>Conversions</th>
 			<th>Conversionrate</th>
 			<th>Gekündigt</th>
 			<th>K-Quote</th>
-			<th>Artikel bis Conv.</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -43,6 +43,9 @@
 			<td><div class="indicator plusleser"><div>0</div></div></td>
 			<?php endif; ?>
 
+			<td><?=number_format($stats['buyintents'],0,'.','.') ?? 0?></td>
+
+
 			<td><div<?php if ($stats['conversions'] > 0): ?> class="conversions"<?php endif; ?>><?=number_format($stats['conversions'],0,'.','.') ?? 0?></div></td>
 
 			<?php if ($stats['sessions'] > 0): ?>
@@ -55,9 +58,6 @@
 			<td><?=round($stats['cancelled'] / $stats['conversions'] * 100,1)?>&nbsp;%</td>
 			<?php else: ?><td>0&nbsp;%</td><?php endif; ?>
 
-			<?php if ($stats['conversions'] > 0): ?>
-			<td><?=round($stats['artikel'] / $stats['conversions'],1)?></td>
-			<?php else: ?><td>-</td><?php endif ?>
 		</tr>
 		<?php endforeach; ?>
 		</tbody>

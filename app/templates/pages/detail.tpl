@@ -34,7 +34,7 @@
 	<?php endif; ?>
 
 	<?php if ($article['buyintent']): ?>
-	&ensp; Nutzer mit Kaufabsicht: <span class="bluebg"><?=$article['buyintent']?></span>
+	&ensp; Nutzer mit Kaufabsicht: <span class="orangebg"><?=$article['buyintent']?></span>
 	<?php endif; ?>
 	</p>
 

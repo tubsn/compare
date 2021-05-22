@@ -13,11 +13,13 @@
 <?php if (isset($pageviews) || isset($conversions)): ?>
 
 <p class="light-box" style="margin-bottom:2em;">
-Artikel: <b><?=$numberOfArticles?></b> &emsp; Klicks: <b class="blue"><?=number_format($pageviews,0,',','.')?></b> 
+Artikel: <b><?=$numberOfArticles?></b> &emsp; Klicks: <b class="blue"><?=number_format($pageviews,0,',','.')?></b>
 <?php if ($numberOfArticles > 0): ?>
 &emsp; ⌀-Klicks: <b class="blue"><?=number_format(($pageviews / $numberOfArticles), 0,',','.') ?></b>
 <?php endif ?>
-&emsp; Conversions: <b class="orange"><?=$conversions?></b> &emsp; Kündiger: <b class="redish"><?=$cancelled ?? '0'?></b></p>
+&emsp; Kaufimpulse: <b class="orange"><?=$buyintents ?? '0'?></b>
+&emsp; Conversions: <b class="orange"><?=$conversions?></b>
+&emsp; Kündiger: <b class="redish"><?=$cancelled ?? '0'?></b></p>
 
 <?php endif; ?>
 
@@ -33,6 +35,7 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Klicks: <b class="blue"><?=number_
 <tr>
 	<th>Dachzeile</th>
 	<th></th>
+	<th>Impuls</th>
 	<th>Titel</th>
 	<th>Inhaltstyp</th>
 	<th>Ressort</th>
@@ -49,7 +52,24 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Klicks: <b class="blue"><?=number_
 <tr>
 	<td class="narrower text-right"><?=$article['kicker'] ?? '-'?> </td>
 	<td><?php if ($article['plus']): ?><div class="bluebg"><a title="Statistik-Daten refreshen" class="noline" href="/artikel/<?=$article['id']?>/refresh">+</a></div><?php endif; ?></td>
+
+
+	<?php if ($article['buyintent']): ?>
+	<td title="Kaufabsichten: <?=$article['buyintent']?>">
+		<div class="indicator buyintent">
+			<?php if ($article['buyintent'] >= 100): ?>
+			<div style="width:100%;"><?=$article['buyintent']?></div>
+			<?php else: ?>
+			<div style="width:<?=$article['buyintent']?>%;"><?=$article['buyintent']?></div>
+			<?php endif; ?>
+		</div>
+	</td>
+	<?php else: ?>
+	<td><div class="indicator buyintent"><div>0</div></div></td>
+	<?php endif; ?>
+
 	<td><a href="/artikel/<?=$article['id']?>"><?=$article['title']?></a> </td>
+
 	<td class="type">
 		<?php if (auth_rights('type')): ?>
 		<div class="dropdown-selectors">
@@ -82,6 +102,8 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Klicks: <b class="blue"><?=number_
 		-
 		<?php endif; ?>
 	</td>
+
+
 	<td class="nowrap"><a href="/ressort/<?=urlencode(str_replace('/', '-slash-', $article['ressort']))?>"><?=ucwords($article['ressort'])?></a></td>
 	<?php if (auth_rights('author')): ?>
 	<td class="narrow"><a href="/author/<?=urlencode(str_replace('/', '-slash-', $article['author'] ?? 'Unbekannt'))?>"><?=$article['author'] ?? 'Unbekannt'?></a></td>
@@ -98,7 +120,13 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Klicks: <b class="blue"><?=number_
 	<td><div class="indicator plusleser"><div>0</div></div></td>
 	<?php endif; ?>
 
+
+
+
+
 	<td class="text-right"><div<?php if ($article['conversions'] > 0): ?> class="conversions"<?php endif; ?>><?=number_format($article['conversions'],0,'.','.')?></div></td>
+
+
 	<td class="narrower"><div<?php if ($article['cancelled'] > 0): ?> class="cancelled"<?php endif; ?>><?=$article['cancelled'] ?? '-'?></div></td>
 	<td data-sortdate="<?=$article['pubdate']?>" ><?=formatDate($article['pubdate'],"d.m.Y")?></td>
 </tr>

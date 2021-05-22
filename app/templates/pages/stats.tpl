@@ -4,19 +4,21 @@
 
 <h1>Allgemeine Statistiken</h1>
 
-<p>Es werden nur Klicks auf selbstproduzierte Artikel gezählt, Übersichtsseiten, Bildergalerien, DPA-Artikel u.ä. sind außen vor.<br/>
+<p>Es werden nur Klicks auf selbstproduzierte Artikel gezählt. Einige Übersichtsseiten und DPA-Artikel u.ä. sind außen vor.<br/>
 Daten werden seit Lebensdauer des Artikels angezeigt. Der eingestellte Zeitraum filtert das <b>Publikationsdatum des Artikels!</b> Nicht die eigentlichen Daten! </p>
-<p><b>Kündigungsdaten sind NICHT Live</b> und beziehen sich auf den Tag der letzten Statistik-Aktualisierung des Artikels.<br /> Auch hier handelt es sich um <b>Lebensdauerdaten</b> - der eingestellte Zeitraum filtert lediglich das Publikationsdatum des Artikels.<br />
+<p><b>Kündigungsdaten sind NICHT Live</b> und beziehen sich auf den Tag der letzten Statistik-Aktualisierung des Artikels (i.d.R. 3 Tagen ach Publikation). <br />
 Die Kündigerraten sind vor Februar 2021 nicht relevant, da hier zuviele Daten fehlen!</p>
 
 <p>Alle Daten werden aus performance Gründen <b>1 Minute lang gecached.</b></p>
 
 <p class="light-box" style="margin-bottom:2em;">
-Artikel: <b><?=$articles?></b> &emsp; Klicks: <b class="blue"><?=number_format($pageviews,0,',','.')?></b> 
+Artikel: <b><?=$articles?></b> &emsp; Klicks: <b class="blue"><?=number_format($pageviews,0,',','.')?></b>
 <?php if ($articles > 0): ?>
 &emsp; ⌀-Klicks: <b class="blue"><?=number_format(($pageviews / $articles), 0,',','.') ?></b>
 <?php endif ?>
-&emsp; Besuche: <b class="blue"><?=number_format($sessions,0,',','.')?></b> &emsp; Conversions: <b class="orange"><?=$conversions?></b>
+&emsp; Besuche: <b class="blue"><?=number_format($sessions,0,',','.')?></b>
+&emsp; Kaufimpulse: <b class="orange"><?=$buyintents?></b>
+&emsp; Conversions: <b class="orange"><?=$conversions?></b>
 &emsp; Gekündigt: <b class="redish"><?=$cancelled?></b>
 </p>
 
@@ -95,7 +97,7 @@ Artikel: <b><?=$articles?></b> &emsp; Klicks: <b class="blue"><?=number_format($
 
 <div class="light-box mt" style="margin-bottom:2em;">
 <h3>Legende / Begriffs Erklärungen:</h3>
-<b>Plusquote</b> = Plusartikel / Artikel | <b>⌀-Klicks</b> = Klicks / Anzahl aller Artikel | <b>Plusleser %</b> Eingeloggte User / Klicks | <b>Conversionrate</b> = Conversions / Besuche | <b>Artikel bis Conversion</b> = Artikel / Conversions |
+<b>Plusquote</b> = Plusartikel / Artikel | <b>⌀-Klicks</b> = Klicks / Anzahl aller Artikel | <b>Plusleser %</b> Eingeloggte User / Klicks | <b>Conversionrate</b> = Conversions / Besuche | <b>Kaufimpuls</b> = Klick auf Paywall Produkt |
 <b>K-Quote</b> = Kündigerquote (in der Regel auf 3 Tage)
 </div>
 

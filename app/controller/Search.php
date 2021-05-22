@@ -32,6 +32,7 @@ class Search extends Controller {
 		$viewData['articles'] = $articles;
 		$viewData['query'] = $query;
 		$viewData['pageviews'] = $this->Articles->sum_up($articles,'pageviews');
+		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');		
 		$viewData['conversions'] = $this->Articles->sum_up($articles,'conversions');
 		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
 		$viewData['numberOfArticles'] = 0;
