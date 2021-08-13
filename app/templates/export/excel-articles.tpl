@@ -17,7 +17,8 @@ $header = [
 	'Pageviews',
 	'Sessions',
 	'Conversions',
-	'+Leser',
+	'PlusLeser',
+	'Impulse',
 	'Kündiger',
 	'Haltedauer'
 ];
@@ -43,6 +44,7 @@ foreach ($articles as $article) {
 		$article['sessions'],
 		$article['conversions'],
 		$article['subscribers'],
+		$article['buyintent'],
 		$article['cancelled'],
 		$article['retention_days'],
 	], ';');

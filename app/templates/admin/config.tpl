@@ -32,6 +32,9 @@
 Hier können alle Artikel inklusive Klick- und Kündigerstatistik exportiert werden.<br /><br />
 <a class="button noline" href="/export/articles">Artikeldaten als Excel</a> <a class="button" href="/export/conversions">Conversiondaten als Excel</a></p>
 
+<a class="button noline" target="_blank" href="/newsletter/chefredaktion">Export Chefredaktion</a>
+
+
 </section>
 
 <section>

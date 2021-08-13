@@ -12,7 +12,7 @@ Die Kündigerraten sind vor Februar 2021 nicht relevant, da hier zuviele Daten f
 <p>Alle Daten werden aus performance Gründen <b>1 Minute lang gecached.</b></p>
 
 <p class="light-box" style="margin-bottom:2em;">
-Artikel: <b><?=$articles?></b> &emsp; Klicks: <b class="blue"><?=number_format($pageviews,0,',','.')?></b>
+Artikel: <b title="davon Plusartikel: <?=$plusarticles?>"><?=$articles?></b> &emsp; Klicks: <b class="blue"><?=number_format($pageviews,0,',','.')?></b>
 <?php if ($articles > 0): ?>
 &emsp; ⌀-Klicks: <b class="blue"><?=number_format(($pageviews / $articles), 0,',','.') ?></b>
 <?php endif ?>

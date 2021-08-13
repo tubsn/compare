@@ -147,7 +147,7 @@ class Articles extends Controller {
 	private function collect_data($id, $pubDate = '30daysAgo') {
 
 		// Don't refresh Stuff older then a Year
-		if ($this->days_since($pubDate) > 365) {return;}
+		if ($this->days_since($pubDate) > MAX_IMPORT_RANGE) {return;}
 
 		// show Realtime Linkpulse Data for Todays articles
 		if ($pubDate == date('Y-m-d')) {
@@ -189,7 +189,7 @@ class Articles extends Controller {
 			throw new \Exception('Artikel konnte nicht importiert werden', 404);
 		}
 
-		if ($this->days_since($newArticle['pubdate']) >= 365) {
+		if ($this->days_since($newArticle['pubdate']) >= MAX_IMPORT_RANGE) {
 			throw new \Exception('Artikel zu alt zum Importieren', 404);
 		}
 

@@ -6,13 +6,15 @@
 
 <nav class="main-nav">
 	<ul>
-		<li><a href="/">Home</a></li>
+		<!--<li><a href="/">Home</a></li>-->
+		<li class="compare-logo-li"><a href="/"><span class="compare-logo"></span></a></li>
 		<li><a href="/ressort">Ressorts</a></li>
 		<li><a href="/type">Inhalte</a></li>
 		<li><a href="/tag">#Tags</a></li>
-		<!--<li><a href="/plus">Plus-Artikel</a></li>-->
 		<li><a href="/pageviews">Klicks</a></li>
+		<li><a href="/subscribers">Subscribers</a></li>
 		<li><a href="/conversions">Conversions</a></li>
+		<li><a href="/top5">Top5</a></li>
 		<li><a href="/stats">Statistiken</a></li>
 		<li><a href="/stats/cancellations">Kündiger</a></li>
 	</ul>
@@ -44,7 +46,7 @@
 
 </nav>
 
-<a href="/" title="Max die Datenkrake lässt sich nicht gern kitzeln!"><img class="main-logo" src="/styles/img/datenkrake.svg"></a>
+<!--<a href="/" title="Max die Datenkrake lässt sich nicht gern kitzeln!"><img class="main-logo" src="/styles/img/datenkrake.svg"></a>-->
 
 <?php if (isset($navigation)): ?>
 <?php include tpl($navigation) ?>

@@ -36,11 +36,16 @@ class LR_RSS_Adapter
 		$article['plus'] = $xml->NewsItem->NewsManagement->accessRights->__toString()  == 'available to subscribers only' ? true : false;
 
 		// This is the last Edit timestamp - Pubdate is not available
-		$timestamp = $xml->NewsItem->NewsManagement->ThisRevisionCreated->__toString();
+		//$timestamp = $xml->NewsItem->NewsManagement->ThisRevisionCreated->__toString();
+		$timestamp = $xml->NewsItem->Identification->NewsIdentifier->DateId->__toString();
 		$article['pubdate'] = date('Y-m-d H:i:s', strtotime($timestamp));
 
-		$article['image'] = $xml->NewsItem->xpath('NewsComponent[@Duid="leadImage"]//NewsComponent')[0]->ContentItem['Href']->__toString();
-		$article['link'] = $url;
+		if (isset($xml->NewsItem->xpath('NewsComponent[@Duid="leadImage"]//NewsComponent')[0]->ContentItem['Href'])) {
+			$article['image'] = $xml->NewsItem->xpath('NewsComponent[@Duid="leadImage"]//NewsComponent')[0]->ContentItem['Href']->__toString();
+		}
+		else {$article['image'] = null;}
+
+		$article['link'] = substr($url,0,-9);;
 
 		return $article;
 

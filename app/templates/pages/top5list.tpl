@@ -10,30 +10,15 @@
 <p><?=$info?></p>
 <?php endif; ?>
 
-<?php if (isset($pageviews) || isset($conversions)): ?>
+<?php foreach ($list as $type => $articles): ?>
 
-<p class="light-box" style="margin-bottom:2em;">
-Artikel: <b><?=$numberOfArticles?></b> &emsp; Klicks: <b class="blue"><?=number_format($pageviews,0,',','.')?></b>
-&emsp; Subscribers: <b class="blue"><?=number_format($subscribers,0,',','.')?></b>
-<?php if ($numberOfArticles > 0): ?>
-&emsp; ⌀-Klicks: <b class="blue"><?=number_format(($pageviews / $numberOfArticles), 0,',','.') ?></b>
-<?php endif ?>
-&emsp; Kaufimpulse: <b class="orange"><?=$buyintents ?? '0'?></b>
-&emsp; Conversions: <b class="orange"><?=$conversions?></b>
-&emsp; Kündiger: <b class="redish"><?=$cancelled ?? '0'?></b></p>
-
-<?php endif; ?>
-
-<?php if (isset($chart) && strlen($chart['dates']) > 12): ?>
-	<figure class="mb">
-	<?php include tpl('charts/ressort_lines');?>
-	</figure>
-<?php endif; ?>
-
+<h1><?=ucfirst($type)?></h1>
+	
 <?php if ($articles): ?>
-<table class="fancy wide js-sortable condensed">
+<table class="fancy wide js-sortable condensed mbig">
 <thead>
 <tr>
+	<th></th>
 	<th>Dachzeile</th>
 	<th></th>
 	<th>Impuls</th>
@@ -52,6 +37,9 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Klicks: <b class="blue"><?=number_
 <tbody>
 <?php foreach ($articles as $article): ?>
 <tr>
+
+	<td class="<?php if ($article['multiple'] == 2): ?>once<?php endif ?><?php if ($article['multiple'] == 3): ?>twice<?php endif ?>"><?=$article['multiple']?></td>
+
 	<td class="narrower text-right"><?=$article['kicker'] ?? '-'?> </td>
 	<td><?php if ($article['plus']): ?><div class="bluebg"><a title="Statistik-Daten refreshen" class="noline" href="/artikel/<?=$article['id']?>/refresh">+</a></div><?php endif; ?></td>
 
@@ -123,7 +111,7 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Klicks: <b class="blue"><?=number_
 	<?php endif; ?>
 
 
-	<td><?=number_format($article['subscribers'],0,'.','.') ?? 0?></td>
+	<td><?=$article['subscribers']?></td>
 
 
 	<td class="text-right"><div<?php if ($article['conversions'] > 0): ?> class="conversions"<?php endif; ?>><?=number_format($article['conversions'],0,'.','.')?></div></td>
@@ -138,5 +126,7 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Klicks: <b class="blue"><?=number_
 <?php else: ?>
 	<p>Für diesen Zeitraum oder diese Suchanfrage sind keine Artikel vorhanden!</p>
 <?php endif; ?>
+
+<?php endforeach ?>
 
 </main>

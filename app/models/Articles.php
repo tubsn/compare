@@ -99,6 +99,29 @@ class Articles extends Model
 
 	}
 
+	public function list_by_fuzzy($searchterm, $column, $order = 'pubdate') {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$searchterm = '%'.$searchterm.'%';
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT *
+			 FROM `articles`
+			 WHERE `$column` LIKE :term
+			 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			 ORDER BY $order DESC
+			 LIMIT 0, 5000"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to, ':term' => $searchterm]);
+		$output = $SQLstatement->fetchall();
+		if (empty($output)) {return null;}
+		return $output;
+
+	}
+
 
 	public function list_distinct($column) {
 
@@ -165,8 +188,9 @@ class Articles extends Model
 
 	}
 
-	public function conversions_only(array $options = []) {
+	public function conversions_only($limit=1000) {
 
+		$limit = intval($limit);
 		$from = strip_tags($this->from);
 		$to = strip_tags($this->to);
 
@@ -176,7 +200,7 @@ class Articles extends Model
 			 WHERE `conversions` > 0
 			 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate
 			 ORDER BY `conversions` DESC
-			 LIMIT 0, 1000"
+			 LIMIT 0, $limit"
 		);
 
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
@@ -186,9 +210,10 @@ class Articles extends Model
 
 	}
 
-	public function pageviews_only($minimum = 1000) {
+	public function pageviews_only($minimum = 1000, $limit=1000) {
 
 		$minimum = intval($minimum);
+		$limit = intval($limit);
 		$from = strip_tags($this->from);
 		$to = strip_tags($this->to);
 
@@ -198,7 +223,7 @@ class Articles extends Model
 			 WHERE `pageviews` > $minimum
 			 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate
 			 ORDER BY `pageviews` DESC
-			 LIMIT 0, 1000"
+			 LIMIT 0, $limit"
 		);
 
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
@@ -208,6 +233,27 @@ class Articles extends Model
 
 	}
 
+
+	public function subscriber_only($limit=2000) {
+
+		$limit = intval($limit);
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT *
+			 FROM `articles`
+			 WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			 ORDER BY `subscribers` DESC
+			 LIMIT 0, $limit"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall();
+		if (empty($output)) {return null;}
+		return $output;
+
+	}
 
 	public function by_date_range($start, $end = null) {
 
@@ -307,6 +353,86 @@ class Articles extends Model
 	}
 
 
+
+
+	public function top_pageviews_days_ago($days = 1) {
+
+		$from = date('Y-m-d', strtotime('-'.$days.'days'));
+		$to = date('Y-m-d', strtotime('-1days'));
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT *
+			 FROM `articles`
+			 WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			 ORDER BY pageviews DESC
+			 LIMIT 0, 5"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall();
+		if (empty($output)) {return null;}
+		return $output;
+
+	}
+
+	public function top_conversions_days_ago($days = 1) {
+
+		$from = date('Y-m-d', strtotime('-'.$days.'days'));
+		$to = date('Y-m-d', strtotime('-1days'));
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT *
+			 FROM `articles`
+			 WHERE (DATE(`pubdate`) BETWEEN :startDate AND :endDate)
+			 AND conversions > 0
+			 ORDER BY conversions DESC, pageviews DESC
+			 LIMIT 0, 5"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall();
+		if (empty($output)) {return null;}
+		return $output;
+
+	}
+
+
+	public function top_articles_by_ressort_and_days_ago($ressorts = null, $days = 1) {
+
+		$from = date('Y-m-d', strtotime('-'.$days.'days'));
+		$to = date('Y-m-d', strtotime('-1days'));
+
+		$ressortQuery = null; 
+
+		if ($ressorts) {
+			$ressorts = explode_and_trim(',', $ressorts);
+			foreach ($ressorts as $key => $ressort) {
+				if ($key == 0) {
+					$ressortQuery = "AND (ressort = '" . $ressort . "'";
+				}
+				else {$ressortQuery .= " OR ressort = '" . $ressort . "'";}
+			}
+			$ressortQuery .= ')';
+		}
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT *
+			 FROM `articles`
+			 WHERE (DATE(`pubdate`) BETWEEN :startDate AND :endDate)
+			 $ressortQuery
+			 ORDER BY conversions DESC, pageviews DESC
+			 LIMIT 0, 5"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall();
+		if (empty($output)) {return null;}
+		return $output;
+
+	}
+
+
+
 	public function stats_grouped_by($column = 'ressort', $orderby = 'conversions DESC, ressort ASC') {
 
 		$column = strip_tags($column);
@@ -385,6 +511,92 @@ class Articles extends Model
 		return $output;
 
 	}
+
+
+	public function stats_grouped_by_single_author($column = 'ressort', $orderby = 'conversions DESC, ressort ASC') {
+
+		/* Test Purpose Only!!!! */
+
+		$column = strip_tags($column);
+		$orderby = strip_tags($orderby);
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+
+			"SELECT $column,
+
+       		(SELECT count(id)
+        	FROM `articles` AS temptable
+        	WHERE temptable.$column = maintable.$column
+        	AND `author` LIKE '%boc%' 
+			AND DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			) as artikel,
+
+       		(SELECT count(id)
+        	FROM `articles` AS temptable
+        	WHERE temptable.$column = maintable.$column
+        	AND `author` LIKE '%boc%' 
+			AND `plus` IS NULL AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) AS free,
+
+       		(SELECT count(id)
+        	FROM `articles` AS temptable
+        	WHERE temptable.$column = maintable.$column
+        	AND `author` LIKE '%boc%' 
+			AND `plus` = 1 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as plus,
+
+       		(SELECT sum(pageviews)
+        	FROM `articles` AS temptable
+        	WHERE temptable.$column = maintable.$column
+        	AND `author` LIKE '%boc%' 
+			AND `pageviews` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as pageviews,
+
+       		(SELECT sum(subscribers)
+        	FROM `articles` AS temptable
+        	WHERE temptable.$column = maintable.$column
+        	AND `author` LIKE '%boc%' 
+			AND `subscribers` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as subscribers,
+
+       		(SELECT sum(sessions)
+        	FROM `articles` AS temptable
+        	WHERE temptable.$column = maintable.$column
+        	AND `author` LIKE '%boc%' 
+			AND `sessions` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as sessions,
+
+       		(SELECT sum(cancelled)
+        	FROM `articles` AS temptable
+        	WHERE temptable.$column = maintable.$column
+        	AND `author` LIKE '%boc%' 
+			AND `cancelled` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as cancelled,
+
+       		(SELECT sum(buyintent)
+        	FROM `articles` AS temptable
+        	WHERE temptable.$column = maintable.$column
+        	AND `author` LIKE '%boc%' 
+			AND `buyintent` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as buyintents,
+
+       		(SELECT sum(conversions)
+        	FROM `articles` AS temptable
+        	WHERE temptable.$column = maintable.$column
+        	AND `author` LIKE '%boc%' 
+			AND `conversions` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as conversions
+
+			FROM `articles` AS maintable
+			WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			AND `author` LIKE '%boc%' 
+			GROUP BY $column ORDER BY $orderby");
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+
+		$output = $SQLstatement->fetchall(\PDO::FETCH_UNIQUE);
+		if (empty($output)) {return null;}
+
+		unset($output['']); // somehow there´s some null Type exported
+
+		return $output;
+
+	}
+
 
 
 	public function free_articles_by_ressort() {

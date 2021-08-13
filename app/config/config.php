@@ -12,6 +12,8 @@ define('ARTICLE_TAGS', $tags);
 define('PORTAL_URL', 'https://www.lr-online.de');
 define('PORTAL_NAME', 'LR');
 
+define('MAX_IMPORT_RANGE', 365);
+
 define('IMPORT_FEEDS', [
 	'https://www.lr-online.de/?_XML=RSS',
 	'https://www.lr-online.de/energie-cottbus/?_XML=RSS',

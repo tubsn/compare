@@ -18,6 +18,7 @@ class Stats extends Controller {
 	public function index() {
 
 		$viewData['articles'] = $this->Articles->count('*');
+		$viewData['plusarticles'] = $this->Articles->sum('plus');
 		$viewData['pageviews'] = $this->Articles->sum('pageviews');
 		$viewData['subscribers'] = $this->Articles->sum('subscribers');
 		$viewData['sessions'] = $this->Articles->sum('sessions');
@@ -35,6 +36,15 @@ class Stats extends Controller {
 		Session::set('referer', '/stats');
 		$this->view->title = 'Statistik Daten';
 		$this->view->render('pages/stats', $viewData);
+	}
+
+	public function stats_bock() {
+
+		$viewData['authorStats'] = $this->Articles->stats_grouped_by_single_author($column = 'author', $order = 'author ASC');
+
+		$this->view->title = 'Statistik Daten';
+		$this->view->render('pages/stats', $viewData);
+
 	}
 
 

@@ -6,6 +6,7 @@ $routes->get('/', 'Lists@index');
 // Pages
 $routes->get('/unset', 'Lists@unset_only');
 $routes->get('/author/{author}', 'Lists@author');
+$routes->get('/author-fuzzy/{author}', 'Lists@author_fuzzy');
 $routes->get('/ressort/{ressort}', 'Lists@ressort');
 $routes->get('/ressort', 'Lists@ressort');
 $routes->get('/type/{type}', 'Lists@type');
@@ -13,12 +14,15 @@ $routes->get('/type', 'Lists@type');
 $routes->get('/tag/{tag}', 'Lists@tag');
 $routes->get('/tag', 'Lists@tag');
 $routes->get('/plus', 'Lists@plus');
+$routes->get('/top5', 'Lists@top5');
 $routes->get('/conversions', 'Lists@conversions');
 $routes->get('/pageviews', 'Lists@pageviews');
+$routes->get('/subscribers', 'Lists@subscribers');
 $routes->post('/settimeframe', 'Articles@set_timeframe');
 
 // Stats
 $routes->get('/stats', 'Stats@index');
+$routes->get('/stats-bock', 'Stats@stats_bock');
 $routes->get('/stats/cancellations', 'Stats@cancellations');
 
 // Article Details
@@ -41,7 +45,6 @@ $routes->get('/leser/{plenigoID}', 'Readers@detail');
 $routes->get('/lp/{articleID:\d+}', 'Articles@linkpulse');
 $routes->get('/retresco/{id:\d+}', 'Articles@retresco');
 $routes->get('/cards', 'Lists@cards');
-$routes->get('/art/{articleID:\d+}', 'Articles@quickview');
 $routes->get('/test/{id:\d+}', 'Articles@test');
 
 
@@ -49,9 +52,13 @@ $routes->get('/test/{id:\d+}', 'Articles@test');
 $routes->get('/export/articles', 'Exports@articles');
 $routes->get('/export/conversions', 'Exports@conversions');
 $routes->get('/export/json', 'Exports@full_json');
-$routes->get('/export/combined', 'Exports@daily');
 $routes->get('/export/ressorts', 'Exports@ressort_stats');
 $routes->get('/mp', 'MassPlenigo@export');
+
+// Newsletter
+$routes->get('/newsletter/chefredaktion', 'Newsletter@chefredaktion');
+$routes->get('/newsletter/sport', 'Newsletter@sport_newsletter');
+$routes->get('/newsletter/test', 'Newsletter@test');
 
 
 // Admin - Config Area

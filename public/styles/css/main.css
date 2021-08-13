@@ -23,6 +23,8 @@ h3 + h1 {margin-top:-.5em;}
 .main-nav {display:flex; justify-content:space-between; padding-left: 1em; padding-right:1em;}
 .main-nav {margin-bottom:3em;}
 
+.main-nav ::placeholder {color:#9aafc0;}
+
 .main-nav a {padding:.5em; color:white;}
 .main-nav a:hover {padding:.5em; color:#213e5e;}
 
@@ -41,6 +43,10 @@ h3 + h1 {margin-top:-.5em;}
 	.main-logo {display:none;}
 }
 
+
+.compare-logo-li {}
+.compare-logo {background:url('/styles/img/compare-logo-white.svg') no-repeat; background-size:100%; display:inline-block; width:90px; height:18px; position: relative; top: 6px;}
+.compare-logo-li:hover .compare-logo {background:url('/styles/img/compare-logo-black.svg') no-repeat; background-size:100%;}
 
 .login-icon:hover #loginHeadIcon {fill: #333333}
 
@@ -64,6 +70,11 @@ table th.dir-d {background-image: linear-gradient(#4c739d 0%, #3b618c 82%, #d1d7
 table td.narrow {white-space: nowrap; max-width:200px; overflow: hidden; text-overflow: ellipsis;}
 table td.narrower {white-space: nowrap; max-width:250px; overflow: hidden; text-overflow: ellipsis;}
 table td.type {white-space: nowrap; min-width:160px; overflow: hidden; text-overflow: ellipsis;}
+
+table td.once {background-color: #fff8c3 !important;}
+table td.twice {background-color: #ceddbd !important;}
+
+table.mbig {margin-bottom:2em;}
 
 tr.text-right th {text-align:right;}
 th.text-left {text-align:left !important;}
@@ -92,10 +103,12 @@ th.text-left {text-align:left !important;}
 .orangebg {background-color: var(--light-orange);}
 
 
-.type-link {background-color: var(--light-gray); display:inline-block; padding:0.1em .5em; border-radius:1em}
-.type-link:hover {background-color:white;}
+.type-link, .type-link-light {background-color: var(--light-gray); display:inline-block; padding:0.1em .5em; border-radius:1em}
+.type-link-light {background-color:f3f3f3 !important;}
 
-a.type-link {text-decoration: none; color: var(--text-color)}
+.type-link:hover, .type-link-light:hover {background-color:white;}
+
+a.type-link, a.type-link-light {text-decoration: none; color: var(--text-color)}
 
 .pointer {cursor:pointer;}
 
@@ -136,7 +149,7 @@ a.type-link {text-decoration: none; color: var(--text-color)}
 .timeframe-picker {display:flex; gap:1em;}
 .icon-calendar {max-width:40px; position:relative; bottom:-5px; cursor:pointer; border:0; }
 
-.calendar-picker {background-color:#f0f0f0; padding:0.4em .6em; position:absolute; right:0;}
+.calendar-picker {background-color:#f0f0f0; padding:0.4em .6em 0.1em .6em; position:absolute; right:0;}
 
 .calendar-picker form {display:inline-block;}
 .calendar-picker select, .calendar-picker input, .calendar-picker fieldset, .calendar-picker button {margin:0;}

@@ -4,10 +4,11 @@
 			<th class="text-left"><?=$tableName?></th>
 			<th>Artikel</th>
 			<th style="text-align:center">Plus-Artikel</th>
-			<th>Quote</th>
+			<th>+Quote</th>
 			<th>Klicks</th>
 			<th>⌀-Klicks</th>
-			<th style="text-align:center">Plusleser %</th>
+			<th style="text-align:center">+Leser %</th>
+			<th>+Leser</th>
 			<th>Kaufimpulse</th>
 			<th>Conversions</th>
 			<th>Conversionrate</th>
@@ -43,6 +44,7 @@
 			<td><div class="indicator plusleser"><div>0</div></div></td>
 			<?php endif; ?>
 
+			<td><?=number_format($stats['subscribers'],0,'.','.') ?? 0?></td>
 			<td><?=number_format($stats['buyintents'],0,'.','.') ?? 0?></td>
 
 
