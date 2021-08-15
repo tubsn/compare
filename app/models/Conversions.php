@@ -4,7 +4,6 @@ namespace app\models;
 use \flundr\database\SQLdb;
 use \flundr\mvc\Model;
 use \flundr\utility\Session;
-use flundr\cache\RequestCache;
 
 class Conversions extends Model
 {
@@ -39,13 +38,16 @@ class Conversions extends Model
 
 	}
 
-	public function refresh() {
+	public function refresh($withGoogleAnalytics = true) {
 
 		$this->transactions = [];
 		$this->transactionIDs = [];
 		$this->analyticsData = [];
 
-		$this->collect_analytics_data();
+		if ($withGoogleAnalytics) {
+			$this->collect_analytics_data();
+		}
+
 		$this->merge_archived_transactions();
 		$this->enrich_transactions();
 
@@ -53,6 +55,8 @@ class Conversions extends Model
 		$this->update_article();
 
 	}
+
+	public function refresh_without_google_analytics() {$this->refresh(false);}
 
 	public function update_article() {
 		$article = new Articles();
@@ -68,8 +72,6 @@ class Conversions extends Model
 		$data['refresh'] = date('Y-m-d H:i:s');
 		$article->update($data, $this->articleID);
 	}
-
-
 
 
 	public function group_by($index) {
@@ -201,6 +203,7 @@ class Conversions extends Model
 	private function collect_analytics_data() {
 
 		$analyticsData = $this->analytics->conversions_by_article_id($this->articleID, $this->pubDate);
+
 		$analyticsData = array_column($analyticsData, null, 'Transactionid'); // Sets TransactionID as Key
 		$this->analyticsData = $analyticsData;
 
@@ -208,11 +211,27 @@ class Conversions extends Model
 
 	private function merge_archived_transactions() {
 
-		$analyticsTransactionIDs = array_column($this->analyticsData, 'Transactionid');
-		$analyticsTransactionIDs = array_fill_keys($analyticsTransactionIDs, []);
+		if (count($this->analyticsData) > 0) {
 
-		$articlesInDB = $this->archived_transaction_ids($this->articleID);
-		$this->transactionIDs = array_replace($articlesInDB, $analyticsTransactionIDs);
+			$analyticsTransactionIDs = array_column($this->analyticsData, 'Transactionid');
+			$analyticsTransactionIDs = array_fill_keys($analyticsTransactionIDs, []);
+
+			$previouslyStoredTransactionIDs = $this->archived_transaction_ids($this->articleID);
+			$plenigoTransactionIDs = $this->plenigo_transaction_ids($this->articleID);
+
+			// Adds IDs from Analytics, to the stored ones and fills up with the Orders from the Plenigo API
+			$transactionIDs = array_replace($previouslyStoredTransactionIDs, $analyticsTransactionIDs);
+			$transactionIDs = array_replace($transactionIDs, $plenigoTransactionIDs);
+			$this->transactionIDs = $transactionIDs;
+		}
+
+		else {
+
+			$previouslyStoredTransactionIDs = $this->archived_transaction_ids($this->articleID);
+			$plenigoTransactionIDs = $this->plenigo_transaction_ids($this->articleID);
+			$this->transactionIDs = array_replace($previouslyStoredTransactionIDs, $plenigoTransactionIDs);
+
+		}
 
 	}
 
@@ -227,6 +246,17 @@ class Conversions extends Model
 		$SQLstatement->execute([':id' => $articleID]);
 		return $SQLstatement->fetchall(\PDO::FETCH_UNIQUE);
 
+	}
+
+	private function is_already_cancelled($transactionID) {
+		$cancelled = $this->get($transactionID,['cancelled'])['cancelled'];
+		if ($cancelled == 1) {return true;}
+		return false;
+	}
+
+	private function plenigo_transaction_ids($articleID) {
+		$orderDB = new Orders();
+		return $orderDB->transactionIDs_by_article($articleID);
 	}
 
 
@@ -253,6 +283,13 @@ class Conversions extends Model
 				$data['ga_city']		= $analytics['City'];
 				$data['ga_source']		= $analytics['Source'];
 				$data['ga_sessions']	= $analytics['Sessioncount'];
+			}
+
+			// Cancelled orders should not Change right?
+			if ($this->is_already_cancelled($transactionID) == 1) {
+				$data = $this->get($transactionID);
+				array_push($this->transactions, $data);
+				continue;
 			}
 
 			$plenigo = $this->plenigo->order_with_details($transactionID);

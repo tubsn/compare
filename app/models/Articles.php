@@ -402,7 +402,7 @@ class Articles extends Model
 		$from = date('Y-m-d', strtotime('-'.$days.'days'));
 		$to = date('Y-m-d', strtotime('-1days'));
 
-		$ressortQuery = null; 
+		$ressortQuery = null;
 
 		if ($ressorts) {
 			$ressorts = explode_and_trim(',', $ressorts);
@@ -529,61 +529,61 @@ class Articles extends Model
        		(SELECT count(id)
         	FROM `articles` AS temptable
         	WHERE temptable.$column = maintable.$column
-        	AND `author` LIKE '%boc%' 
+        	AND `author` LIKE '%boc%'
 			AND DATE(`pubdate`) BETWEEN :startDate AND :endDate
 			) as artikel,
 
        		(SELECT count(id)
         	FROM `articles` AS temptable
         	WHERE temptable.$column = maintable.$column
-        	AND `author` LIKE '%boc%' 
+        	AND `author` LIKE '%boc%'
 			AND `plus` IS NULL AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) AS free,
 
        		(SELECT count(id)
         	FROM `articles` AS temptable
         	WHERE temptable.$column = maintable.$column
-        	AND `author` LIKE '%boc%' 
+        	AND `author` LIKE '%boc%'
 			AND `plus` = 1 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as plus,
 
        		(SELECT sum(pageviews)
         	FROM `articles` AS temptable
         	WHERE temptable.$column = maintable.$column
-        	AND `author` LIKE '%boc%' 
+        	AND `author` LIKE '%boc%'
 			AND `pageviews` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as pageviews,
 
        		(SELECT sum(subscribers)
         	FROM `articles` AS temptable
         	WHERE temptable.$column = maintable.$column
-        	AND `author` LIKE '%boc%' 
+        	AND `author` LIKE '%boc%'
 			AND `subscribers` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as subscribers,
 
        		(SELECT sum(sessions)
         	FROM `articles` AS temptable
         	WHERE temptable.$column = maintable.$column
-        	AND `author` LIKE '%boc%' 
+        	AND `author` LIKE '%boc%'
 			AND `sessions` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as sessions,
 
        		(SELECT sum(cancelled)
         	FROM `articles` AS temptable
         	WHERE temptable.$column = maintable.$column
-        	AND `author` LIKE '%boc%' 
+        	AND `author` LIKE '%boc%'
 			AND `cancelled` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as cancelled,
 
        		(SELECT sum(buyintent)
         	FROM `articles` AS temptable
         	WHERE temptable.$column = maintable.$column
-        	AND `author` LIKE '%boc%' 
+        	AND `author` LIKE '%boc%'
 			AND `buyintent` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as buyintents,
 
        		(SELECT sum(conversions)
         	FROM `articles` AS temptable
         	WHERE temptable.$column = maintable.$column
-        	AND `author` LIKE '%boc%' 
+        	AND `author` LIKE '%boc%'
 			AND `conversions` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as conversions
 
 			FROM `articles` AS maintable
 			WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate
-			AND `author` LIKE '%boc%' 
+			AND `author` LIKE '%boc%'
 			GROUP BY $column ORDER BY $orderby");
 
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);

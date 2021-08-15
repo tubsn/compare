@@ -72,7 +72,7 @@ class Lists extends Controller {
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
-		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');		
+		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');
 		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
 		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
 		$viewData['numberOfArticles'] = $count;
@@ -90,7 +90,7 @@ class Lists extends Controller {
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
-		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');		
+		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');
 		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
 		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
 		$viewData['numberOfArticles'] = $count;
@@ -135,7 +135,7 @@ class Lists extends Controller {
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
-		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');		
+		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');
 		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
 		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
 		$viewData['numberOfArticles'] = $count;
@@ -161,7 +161,7 @@ class Lists extends Controller {
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
-		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');		
+		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');
 		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
 		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
 		$viewData['numberOfArticles'] = $count;
@@ -170,8 +170,6 @@ class Lists extends Controller {
 		$this->view->info = null;
 		$this->view->render('pages/list', $viewData);
 	}
-
-
 
 
 
@@ -191,7 +189,7 @@ class Lists extends Controller {
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
-		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');		
+		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');
 		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
 		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
 		$viewData['numberOfArticles'] = $count;
@@ -214,7 +212,7 @@ class Lists extends Controller {
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
-		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');		
+		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');
 		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
 		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
 		$viewData['numberOfArticles'] = $count;
@@ -236,7 +234,7 @@ class Lists extends Controller {
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
-		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');		
+		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');
 		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
 		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
 		$viewData['numberOfArticles'] = $count;
@@ -264,7 +262,9 @@ class Lists extends Controller {
 
 		foreach ($viewData['list'] as $type => $list) {
 			$viewData['list'][$type] = array_map(function($article) use ($multipleIDs) {
-		
+
+				$article['multiple'] = null;
+
 				if (in_array($article['id'], array_keys($multipleIDs))) {
 					$article['multiple'] = $multipleIDs[$article['id']];
 					return $article;

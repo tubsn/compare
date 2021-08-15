@@ -16,14 +16,6 @@ class Articles extends Controller {
 		$this->models('Articles,Analytics,Stats,Conversions,Linkpulse,Plenigo');
 	}
 
-	public function test($id) {
-
-	$id = 'LBIQCRx4J6B5q1507142B9i3663106u1';
-
-		dd($this->Plenigo->order_with_details($id));
-
-	}
-
 
 	public function detail($id) {
 		$viewData['article'] = $this->Articles->get($id);

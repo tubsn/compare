@@ -42,7 +42,7 @@ Hier können alle Artikel inklusive Klick- und Kündigerstatistik exportiert wer
 	<p>Hier werden mögliche Artikel Inhaltstypen eingestellt. Die Typen können gelöscht werden, bereits gesetzte Artikel behalten ihren Typen bei. Für neue Artikel ist der gelöschte Typ nicht mehr auswählbar. (Nützlich für Zeitlich begrenzte Serien - Reihenfolge ist relevant)</p>
 	<p>Artikeltypen:</p>
 
-	<form action="" method="post">
+	<form class="mb" action="" method="post">
 	<textarea name="typen" class="artikel-typen"><?=$typen?></textarea>
 
 	<p>Subkategorien:</p>
@@ -50,6 +50,13 @@ Hier können alle Artikel inklusive Klick- und Kündigerstatistik exportiert wer
 	<textarea name="tags" class="artikel-tags mt"><?=$tags?></textarea>
 	<button type="submit">Artikel Kategorien speichern</button>
 	</form>
+
+
+	<hr/>
+	<h3>Plenigo Order Tabelle</h3>
+	<p>Zwischenlösung um Plenigo API Daten zu Importieren</p>
+	<a class="button noline" href="/admin/orders">Zur Order Import Verwaltung</a>
+
 
 
 </section>

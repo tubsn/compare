@@ -230,6 +230,10 @@
 		<td><a target="_blank" href="https://backend.plenigo.com/***REMOVED***/customers/<?=$conversion['customer_id'];?>/show"><?=$conversion['customer_id'];?></a></td>
 	</tr>
 	<tr>
+		<td>OrderID:</td>
+		<td><a target="_blank" href="https://backend.plenigo.com/***REMOVED***/orders/<?=$conversion['transaction_id'];?>/show"><?=$conversion['transaction_id'];?></a></td>
+	</tr>
+	<tr>
 		<td>Bestelldatum:</td>
 		<td><?=formatDate($conversion['order_date'], 'd.m.Y H:i')?> Uhr</td>
 	</tr>

@@ -1,3 +1,145 @@
+class Imports {
+
+	constructor() {
+
+	}
+
+	run (event) {
+
+		event.preventDefault();
+		let from = event.target.querySelector('input[name="from"]').value || new Date();
+		let to = event.target.querySelector('input[name="to"]').value || new Date();
+		let dates = this.date_span(from, to);
+
+		console.log(dates);
+
+		this.prepare(dates);
+		this.import(dates).then(response => {this.aftercare()});
+
+	}
+
+
+	prepare(dates) {
+
+		this.output = document.querySelector('#output') || null;
+		this.output.innerHTML = '';
+		this.output.style.border = '1px solid black';
+		this.output.style.padding = '1em';
+		this.output.style.display = 'inline-block';
+
+		this.loader = document.createElement('progress');
+		this.loader.max = 100;
+		this.loader.style.display = 'block';
+
+		/*
+		this.loader.style.background = 'black';
+		this.loader.style.height = '.3em';
+		this.loader.style.display = 'block';
+		this.loader.style.width = '10%';
+		*/
+
+		this.output.appendChild(this.loader);
+
+		this.importedDays = 0;
+		this.importedDuration = 0;
+		this.daysToImport = dates.length;
+		this.output.appendChild(document.createTextNode("Zu Importierende Tage: "+this.daysToImport))
+	}
+
+	aftercare() {
+
+		let seconds = this.importedDuration / 1000 + 's';
+
+		this.output.appendChild(document.createTextNode("Gesamtdauer: " + seconds))
+
+	}
+
+
+	to_iso(date) {
+		return date.toISOString().split('T')[0];
+	}
+
+	date_span(startDate, endDate) {
+
+		if (typeof startDate.getMonth !== 'function') {startDate = new Date(startDate);}
+		if (typeof endDate.getMonth !== 'function') {endDate = new Date(endDate);}
+
+		if (startDate > endDate) {
+			let temp = startDate;
+			startDate = endDate;
+			endDate = temp;
+		}
+
+		let dates = []
+		//to avoid modifying the original date
+		const theDate = new Date(startDate)
+		while (theDate < endDate) {
+			dates = [...dates, this.to_iso(new Date(theDate))]
+			theDate.setDate(theDate.getDate() + 1)
+		}
+		dates = [...dates, this.to_iso(endDate)]
+		return dates
+	}
+
+
+	log(orders, date, duration) {
+
+		let container = document.createElement('div');
+
+		duration = duration / 1000;
+
+		let text = document.createElement('p');
+		text.innerText = date + ' | Anzahl Käufe: ' + orders.length + ' | Importdauer: ' + duration + 's';
+
+		/*
+		for (let order of orders) {
+			let entry = document.createElement('p');
+			entry.innerHTML = order.order_id;
+			container.appendChild(entry);
+		}
+		*/
+
+		container.appendChild(text);
+		this.output.appendChild(container);
+
+	}
+
+	async import(dates) {
+
+		for(const date of dates) {
+
+			let start = new Date().getTime();
+
+			await fetch('http://app2.localhost/import/' + date, {method: 'GET', credentials: 'same-origin'})
+			.then(response => {
+				if(response.status === 404) {console.log(response.text()); return null;}
+				return response.json();
+			})
+			.then(orders => {
+				let end = new Date().getTime();
+				let duration = end - start;
+				this.importedDays++;
+				this.importedDuration = this.importedDuration + duration
+				this.loader.value = Math.round((this.importedDays / this.daysToImport * 100));
+				this.log(orders, date, duration);
+			})
+			.catch(error => {
+				console.error(`Oops: ${error}`);
+			});
+		}
+
+	};
+
+
+
+
+}
+
+
+
+
+
+
 class Artikel {
 
 	constructor() {
@@ -235,4 +377,5 @@ class Artikel {
 //When the DOM is fully loaded - aka Document Ready
 document.addEventListener("DOMContentLoaded", function(){
 	const artikel = new Artikel();
+	window.imports = new Imports();
 });

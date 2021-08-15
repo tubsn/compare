@@ -20,6 +20,10 @@ $routes->get('/pageviews', 'Lists@pageviews');
 $routes->get('/subscribers', 'Lists@subscribers');
 $routes->post('/settimeframe', 'Articles@set_timeframe');
 
+// Orders
+$routes->get('/orders', 'Orders@stats');
+$routes->get('/orders/list', 'Orders@list');
+
 // Stats
 $routes->get('/stats', 'Stats@index');
 $routes->get('/stats-bock', 'Stats@stats_bock');
@@ -69,6 +73,8 @@ $routes->get('/admin/warmup', 'Warmup@daterange');
 $routes->get('/admin/warmup_conversions', 'Warmup@conversions');
 $routes->get('/admin/warmup_subscribers', 'Warmup@subscribers');
 $routes->get('/admin/warmup/{weeksago}', 'Warmup@weeks_ago');
+
+$routes->get('/admin/orders', 'Warmup@order_import');
 
 // Admin - Usermanagement
 $routes->get('/admin/users', 'Usermanagement@index');

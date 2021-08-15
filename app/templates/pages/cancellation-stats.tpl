@@ -24,7 +24,7 @@ Conversions: <b class="orange"><?=count($conversions)?></b>
 <table class="fancy wide js-sortable">
 	<thead><tr>
 		<th>Zahlmethoden</th>
-		<th>Aktiv</th>
+		<th>Käufe</th>
 		<th>Gekündigt</th>
 		<th>Quote</th>
 	</tr></thead>
@@ -45,7 +45,7 @@ Conversions: <b class="orange"><?=count($conversions)?></b>
 <table class="fancy wide js-sortable">
 	<thead><tr>
 		<th>Geschlecht</th>
-		<th>Aktiv</th>
+		<th>Käufe</th>
 		<th>Gekündigt</th>
 		<th>Quote</th>
 	</tr></thead>
@@ -66,7 +66,7 @@ Conversions: <b class="orange"><?=count($conversions)?></b>
 <table class="fancy js-sortable">
 	<thead><tr>
 		<th>Ressort</th>
-		<th>Aktiv</th>
+		<th>Käufe</th>
 		<th>Gekündigt</th>
 		<th>Quote</th>
 	</tr></thead>
@@ -86,7 +86,7 @@ Conversions: <b class="orange"><?=count($conversions)?></b>
 <table class="fancy wide js-sortable">
 	<thead><tr>
 		<th>Artikel-Kategorien</th>
-		<th>Aktiv</th>
+		<th>Käufe</th>
 		<th>Gekündigt</th>
 		<th>Quote</th>
 	</tr></thead>
@@ -105,7 +105,7 @@ Conversions: <b class="orange"><?=count($conversions)?></b>
 <table class="fancy wide js-sortable">
 	<thead><tr>
 		<th>Artikel-Tags</th>
-		<th>Aktiv</th>
+		<th>Käufe</th>
 		<th>Gekündigt</th>
 		<th>Quote</th>
 	</tr></thead>
@@ -132,7 +132,7 @@ Conversions: <b class="orange"><?=count($conversions)?></b>
 <table class="fancy js-sortable">
 	<thead><tr>
 		<th>Stadt</th>
-		<th>Aktiv</th>
+		<th>Käufe</th>
 		<th>Gekündigt</th>
 		<th>Quote</th>
 	</tr></thead>
@@ -151,7 +151,7 @@ Conversions: <b class="orange"><?=count($conversions)?></b>
 <table class="fancy js-sortable">
 	<thead><tr>
 		<th>Referer</th>
-		<th>Aktiv</th>
+		<th>Käufe</th>
 		<th>Gekündigt</th>
 		<th>Quote</th>
 	</tr></thead>
@@ -171,7 +171,7 @@ Conversions: <b class="orange"><?=count($conversions)?></b>
 <table class="fancy js-sortable">
 	<thead><tr>
 		<th>Autor</th>
-		<th>Aktiv</th>
+		<th>Käufe</th>
 		<th>Gekündigt</th>
 		<th>Quote</th>
 	</tr></thead>
@@ -205,6 +205,7 @@ Conversions: <b class="orange"><?=count($conversions)?></b>
 <thead>
 <tr class="text-right">
 	<th>Art-ID</th>
+	<th>Trans-ID</th>
 	<th>Artikel-Typ</th>
 	<th>Ressort</th>
 	<?php if (auth_rights('author')): ?><th>Author</th><?php endif; ?>
@@ -226,6 +227,7 @@ Conversions: <b class="orange"><?=count($conversions)?></b>
 <?php foreach ($conversions as $conversion): ?>
 <tr class="text-right">
 	<td><a href="/artikel/<?=$conversion['article_id']?>"><?=$conversion['article_id']?></a></td>
+	<td><?=$conversion['transaction_id']?></td>
 	<td><?=$conversion['article_type']?></td>
 	<td><?=$conversion['article_ressort']?></td>
 	<?php if (auth_rights('author')): ?><td><a href="/author/<?=urlencode(str_replace('/', '-slash-', $conversion['article_author']))?>"><?=$conversion['article_author']?></a></td><?php endif; ?>

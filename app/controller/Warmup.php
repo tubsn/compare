@@ -14,6 +14,12 @@ class Warmup extends Controller {
 		$this->models('Analytics,Linkpulse,Articles,Conversions,Stats');
 	}
 
+
+	public function order_import() {
+		$this->view->render('import/orders');
+	}
+
+
 	public function daterange() {
 
 		if (isset($_GET['from']) && isset($_GET['from'])) {
