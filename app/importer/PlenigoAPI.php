@@ -25,11 +25,6 @@ class PlenigoAPI
 	public function orders($start, $end, $items = 100) {
 
 		$data = $this->curl('/orders/?startTime=' . $start . 'T00:00:00Z&endTime=' . $end . 'T23:59:59Z&size=' . $items);
-
-		if (!isset($data['items'])) {
-			dd($data);
-		}
-
 		return $data['items'];
 
 	}

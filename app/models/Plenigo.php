@@ -17,6 +17,7 @@ class Plenigo
 	public function orders($start, $end, $items, $showAll = false) {
 
 		$orders = $this->api->orders($start, $end, $items);
+		if (empty($orders)) {return [];}
 
 		if (!$showAll) {$orders = array_filter($orders, [$this, 'remove_free_products']);}
 		$orders = array_map([$this, 'map_order'], $orders);

@@ -11,7 +11,6 @@
 	<tr>
 		<th>ID</th>
 		<th>Datum</th>
-		<th>Status</th>
 		<th>Produkt</th>
 		<th>Preis</th>
 		<th>Zahlart</th>
@@ -23,7 +22,6 @@
 	<tr>
 		<td><a href="https://backend.plenigo.com/***REMOVED***/orders/<?=$order['order_id']?>/show"><?=$order['order_id']?></a></td>
 		<td><?=$order['order_date']?></td>
-		<td><?=$order['order_status']?></td>
 		<td><?=$order['order_title']?></td>
 		<td><?=$order['order_price']?></td>
 		<td><?=$order['order_payment_method']?></td>

@@ -33,7 +33,6 @@ class Livedata extends Controller {
 	public function orders() {
 
 		$this->gather_get_info();
-
 		$paidFilter = Session::get('paid_filter');
 		$viewData['orders'] = $this->Plenigo->orders($this->start, $this->end, $this->items, $paidFilter);
 		$this->view->render('orders/live/list',$viewData);
