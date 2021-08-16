@@ -115,7 +115,7 @@ class Lists extends Controller {
 		$viewData['numberOfArticles'] = $count;
 
 		$this->view->title = 'Artikel mit Subscriberviews: ' . $count;
-		$this->view->info = 'Auflistung von Artikeln die von Pluslesern gelesen wurden';
+		$this->view->info = 'Artikel die von Pluslesern gelesen wurden. <b>Bitte beachten:</b> wir haben nur ca. 2500 aktive Abonnenten die einen Plusartikel lesen können!';
 		$this->view->render('pages/list', $viewData);
 	}
 

@@ -15,13 +15,13 @@ class Conversions extends Model
 	public $pubDate = '30daysAgo';
 
 	private $transactions = [];
-	private $transactionIDs = [];
+	private $orderIDs = [];
 	private $analyticsData = [];
 
 	function __construct() {
 		$this->db = new SQLdb(DB_SETTINGS);
 		$this->db->table = 'conversions';
-		$this->db->primaryIndex = 'transaction_id';
+		$this->db->primaryIndex = 'order_id';
 		$this->db->orderby = 'order_date';
 		$this->analytics = new Analytics();
 		$this->plenigo = new Plenigo();
@@ -41,7 +41,7 @@ class Conversions extends Model
 	public function refresh($withGoogleAnalytics = true) {
 
 		$this->transactions = [];
-		$this->transactionIDs = [];
+		$this->orderIDs = [];
 		$this->analyticsData = [];
 
 		if ($withGoogleAnalytics) {
@@ -153,7 +153,7 @@ class Conversions extends Model
 
 		foreach ($this->transactions as $transaction) {
 
-			$id = $transaction['transaction_id'];
+			$id = $transaction['order_id'];
 			$item = $this->get($id,['article_id']);
 
 			//dd($transaction);
@@ -204,7 +204,7 @@ class Conversions extends Model
 
 		$analyticsData = $this->analytics->conversions_by_article_id($this->articleID, $this->pubDate);
 
-		$analyticsData = array_column($analyticsData, null, 'Transactionid'); // Sets TransactionID as Key
+		$analyticsData = array_column($analyticsData, null, 'Transactionid'); // OrderIDs are called TransactionIDs in Google
 		$this->analyticsData = $analyticsData;
 
 	}
@@ -213,32 +213,32 @@ class Conversions extends Model
 
 		if (count($this->analyticsData) > 0) {
 
-			$analyticsTransactionIDs = array_column($this->analyticsData, 'Transactionid');
-			$analyticsTransactionIDs = array_fill_keys($analyticsTransactionIDs, []);
+			$analyticsOrderIDs = array_column($this->analyticsData, 'Transactionid'); // OrderIDs are called TransactionIDs in Google
+			$analyticsOrderIDs = array_fill_keys($analyticsOrderIDs, []);
 
-			$previouslyStoredTransactionIDs = $this->archived_transaction_ids($this->articleID);
-			$plenigoTransactionIDs = $this->plenigo_transaction_ids($this->articleID);
+			$previouslyStoredOrderIDs = $this->archived_order_ids($this->articleID);
+			$plenigoOrderIDs = $this->plenigo_order_ids($this->articleID);
 
 			// Adds IDs from Analytics, to the stored ones and fills up with the Orders from the Plenigo API
-			$transactionIDs = array_replace($previouslyStoredTransactionIDs, $analyticsTransactionIDs);
-			$transactionIDs = array_replace($transactionIDs, $plenigoTransactionIDs);
-			$this->transactionIDs = $transactionIDs;
+			$orderIDs = array_replace($previouslyStoredOrderIDs, $analyticsOrderIDs);
+			$orderIDs = array_replace($orderIDs, $plenigoOrderIDs);
+			$this->orderIDs = $orderIDs;
 		}
 
 		else {
 
-			$previouslyStoredTransactionIDs = $this->archived_transaction_ids($this->articleID);
-			$plenigoTransactionIDs = $this->plenigo_transaction_ids($this->articleID);
-			$this->transactionIDs = array_replace($previouslyStoredTransactionIDs, $plenigoTransactionIDs);
+			$previouslyStoredOrderIDs = $this->archived_order_ids($this->articleID);
+			$plenigoOrderIDs = $this->plenigo_order_ids($this->articleID);
+			$this->orderIDs = array_replace($previouslyStoredOrderIDs, $plenigoOrderIDs);
 
 		}
 
 	}
 
-	private function archived_transaction_ids($articleID) {
+	private function archived_order_ids($articleID) {
 
 		$SQLstatement = $this->db->connection->prepare(
-			"SELECT transaction_id
+			"SELECT order_id
 			 FROM `conversions`
 			 WHERE `article_id` = :id"
 		);
@@ -254,21 +254,21 @@ class Conversions extends Model
 		return false;
 	}
 
-	private function plenigo_transaction_ids($articleID) {
+	private function plenigo_order_ids($articleID) {
 		$orderDB = new Orders();
-		return $orderDB->transactionIDs_by_article($articleID);
+		return $orderDB->orderIDs_by_article($articleID);
 	}
 
 
 	private function enrich_transactions() {
 
-		foreach ($this->transactionIDs as $transactionID => $voidValue) {
+		foreach ($this->orderIDs as $transactionID => $voidValue) {
 
 			// New Plenigo IDs should only be numbers
 			// We are ignoring old GA transaction IDs
 			if (!is_numeric($transactionID)) {continue;}
 
-			$data['transaction_id'] = $transactionID;
+			$data['order_id'] = $transactionID;
 			$data['article_id'] = $this->articleID;
 			$data['cancelled'] = 0;
 			$data['retention'] = null;

@@ -75,6 +75,8 @@ table td.once {background-color: #fff8c3 !important;}
 table td.twice {background-color: #ceddbd !important;}
 
 table.mbig {margin-bottom:2em;}
+table.font-small {font-size:0.9em;}
+table.compact td, table.compact th {padding: 10px 15px;}
 
 tr.text-right th {text-align:right;}
 th.text-left {text-align:left !important;}
@@ -142,6 +144,12 @@ a.type-link, a.type-link-light {text-decoration: none; color: var(--text-color)}
 	width:500px;
 	padding:1em;
 }
+
+.floating-settings {
+background-color: #f0f0f0; padding: .6em .6em .3em .6em; position: absolute;
+right: 0; top:-1em; display:flex; flex-wrap: wrap; align-items:center; gap:1em;}
+
+.floating-settings form {min-width:120px}
 
 
 .calendar-container {position:relative; bottom:5px;}

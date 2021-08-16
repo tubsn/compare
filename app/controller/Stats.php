@@ -38,15 +38,6 @@ class Stats extends Controller {
 		$this->view->render('pages/stats', $viewData);
 	}
 
-	public function stats_bock() {
-
-		$viewData['authorStats'] = $this->Articles->stats_grouped_by_single_author($column = 'author', $order = 'author ASC');
-
-		$this->view->title = 'Statistik Daten';
-		$this->view->render('pages/stats', $viewData);
-
-	}
-
 
 	public function cancellations() {
 

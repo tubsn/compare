@@ -23,11 +23,23 @@ $routes->post('/settimeframe', 'Articles@set_timeframe');
 // Orders
 $routes->get('/orders', 'Orders@stats');
 $routes->get('/orders/list', 'Orders@list');
+$routes->get('/orders/import/{date:[\d]{4}-[\d]{2}-[\d]{2}?}', 'Import@order_import');
+
+$routes->get('/orders/live', 'Livedata@index');
+$routes->get('/orders/yesterday', 'Livedata@orders_yesterday');
+$routes->get('/orders/today', 'Livedata@orders_today');
+$routes->get('/orders/{id:\d+}', 'Livedata@order');
+$routes->get('/orders/{date}', 'Livedata@orders_date');
+$routes->get('/orders/customer/{id:\d+}', 'Livedata@customer');
+$routes->get('/orders/subscription/{id:\d+}', 'Livedata@subscription');
+
+$routes->post('/orders/set_client', 'Livedata@set_client');
+$routes->post('/orders/set_date', 'Livedata@set_date');
+$routes->post('/orders/set_paid_filter', 'Livedata@set_paid_filter');
 
 // Stats
 $routes->get('/stats', 'Stats@index');
-$routes->get('/stats-bock', 'Stats@stats_bock');
-$routes->get('/stats/cancellations', 'Stats@cancellations');
+// $routes->get('/stats/cancellations', 'Stats@cancellations');
 
 // Article Details
 $routes->get('/artikel/{id:\d+}', 'Articles@detail');
@@ -57,7 +69,6 @@ $routes->get('/export/articles', 'Exports@articles');
 $routes->get('/export/conversions', 'Exports@conversions');
 $routes->get('/export/json', 'Exports@full_json');
 $routes->get('/export/ressorts', 'Exports@ressort_stats');
-$routes->get('/mp', 'MassPlenigo@export');
 
 // Newsletter
 $routes->get('/newsletter/chefredaktion', 'Newsletter@chefredaktion');
@@ -69,12 +80,11 @@ $routes->get('/newsletter/test', 'Newsletter@test');
 $routes->get('/admin', 'Admin@index');
 $routes->post('/admin', 'Admin@save_config');
 $routes->get('/admin/import', 'Import@feeds');
+$routes->get('/admin/orders', 'Import@order_import_form');
 $routes->get('/admin/warmup', 'Warmup@daterange');
 $routes->get('/admin/warmup_conversions', 'Warmup@conversions');
 $routes->get('/admin/warmup_subscribers', 'Warmup@subscribers');
 $routes->get('/admin/warmup/{weeksago}', 'Warmup@weeks_ago');
-
-$routes->get('/admin/orders', 'Warmup@order_import');
 
 // Admin - Usermanagement
 $routes->get('/admin/users', 'Usermanagement@index');

@@ -15,7 +15,7 @@ class Orders extends Model
 	function __construct() {
 
 		$this->db = new SQLdb(DB_SETTINGS);
-		$this->db->table = 'orders';
+		$this->db->table = 'conversions';
 		$this->db->primaryIndex = 'order_id';
 		$this->db->orderby = 'order_id';
 
@@ -35,21 +35,21 @@ class Orders extends Model
 
 		$SQLstatement = $this->db->connection->prepare(
 
-			"SELECT orders.*,
+			"SELECT conversions.*,
 			 articles.title as article_title,
 			 articles.type as article_type,
 			 articles.tag as article_tag,
+			 ifnull(conversions.article_ressort, articles.ressort) as article_ressort,
 			 articles.author as article_author,
 			 articles.kicker as article_kicker,
 			 articles.pubdate as article_pubdate
-			 #conversions.ga_source as ga_source,
-			 #conversions.ga_city as ga_city
-			 FROM orders
-			 LEFT JOIN articles ON `id` = orders.article_id
-			 #LEFT JOIN `conversions` ON `transaction_id` = orders.order_id
 
-			 WHERE DATE(orders.order_date) BETWEEN :startDate AND :endDate
-			 ORDER BY orders.order_date DESC
+			 FROM conversions
+
+			 LEFT JOIN articles ON `id` = conversions.article_id
+
+			 WHERE DATE(conversions.order_date) BETWEEN :startDate AND :endDate
+			 ORDER BY conversions.order_date DESC
 			 LIMIT 0, $limit"
 		);
 
@@ -69,7 +69,7 @@ class Orders extends Model
 
 		$SQLstatement = $this->db->connection->prepare(
 			"SELECT *
-			 FROM `orders`
+			 FROM `conversions`
 			 WHERE DATE(`order_date`) BETWEEN :startDate AND :endDate
 			 ORDER BY order_date DESC
 			 LIMIT 0, $limit"
@@ -158,46 +158,7 @@ class Orders extends Model
 	}
 
 
-	public function untracked_orders_with_date() {
-
-		$from = strip_tags($this->from);
-		$to = strip_tags($this->to);
-
-		$SQLstatement = $this->db->connection->prepare(
-			"SELECT order_id FROM orders
-			left join conversions
-			on order_id = conversions.transaction_id
-			WHERE conversions.transaction_id IS NULL
-			AND DATE(orders.order_date) BETWEEN :startDate AND :endDate
-			AND orders.article_id IS NOT NULL
-			"
-		);
-
-		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
-		return $SQLstatement->fetchall(\PDO::FETCH_COLUMN);
-
-	}
-
-
-
-	public function untracked_orders() {
-
-		$SQLstatement = $this->db->connection->prepare(
-			"SELECT order_id FROM orders
-			left join conversions
-			on order_id = conversions.transaction_id
-			WHERE conversions.transaction_id IS NULL
-			AND orders.article_id IS NOT NULL
-			"
-		);
-
-		$SQLstatement->execute();
-		return $SQLstatement->fetchall(\PDO::FETCH_COLUMN);
-
-	}
-
-
-	public function transactionIDs_by_article($articleID) {
+	public function orderIDs_by_article($articleID) {
 
 		$SQLstatement = $this->db->connection->prepare(
 			"SELECT `order_id`
@@ -229,7 +190,7 @@ class Orders extends Model
 	public function filter_external($orders) {
 		if (empty($orders)) {return [];}
 		return array_filter($orders, function($order) {
-			if ($order['article_ressort'] == '') {return $order;}
+			if ($order['article_ressort'] == '' && $order['article_id'] == '') {return $order;}
 		});
 	}
 
@@ -244,5 +205,51 @@ class Orders extends Model
 		return (array_sum(array_column($array,$key)) / count(array_column($array,$key)) );
 	}
 
+
+	public function import($date, $client = 'LR') {
+
+		// don't do Imports prior to Plenigo V3
+		if ($date < '2021-03-23') {
+			return ['Error' => 'Can´t Import prior to 2021-03-23 (PlenigoV3)'];
+		}
+
+		$plenigo = new Plenigo();
+		$plenigo->api->client($client);
+
+		$orderList = $plenigo->orders($date, $date, 100);
+
+		$detailedOrders = [];
+		foreach ($orderList as $order) {
+
+			$cache = new RequestCache($order['order_id'], 30 * 60);
+			$details = $cache->get();
+
+			if (!$details) {
+				$details = $plenigo->order_with_details($order['order_id']);
+			}
+
+			$cache->save($details);
+			array_push($detailedOrders, $details);
+		}
+
+		// Save to DB
+		foreach ($detailedOrders as $order) {
+
+			if ($this->get($order['order_id'])) {
+				$this->update($order, $order['order_id']);
+			} else {$this->create($order);}
+
+			if (isset($order['article_id'])) {
+				$conversions = new Conversions();
+				$conversions->articleID = $order['article_id'];
+				$conversions->collect();
+				$conversions->update_article();
+			}
+
+		}
+
+		return $detailedOrders;
+
+	}
 
 }

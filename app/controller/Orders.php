@@ -4,6 +4,7 @@ namespace app\controller;
 use flundr\mvc\Controller;
 use flundr\utility\Session;
 use flundr\auth\Auth;
+use flundr\cache\RequestCache;
 
 class Orders extends Controller {
 
@@ -18,11 +19,6 @@ class Orders extends Controller {
 
 	public function list() {
 
-		$this->view->title = 'Bestellübersicht - Plenigo API';
-		$this->view->info = null;
-
-		$viewData['untracked'] = $this->Orders->untracked_orders_with_date();
-
 		$viewData['orders'] = $this->Orders->list_plain();
 		$viewData['numberOfOrders'] = count($viewData['orders'] ?? []);
 		$viewData['numberOfCancelled'] = count($this->Orders->filter_cancelled($viewData['orders']));
@@ -30,13 +26,14 @@ class Orders extends Controller {
 		$viewData['externalOnly'] = count($this->Orders->filter_external($viewData['orders']));
 		$viewData['averageRetention'] = $this->Orders->average($this->Orders->filter_cancelled($viewData['orders']),'retention');
 
+		$this->view->title = 'Bestellübersicht';
 		$this->view->render('orders/list', $viewData);
 
 	}
 
 	public function stats() {
 
-		$this->view->title = 'Bestell Statistiken - Plenigo API';
+		$this->view->title = 'Bestell- und Kündiger Statistiken';
 		$this->view->info = null;
 
 		$viewData['orders'] = $this->Orders->list();
@@ -59,12 +56,12 @@ class Orders extends Controller {
 		$viewData['plz'] = $this->Orders->group_by_combined('customer_postcode');
 		$viewData['gender'] = $this->Orders->group_by_combined('customer_gender');
 		$viewData['product'] = $this->Orders->group_by_combined('order_title');
+		$viewData['internalTitle'] = $this->Orders->group_by_combined('subscription_internal_title');
 		$viewData['price'] = $this->Orders->group_by_combined('order_price');
 		$viewData['payment'] = $this->Orders->group_by_combined('order_payment_method');
 		$viewData['gender'] = $this->Orders->group_by_combined('customer_gender');
 		$this->view->render('orders/stats', $viewData);
 
 	}
-
 
 }

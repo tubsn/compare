@@ -14,14 +14,6 @@ class Newsletter extends Controller {
 		$this->models('Articles');
 	}
 
-
-	public function test() {
-
-		dd('blub');
-
-
-	}
-
 	public function chefredaktion() {
 
 		$this->view('BlankLayout');
@@ -38,6 +30,5 @@ class Newsletter extends Controller {
 		$this->view->render('newsletter/sport', $viewData);
 
 	}
-
 
 }

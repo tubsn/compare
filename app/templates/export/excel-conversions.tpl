@@ -3,7 +3,7 @@
 $output = fopen('php://output', 'w');
 
 $header = [
-	'transaction_id',
+	'order_id',
 	'customer_id',
 	'external_customer_id',
 
@@ -23,14 +23,14 @@ $header = [
 	'cancelled',
 	'retention_days',
 
-	'subscription_payment_method',
+	'order_payment_method',
 	'customer_gender',
 	'ga_source',
 	'ga_city',
 	'customer_city',
 	'ga_sessions',
 
-	'order_product_id',
+	'subscription_product_id',
 	'order_title',
 	'order_price',
 	'subscription_title',
@@ -44,7 +44,7 @@ fputcsv($output, $header, ';');
 foreach ($conversions as $conversion) {
 
 	fputcsv($output,[
-		$conversion['transaction_id'],
+		$conversion['order_id'],
 		$conversion['customer_id'],
 		$conversion['external_customer_id'],
 
@@ -64,14 +64,14 @@ foreach ($conversions as $conversion) {
 		$conversion['cancelled'],
 		$conversion['retention'],
 
-		$conversion['subscription_payment_method'],
+		$conversion['order_payment_method'],
 		$conversion['customer_gender'],
 		$conversion['ga_source'],
 		$conversion['ga_city'],
 		$conversion['customer_city'],
 		$conversion['ga_sessions'],
 
-		$conversion['order_product_id'],
+		$conversion['subscription_product_id'],
 		$conversion['order_title'],
 		$conversion['order_price'],
 

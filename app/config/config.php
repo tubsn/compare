@@ -43,5 +43,6 @@ define('TIMEFRAMES', [
 	'aktueller Monat',
 	'letzter Monat',
 	'vorletzter Monat',
+	'letzte 3 Monate',
 	'alle Daten',
 ]);

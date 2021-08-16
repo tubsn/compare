@@ -16,8 +16,8 @@
 		<li><a href="/conversions">Conversions</a></li>
 		<li><a href="/top5">Top5</a></li>
 		<li><a href="/stats">Statistiken</a></li>
-		<li><a href="/stats/cancellations">Kündiger</a></li>
-		<li><a href="/orders">Bestellungen</a></li>
+		<!--<li><a href="/stats/cancellations">Kündiger</a></li>-->
+		<li><a href="/orders">Bestelldaten</a></li>
 	</ul>
 
 	<ul>

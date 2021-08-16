@@ -1,12 +1,12 @@
 <?php if ($tableData): ?>
-<table class="fancy wide js-sortable">
+<table class="fancy wide js-sortable font-small compact">
 	<thead><tr>
 		<th><?=$tableName ?? 'Name' ?></th>
 		<th>Conv</th>
 		<th>Aktiv</th>
-		<th>Gekündigt</th>
-		<th>Tage</th>
-		<th>Quote</th>
+		<th>Künd</th>
+		<th>Ø-Tage</th>
+		<th class="text-right">Quote</th>
 	</tr></thead>
 	<tbody>
 <?php foreach ($tableData as $index => $value): ?>
@@ -18,10 +18,10 @@
 		<?php endif; ?>
 
 		<td><?=$value['all']?></td>
-		<td><?=$value['active']?></td>
-		<td><?=$value['cancelled']?></td>
+		<td class="blue"><?=$value['active']?></td>
+		<td class="redish"><?=$value['cancelled']?></td>
 		<td><?=$value['retention'] ?? '-'?></td>
-		<td><?=$value['quote'] ?? '-'?> %</td>
+		<td class="text-right"><?=$value['quote'] ?? '-'?> %</td>
 	</tr>
 <?php endforeach; ?>
 	</tbody>

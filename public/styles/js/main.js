@@ -110,7 +110,7 @@ class Imports {
 
 			let start = new Date().getTime();
 
-			await fetch('http://app2.localhost/import/' + date, {method: 'GET', credentials: 'same-origin'})
+			await fetch('/orders/import/' + date, {method: 'GET', credentials: 'same-origin'})
 			.then(response => {
 				if(response.status === 404) {console.log(response.text()); return null;}
 				return response.json();

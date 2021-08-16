@@ -231,7 +231,7 @@
 	</tr>
 	<tr>
 		<td>OrderID:</td>
-		<td><a target="_blank" href="https://backend.plenigo.com/***REMOVED***/orders/<?=$conversion['transaction_id'];?>/show"><?=$conversion['transaction_id'];?></a></td>
+		<td><a target="_blank" href="https://backend.plenigo.com/***REMOVED***/orders/<?=$conversion['order_id'];?>/show"><?=$conversion['order_id'];?></a></td>
 	</tr>
 	<tr>
 		<td>Bestelldatum:</td>
@@ -267,18 +267,8 @@
 	</tr>
 	<tr>
 		<td>Bezahlmethode:</td>
-		<td><?=$conversion['subscription_payment_method'];?></td>
+		<td><?=$conversion['order_payment_method'];?></td>
 	</tr>
-	<!--
-	<tr>
-		<td>Consent:</td>
-		<td><?=$conversion['customer_consent'] ?? '-';?></td>
-	</tr>
-	<tr>
-		<td>Gesperrt Status:</td>
-		<td><?=$conversion['customer_status']  ?? '-';?></td>
-	</tr>
-	-->
 	<tr>
 		<td>Geschlecht:</td>
 		<td><?=ucfirst($conversion['customer_gender'] ?? '-');?></td>
@@ -288,6 +278,11 @@
 		<td><?=$conversion['ga_city'];?>
 		<?php if ($conversion['customer_city']): ?><br> (Plenigo: <?=$conversion['customer_city'];?>)<?php endif; ?>
 		</td>
+	</tr>
+
+	<tr>
+		<td>PLZ:</td>
+		<td><?=$conversion['customer_postcode'] ?? '-';?></td>
 	</tr>
 
 	<tr>

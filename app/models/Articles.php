@@ -141,6 +141,10 @@ class Articles extends Model
 	}
 
 
+	public function field($articleID, $fieldname) {
+		return $this->get($articleID,$fieldname)[$fieldname];
+	}
+
 	public function sum_up($array, $key) {
 		if (empty($array)) {return 0;}
 		return array_sum(array_column($array,$key));
@@ -511,92 +515,6 @@ class Articles extends Model
 		return $output;
 
 	}
-
-
-	public function stats_grouped_by_single_author($column = 'ressort', $orderby = 'conversions DESC, ressort ASC') {
-
-		/* Test Purpose Only!!!! */
-
-		$column = strip_tags($column);
-		$orderby = strip_tags($orderby);
-		$from = strip_tags($this->from);
-		$to = strip_tags($this->to);
-
-		$SQLstatement = $this->db->connection->prepare(
-
-			"SELECT $column,
-
-       		(SELECT count(id)
-        	FROM `articles` AS temptable
-        	WHERE temptable.$column = maintable.$column
-        	AND `author` LIKE '%boc%'
-			AND DATE(`pubdate`) BETWEEN :startDate AND :endDate
-			) as artikel,
-
-       		(SELECT count(id)
-        	FROM `articles` AS temptable
-        	WHERE temptable.$column = maintable.$column
-        	AND `author` LIKE '%boc%'
-			AND `plus` IS NULL AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) AS free,
-
-       		(SELECT count(id)
-        	FROM `articles` AS temptable
-        	WHERE temptable.$column = maintable.$column
-        	AND `author` LIKE '%boc%'
-			AND `plus` = 1 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as plus,
-
-       		(SELECT sum(pageviews)
-        	FROM `articles` AS temptable
-        	WHERE temptable.$column = maintable.$column
-        	AND `author` LIKE '%boc%'
-			AND `pageviews` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as pageviews,
-
-       		(SELECT sum(subscribers)
-        	FROM `articles` AS temptable
-        	WHERE temptable.$column = maintable.$column
-        	AND `author` LIKE '%boc%'
-			AND `subscribers` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as subscribers,
-
-       		(SELECT sum(sessions)
-        	FROM `articles` AS temptable
-        	WHERE temptable.$column = maintable.$column
-        	AND `author` LIKE '%boc%'
-			AND `sessions` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as sessions,
-
-       		(SELECT sum(cancelled)
-        	FROM `articles` AS temptable
-        	WHERE temptable.$column = maintable.$column
-        	AND `author` LIKE '%boc%'
-			AND `cancelled` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as cancelled,
-
-       		(SELECT sum(buyintent)
-        	FROM `articles` AS temptable
-        	WHERE temptable.$column = maintable.$column
-        	AND `author` LIKE '%boc%'
-			AND `buyintent` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as buyintents,
-
-       		(SELECT sum(conversions)
-        	FROM `articles` AS temptable
-        	WHERE temptable.$column = maintable.$column
-        	AND `author` LIKE '%boc%'
-			AND `conversions` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as conversions
-
-			FROM `articles` AS maintable
-			WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate
-			AND `author` LIKE '%boc%'
-			GROUP BY $column ORDER BY $orderby");
-
-		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
-
-		$output = $SQLstatement->fetchall(\PDO::FETCH_UNIQUE);
-		if (empty($output)) {return null;}
-
-		unset($output['']); // somehow there´s some null Type exported
-
-		return $output;
-
-	}
-
 
 
 	public function free_articles_by_ressort() {

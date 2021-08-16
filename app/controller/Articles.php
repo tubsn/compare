@@ -265,6 +265,10 @@ class Articles extends Controller {
 				Session::set('from', date('Y-m-d', strtotime('first day of this month -2month')));
 				Session::set('to', date('Y-m-d', strtotime('last day of this month -2month')));
 			break;
+			case 'letzte 3 Monate':
+				Session::set('from', date('Y-m-d', strtotime('first day of this month -3month')));
+				Session::set('to', date('Y-m-d', strtotime('last day of this month -1month')));
+			break;
 			case 'alle Daten':
 				Session::set('from', '2000-01-01');
 				Session::set('to', '2050-01-01');

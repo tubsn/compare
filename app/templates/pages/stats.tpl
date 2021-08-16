@@ -2,14 +2,13 @@
 
 <?php include tpl('navigation/date-picker');?>
 
-<h1>Allgemeine Statistiken</h1>
+<h1>Artikelbasierte Statistiken</h1>
 
-<p>Es werden nur Klicks auf selbstproduzierte Artikel gezählt. Einige Übersichtsseiten und DPA-Artikel u.ä. sind außen vor.<br/>
-Daten werden seit Lebensdauer des Artikels angezeigt. Der eingestellte Zeitraum filtert das <b>Publikationsdatum des Artikels!</b> Nicht die eigentlichen Daten! </p>
+<p>Es werden nur Klicks auf selbstproduzierte Artikel gezählt. Übersichtsseiten und Artikel mit DPA-Kürzel werden ignoriert.<br/>
+Die Daten werden <b>auf Lebensdauer des Artikels</b> gruppiert. Der eingestellte Zeitraum filtert das <b>Publikationsdatum der Artikel!</b> Nicht gewohnt die eigentlichen Daten! </p>
 <p><b>Kündigungsdaten sind NICHT Live</b> und beziehen sich auf den Tag der letzten Statistik-Aktualisierung des Artikels (i.d.R. 3 Tagen ach Publikation). <br />
 Die Kündigerraten sind vor Februar 2021 nicht relevant, da hier zuviele Daten fehlen!</p>
 
-<p>Alle Daten werden aus performance Gründen <b>1 Minute lang gecached.</b></p>
 
 <p class="light-box" style="margin-bottom:2em;">
 Artikel: <b title="davon Plusartikel: <?=$plusarticles?>"><?=$articles?></b> &emsp; Klicks: <b class="blue"><?=number_format($pageviews,0,',','.')?></b>
