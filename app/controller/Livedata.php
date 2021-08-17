@@ -88,9 +88,15 @@ class Livedata extends Controller {
 	}
 
 	public function set_paid_filter() {
-		$paidFilter = boolval($_POST['paid_filter']);
+
+		$paidFilter = false;
+		if (isset($_POST['paid_filter'])) {
+			$paidFilter = boolval($_POST['paid_filter']);
+		}
+
 		Session::set('paid_filter', $paidFilter);
 		$this->view->back();
+		die;
 	}
 
 

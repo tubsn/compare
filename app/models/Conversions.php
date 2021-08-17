@@ -75,7 +75,7 @@ class Conversions extends Model
 
 
 	public function group_by($index) {
-		$data = array_column($this->transactions,$index);
+		$data = array_column($this->transactions,$index);		
 		$data = @array_count_values($data); // @ Surpresses Warnings with Null Values
 		arsort($data);
 		return $data;
@@ -92,6 +92,7 @@ class Conversions extends Model
 
 		$combined = [];
 		$active = $this->group_by($index);
+
 		$cancelled = $this->group_cancelled_orders_by($index);
 
 		foreach ($active as $key => $value) {
@@ -217,20 +218,13 @@ class Conversions extends Model
 			$analyticsOrderIDs = array_fill_keys($analyticsOrderIDs, []);
 
 			$previouslyStoredOrderIDs = $this->archived_order_ids($this->articleID);
-			$plenigoOrderIDs = $this->plenigo_order_ids($this->articleID);
 
 			// Adds IDs from Analytics, to the stored ones and fills up with the Orders from the Plenigo API
-			$orderIDs = array_replace($previouslyStoredOrderIDs, $analyticsOrderIDs);
-			$orderIDs = array_replace($orderIDs, $plenigoOrderIDs);
-			$this->orderIDs = $orderIDs;
+			$this->orderIDs = array_replace($previouslyStoredOrderIDs, $analyticsOrderIDs);
 		}
 
 		else {
-
-			$previouslyStoredOrderIDs = $this->archived_order_ids($this->articleID);
-			$plenigoOrderIDs = $this->plenigo_order_ids($this->articleID);
-			$this->orderIDs = array_replace($previouslyStoredOrderIDs, $plenigoOrderIDs);
-
+			$this->orderIDs = $this->archived_order_ids($this->articleID);
 		}
 
 	}
@@ -253,12 +247,6 @@ class Conversions extends Model
 		if ($cancelled == 1) {return true;}
 		return false;
 	}
-
-	private function plenigo_order_ids($articleID) {
-		$orderDB = new Orders();
-		return $orderDB->orderIDs_by_article($articleID);
-	}
-
 
 	private function enrich_transactions() {
 

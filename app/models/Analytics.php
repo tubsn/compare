@@ -45,7 +45,7 @@ class Analytics
 		$this->ga->to = $to;
 		$this->ga->dimensions = 'ga:eventLabel';
 		$this->ga->sort = 'ga:eventLabel';
-		$this->ga->filters = 'ga:pagePath=@' . $articleID . ';ga:eventLabel==register nosub button';
+		$this->ga->filters = 'ga:pagePath=@' . $articleID . ';ga:eventLabel=@register;ga:eventCategory==artikel';
 		$this->ga->maxResults = '365';
 
 		$this->ga->fetch();
@@ -86,6 +86,20 @@ class Analytics
 		$this->ga->sort = 'ga:pageViews';
 		$this->ga->filters = 'ga:pagePath=@' . $articleID;
 		$this->ga->maxResults = '365';
+
+		return $this->ga->fetch();
+
+	}
+
+	public function transaction_metainfo_as_list($dayCount = 5) {
+
+		$this->ga->metrics = 'ga:transactions';
+		$this->ga->from = $dayCount . 'daysAgo';
+		$this->ga->to = 'today';
+		$this->ga->dimensions = 'ga:transactionId, ga:sessionCount, ga:source, ga:city';
+		$this->ga->sort = 'ga:transactionId';
+		$this->ga->filters = 'ga:transactions>0';
+		$this->ga->maxResults = '2000';
 
 		return $this->ga->fetch();
 

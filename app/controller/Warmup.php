@@ -11,7 +11,7 @@ class Warmup extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Analytics,Linkpulse,Articles,Conversions,Stats');
+		$this->models('Analytics,Linkpulse,Articles,Conversions,Stats,Orders');
 	}
 
 	public function daterange() {
@@ -56,17 +56,14 @@ class Warmup extends Controller {
 
 	public function weeks_ago($weeks = 1) {
 
-		// This Only Updates Pageviews and Conversions
-
+		// This Only Updates Pageviews
 		$articles = $this->Articles->by_weeks_ago($weeks);
-
-		//dd($articles);
 
 		foreach ($articles as $article) {
 
 			$id = $article['id'];
 			$pubDate = formatDate($article['pubdate'],'Y-m-d');
-			$gaData = $this->Analytics->byArticleID($id, $pubDate);
+			$gaData = $this->Analytics->by_article_id($id, $pubDate);
 
 			$this->save_article_stats($gaData, $id);
 
@@ -78,22 +75,36 @@ class Warmup extends Controller {
 	}
 
 
+	public function enrich_conversions_with_ga($daysago = 5) {
+
+		$plainOrders = $this->Orders->without_ga_sources($daysago);
+		$transactionInfoList = $this->Analytics->transaction_metainfo_as_list($daysago);
+		$transactionInfoList = array_combine(array_column($transactionInfoList, 'Transactionid'), $transactionInfoList);
+
+		$enrichedData = array_intersect_key($transactionInfoList, $plainOrders);
+
+		foreach ($enrichedData as $orderID => $data) {
+			$order['ga_source'] = $data['Source'];
+			$order['ga_sessions'] = $data['Sessioncount'];
+			$order['ga_city'] = $data['City'];
+			$this->Orders->update($order, $orderID);
+		}
+
+	}
+
+
 	public function conversions() {
 
-		$from = date('Y-m-d', strtotime('today -3 days'));
-		$to = date('Y-m-d', strtotime('today -1 day'));
-		$articles = $this->Articles->conversions_only_by_date_range($from, $to);
+		$dates = [];
+		array_push($dates, date('Y-m-d', strtotime('today')));
+		array_push($dates, date('Y-m-d', strtotime('today -1 day')));
+		array_push($dates, date('Y-m-d', strtotime('today -2 day')));
 
-		//dd($articles);
-
-		foreach ($articles as $article) {
-			$id = $article['id'];
-			$pubDate = formatDate($article['pubdate'],'Y-m-d');
-
-			$this->Conversions->articleID = $id;
-			$this->Conversions->pubDate = $pubDate;
-			$this->Conversions->refresh();
+		foreach ($dates as $day) {
+			$this->Orders->import($day);
 		}
+
+		$this->enrich_conversions_with_ga();
 
 		echo 'wenn dieser Text erscheint hats geklappt...<br/>';
 		echo 'Processing-Time: <b>'.round((microtime(true)-APP_START)*1000,2) . '</b>ms';

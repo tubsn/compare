@@ -81,6 +81,18 @@ class Orders extends Model
 
 	}
 
+	public function without_ga_sources($dayCount = 5) {
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT order_id FROM `conversions` WHERE ga_source IS NULL
+			 AND DATE(`order_date`) >= DATE_SUB(CURRENT_DATE, INTERVAL :dayCount DAY)
+			 LIMIT 0, 500"
+		);
+
+		$SQLstatement->execute([':dayCount' => $dayCount]);
+		$output = $SQLstatement->fetchall(\PDO::FETCH_UNIQUE);
+		return $output;
+	}
+
 
 	public function group_by($index) {
 		$orders = $this->list();
@@ -157,21 +169,6 @@ class Orders extends Model
 		return $combined;
 	}
 
-
-	public function orderIDs_by_article($articleID) {
-
-		$SQLstatement = $this->db->connection->prepare(
-			"SELECT `order_id`
-			 FROM `orders`
-			 WHERE `article_id` = :articleID"
-		);
-
-		$SQLstatement->execute([':articleID' => $articleID]);
-		return $SQLstatement->fetchall(\PDO::FETCH_UNIQUE);
-
-	}
-
-
 	public function filter_cancelled($orders) {
 		if (empty($orders)) {return [];}
 		return array_filter($orders, function($order) {
@@ -221,7 +218,7 @@ class Orders extends Model
 		$detailedOrders = [];
 		foreach ($orderList as $order) {
 
-			$cache = new RequestCache($order['order_id'], 30 * 60);
+			$cache = new RequestCache($order['order_id'], 5 * 60);
 			$details = $cache->get();
 
 			if (!$details) {

@@ -121,6 +121,8 @@
 
 <section class="conversion-tables-layout">
 
+
+<?php if (count($sources) > 0): ?>
 <table class="fancy js-sortable">
 	<thead><tr>
 		<th>Quelle / Referrer</th>
@@ -139,8 +141,9 @@
 <?php endforeach; ?>
 	</tbody>
 </table>
+<?php endif ?>
 
-
+<?php if (count($cities) > 0): ?>
 <table class="fancy js-sortable">
 	<thead><tr>
 		<th>Städte</th>
@@ -159,9 +162,10 @@
 <?php endforeach; ?>
 	</tbody>
 </table>
-
+<?php endif ?>
 
 <div>
+<?php if (count($gender) > 0): ?>	
 <table class="fancy wide js-sortable">
 	<thead><tr>
 		<th>Geschlecht</th>
@@ -180,8 +184,9 @@
 <?php endforeach; ?>
 	</tbody>
 </table>
+<?php endif ?>
 
-
+<?php if (count($payments) > 0): ?>
 <table class="fancy wide js-sortable">
 	<thead><tr>
 		<th>Zahlmethode</th>
@@ -200,6 +205,8 @@
 <?php endforeach; ?>
 	</tbody>
 </table>
+<?php endif ?>
+
 </div>
 
 </section>

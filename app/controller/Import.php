@@ -49,21 +49,8 @@ class Import extends Controller {
 	}
 
 	public function order_import($date = null) {
-
-		$date = $date ?: '2021-08-14';
-
-		$cache = new RequestCache($date, 1 * 60 * 60);
-		$orders = $cache->get();
-
-		if ($orders) {
-			$this->view->json($orders);
-			return;
-		}
-
 		$orders = $this->Orders->import($date);
-		$cache->save($orders);
 		$this->view->json($orders);
-
 	}
 
 

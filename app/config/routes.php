@@ -84,6 +84,7 @@ $routes->get('/admin/orders', 'Import@order_import_form');
 $routes->get('/admin/warmup', 'Warmup@daterange');
 $routes->get('/admin/warmup_conversions', 'Warmup@conversions');
 $routes->get('/admin/warmup_subscribers', 'Warmup@subscribers');
+$routes->get('/admin/warmup/sources[/{daysago}]', 'Warmup@enrich_conversions_with_ga');
 $routes->get('/admin/warmup/{weeksago}', 'Warmup@weeks_ago');
 
 // Admin - Usermanagement

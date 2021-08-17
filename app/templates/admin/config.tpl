@@ -64,8 +64,7 @@ Hier können alle Artikel inklusive Klick- und Kündigerstatistik exportiert wer
 <section>
 
 	<h3>Conversion und Kündigerdaten aktualisieren</h3>
-	<p>Die Kündigerdaten werden täglich um 3 Uhr morgens für alle Käufe in Artikeln der letzten 3 Tage aktualisiert. Es werden zunächst Google Analytics und dann die Plenigo API abgefragt.</p> <p><b>Achtung:</b> Abhängig von der Gesamt-Conversion-Anzahl kann diese Abfrage sehr lange dauern!</p>
-	<p>
+	<p>Die Kündigerdaten werden täglich um 3 Uhr morgens für alle Käufe in Artikeln der letzten 3 Tage aktualisiert. Es werden zunächst Google Analytics und dann die Plenigo API abgefragt.</p>
 	<a class="button noline" href="/admin/warmup_conversions">Conversions der letzten 3 Tage aktualisieren</a>
 	</p>
 
