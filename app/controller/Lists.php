@@ -11,7 +11,7 @@ class Lists extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Articles,Stats');
+		$this->models('Articles,Stats,Orders');
 	}
 
 	public function index() {
@@ -70,6 +70,8 @@ class Lists extends Controller {
 		$count = 0;
 		if (is_array($viewData['articles'])) {$count = count($viewData['articles']);}
 
+		$viewData['singleChart'] = $this->Orders->orders_for_chart();
+
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
 		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');
@@ -78,7 +80,7 @@ class Lists extends Controller {
 		$viewData['numberOfArticles'] = $count;
 
 		$this->view->title = 'Artikel mit Conversions: ' . $count;
-		$this->view->info = null;
+		$this->view->info = '<b>Hinweis:</b> im Diagramm werden taggenau alle auf der Seite registrierten Conversions gezeigt (auch Plusseite)';
 		$this->view->render('pages/list', $viewData);
 	}
 
@@ -88,6 +90,8 @@ class Lists extends Controller {
 		$count = 0;
 		if (is_array($viewData['articles'])) {$count = count($viewData['articles']);}
 
+		$viewData['chart'] = $this->Stats->get_grouped_chart_data();
+
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
 		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');
@@ -96,7 +100,7 @@ class Lists extends Controller {
 		$viewData['numberOfArticles'] = $count;
 
 		$this->view->title = 'Klick-Highlights: ' . $count;
-		$this->view->info = 'Auflistung von Artikeln mit mehr als 2500 klicks';
+		$this->view->info = 'Auflistung von Artikeln mit <b>mehr als 2500</b> klicks';
 		$this->view->render('pages/list', $viewData);
 	}
 
@@ -107,6 +111,9 @@ class Lists extends Controller {
 		$count = 0;
 		if (is_array($viewData['articles'])) {$count = count($viewData['articles']);}
 
+		$viewData['singleChart'] = $this->Articles->subscribers_for_chart();
+		$viewData['barChart'] = $this->Articles->subscribers_by_ressort_chart();
+
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
 		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
@@ -114,8 +121,8 @@ class Lists extends Controller {
 		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
 		$viewData['numberOfArticles'] = $count;
 
-		$this->view->title = 'Artikel mit Subscriberviews: ' . $count;
-		$this->view->info = 'Artikel die von Pluslesern gelesen wurden. <b>Bitte beachten:</b> wir haben nur ca. 2500 aktive Abonnenten die einen Plusartikel lesen können!';
+		$this->view->title = 'Von Abonnenten gelesene Artikel';
+		$this->view->info = '<b>Bitte beachten:</b> wir haben verhältnismäßig wenige aktive Abonnenten die einen Plusartikel auch tatsächlich lesen können!';
 		$this->view->render('pages/list', $viewData);
 	}
 
@@ -177,6 +184,18 @@ class Lists extends Controller {
 		Session::set('referer', '/ressort/'.$ressort);
 
 		$ressortList = $this->Articles->list_distinct('ressort');
+
+		if ($ressortList[0] = 'bilder') {
+			$temp = array_shift($ressortList);
+			array_push($ressortList, $temp);
+		}
+
+		if ($ressortList[0] = 'blaulicht') {
+			$temp = array_shift($ressortList);
+			array_push($ressortList, $temp);
+		}
+
+
 		if ($ressort == null) {$ressort = $ressortList[0];}
 
 		$ressort = $this->decode_url($ressort);

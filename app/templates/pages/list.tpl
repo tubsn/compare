@@ -13,13 +13,13 @@
 <?php if (isset($pageviews) || isset($conversions)): ?>
 
 <p class="light-box" style="margin-bottom:2em;">
-Artikel: <b><?=$numberOfArticles?></b> &emsp; Klicks: <b class="blue"><?=number_format($pageviews,0,',','.')?></b>
+Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=number_format($pageviews,0,',','.')?></b>
 &emsp; Subscribers: <b class="blue"><?=number_format($subscribers,0,',','.')?></b>
 <?php if ($numberOfArticles > 0): ?>
-&emsp; ⌀-Klicks: <b class="blue"><?=number_format(($pageviews / $numberOfArticles), 0,',','.') ?></b>
+&emsp; ⌀-Pageviews: <b class="blue"><?=number_format(($pageviews / $numberOfArticles), 0,',','.') ?></b>
 <?php endif ?>
 &emsp; Kaufimpulse: <b class="orange"><?=$buyintents ?? '0'?></b>
-&emsp; Conversions: <b class="orange"><?=$conversions?></b>
+&emsp; Conversions: <b class="conversions"><?=$conversions?></b>
 &emsp; Kündiger: <b class="redish"><?=$cancelled ?? '0'?></b></p>
 
 <?php endif; ?>
@@ -29,6 +29,22 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Klicks: <b class="blue"><?=number_
 	<?php include tpl('charts/ressort_lines');?>
 	</figure>
 <?php endif; ?>
+
+<?php if (isset($barChart) && strlen($barChart['dates']) > 12): ?>
+	<figure class="mb">
+
+	<?php include tpl('charts/bar_chart');?>
+	</figure>
+<?php endif; ?>
+
+<?php if (isset($singleChart)): ?>
+	<figure class="mb">
+	<?php include tpl('charts/single_stat_line');?>
+	</figure>
+<?php endif; ?>
+
+
+
 
 <?php if ($articles): ?>
 <table class="fancy wide js-sortable condensed">

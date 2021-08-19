@@ -1,12 +1,13 @@
 <?php
 
 //Homepage
-$routes->get('/', 'Lists@index');
+$routes->get('/', 'Stats@dashboard');
 
 // Pages
 $routes->get('/unset', 'Lists@unset_only');
 $routes->get('/author/{author}', 'Lists@author');
 $routes->get('/author-fuzzy/{author}', 'Lists@author_fuzzy');
+$routes->get('/list', 'Lists@index');
 $routes->get('/ressort/{ressort}', 'Lists@ressort');
 $routes->get('/ressort', 'Lists@ressort');
 $routes->get('/type/{type}', 'Lists@type');
@@ -39,7 +40,7 @@ $routes->post('/orders/set_paid_filter', 'Livedata@set_paid_filter');
 
 // Stats
 $routes->get('/stats', 'Stats@index');
-// $routes->get('/stats/cancellations', 'Stats@cancellations');
+$routes->get('/dashboard', 'Stats@dashboard');
 
 // Article Details
 $routes->get('/artikel/{id:\d+}', 'Articles@detail');
@@ -85,7 +86,9 @@ $routes->get('/admin/warmup', 'Warmup@daterange');
 $routes->get('/admin/warmup_conversions', 'Warmup@conversions');
 $routes->get('/admin/warmup_subscribers', 'Warmup@subscribers');
 $routes->get('/admin/warmup/sources[/{daysago}]', 'Warmup@enrich_conversions_with_ga');
+$routes->get('/admin/warmup/buyintents[/{daysago}]', 'Warmup@enrich_article_with_buy_intents');
 $routes->get('/admin/warmup/{weeksago}', 'Warmup@weeks_ago');
+
 
 // Admin - Usermanagement
 $routes->get('/admin/users', 'Usermanagement@index');
@@ -94,6 +97,7 @@ $routes->post('/admin/users', 'Usermanagement@create');
 $routes->get('/admin/users/{id:\d+}', 'Usermanagement@show');
 $routes->get('/admin/users/{id:\d+}/delete/{token}', 'Usermanagement@delete');
 $routes->post('/admin/users/{id:\d+}', 'Usermanagement@update');
+
 
 // Authentication Routes
 $routes->get('/login', 'Authentication@login');

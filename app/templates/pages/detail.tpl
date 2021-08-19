@@ -126,7 +126,7 @@
 <table class="fancy js-sortable">
 	<thead><tr>
 		<th>Quelle / Referrer</th>
-		<th>Aktiv</th>
+		<th>Käufe</th>
 		<th>Gekündigt</th>
 		<th>Quote</th>
 	</tr></thead>
@@ -147,7 +147,7 @@
 <table class="fancy js-sortable">
 	<thead><tr>
 		<th>Städte</th>
-		<th>Aktiv</th>
+		<th>Käufe</th>
 		<th>Gekündigt</th>
 		<th>Quote</th>
 	</tr></thead>
@@ -165,11 +165,11 @@
 <?php endif ?>
 
 <div>
-<?php if (count($gender) > 0): ?>	
+<?php if (count($gender) > 0): ?>
 <table class="fancy wide js-sortable">
 	<thead><tr>
 		<th>Geschlecht</th>
-		<th>Aktiv</th>
+		<th>Käufe</th>
 		<th>Gekündigt</th>
 		<th>Quote</th>
 	</tr></thead>
@@ -190,7 +190,7 @@
 <table class="fancy wide js-sortable">
 	<thead><tr>
 		<th>Zahlmethode</th>
-		<th>Aktiv</th>
+		<th>Käufe</th>
 		<th>Gekündigt</th>
 		<th>Quote</th>
 	</tr></thead>

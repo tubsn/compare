@@ -259,6 +259,82 @@ class Articles extends Model
 
 	}
 
+	public function subscribers_for_chart() {
+		$rawData = $this->subscribers_by_date();
+
+		$subscribers = null; $dates = null;
+		foreach ($rawData as $data) {
+			$subscribers .= $data['subscribers'] . ',';
+			$dates .= "'" . $data['day'] . "'" . ',';
+		}
+
+		$chart['amount'] = rtrim($subscribers, ',');
+		$chart['dates'] = rtrim($dates, ',');
+		$chart['color'] = '#6088b4';
+		$chart['name'] = 'Subscribers';
+
+		return $chart;
+	}
+
+	public function subscribers_by_date() {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT sum(subscribers) as 'subscribers', DATE(`pubdate`) as 'day'
+			 FROM `articles`
+			 WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			 GROUP BY day
+			 ORDER BY pubdate ASC"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall();
+		return $output;
+
+	}
+
+
+
+	public function subscribers_by_ressort_chart() {
+		$rawData = $this->subscribers_by_ressort();
+
+		$subscribers = null; $ressorts = null;
+		foreach ($rawData as $data) {
+			$subscribers .= $data['subscribers'] . ',';
+			$ressorts .= "'" . ucfirst($data['ressort']) . "'" . ',';
+		}
+
+		$chart['amount'] = rtrim($subscribers, ',');
+		$chart['dates'] = rtrim($ressorts, ',');
+		$chart['color'] = '#6088b4';
+		$chart['name'] = 'Subscribers';
+
+		return $chart;
+	}
+
+
+	public function subscribers_by_ressort() {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT ressort, sum(subscribers) as 'subscribers'
+			 FROM `articles`
+			 WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			 GROUP BY ressort
+			 ORDER BY ressort ASC"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall();
+		return $output;
+
+	}
+
+
 	public function by_date_range($start, $end = null) {
 
 		if (is_null($end)) {$end = $start;}

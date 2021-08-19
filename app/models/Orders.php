@@ -81,6 +81,85 @@ class Orders extends Model
 
 	}
 
+	public function orders_for_chart() {
+		$rawOrders = $this->orders_by_date();
+
+		$orders = null; $dates = null;
+		foreach ($rawOrders as $order) {
+			$orders .= $order['orders'] . ',';
+			$dates .= "'" . $order['day'] . "'" . ',';
+		}
+
+		$chart['amount'] = rtrim($orders, ',');
+		$chart['dates'] = rtrim($dates, ',');
+		$chart['color'] = '#df886d';
+		$chart['name'] = 'Conversions';
+
+		return $chart;
+	}
+
+	public function orders_by_date() {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT count(order_id) as 'orders', DATE(`order_date`) as 'day'
+			 FROM `conversions`
+			 WHERE DATE(`order_date`) BETWEEN :startDate AND :endDate
+			 GROUP BY day
+			 ORDER BY order_date ASC"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall();
+		return $output;
+
+	}
+
+	public function ressorts_for_chart() {
+		$rawOrders = $this->orders_by_ressort();
+
+		//dd($rawOrders);
+
+		$orders = null; $ressorts = null;
+		foreach ($rawOrders as $data) {
+			if (empty($data['article_ressort'])) {continue;}
+			$orders .= $data['orders'] . ',';
+			$ressorts .= "'" . ucfirst($data['article_ressort']) . "'" . ',';
+		}
+
+		$chart['amount'] = rtrim($orders, ',');
+		$chart['dates'] = rtrim($ressorts, ',');
+		$chart['color'] = '#df886d';
+		$chart['name'] = 'Bestellungen';
+
+
+		return $chart;
+	}
+
+	public function orders_by_ressort() {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT article_ressort, count(order_id) as 'orders'
+			 FROM `conversions`
+			 WHERE DATE(order_date) BETWEEN :startDate AND :endDate
+			 GROUP BY article_ressort
+			 ORDER BY article_ressort ASC"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall();
+
+		return $output;
+
+	}
+
+
+
 	public function without_ga_sources($dayCount = 5) {
 		$SQLstatement = $this->db->connection->prepare(
 			"SELECT order_id FROM `conversions` WHERE ga_source IS NULL

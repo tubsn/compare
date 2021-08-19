@@ -105,7 +105,7 @@ th.text-left {text-align:left !important;}
 .orangebg {background-color: var(--light-orange);}
 
 
-.type-link, .type-link-light {background-color: var(--light-gray); display:inline-block; padding:0.1em .5em; border-radius:1em}
+.type-link, .type-link-light {background-color: #ececec; display:inline-block; padding:0.0em .3em; border-radius:.2em}
 .type-link-light {background-color:f3f3f3 !important;}
 
 .type-link:hover, .type-link-light:hover {background-color:white;}

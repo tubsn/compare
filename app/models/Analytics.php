@@ -56,6 +56,26 @@ class Analytics
 	}
 
 
+	public function list_buy_intention($dayCount = 5) {
+
+		/* Data is Sampled... Fuck*/
+
+		$this->ga->metrics = 'ga:totalEvents';
+		$this->ga->from = '30daysAgo';
+		$this->ga->to = 'today';
+		$this->ga->dimensions = 'ga:pagePath';
+		$this->ga->sort = null;
+		$this->ga->filters = 'ga:eventLabel=@register;ga:pagePath=~\d+.html';
+		$this->ga->maxResults = '1000';
+
+		return $this->ga->fetch();
+
+		$stats = $this->ga->metric_totals();
+		return $stats;
+
+	}
+
+
 	public function conversions_by_article_id($articleID, $from = '30daysAgo', $to = 'today') {
 
 		$articleID = htmlspecialchars($articleID, ENT_QUOTES, 'UTF-8');

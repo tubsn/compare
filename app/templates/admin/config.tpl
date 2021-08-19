@@ -52,20 +52,18 @@ Hier können alle Artikel inklusive Klick- und Kündigerstatistik exportiert wer
 	</form>
 
 
-	<hr/>
-	<h3>Plenigo Order Tabelle</h3>
-	<p>Zwischenlösung um Plenigo API Daten zu Importieren</p>
-	<a class="button noline" href="/admin/orders">Zur Order Import Verwaltung</a>
-
-
-
 </section>
 
 <section>
 
-	<h3>Conversion und Kündigerdaten aktualisieren</h3>
-	<p>Die Kündigerdaten werden täglich um 3 Uhr morgens für alle Käufe in Artikeln der letzten 3 Tage aktualisiert. Es werden zunächst Google Analytics und dann die Plenigo API abgefragt.</p>
-	<a class="button noline" href="/admin/warmup_conversions">Conversions der letzten 3 Tage aktualisieren</a>
+
+
+
+	<h3>Plenigo Bestelldaten aktualisieren</h3>
+	<p>Die Bestelldaten für Conversions und Kündiger werden täglich um 3 Uhr morgens aktualisiert.</p>
+
+	<a class="button noline" href="/admin/orders">Import Manager öffnen</a>
+	<a class="button noline" href="/admin/warmup_conversions">letzte 3 Tage</a>
 	</p>
 
 <hr>

@@ -82,13 +82,15 @@ class Stats extends Model
 	}
 
 
-	public function get_grouped_chart_data($filter, $column = 'ressort') {
+	public function get_grouped_chart_data($filter = null, $column = 'ressort') {
 
 		$articles = $this->with_article_data();
 
-		$articles = array_filter($articles, function($article) use ($filter, $column) {
-			return $article[$column] == $filter;
-		});
+		if ($filter) {
+			$articles = array_filter($articles, function($article) use ($filter, $column) {
+				return $article[$column] == $filter;
+			});
+		}
 
 		$dailyStats = $this->sum_stats_by_date($articles);
 

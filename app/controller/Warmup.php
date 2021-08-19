@@ -36,7 +36,6 @@ class Warmup extends Controller {
 			$gaData['totals']['subscribers'] = $this->Linkpulse->subscribers($id, $pubDate);
 			$gaData['totals']['buyintent'] = $this->Analytics->buy_intention_by_article_id($id, $pubDate);
 
-
 			// Dont Upgrade Conversions in a Specific Time Period after the Plenigo V3 Update...
 			// The Analytics Conversion Data is completely wrong due to a tracking error
 			$plenigoUpdateDate = date("2021-02-23");
@@ -89,6 +88,17 @@ class Warmup extends Controller {
 			$order['ga_city'] = $data['City'];
 			$this->Orders->update($order, $orderID);
 		}
+
+	}
+
+
+	public function enrich_article_with_buy_intents() {
+
+		$buyIntentions = $this->Analytics->list_buy_intention();
+
+		dd($buyIntentions);
+
+
 
 	}
 

@@ -12,7 +12,7 @@ class Stats extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Articles,Conversions,Stats');
+		$this->models('Articles,Conversions,Stats,Orders');
 	}
 
 	public function index() {
@@ -58,6 +58,37 @@ class Stats extends Controller {
 
 		$this->view->title = 'Kündiger Statistiken';
 		$this->view->render('pages/cancellation-stats', $viewData);
+
+	}
+
+
+	public function dashboard() {
+
+		$viewData['articles'] = $this->Articles->count('*');
+		$viewData['subscribers'] = $this->Articles->sum('subscribers');
+		$viewData['orders'] = $this->Orders->list();
+		$viewData['numberOfOrders'] = count($viewData['orders'] ?? []);
+		$viewData['numberOfCancelled'] = count($this->Orders->filter_cancelled($viewData['orders']));
+
+		if ($viewData['orders']) {
+			$viewData['cancelQuote'] = round(($viewData['numberOfCancelled'] / $viewData['numberOfOrders']) * 100, 1);
+		} else {$viewData['cancelQuote'] = null;}
+
+		$viewData['plusOnly'] = count($this->Orders->filter_plus_only($viewData['orders']));
+		$viewData['externalOnly'] = count($this->Orders->filter_external($viewData['orders']));
+		$viewData['averageRetention'] = $this->Orders->average($this->Orders->filter_cancelled($viewData['orders']),'retention');
+
+
+		$viewData['singleChart'] = $this->Articles->subscribers_for_chart();
+		$viewData['barChart'] = $this->Articles->subscribers_by_ressort_chart();
+
+		$viewData['barChart2'] = $this->Orders->ressorts_for_chart();
+		$viewData['singleChart2'] = $this->Orders->orders_for_chart();
+
+		//$viewData['barChart'] = $this->Orders->ressorts_for_chart();
+
+		$this->view->title = 'Dashboard';
+		$this->view->render('pages/dashboard', $viewData);
 
 	}
 

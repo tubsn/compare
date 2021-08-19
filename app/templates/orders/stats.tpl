@@ -15,10 +15,13 @@ Es kommt daher zu Abweichungen im Vergleich zur Statistik-Seite (dort wird nach 
 <p>Die Bestellungen werden seit <b>23. März</b> direkt aus dem SSO System (Plenigo) bezogen. Zur Zeit, die beste Datenquelle die wir haben!<br /> Die <b>Kündigungsdaten sind NICHT Live</b> sie beziehen sich auf den Tag der letzten Statistik-Aktualisierung. Conversions des heutigen Tages werden bis 3 Uhr morgens aufgeführt!
 </p>
 
+<p>
+<a class="button" href="/orders/list">Bestellungen einzeln auflisten</a>&emsp;
+<a class="button" href="/orders/today">Live Conversions aus Plenigo</a>
+</p>
 
-<p class="light-box" style="margin-bottom:2em;">
-
-Gesamtbestellungen: <span class="conversions"><?=$numberOfOrders?></span>
+<p class="light-box" style=" margin-bottom:1em; margin-top:1em;">
+Gesamtbestellungen: <b class="conversions"><?=$numberOfOrders?></b>
 &emsp; davon Plusseite: <b class="blue"><?=$plusOnly?></b>
 &emsp; davon Extern: <b class="blue"><?=$externalOnly?></b>
 &emsp; davon Gekündigt: <b class="redish"><?=$numberOfCancelled?></b>
@@ -26,12 +29,10 @@ Gesamtbestellungen: <span class="conversions"><?=$numberOfOrders?></span>
 &emsp; ⌀-Haltedauer: <b class="blue"><?=number_format($averageRetention,2,',','.')?> Tage</b>
 </p>
 
-<p>
-<a class="button" href="/orders/list">Bestellungen einzeln auflisten</a>&emsp;
-<a class="button" href="/orders/today">Live Conversions aus Plenigo</a>
-</p>
 
-<hr>
+<h3>Bestellverteilung nach Ressort: </h3>
+<?php include tpl('charts/bar_chart');?>
+
 
 <section class="detail-layout" style="align-items:start">
 
@@ -82,7 +83,7 @@ Gesamtbestellungen: <span class="conversions"><?=$numberOfOrders?></span>
 
 		<?php if (count($plz) > 0): ?>
 
-		<h3>Postleitzahlen (laut Rechnung)</h3>
+		<h3>Postleitzahlen (laut Plenigo)</h3>
 		<?php $tableData = $plz;?>
 		<?php $tableName = null;?>
 		<?php include tpl('orders/stats-table');?>
@@ -124,7 +125,5 @@ Gesamtbestellungen: <span class="conversions"><?=$numberOfOrders?></span>
 	</div>
 
 </section>
-
-
 
 </main>
