@@ -12,6 +12,7 @@
 		<li><a href="/tag">#Tags</a></li>
 		<li><a href="/pageviews">Pageviews</a></li>
 		<li><a href="/subscribers">Subscribers</a></li>
+		<li><a href="/mediatime">Mediatime</a></li>
 		<li><a href="/conversions">Conversions</a></li>
 		<li><a href="/top5">Top5</a></li>
 		<li><a href="/stats">Statistiken</a></li>

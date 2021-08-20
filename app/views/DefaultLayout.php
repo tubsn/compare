@@ -26,7 +26,7 @@ class DefaultLayout extends htmlView {
 		'tinyhead' => 'layout/html-doc-header',
 		'header' => 'navigation/main-menu',
 		'main' => null,
-		'footer' => null,
+		'footer' => 'navigation/footer',
 		'tinyfoot' => 'layout/html-doc-footer',
 	];
 

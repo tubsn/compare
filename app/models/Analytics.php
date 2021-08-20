@@ -17,7 +17,7 @@ class Analytics
 		$articleID = htmlspecialchars($articleID, ENT_QUOTES, 'UTF-8');
 		if (strlen($articleID) != 8) {return false;}
 
-		$this->ga->metrics = 'ga:pageViews,ga:sessions,ga:itemQuantity';
+		$this->ga->metrics = 'ga:pageViews,ga:sessions,ga:itemQuantity,ga:timeOnPage,ga:avgTimeOnPage';
 		$this->ga->from = $from;
 		$this->ga->to = $to;
 		$this->ga->dimensions = 'ga:date';

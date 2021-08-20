@@ -33,6 +33,7 @@ class Warmup extends Controller {
 			$id = $article['id'];
 			$pubDate = formatDate($article['pubdate'],'Y-m-d');
 			$gaData = $this->Analytics->by_article_id($id, $pubDate);
+
 			$gaData['totals']['subscribers'] = $this->Linkpulse->subscribers($id, $pubDate);
 			$gaData['totals']['buyintent'] = $this->Analytics->buy_intention_by_article_id($id, $pubDate);
 
@@ -93,22 +94,24 @@ class Warmup extends Controller {
 
 
 	public function enrich_article_with_buy_intents() {
-
+		/* Does not Work ... GA Data is Sampled too much */
 		$buyIntentions = $this->Analytics->list_buy_intention();
-
 		dd($buyIntentions);
-
-
 
 	}
 
 
-	public function conversions() {
+	public function conversions($daysago = 3) {
 
 		$dates = [];
 		array_push($dates, date('Y-m-d', strtotime('today')));
 		array_push($dates, date('Y-m-d', strtotime('today -1 day')));
 		array_push($dates, date('Y-m-d', strtotime('today -2 day')));
+
+		if ($daysago == 1) {
+			$dates = [];
+			$dates[0] = date('Y-m-d', strtotime('today'));
+		}
 
 		foreach ($dates as $day) {
 			$this->Orders->import($day);

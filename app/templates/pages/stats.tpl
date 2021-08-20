@@ -15,6 +15,7 @@ Artikel: <b title="davon Plusartikel: <?=$plusarticles?>"><?=$articles?></b> &em
 <?php if ($articles > 0): ?>
 &emsp; ⌀-Pageviews: <b class="blue"><?=number_format(($pageviews / $articles), 0,',','.') ?></b>
 <?php endif ?>
+&emsp; Mediatime: <b class="green"><?=number_format($mediatime,0,',','.')?>s</b>
 &emsp; Besuche: <b class="blue"><?=number_format($sessions,0,',','.')?></b>
 &emsp; Kaufimpulse: <b class="orange"><?=$buyintents?></b>
 &emsp; Conversions: <b class="conversions"><?=$conversions?></b>
@@ -93,11 +94,5 @@ Artikel: <b title="davon Plusartikel: <?=$plusarticles?>"><?=$articles?></b> &em
 <?php endif ?>
 
 </section>
-
-<div class="light-box mt" style="margin-bottom:2em;">
-<h3>Legende / Begriffs Erklärungen:</h3>
-<b>Plusquote</b> = Plusartikel / Artikel | <b>⌀-Klicks</b> = Klicks / Anzahl aller Artikel | <b>Plusleser %</b> Eingeloggte User / Klicks | <b>Conversionrate</b> = Conversions / Besuche | <b>Kaufimpuls</b> = Klick auf Paywall Produkt |
-<b>K-Quote</b> = Kündigerquote (in der Regel auf 3 Tage)
-</div>
 
 </main>

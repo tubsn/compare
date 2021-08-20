@@ -11,14 +11,21 @@ class Newsletter extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Articles');
+		$this->models('Articles,Orders');
 	}
 
 	public function chefredaktion() {
 
 		$this->view('BlankLayout');
+
+		$this->Orders->from = date('Y-m-d', strtotime('yesterday'));
+		$this->Orders->to = date('Y-m-d', strtotime('today'));
+
 		$viewData['pageviews'] = $this->Articles->top_pageviews_days_ago(1);
-		$viewData['conversions'] = $this->Articles->top_conversions_days_ago(1);
+		//$viewData['conversions'] = $this->Articles->top_conversions_days_ago(1);
+		$viewData['conversions'] = $this->Orders->latest_grouped();
+		$viewData['conversionCount'] =$this->Orders->count();
+
 		$this->view->render('newsletter/top-articles', $viewData);
 
 	}

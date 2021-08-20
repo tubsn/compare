@@ -18,6 +18,7 @@ $routes->get('/plus', 'Lists@plus');
 $routes->get('/top5', 'Lists@top5');
 $routes->get('/conversions', 'Lists@conversions');
 $routes->get('/pageviews', 'Lists@pageviews');
+$routes->get('/mediatime', 'Lists@mediatime');
 $routes->get('/subscribers', 'Lists@subscribers');
 $routes->post('/settimeframe', 'Articles@set_timeframe');
 
@@ -83,7 +84,7 @@ $routes->post('/admin', 'Admin@save_config');
 $routes->get('/admin/import', 'Import@feeds');
 $routes->get('/admin/orders', 'Import@order_import_form');
 $routes->get('/admin/warmup', 'Warmup@daterange');
-$routes->get('/admin/warmup_conversions', 'Warmup@conversions');
+$routes->get('/admin/warmup_conversions[/{daysago}]', 'Warmup@conversions');
 $routes->get('/admin/warmup_subscribers', 'Warmup@subscribers');
 $routes->get('/admin/warmup/sources[/{daysago}]', 'Warmup@enrich_conversions_with_ga');
 $routes->get('/admin/warmup/buyintents[/{daysago}]', 'Warmup@enrich_article_with_buy_intents');

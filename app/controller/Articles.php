@@ -241,6 +241,14 @@ class Articles extends Controller {
 		Session::set('timeframe', $timeframe); // for the Select Box
 
 		switch ($timeframe) {
+			case 'heute':
+				Session::set('from', date('Y-m-d', strtotime('today')));
+				Session::set('to', date('Y-m-d', strtotime('today')));
+			break;
+			case 'gestern':
+				Session::set('from', date('Y-m-d', strtotime('yesterday')));
+				Session::set('to', date('Y-m-d', strtotime('yesterday')));
+			break;
 			case 'aktuelle Woche':
 				Session::set('from', date('Y-m-d', strtotime('monday this week')));
 				Session::set('to', date('Y-m-d', strtotime('sunday this week')));

@@ -131,8 +131,9 @@ class Orders extends Model
 
 		$chart['amount'] = rtrim($orders, ',');
 		$chart['dates'] = rtrim($ressorts, ',');
-		$chart['color'] = '#df886d';
+		$chart['color'] = '#df886d';  // Orange #df886d - Blue #6088b4
 		$chart['name'] = 'Bestellungen';
+		$chart['showValues'] = 'true';
 
 
 		return $chart;
@@ -159,6 +160,61 @@ class Orders extends Model
 	}
 
 
+	public function latest_grouped($limit = 5) {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+
+			"SELECT articles.id as id,
+			 count(conversions.order_id) as conversions,
+			 articles.title as title,
+			 articles.plus as plus,
+			 articles.type as type,
+			 articles.image as image,
+			 articles.pageviews as pageviews,
+			 articles.subscribers as subscribers,
+			 ifnull(conversions.article_ressort, articles.ressort) as ressort,
+			 articles.author as author,
+			 articles.kicker as kicker,
+			 articles.cancelled as cancelled,
+			 articles.avgmediatime as avgmediatime,
+			 articles.pubdate as pubdate
+
+			 FROM conversions
+			 LEFT JOIN articles ON `id` = conversions.article_id
+			 WHERE DATE(conversions.order_date) BETWEEN :startDate AND :endDate
+			# AND ressort != 'plus'
+
+			 GROUP BY articles.id
+			 ORDER BY conversions DESC, pageviews DESC
+			 LIMIT 0, $limit"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$orders = $SQLstatement->fetchall();
+
+		return $orders;
+
+	}
+
+
+	public function count() {
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT count(*) as orders
+			 FROM `conversions`
+			 WHERE DATE(`order_date`) BETWEEN :startDate AND :endDate"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetch();
+		return $output['orders'];
+
+	}
 
 	public function without_ga_sources($dayCount = 5) {
 		$SQLstatement = $this->db->connection->prepare(

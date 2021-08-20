@@ -1,5 +1,5 @@
 <?php if ($tableData): ?>
-<table class="fancy wide js-sortable font-small compact">
+<table class="fancy wide js-sortable font-small compact mbig">
 	<thead><tr>
 		<th><?=$tableName ?? 'Name' ?></th>
 		<th>Conv</th>

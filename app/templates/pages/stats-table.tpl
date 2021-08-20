@@ -9,6 +9,8 @@
 			<th>⌀-Klicks</th>
 			<th style="text-align:center">+Leser %</th>
 			<th>+Leser</th>
+			<th>Mediatime</th>
+			<th>⌀-Mediatime</th>
 			<th>Kaufimpulse</th>
 			<th>Conversions</th>
 			<th>Conversionrate</th>
@@ -45,6 +47,17 @@
 			<?php endif; ?>
 
 			<td><?=number_format($stats['subscribers'],0,'.','.') ?? 0?></td>
+
+
+			<td title="Mediatime: <?=$stats['mediatime']?>">
+				<div class="indicator mediatime">
+					<div style="width:<?=round($stats['mediatime'] / $mediatime * 100)?>%;"><?=round($stats['mediatime'] / $mediatime * 100)?></div>
+				</div>
+			</td>
+
+			<td><div<?php if ($stats['avgmediatime'] > 100): ?> class="greenbg"<?php endif; ?>><?=number_format($stats['avgmediatime'],0,'.','.') ?? 0?></div></td>
+
+
 			<td><?=number_format($stats['buyintents'],0,'.','.') ?? 0?></td>
 
 

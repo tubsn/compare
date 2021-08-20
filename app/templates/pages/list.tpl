@@ -18,6 +18,7 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 <?php if ($numberOfArticles > 0): ?>
 &emsp; ⌀-Pageviews: <b class="blue"><?=number_format(($pageviews / $numberOfArticles), 0,',','.') ?></b>
 <?php endif ?>
+&emsp; ⌀-Mediatime: <b class="green"><?=number_format($avgmediatime,0,',','.')?>&thinsp;s</b>
 &emsp; Kaufimpulse: <b class="orange"><?=$buyintents ?? '0'?></b>
 &emsp; Conversions: <b class="conversions"><?=$conversions?></b>
 &emsp; Kündiger: <b class="redish"><?=$cancelled ?? '0'?></b></p>
@@ -60,6 +61,7 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 	<th>Klicks</th>
 	<th>+Leser</th>
 	<th></th>
+	<th>⌀-MT</th>
 	<th>Conv</th>
 	<th>Künd</th>
 	<th>Datum</th>
@@ -141,6 +143,8 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 
 	<td><?=number_format($article['subscribers'],0,'.','.') ?? 0?></td>
 
+
+	<td><span class="<?php if ($article['avgmediatime'] > 150): ?>greenbg<?php endif; ?>"><?=number_format($article['avgmediatime'],0,'.','.') ?? 0?></span></td>
 
 	<td class="text-right"><div<?php if ($article['conversions'] > 0): ?> class="conversions"<?php endif; ?>><?=number_format($article['conversions'],0,'.','.')?></div></td>
 

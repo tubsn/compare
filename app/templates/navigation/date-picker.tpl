@@ -8,6 +8,8 @@
 				<?php foreach (TIMEFRAMES as $timeframe): ?>
 				<?php if (session('timeframe') == $timeframe): ?>
 				<option selected><?=session('timeframe')?></option>
+				<?php elseif(!session('timeframe') AND $timeframe == 'aktuelle Woche'): ?>
+				<option selected><?=$timeframe?></option>
 				<?php else: ?>
 				<option><?=$timeframe?></option>
 				<?php endif; ?>

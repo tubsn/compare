@@ -13,7 +13,7 @@
 <?php foreach ($list as $type => $articles): ?>
 
 <h1><?=ucfirst($type)?></h1>
-	
+
 <?php if ($articles): ?>
 <table class="fancy wide js-sortable condensed mbig">
 <thead>
@@ -29,6 +29,7 @@
 	<th>Klicks</th>
 	<th>+Leser</th>
 	<th></th>
+	<th>MediaT</th>
 	<th>Conv</th>
 	<th>Künd</th>
 	<th>Datum</th>
@@ -113,6 +114,7 @@
 
 	<td><?=$article['subscribers']?></td>
 
+	<td><span class="<?php if ($article['avgmediatime'] > 150): ?>greenbg<?php endif; ?>"><?=number_format($article['avgmediatime'],0,'.','.') ?? 0?></span></td>
 
 	<td class="text-right"><div<?php if ($article['conversions'] > 0): ?> class="conversions"<?php endif; ?>><?=number_format($article['conversions'],0,'.','.')?></div></td>
 

@@ -21,6 +21,7 @@ class Stats extends Controller {
 		$viewData['plusarticles'] = $this->Articles->sum('plus');
 		$viewData['pageviews'] = $this->Articles->sum('pageviews');
 		$viewData['subscribers'] = $this->Articles->sum('subscribers');
+		$viewData['mediatime'] = $this->Articles->sum('mediatime');
 		$viewData['sessions'] = $this->Articles->sum('sessions');
 		$viewData['conversions'] = $this->Articles->sum('conversions');
 		$viewData['buyintents'] = $this->Articles->sum('buyintent');
@@ -66,6 +67,15 @@ class Stats extends Controller {
 
 		$viewData['articles'] = $this->Articles->count('*');
 		$viewData['subscribers'] = $this->Articles->sum('subscribers');
+		$viewData['avgmediatime'] = $this->Articles->average('avgmediatime');
+		$viewData['mediatime'] = $this->Articles->sum('mediatime');
+
+		$viewData['mtDays'] = floor($viewData['mediatime'] / 60 / 60 / 24);
+		//$viewData['mtDays'] = date('z', mktime(0,round($viewData['mediatime'])));
+		$viewData['mtHours'] = date('G', mktime(0,round($viewData['mediatime'])));
+		$viewData['mtMinutes'] = date('i', mktime(0,round($viewData['mediatime'])));
+		$viewData['mtSeconds'] = date('s', mktime(0,round($viewData['mediatime'])));
+
 		$viewData['orders'] = $this->Orders->list();
 		$viewData['numberOfOrders'] = count($viewData['orders'] ?? []);
 		$viewData['numberOfCancelled'] = count($this->Orders->filter_cancelled($viewData['orders']));
@@ -78,14 +88,17 @@ class Stats extends Controller {
 		$viewData['externalOnly'] = count($this->Orders->filter_external($viewData['orders']));
 		$viewData['averageRetention'] = $this->Orders->average($this->Orders->filter_cancelled($viewData['orders']),'retention');
 
-
 		$viewData['singleChart'] = $this->Articles->subscribers_for_chart();
 		$viewData['barChart'] = $this->Articles->subscribers_by_ressort_chart();
 
 		$viewData['barChart2'] = $this->Orders->ressorts_for_chart();
 		$viewData['singleChart2'] = $this->Orders->orders_for_chart();
 
-		//$viewData['barChart'] = $this->Orders->ressorts_for_chart();
+		//$viewData['combinedChart'][0] = $this->Articles->mediatime_by_ressort_chart();
+		//$viewData['combinedChart'][1] = $this->Articles->pageviews_by_ressort_chart();
+		
+		$viewData['barChart3'] = $this->Articles->mediatime_by_ressort_chart();
+		$viewData['barChart4'] = $this->Articles->pageviews_by_ressort_chart();
 
 		$this->view->title = 'Dashboard';
 		$this->view->render('pages/dashboard', $viewData);

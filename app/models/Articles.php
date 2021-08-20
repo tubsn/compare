@@ -150,6 +150,11 @@ class Articles extends Model
 		return array_sum(array_column($array,$key));
 	}
 
+	public function average_up($array, $key) {
+		if (empty($array)) {return 0;}
+		return array_sum(array_column($array,$key)) / count($array);
+	}
+
 	public function add_to_database($articles) {
 		$this->save_to_db($articles);
 	}
@@ -162,11 +167,10 @@ class Articles extends Model
 			'subscribers' => $gaData['subscribers'] ?? 0,
 			'buyintent ' => $gaData['buyintent'] ?? null,
 			'conversions' => $gaData['Itemquantity'] ?? 0,
+			'mediatime' => $gaData['Timeonpage'] ?? 0,
+			'avgmediatime' => $gaData['Avgtimeonpage'] ?? 0,
 			'refresh' => date('Y-m-d H:i:s'),
 		];
-
-		// Fix for Google Analytics Bug of 23. Mrz
-		//if ($stats['conversions'] == 0) {unset($stats['conversions']);}
 
 		$this->update($stats,$id);
 	}
@@ -236,6 +240,30 @@ class Articles extends Model
 		return $output;
 
 	}
+
+	public function mediatime_only($minimum = 150, $limit=1000) {
+
+		$minimum = intval($minimum);
+		$limit = intval($limit);
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT *
+			 FROM `articles`
+			 WHERE `avgmediatime` > $minimum
+			 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			 ORDER BY `avgmediatime` DESC
+			 LIMIT 0, $limit"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall();
+		if (empty($output)) {return null;}
+		return $output;
+
+	}
+
 
 
 	public function subscriber_only($limit=2000) {
@@ -333,6 +361,87 @@ class Articles extends Model
 		return $output;
 
 	}
+
+
+	public function mediatime_by_ressort_chart() {
+		$rawData = $this->mediatime_by_ressort();
+
+		$mediatime = null; $ressorts = null;
+		foreach ($rawData as $data) {
+			$mediatime .= $data['mediatime'] . ',';
+			$ressorts .= "'" . ucfirst($data['ressort']) . "'" . ',';
+		}
+
+		$chart['amount'] = rtrim($mediatime, ',');
+		$chart['dates'] = rtrim($ressorts, ',');
+		$chart['color'] = '#6ea681';
+		$chart['name'] = 'Mediatime';
+
+		return $chart;
+	}
+
+
+	public function mediatime_by_ressort() {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT ressort, sum(mediatime) as mediatime
+			 FROM `articles`
+			 WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			 GROUP BY ressort
+			 ORDER BY ressort ASC"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall();
+
+		return $output;
+
+	}
+
+	public function pageviews_by_ressort_chart() {
+		$rawData = $this->pageviews_by_ressort();
+
+		$pageviews = null; $ressorts = null;
+		foreach ($rawData as $data) {
+			$pageviews .= $data['pageviews'] . ',';
+			$ressorts .= "'" . ucfirst($data['ressort']) . "'" . ',';
+		}
+
+		$chart['amount'] = rtrim($pageviews, ',');
+		$chart['dates'] = rtrim($ressorts, ',');
+		$chart['color'] = '#6088b4';
+		$chart['name'] = 'Pageviews';
+
+		return $chart;
+	}
+
+
+	public function pageviews_by_ressort() {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT ressort, sum(pageviews) as pageviews
+			 FROM `articles`
+			 WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			 GROUP BY ressort
+			 ORDER BY ressort ASC"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall();
+
+		return $output;
+
+	}
+
+
+
+
 
 
 	public function by_date_range($start, $end = null) {
@@ -555,6 +664,16 @@ class Articles extends Model
         	WHERE temptable.$column = maintable.$column
 			AND `subscribers` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as subscribers,
 
+       		(SELECT sum(mediatime)
+        	FROM `articles` AS temptable
+        	WHERE temptable.$column = maintable.$column
+			AND `mediatime` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as mediatime,
+
+       		(SELECT avg(avgmediatime)
+        	FROM `articles` AS temptable
+        	WHERE temptable.$column = maintable.$column
+			AND `avgmediatime` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as avgmediatime,
+
        		(SELECT sum(sessions)
         	FROM `articles` AS temptable
         	WHERE temptable.$column = maintable.$column
@@ -657,6 +776,22 @@ class Articles extends Model
 
 		return $output['sum('.$field.')'];
 	}
+
+	public function average($field) {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+		$field = strip_tags($field);
+
+		$SQLstatement = $this->db->connection->prepare("SELECT avg($field) FROM `articles` WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate");
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+
+		$output = $SQLstatement->fetch();
+		if (empty($output)) {return null;}
+
+		return $output['avg('.$field.')'];
+	}
+
 
 	private function save_to_db(array $articles) {
 

@@ -1,7 +1,7 @@
-<div id="<?=$singleChart['name']?>barChart" class="mb"></div>
+<div id="<?=$barChart['name']?>barChart" class="mb"></div>
 
 <script>
-let <?=$singleChart['name']?>BarOptions = {
+let <?=$barChart['name']?>BarOptions = {
 	series: [
 		{
 			name: '<?=$barChart['name']?>', color: '<?=$barChart['color']?>',
@@ -15,7 +15,7 @@ let <?=$singleChart['name']?>BarOptions = {
 
 	},
 	tooltip: {
-		enabled: false,
+		enabled: <?php if (isset($barChart['showValues'])): ?>false<?php else: ?>true<?php endif; ?>,
 	},
 
 	grid: {
@@ -30,7 +30,7 @@ let <?=$singleChart['name']?>BarOptions = {
 	},
 	dataLabels: {
 		textAnchor: 'middle',
-		enabled: true,
+		enabled: <?=$barChart['showValues'] ?? 'false'?>,
   		offsetX: 0,
   		offsetY: 20,
 		style: {
@@ -61,6 +61,6 @@ let <?=$singleChart['name']?>BarOptions = {
 	}
 };
 
-let <?=$singleChart['name']?>barchart = new ApexCharts(document.querySelector("#<?=$singleChart['name']?>barChart"), <?=$singleChart['name']?>BarOptions);
-<?=$singleChart['name']?>barchart.render();
+let <?=$barChart['name']?>barchart = new ApexCharts(document.querySelector("#<?=$barChart['name']?>barChart"), <?=$barChart['name']?>BarOptions);
+<?=$barChart['name']?>barchart.render();
 </script>

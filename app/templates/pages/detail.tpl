@@ -28,6 +28,10 @@
 
 	<hr style="width:40%"/>
 
+	<?php if ($article['avgmediatime']): ?>
+	<p>Ø-Mediatime: <span title="gesamt Mediatime: <?=round($article['mediatime'])?>&thinsp;s" class="greenbg"><?=round($article['avgmediatime'],2)?>&thinsp;s</span></p>
+	<?php endif; ?>
+
 	<p>
 	<?php if ($article['subscribers']): ?>
 	Plus-Leser-Anteil: <span title="Registrierte Leser: <?=$article['subscribers']?>" class="bluebg"><?=round($article['subscribers'] / $article['pageviews'] * 100)?>%</span>

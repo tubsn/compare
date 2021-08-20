@@ -9,7 +9,7 @@
 <p>Übersicht erfasster Bestellungen seit anfang September 2020. Seit dem 23. März 2021 werden die Bestellungen direkt aus Plenigo importiert.</p>
 
 <p class="light-box" style="margin-bottom:2em;">
-Gesamtbestellungen: <span class="conversions"><?=$numberOfOrders?></span>
+Gesamtbestellungen: <b class="conversions"><?=$numberOfOrders?></b>
 &emsp; davon Plusseite: <b class="blue"><?=$plusOnly?></b>
 &emsp; davon Extern: <b class="blue"><?=$externalOnly?></b>
 &emsp; davon Gekündigt: <b class="redish"><?=$numberOfCancelled?></b>
