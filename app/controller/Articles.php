@@ -58,7 +58,7 @@ class Articles extends Controller {
 		$viewData['sources'] = $this->Conversions->group_by_combined('ga_source');
 		$viewData['cities'] = $this->Conversions->group_by_combined('ga_city');
 		$viewData['gender'] = $this->Conversions->group_by_combined('customer_gender');
-		$viewData['payments'] = $this->Conversions->group_by_combined('subscription_payment_method');
+		$viewData['payments'] = $this->Conversions->group_by_combined('order_payment_method');
 		$viewData['cancelled'] = $this->Conversions->cancelled_orders();
 
 		// Rendering

@@ -230,8 +230,12 @@ class Lists extends Controller {
 		$this->view->render('pages/list', $viewData);
 	}
 
-	public function type($type = ARTICLE_TYPES[0]) {
+	public function type($type = null) {
 		Session::set('referer', '/type/'.$type);
+
+		$viewData['typeList'] = $this->Articles->list_distinct('type');
+		if (is_null($type)) {$type = $viewData['typeList'][0] ?? '';}
+
 		$type = $this->decode_url($type);
 		$viewData['articles'] = $this->Articles->list_by($type, 'type');
 		$viewData['chart'] = $this->Stats->get_grouped_chart_data($type, 'type');
@@ -252,8 +256,12 @@ class Lists extends Controller {
 		$this->view->render('pages/list', $viewData);
 	}
 
-	public function tag($tag = ARTICLE_TAGS[0]) {
+	public function tag($tag = null) {
 		Session::set('referer', '/tag/'.$tag);
+
+		$viewData['tagList'] = $this->Articles->list_distinct('tag');
+		if (is_null($tag)) {$tag = $viewData['tagList'][0] ?? '';}
+
 		$tag = $this->decode_url($tag);
 
 		$viewData['articles'] = $this->Articles->list_by($tag, 'tag');

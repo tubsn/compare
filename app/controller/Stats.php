@@ -70,11 +70,13 @@ class Stats extends Controller {
 		$viewData['avgmediatime'] = $this->Articles->average('avgmediatime');
 		$viewData['mediatime'] = $this->Articles->sum('mediatime');
 
+		//dd($viewData['mediatime']);
+
 		$viewData['mtDays'] = floor($viewData['mediatime'] / 60 / 60 / 24);
-		//$viewData['mtDays'] = date('z', mktime(0,round($viewData['mediatime'])));
-		$viewData['mtHours'] = date('G', mktime(0,round($viewData['mediatime'])));
-		$viewData['mtMinutes'] = date('i', mktime(0,round($viewData['mediatime'])));
-		$viewData['mtSeconds'] = date('s', mktime(0,round($viewData['mediatime'])));
+		//$viewData['mtDays'] = date('z', mktime(0,0,0,$viewData['mediatime'] / 60 / 60));
+		$viewData['mtHours'] = date('G', mktime($viewData['mediatime'] / 60 / 60));
+		$viewData['mtMinutes'] = date('i', mktime(0,$viewData['mediatime'] / 60));
+		$viewData['mtSeconds'] = date('s', mktime(0,0,$viewData['mediatime']));
 
 		$viewData['orders'] = $this->Orders->list();
 		$viewData['numberOfOrders'] = count($viewData['orders'] ?? []);
@@ -96,7 +98,7 @@ class Stats extends Controller {
 
 		//$viewData['combinedChart'][0] = $this->Articles->mediatime_by_ressort_chart();
 		//$viewData['combinedChart'][1] = $this->Articles->pageviews_by_ressort_chart();
-		
+
 		$viewData['barChart3'] = $this->Articles->mediatime_by_ressort_chart();
 		$viewData['barChart4'] = $this->Articles->pageviews_by_ressort_chart();
 
