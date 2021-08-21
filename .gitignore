@@ -1,6 +1,8 @@
 /logs
 /cache
 /vendor
+/app/config/artikel_tags.txt
+/app/config/artikel_typen.txt
 /public/storage
 /public/uploads
 /public/assets
