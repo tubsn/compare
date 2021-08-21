@@ -14,7 +14,7 @@
 
 <p class="light-box" style="margin-bottom:2em;">
 Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=number_format($pageviews,0,',','.')?></b>
-&emsp; Subscribers: <b class="blue"><?=number_format($subscribers,0,',','.')?></b>
+&emsp; Subscribers: <b class="deepblue"><?=number_format($subscribers,0,',','.')?></b>
 <?php if ($numberOfArticles > 0): ?>
 &emsp; ⌀-Pageviews: <b class="blue"><?=number_format(($pageviews / $numberOfArticles), 0,',','.') ?></b>
 <?php endif ?>
@@ -46,7 +46,6 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 
 
 
-
 <?php if ($articles): ?>
 <table class="fancy wide js-sortable condensed">
 <thead>
@@ -58,9 +57,9 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 	<th>Inhaltstyp</th>
 	<th>Ressort</th>
 	<?php if (auth_rights('author')): ?><th>Autor</th><?php endif; ?>
-	<th>Klicks</th>
-	<th>+Leser</th>
-	<th></th>
+	<?php if (!isset($showSubscribersInTable)): ?><th>Klicks</th><?php endif; ?>
+	<?php if (isset($showSubscribersInTable) && $showSubscribersInTable == true): ?><th>Subs</th><?php endif; ?>
+	<th>%-Subs</th>
 	<th>⌀-MT</th>
 	<th>Conv</th>
 	<th>Künd</th>
@@ -128,7 +127,14 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 	<?php if (auth_rights('author')): ?>
 	<td class="narrow"><a href="/author/<?=urlencode(str_replace('/', '-slash-', $article['author'] ?? 'Unbekannt'))?>"><?=$article['author'] ?? 'Unbekannt'?></a></td>
 	<?php endif ?>
+
+	<?php if (!isset($showSubscribersInTable)): ?>
 	<td class="text-right"><div<?php if ($article['pageviews'] > 2500): ?> class="pageviews"<?php endif; ?>><?=number_format($article['pageviews'],0,'.','.')?></div></td>
+	<?php endif ?>
+
+	<?php if (isset($showSubscribersInTable) && $showSubscribersInTable == true): ?>
+	<td><div<?php if ($article['subscribers'] > 750): ?> class="subscribers"<?php endif; ?>><?=number_format($article['subscribers'],0,'.','.') ?? 0?></div></td>
+	<?php endif; ?>
 
 	<?php if ($article['pageviews'] && $article['subscribers']): ?>
 	<td title="Plus-Leser: <?=$article['subscribers']?>">
@@ -139,10 +145,6 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 	<?php else: ?>
 	<td><div class="indicator plusleser"><div>0</div></div></td>
 	<?php endif; ?>
-
-
-	<td><?=number_format($article['subscribers'],0,'.','.') ?? 0?></td>
-
 
 	<td><span class="<?php if ($article['avgmediatime'] > 150): ?>greenbg<?php endif; ?>"><?=number_format($article['avgmediatime'],0,'.','.') ?? 0?></span></td>
 

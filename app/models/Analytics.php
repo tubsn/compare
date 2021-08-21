@@ -127,4 +127,20 @@ class Analytics
 	}
 
 
+	public function page_data($dayCount = 3) {
+
+		$this->ga->metrics = 'ga:pageviews, ga:sessions, ga:timeOnPage, ga:avgTimeOnPage';
+		$this->ga->from = $dayCount . 'daysAgo';
+		$this->ga->to = 'today';
+		$this->ga->dimensions = 'ga:date';
+		$this->ga->sort = 'ga:date';
+		$this->ga->filters = null;
+		$this->ga->maxResults = '1000';
+
+		return $this->ga->fetch();
+
+	}
+
+
+
 }

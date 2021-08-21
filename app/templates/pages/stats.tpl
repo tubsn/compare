@@ -2,12 +2,12 @@
 
 <?php include tpl('navigation/date-picker');?>
 
-<h1>Artikelbasierte Statistiken</h1>
+<h1><?=$page['title'] ?? 'Statistiken'?></h1>
 
 <p>Es werden nur Klicks auf selbstproduzierte Artikel gezählt. Übersichtsseiten und Artikel mit DPA-Kürzel werden ignoriert.<br/>
-Die Daten werden <b>auf Lebensdauer des Artikels</b> gruppiert. Der eingestellte Zeitraum filtert das <b>Publikationsdatum der Artikel!</b> Nicht gewohnt die eigentlichen Daten! </p>
+Die Daten werden <b>auf Lebensdauer des Artikels</b> gruppiert. Der eingestellte Zeitraum filtert das <b>Publikationsdatum der Artikel!</b> Nicht die eigentlichen Daten!</p>
 <p><b>Kündigungsdaten sind NICHT Live</b> und beziehen sich auf den Tag der letzten Statistik-Aktualisierung des Artikels (i.d.R. 3 Tagen ach Publikation). <br />
-Die Kündigerraten sind vor Februar 2021 nicht relevant, da hier zuviele Daten fehlen!</p>
+</p>
 
 
 <p class="light-box" style="margin-bottom:2em;">
@@ -15,6 +15,7 @@ Artikel: <b title="davon Plusartikel: <?=$plusarticles?>"><?=$articles?></b> &em
 <?php if ($articles > 0): ?>
 &emsp; ⌀-Pageviews: <b class="blue"><?=number_format(($pageviews / $articles), 0,',','.') ?></b>
 <?php endif ?>
+&emsp; Subscriber Views: <b class="deepblue"><?=number_format($subscribers,0,',','.')?></b>
 &emsp; Mediatime: <b class="green"><?=number_format($mediatime,0,',','.')?>s</b>
 &emsp; Besuche: <b class="blue"><?=number_format($sessions,0,',','.')?></b>
 &emsp; Kaufimpulse: <b class="orange"><?=$buyintents?></b>

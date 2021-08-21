@@ -128,6 +128,8 @@ class Lists extends Controller {
 		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
 		$viewData['numberOfArticles'] = $count;
 
+		$viewData['showSubscribersInTable'] = true;
+
 		$this->view->title = 'Von Abonnenten gelesene Artikel';
 		$this->view->info = '<b>Bitte beachten:</b> wir haben verhältnismäßig wenige aktive Abonnenten die einen Plusartikel auch tatsächlich lesen können!';
 		$this->view->render('pages/list', $viewData);

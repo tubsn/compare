@@ -4,7 +4,7 @@ namespace app\models;
 use \flundr\mvc\Model;
 use \flundr\database\SQLdb;
 use \flundr\utility\Session;
-use flundr\cache\RequestCache;
+use \flundr\cache\RequestCache;
 
 class Orders extends Model
 {

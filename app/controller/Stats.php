@@ -12,7 +12,7 @@ class Stats extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Articles,Conversions,Stats,Orders');
+		$this->models('Articles,Conversions,Stats,Orders,GlobalKPIs');
 	}
 
 	public function index() {
@@ -32,15 +32,15 @@ class Stats extends Controller {
 		$viewData['typeStats'] = $this->Articles->stats_grouped_by($column = 'type', $order = 'conversions DESC');
 		$viewData['tagStats'] = $this->Articles->stats_grouped_by($column = 'tag', $order = 'conversions DESC');
 
-		//dd($viewData['ressortStats']);
-
 		Session::set('referer', '/stats');
-		$this->view->title = 'Statistik Daten';
+		$this->view->title = 'Inhaltsbasierte Statistiken';
 		$this->view->render('pages/stats', $viewData);
 	}
 
 
 	public function cancellations() {
+
+		/* Cancellations are Displayed in the Orders Controller now */
 
 		$viewData['conversions'] = $this->Conversions->list();
 		$viewData['cancelled'] = $this->Conversions->cancelled_orders();
@@ -68,12 +68,12 @@ class Stats extends Controller {
 		$viewData['articles'] = $this->Articles->count('*');
 		$viewData['subscribers'] = $this->Articles->sum('subscribers');
 		$viewData['avgmediatime'] = $this->Articles->average('avgmediatime');
+		//$viewData['avgmediatime'] = $this->GlobalKPIs->avg('avgmediatime');
+		$viewData['pageviews'] = $this->GlobalKPIs->sum('pageviews');
+
+		// Mediatime
 		$viewData['mediatime'] = $this->Articles->sum('mediatime');
-
-		//dd($viewData['mediatime']);
-
 		$viewData['mtDays'] = floor($viewData['mediatime'] / 60 / 60 / 24);
-		//$viewData['mtDays'] = date('z', mktime(0,0,0,$viewData['mediatime'] / 60 / 60));
 		$viewData['mtHours'] = date('G', mktime($viewData['mediatime'] / 60 / 60));
 		$viewData['mtMinutes'] = date('i', mktime(0,$viewData['mediatime'] / 60));
 		$viewData['mtSeconds'] = date('s', mktime(0,0,$viewData['mediatime']));
@@ -90,15 +90,13 @@ class Stats extends Controller {
 		$viewData['externalOnly'] = count($this->Orders->filter_external($viewData['orders']));
 		$viewData['averageRetention'] = $this->Orders->average($this->Orders->filter_cancelled($viewData['orders']),'retention');
 
+		// Charts
 		$viewData['singleChart'] = $this->Articles->subscribers_for_chart();
 		$viewData['barChart'] = $this->Articles->subscribers_by_ressort_chart();
-
 		$viewData['barChart2'] = $this->Orders->ressorts_for_chart();
 		$viewData['singleChart2'] = $this->Orders->orders_for_chart();
-
 		//$viewData['combinedChart'][0] = $this->Articles->mediatime_by_ressort_chart();
 		//$viewData['combinedChart'][1] = $this->Articles->pageviews_by_ressort_chart();
-
 		$viewData['barChart3'] = $this->Articles->mediatime_by_ressort_chart();
 		$viewData['barChart4'] = $this->Articles->pageviews_by_ressort_chart();
 

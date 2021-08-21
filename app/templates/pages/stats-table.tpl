@@ -7,10 +7,10 @@
 			<th>+Quote</th>
 			<th>Klicks</th>
 			<th>⌀-Klicks</th>
-			<th style="text-align:center">+Leser %</th>
-			<th>+Leser</th>
+			<th style="text-align:center">%-Subs</th>
+			<th>Subs</th>
 			<th>Mediatime</th>
-			<th>⌀-Mediatime</th>
+			<th>⌀-MT</th>
 			<th>Kaufimpulse</th>
 			<th>Conversions</th>
 			<th>Conversionrate</th>

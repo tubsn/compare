@@ -4,6 +4,8 @@
 --blue: #6088b4;
 --green: #6ea681;
 --light-blue: #d6e0eb;
+--dark-blue: #92afce;
+--deep-blue: #415975;
 --light-orange: #f7dec3;
 --light-green: #d6ebdd;
 --light-gray: #e6e6e6;
@@ -91,6 +93,7 @@ th.text-left {text-align:left !important;}
 
 .orange {color: var(--orange)}
 .blue {color: var(--blue)}
+.deepblue {color: var(--deep-blue)}
 .green {color: var(--green)}
 .redish {color: var(--dark-red)}
 
@@ -108,7 +111,8 @@ th.text-left {text-align:left !important;}
 
 .conversions { background-color: var(--light-orange); display:inline-block; padding:0.1em .3em; border-radius:1em;}
 .cancelled { background-color: var(--red); display:inline-block; padding:0.1em .3em; border-radius:1em;}
-.bluebg, .orangebg, .greenbg, .pageviews { background-color: var(--light-blue); display:inline-block; padding:0.1em .5em; border-radius:1em;}
+.bluebg, .orangebg, .greenbg, .pageviews, .subscribers { background-color: var(--light-blue); display:inline-block; padding:0.1em .5em; border-radius:1em;}
+.subscribers {background-color: var(--dark-blue);}
 .greenbg {background-color: var(--light-green);}
 .orangebg {background-color: var(--light-orange);}
 

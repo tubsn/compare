@@ -3,9 +3,9 @@
 <?php include tpl('navigation/date-picker');?>
 
 <h1>
-	Gesamt Conversions: <span class="conversions"><?=$numberOfOrders?></span>
+	Conversions: <span class="conversions"><?=$numberOfOrders?></span>
 	<?php if ($mediatime > 0): ?>
-	&emsp; Gesamt-Lesedauer:
+	&emsp; Lesedauer:
 	<span class="greenbg">
 		<?php if ($mtDays): ?><?=$mtDays?>t<?php endif; ?>
 		<?php if ($mtHours): ?><?=$mtHours?>h<?php endif; ?>
@@ -13,13 +13,14 @@
 		<?php if ($mtSeconds): ?><?=$mtSeconds?>s<?php endif; ?>
 	</span>
 	<?php endif; ?>
+	&emsp; Pageviews: <span class="pageviews"><?=number_format($pageviews,0,',','.')?></span>
 </h1>
 
 <hr>
 
 <p class="light-box" style="margin-bottom:2em; margin-top:1em; width:100%; text-align:center; box-sizing:border-box">
 Produzierte Artikel: <b><?=$articles?></b>
-&emsp; Subscriber Views: <b class="blue"><?=number_format($subscribers,0,',','.')?></b>
+&emsp; Subscriber Views: <b class="deepblue"><?=number_format($subscribers,0,',','.')?></b>
 &emsp; Conversions Plusseite: <b class="blue"><?=$plusOnly?></b>
 &emsp; Conversions Extern: <b class="blue"><?=$externalOnly?></b>
 &emsp; ⌀-Mediatime: <b class="green"><?=number_format($avgmediatime,0,',','.')?>&thinsp;s</b>
