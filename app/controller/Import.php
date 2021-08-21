@@ -11,7 +11,7 @@ class Import extends Controller {
 	public function __construct() {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 		$this->view('DefaultLayout');
-		$this->models('Articles,Orders');
+		$this->models('Articles,Orders,GlobalKPIs');
 	}
 
 	public function feeds() {
@@ -36,13 +36,14 @@ class Import extends Controller {
 
 		}
 
+		$this->import_global_kpis();
+
 		echo 'Import abgeschlossen! <a href="/admin">zurück</a><br/>';
 		echo 'Processing-Time: <b>'.round((microtime(true)-APP_START)*1000,2) . '</b>ms';
 
 		//$this->view->redirect('/');
 
 	}
-
 
 	public function order_import_form() {
 		$this->view->render('orders/import');
@@ -51,6 +52,10 @@ class Import extends Controller {
 	public function order_import($date = null) {
 		$orders = $this->Orders->import($date);
 		$this->view->json($orders);
+	}
+
+	private function import_global_kpis() {
+		$this->GlobalKPIs->import(3);
 	}
 
 
