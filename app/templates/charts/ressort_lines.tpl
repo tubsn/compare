@@ -45,6 +45,30 @@ let chartOptions = {
 		tooltip: {enabled: false}
 	},
 
+	yaxis: [
+
+		{
+			axisTicks: {
+				show: true,
+			},
+		},
+		{
+			show: false,
+			axisTicks: {
+				show: false,
+			},
+		},
+		{
+			axisTicks: {
+				show: true,
+			},
+			opposite: true,
+		},
+
+
+
+	],
+
 	grid: {row: {colors: ['#e5e5e5', 'transparent'], opacity: 0.2}},
 	//legend: {show:true},
 
