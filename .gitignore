@@ -3,7 +3,7 @@
 /vendor
 /app/config/artikel_tags.txt
 /app/config/artikel_typen.txt
-/app/config/congif.php
+/app/config/config.php
 /public/storage
 /public/uploads
 /public/assets
