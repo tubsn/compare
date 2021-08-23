@@ -34,6 +34,8 @@ define('IMPORT_FEEDS', [
 	'https://www.lr-online.de/nachrichten/brandenburg/?_XML=RSS',
 	'https://www.lr-online.de/nachrichten/polen/?_XML=RSS',
 	'https://www.lr-online.de/nachrichten/wirtschaft/?_XML=RSS',
+	'https://www.lr-online.de/nachrichten/sachsen/?_XML=RSS',
+	'https://www.lr-online.de/nachrichten/kultur/?_XML=RSS',
 ]);
 
 define('TIMEFRAMES', [
