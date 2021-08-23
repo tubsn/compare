@@ -8,7 +8,7 @@
 				<?php foreach (TIMEFRAMES as $timeframe): ?>
 				<?php if (session('timeframe') == $timeframe): ?>
 				<option selected><?=session('timeframe')?></option>
-				<?php elseif(!session('timeframe') AND $timeframe == 'aktuelle Woche'): ?>
+			<?php elseif(!session('timeframe') AND $timeframe == 'letzte 7 Tage'): ?>
 				<option selected><?=$timeframe?></option>
 				<?php else: ?>
 				<option><?=$timeframe?></option>

@@ -19,8 +19,8 @@ class Orders extends Model
 		$this->db->primaryIndex = 'order_id';
 		$this->db->orderby = 'order_id';
 
-		$this->from = date('Y-m-d', strtotime('monday this week'));
-		$this->to = date('Y-m-d', strtotime('sunday this week'));
+		$this->from = date('Y-m-d', strtotime('yesterday -6days'));
+		$this->to = date('Y-m-d', strtotime('yesterday'));
 
 		if (Session::get('from')) {$this->from = Session::get('from');}
 		if (Session::get('to')) {$this->to = Session::get('to');}

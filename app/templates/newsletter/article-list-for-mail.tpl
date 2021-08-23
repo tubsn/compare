@@ -22,8 +22,7 @@ $body = 'Die Zahlen vom Vortag:
 -Hier Bild einfügen-
 %0D%0A
 %0D%0A
-%0D%0A' . $artliste . '%0D%0A
-Stand: '.formatdate(end($pageviews)['refresh'],'d.m.Y H:i').' Uhr
+%0D%0A' . $artliste . '
 %0D%0A%0D%0A
 alle Infos immer auf:
 %0D%0A

@@ -6,7 +6,7 @@ h1 {font-size:1.2em;}
 table td.narrower.same-width {max-width:170px}
 table td.narrower.ressort {max-width:80px}
 table.fancy td, table.fancy th {padding:4px 6px}
-table.fancy {margin-bottom:3em;}
+table.fancy:first-of-type {margin-bottom:3em;}
 .logo-area {width:100%; text-align:right;}
 .logo-area img {max-width:180px; margin-bottom:-2.5em;}
 .fancy img {border-radius:5px}
@@ -14,19 +14,23 @@ table.fancy {margin-bottom:3em;}
 </style>
 
 <div class="logo-area">
-<a href="/"><img src="/styles/img/compare-logo-black.svg"></a>
+	<a href="/"><img src="/styles/img/compare-logo-black.svg"></a>
 </div>
+
+
+
+<?php include tpl('newsletter/latest-conversions');?>
+
 
 <h1>Top 5 Pageviews (Publikationsdatum gestern)</h1>
 
 <?php if ($pageviews): ?>
-<table class="fancy wide js-sortable condensed mb">
+<table class="fancy wide js-sortable condensed">
 <thead>
 <tr>
 	<th>Dachzeile</th>
 	<th></th>
 	<th>Thumb</th>
-	<!--<th>Impuls</th>-->
 	<th>Titel</th>
 	<th>Ressort</th>
 	<th>Klicks</th>
@@ -44,22 +48,6 @@ table.fancy {margin-bottom:3em;}
 	<td><?php if ($article['plus']): ?><div class="bluebg"><a title="Statistik-Daten refreshen" class="noline" href="/artikel/<?=$article['id']?>/refresh">+</a></div><?php endif; ?></td>
 
 	<td><img style="width:80px;" src="<?=$article['image']?>"></td>
-
-	<!--
-	<?php if ($article['buyintent']): ?>
-	<td title="Kaufabsichten: <?=$article['buyintent']?>">
-		<div class="indicator buyintent">
-			<?php if ($article['buyintent'] >= 33): ?>
-			<div style="width:100%;"><?=$article['buyintent']?></div>
-			<?php else: ?>
-			<div style="width:<?=round($article['buyintent']*3)?>%;"><?=$article['buyintent']?></div>
-			<?php endif; ?>
-		</div>
-	</td>
-	<?php else: ?>
-	<td><div class="indicator buyintent"><div>0</div></div></td>
-	<?php endif; ?>
-	-->
 
 	<td><a href="/artikel/<?=$article['id']?>"><?=$article['title']?></a> </td>
 
@@ -91,8 +79,7 @@ table.fancy {margin-bottom:3em;}
 	<p>Für diesen Zeitraum oder diese Suchanfrage sind keine Artikel vorhanden!</p>
 <?php endif; ?>
 
-
-<?php include tpl('newsletter/latest-conversions');?>
+<small style="float:right;">Stand: <?=date('d.m.Y H:i')?>&thinsp;Uhr</small>
 
 <br/><br/>
 

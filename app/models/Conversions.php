@@ -26,8 +26,8 @@ class Conversions extends Model
 		$this->analytics = new Analytics();
 		$this->plenigo = new Plenigo();
 
-		$this->from = date('Y-m-d', strtotime('monday this week'));
-		$this->to = date('Y-m-d', strtotime('sunday this week'));
+		$this->from = date('Y-m-d', strtotime('yesterday -6days'));
+		$this->to = date('Y-m-d', strtotime('yesterday'));
 	}
 
 
@@ -75,7 +75,7 @@ class Conversions extends Model
 
 
 	public function group_by($index) {
-		$data = array_column($this->transactions,$index);		
+		$data = array_column($this->transactions,$index);
 		$data = @array_count_values($data); // @ Surpresses Warnings with Null Values
 		arsort($data);
 		return $data;
