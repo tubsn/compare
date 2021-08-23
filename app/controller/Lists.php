@@ -190,18 +190,17 @@ class Lists extends Controller {
 	}
 
 
-
 	public function ressort($ressort = null) {
 		Session::set('referer', '/ressort/'.$ressort);
 
 		$ressortList = $this->Articles->list_distinct('ressort');
 
-		if ($ressortList[0] = 'bilder') {
+		if ($ressortList[0] == 'bilder') {
 			$temp = array_shift($ressortList);
 			array_push($ressortList, $temp);
 		}
 
-		if ($ressortList[0] = 'blaulicht') {
+		if ($ressortList[0] == 'blaulicht') {
 			$temp = array_shift($ressortList);
 			array_push($ressortList, $temp);
 		}
