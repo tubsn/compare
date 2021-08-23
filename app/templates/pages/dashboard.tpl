@@ -5,7 +5,7 @@
 <h1>
 	Conversions: <span class="conversions"><?=$numberOfOrders?></span>
 	<?php if ($mediatime > 0): ?>
-	&emsp; Lesedauer:
+	&ensp; Lesedauer:
 	<span class="greenbg">
 		<?php if ($mtDays): ?><?=$mtDays?>t<?php endif; ?>
 		<?php if ($mtHours): ?><?=$mtHours?>h<?php endif; ?>
@@ -13,7 +13,7 @@
 		<?php if ($mtSeconds): ?><?=$mtSeconds?>s<?php endif; ?>
 	</span>
 	<?php endif; ?>
-	&emsp; Pageviews: <span class="pageviews"><?=number_format($pageviews,0,',','.')?></span>
+	&ensp; Pageviews: <span class="pageviews"><?=number_format($pageviews,0,',','.')?></span>
 </h1>
 
 <hr>
