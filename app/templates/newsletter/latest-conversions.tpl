@@ -29,13 +29,9 @@
 	<td class="text-right"><div<?php if ($article['pageviews'] > 2500): ?> class="pageviews"<?php endif; ?>><?=number_format($article['pageviews'],0,'.','.')?></div></td>
 
 	<?php if ($article['pageviews'] && $article['subscribers']): ?>
-	<td title="Plus-Leser: <?=$article['subscribers']?>">
-		<div class="indicator plusleser">
-			<div style="width:<?=round($article['subscribers'] / $article['pageviews'] * 100)?>%;"><?=round($article['subscribers'] / $article['pageviews'] * 100)?></div>
-		</div>
-	</td>
+	<td class="text-right" title="Plus-Leser: <?=$article['subscribers']?>"><span class="subscribers nowrap"><?=round($article['subscribers'] / $article['pageviews'] * 100)?>&thinsp;%</span></td>
 	<?php else: ?>
-	<td><div class="indicator plusleser"><div>0</div></div></td>
+	<td class="text-right">0%</td>
 	<?php endif; ?>
 
 	<td class="text-right"><span class="<?php if ($article['avgmediatime'] > 150): ?>greenbg<?php endif; ?>"><?=number_format($article['avgmediatime'],0,'.','.') ?? 0?></span></td>

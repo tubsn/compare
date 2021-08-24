@@ -298,7 +298,7 @@ class Articles extends Model
 
 		$chart['amount'] = rtrim($subscribers, ',');
 		$chart['dates'] = rtrim($dates, ',');
-		$chart['color'] = '#213e5e';
+		$chart['color'] = '#314e6f';
 		$chart['name'] = 'Subscribers';
 
 		return $chart;
@@ -336,7 +336,7 @@ class Articles extends Model
 
 		$chart['amount'] = rtrim($subscribers, ',');
 		$chart['dates'] = rtrim($ressorts, ',');
-		$chart['color'] = '#213e5e'; // lighter? #6e94bd
+		$chart['color'] = '#314e6f'; // lighter? #6e94bd
 		$chart['name'] = 'Subscribers';
 
 		return $chart;
