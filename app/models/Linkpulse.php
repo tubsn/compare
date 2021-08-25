@@ -18,8 +18,44 @@ class Linkpulse
 		return $this->api->subscribers($id, $pubDate);
 	}
 
-	public function today() {
-		return $this->api->live();
+	public function today($client = null) {
+
+		if ($client) {
+			$this->api->client($client);
+		}
+
+		$liveData = $this->api->live();
+		$liveData = $this->convert_to_chart_data($liveData);
+
+		return $liveData;
+	}
+
+	private function convert_to_chart_data($data) {
+
+		$pageviews = null;
+		$values = null;
+		$time = null;
+		$counter = 0;
+
+		foreach ($data as $moment) {
+
+			$pageviews += $moment['attributes']['pageviews'];
+
+			$counter++;
+			if ($counter % 3 != 0) {continue;}
+
+			$values .= $moment['attributes']['pageviews'] . ',';
+			$timestring = date('H:i', strtotime($moment['id']));
+			$time .= "'" . $timestring."'" . ',';
+
+		}
+
+		return [
+			'values' => $values,
+			'timestamps' => $time,
+			'pageviews' => $pageviews,
+		];
+
 	}
 
 }

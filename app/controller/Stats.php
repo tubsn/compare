@@ -116,31 +116,11 @@ class Stats extends Controller {
 		$orders = $this->Plenigo->orders($this->start, $this->end, $maxOrders=100, $includeAppOrders = 0);
 		$viewData['orders'] = array_reverse($orders);
 
-		$live = $this->Linkpulse->today();
+		$linkpulseLiveData = $this->Linkpulse->today();
+		$viewData['chart']['data'] = $linkpulseLiveData['values'];
+		$viewData['chart']['time'] = $linkpulseLiveData['timestamps'];
+		$viewData['pageviews'] = $linkpulseLiveData['pageviews'];
 
-		$pageviews = null;
-		$data = null;
-		$time = null;
-		$counter = 0;
-
-		foreach ($live as $moment) {
-
-			$pageviews += $moment['attributes']['pageviews'];
-
-			$counter++;
-			if ($counter % 3 != 0) {continue;}
-
-			$data .= $moment['attributes']['pageviews'] . ',';
-			$timestring = date('H:i', strtotime($moment['id']));
-			$time .= "'" . $timestring."'" . ',';
-
-		}
-
-		$viewData['chart']['data'] = $data;
-		$viewData['chart']['time'] = $time;
-		$viewData['pageviews'] = $pageviews;
-
-		//$this->view->templates['footer'] = null;
 		$this->view->render('pages/live', $viewData);
 
 	}

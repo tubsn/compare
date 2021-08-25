@@ -2,11 +2,14 @@
 
 namespace app\importer;
 
+use \flundr\cache\RequestCache;
+
 class PlenigoAPI
 {
 
 	const API_BASE_URL = 'https://api.plenigo.com/api/v3.0';
 	private $plenigoToken = PLENIGO_TOKEN_LR;
+	private $client = 'LR';
 
 	public function __construct() {
 	}
@@ -14,17 +17,26 @@ class PlenigoAPI
 	public function client($client) {
 
 		switch ($client) {
-			case 'LR': $this->plenigoToken = PLENIGO_TOKEN_LR; break;
-			case 'MOZ': $this->plenigoToken = PLENIGO_TOKEN_MOZ; break;
-			case 'SWP': $this->plenigoToken = PLENIGO_TOKEN_SWP; break;
-			default: $this->plenigoToken = PLENIGO_TOKEN_LR; break;
+			case 'LR': $this->plenigoToken = PLENIGO_TOKEN_LR; $this->client = 'LR'; break;
+			case 'MOZ': $this->plenigoToken = PLENIGO_TOKEN_MOZ; $this->client = 'MOZ'; break;
+			case 'SWP': $this->plenigoToken = PLENIGO_TOKEN_SWP; $this->client = 'SWP'; break;
+			default: $this->plenigoToken = PLENIGO_TOKEN_LR; $this->client = 'LR'; break;
 		}
 
 	}
 
 	public function orders($start, $end, $items = 100) {
 
-		$data = $this->curl('/orders/?startTime=' . $start . 'T00:00:00Z&endTime=' . $end . 'T23:59:59Z&size=' . $items);
+		$apiQuery = '/orders/?startTime=' . $start . 'T00:00:00Z&endTime=' . $end . 'T23:59:59Z&size=' . $items;
+
+		$cacheExpireMinutes = 1;
+		$cache = new RequestCache($apiQuery . $this->client, $cacheExpireMinutes * 60);
+		$cachedData = $cache->get();
+		if ($cachedData) {return $cachedData;}
+
+		$data = $this->curl($apiQuery);
+
+		$cache->save($data['items']);
 		return $data['items'];
 
 	}
