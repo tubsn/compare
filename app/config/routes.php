@@ -21,6 +21,7 @@ $routes->get('/pageviews', 'Lists@pageviews');
 $routes->get('/mediatime', 'Lists@mediatime');
 $routes->get('/subscribers', 'Lists@subscribers');
 $routes->post('/settimeframe', 'Articles@set_timeframe');
+$routes->get('/live', 'Stats@live');
 
 // Orders
 $routes->get('/orders', 'Orders@stats');

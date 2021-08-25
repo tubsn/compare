@@ -39,9 +39,10 @@ define('IMPORT_FEEDS', [
 ]);
 
 define('TIMEFRAMES', [
+	'heute',
 	'gestern',
-	'aktuelle Woche',
 	'letzte 7 Tage',
+	'aktuelle Woche',
 	'letzte Woche',
 	'vorletzte Woche',
 	'aktueller Monat',

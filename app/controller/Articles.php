@@ -216,6 +216,11 @@ class Articles extends Controller {
 	public function set_timeframe() {
 
 		if (isset($_POST['timeframe'])) {
+
+			if ($_POST['timeframe'] == 'heute') {
+				$this->view->redirect('/live');
+			}
+
 			$this->dates_from_timeframe($_POST['timeframe']);
 		}
 
@@ -228,6 +233,11 @@ class Articles extends Controller {
 
 		$cache = new RequestCache('temp');
 		$cache->flush();
+
+
+		if (parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH) == '/live') {
+			$this->view->back();			
+		}
 
 		$this->view->redirect($_SERVER['HTTP_REFERER']);
 

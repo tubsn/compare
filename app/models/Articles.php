@@ -368,7 +368,7 @@ class Articles extends Model
 
 		$mediatime = null; $ressorts = null;
 		foreach ($rawData as $data) {
-			$mediatime .= $data['mediatime'] . ',';
+			$mediatime .= round($data['mediatime']) . ',';
 			$ressorts .= "'" . ucfirst($data['ressort']) . "'" . ',';
 		}
 
@@ -387,7 +387,7 @@ class Articles extends Model
 		$to = strip_tags($this->to);
 
 		$SQLstatement = $this->db->connection->prepare(
-			"SELECT ressort, sum(mediatime) as mediatime
+			"SELECT ressort, avg(avgmediatime) as mediatime
 			 FROM `articles`
 			 WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate
 			 GROUP BY ressort

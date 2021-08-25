@@ -20,7 +20,7 @@
 
 <p class="light-box" style="margin-bottom:2em; margin-top:1em; width:100%; text-align:center; box-sizing:border-box">
 Produzierte Artikel: <b><?=$articles?></b>
-&emsp; Subscriber Views: <b class="deepblue"><?=number_format($subscribers,0,',','.')?></b>
+&emsp; Subscribers: <b class="deepblue"><?=number_format($subscribers,0,',','.')?></b>
 &emsp; Conversions Plusseite: <b class="blue"><?=$plusOnly?></b>
 &emsp; Conversions Extern: <b class="blue"><?=$externalOnly?></b>
 &emsp; ⌀-Mediatime: <b class="green"><?=number_format($avgmediatime,0,',','.')?>&thinsp;s</b>
@@ -46,6 +46,8 @@ Produzierte Artikel: <b><?=$articles?></b>
 	</figure>
 
 </div>
+
+
 <?php $barChart = $barChart2; ?>
 <?php $singleChart = $singleChart2; ?>
 
@@ -66,19 +68,22 @@ Produzierte Artikel: <b><?=$articles?></b>
 
 <hr>
 
+
+<div class="col-2" style="grid-template-columns: 1fr 1fr;">
+
 <?php $barChart = $barChart3; ?>
-<figure class="mb">
-	<h3 class="text-center">Lesedauer / Mediatime nach Ressort</h3>
+<figure class="">
+	<h3 class="text-center">Ø-Mediatime nach Ressort (in Sekunden)</h3>
 	<?php include tpl('charts/bar_chart');?>
 </figure>
 
 <?php $barChart = $barChart4; ?>
-<figure class="mb">
+<figure class="">
 	<h3 class="text-center">Pageviews nach Ressort</h3>
 	<?php include tpl('charts/bar_chart');?>
 </figure>
 
-
+</div>
 
 
 </main>

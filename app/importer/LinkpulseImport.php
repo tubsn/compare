@@ -12,6 +12,31 @@ class LinkpulseImport
 
 	}
 
+
+	public function live() {
+
+		$apiQueryUrl = 'https://api5.linkpulse.com/v2.1/query?filter%5Brange%5D=today&field%5Bpageviews%5D=sum&aggregate=minute&page%5Boffset%5D=0&page%5Blimit%5D=2000&sort=minute';
+
+		//$apiQueryUrl = 'https://api5.linkpulse.com/v2.1/query?filter%5Brange%5D=today&field%5Bpageviews%5D=sum&aggregate=hour&page%5Boffset%5D=0&page%5Blimit%5D=100&sort=-minute';
+
+		$rawJson = $this->curl($apiQueryUrl);
+
+		$data = json_decode($rawJson, true);
+		$data = $data['data'];
+
+		/*
+		$time = $data[1]['id'];
+		echo date('H:i', strtotime($time));
+		*/
+
+		// dd($data);
+
+		return $data;
+
+	}
+
+
+
 	public function article_today($id) {
 
 		$apiQueryUrl = 'https://api5.linkpulse.com/v2.1/query?filter%5Brange%5D=today&filter%5Burl%5D=*' . $id . '*&field%5Bpageviews%5D=sum&field%5Bconverted_usercount%5D=sum&field%5Bsubscribers%5D=sum&aggregate=total&page%5Boffset%5D=0&page%5Blimit%5D=100&sort=-pageviews';

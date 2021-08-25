@@ -21,6 +21,7 @@ class Admin extends Controller {
 		$viewData['tags'] = file_get_contents(CONFIGPATH . '/artikel_tags.txt');
 
 		$this->view->title = 'Einstellungen';
+		$this->view->templates['footer'] = null;		
 		$this->view->render('admin/config', $viewData);
 	}
 

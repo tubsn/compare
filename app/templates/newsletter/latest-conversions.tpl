@@ -21,7 +21,13 @@
 <tbody>
 <?php foreach ($conversions as $article): ?>
 <tr>
-	<td class="narrower text-right same-width"><?=$article['kicker'] ?? '-'?> </td>
+
+	<?php if (empty($article['title'])): ?>
+	<td class="narrower text-right same-width">Übersichtsseite</td>
+	<?php else: ?>
+	<td class="narrower text-right same-width"><?=$article['kicker'] ?? '-'?> </td>		
+	<?php endif ?>
+
 	<td><?php if ($article['plus']): ?><div class="bluebg"><a title="Statistik-Daten refreshen" class="noline" href="/artikel/<?=$article['id']?>/refresh">+</a></div><?php endif; ?></td>
 	<td><img style="width:70px; height:40px; object-fit: cover;" src="<?=$article['image'] ?? '/styles/img/flundr/no-thumb.svg' ?>"></td>
 	<td><a href="/artikel/<?=$article['id'] ?? ''?>"><?=$article['title'] ?? 'AboShop oder Plusseite'?></a> </td>

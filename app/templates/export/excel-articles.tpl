@@ -18,6 +18,8 @@ $header = [
 	'Sessions',
 	'Conversions',
 	'PlusLeser',
+	'Mediatime',
+	'AvgMediatime',
 	'Impulse',
 	'Kündiger',
 	'Haltedauer'
@@ -44,6 +46,8 @@ foreach ($articles as $article) {
 		$article['sessions'],
 		$article['conversions'],
 		$article['subscribers'],
+		$article['mediatime'],
+		$article['avgmediatime'],
 		$article['buyintent'],
 		$article['cancelled'],
 		$article['retention_days'],

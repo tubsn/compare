@@ -14,7 +14,7 @@
 --dark-red: #f77474;
 }
 
-body {margin:0; font-size:1.15em;}
+body {margin:0; font-size:16px;}
 main {width:90%; margin:0 auto;}
 
 @media only screen and (min-width: 2000px) {

@@ -18,4 +18,8 @@ class Linkpulse
 		return $this->api->subscribers($id, $pubDate);
 	}
 
+	public function today() {
+		return $this->api->live();
+	}
+
 }

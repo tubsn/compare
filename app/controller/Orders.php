@@ -19,6 +19,8 @@ class Orders extends Controller {
 
 	public function list() {
 
+		Session::set('referer', '/orders/list');
+
 		$viewData['orders'] = $this->Orders->list_plain();
 		$viewData['numberOfOrders'] = count($viewData['orders'] ?? []);
 		$viewData['numberOfCancelled'] = count($this->Orders->filter_cancelled($viewData['orders']));
@@ -32,6 +34,8 @@ class Orders extends Controller {
 	}
 
 	public function stats() {
+
+		Session::set('referer', '/orders');
 
 		$this->view->title = 'Bestell- und Kündiger Statistiken';
 		$this->view->info = null;

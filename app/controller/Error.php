@@ -24,6 +24,7 @@ class Error extends Controller {
 		else { http_response_code(404); }
 
 		$this->view->navigation = null;
+		$this->view->templates['footer'] = null;
 		$this->view->render('pages/error', $viewData);
 	}
 

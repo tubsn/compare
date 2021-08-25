@@ -1,5 +1,5 @@
 <main class="settings-page">
-<h1>Content Datenbank Einstellungen</h1>
+<h1>Einstellungen</h1>
 
 <div class="settings-layout">
 

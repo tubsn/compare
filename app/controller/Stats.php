@@ -12,10 +12,12 @@ class Stats extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Articles,Conversions,Stats,Orders,GlobalKPIs');
+		$this->models('Articles,Conversions,Stats,Orders,Plenigo,GlobalKPIs,Linkpulse');
 	}
 
 	public function index() {
+
+		Session::set('referer', '/stats');
 
 		$viewData['articles'] = $this->Articles->count('*');
 		$viewData['plusarticles'] = $this->Articles->sum('plus');
@@ -65,6 +67,8 @@ class Stats extends Controller {
 
 	public function dashboard() {
 
+		Session::set('referer', '/');
+
 		$viewData['articles'] = $this->Articles->count('*');
 		$viewData['subscribers'] = $this->Articles->sum('subscribers');
 		$viewData['avgmediatime'] = $this->Articles->average('avgmediatime');
@@ -105,5 +109,40 @@ class Stats extends Controller {
 
 	}
 
+	public function live() {
+
+		$this->start = date('Y-m-d', strtotime('today'));
+		$this->end = date('Y-m-d', strtotime('today'));
+		$orders = $this->Plenigo->orders($this->start, $this->end, $maxOrders=100, $includeAppOrders = 0);
+		$viewData['orders'] = array_reverse($orders);
+
+		$live = $this->Linkpulse->today();
+
+		$pageviews = null;
+		$data = null;
+		$time = null;
+		$counter = 0;
+
+		foreach ($live as $moment) {
+
+			$pageviews += $moment['attributes']['pageviews'];
+
+			$counter++;
+			if ($counter % 3 != 0) {continue;}
+
+			$data .= $moment['attributes']['pageviews'] . ',';
+			$timestring = date('H:i', strtotime($moment['id']));
+			$time .= "'" . $timestring."'" . ',';
+
+		}
+
+		$viewData['chart']['data'] = $data;
+		$viewData['chart']['time'] = $time;
+		$viewData['pageviews'] = $pageviews;
+
+		//$this->view->templates['footer'] = null;
+		$this->view->render('pages/live', $viewData);
+
+	}
 
 }
