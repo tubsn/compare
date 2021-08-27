@@ -43,11 +43,10 @@ class ArticleImport
 		curl_setopt ($ch, CURLOPT_HEADER, 0);
 		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
 
-		if (curl_exec($ch) === false) {
+		$recievedData = curl_exec($ch);
+		if ($recievedData === false) {
 			dd(curl_error($ch));
 		}
-
-		$recievedData = curl_exec($ch);
 
 		curl_close ($ch);
 
@@ -65,11 +64,11 @@ class ArticleImport
 		curl_setopt ($ch, CURLOPT_HEADER, 0);
 		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
 
-		if (curl_exec($ch) === false) {
+		$recievedData = curl_exec($ch);
+		if ($recievedData === false) {
 			dd(curl_error($ch));
 		}
-
-		$recievedData = curl_exec($ch);
+		
 		$lastUrl = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
 		$responseCode = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
 
