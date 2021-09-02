@@ -329,7 +329,9 @@ class Articles extends Model
 		$rawData = $this->subscribers_by_ressort();
 
 		$subscribers = null; $ressorts = null;
+
 		foreach ($rawData as $data) {
+			if (empty($data['ressort'])) {continue;}
 			$subscribers .= $data['subscribers'] . ',';
 			$ressorts .= "'" . ucfirst($data['ressort']) . "'" . ',';
 		}
@@ -368,6 +370,7 @@ class Articles extends Model
 
 		$mediatime = null; $ressorts = null;
 		foreach ($rawData as $data) {
+			if (empty($data['ressort'])) {continue;}			
 			$mediatime .= round($data['mediatime']) . ',';
 			$ressorts .= "'" . ucfirst($data['ressort']) . "'" . ',';
 		}
@@ -406,6 +409,7 @@ class Articles extends Model
 
 		$pageviews = null; $ressorts = null;
 		foreach ($rawData as $data) {
+			if (empty($data['ressort'])) {continue;}			
 			$pageviews .= $data['pageviews'] . ',';
 			$ressorts .= "'" . ucfirst($data['ressort']) . "'" . ',';
 		}

@@ -86,6 +86,14 @@ class Articles extends Controller {
 			$this->Articles->update(['kicker' => $_POST['kicker']], $id);
 		}
 
+		if (isset($_POST['image'])) {
+			$this->Articles->update(['image' => $_POST['image']], $id);
+		}
+
+		if (isset($_POST['ressort'])) {
+			$this->Articles->update(['ressort' => $_POST['ressort']], $id);
+		}
+
 		$this->view->redirect('/artikel/' . $id);
 
 	}

@@ -31,7 +31,7 @@ class Orders extends Model
 
 		$from = strip_tags($this->from);
 		$to = strip_tags($this->to);
-		$limit = 5000;
+		$limit = 10000;
 
 		$SQLstatement = $this->db->connection->prepare(
 
@@ -51,6 +51,7 @@ class Orders extends Model
 			 WHERE DATE(conversions.order_date) BETWEEN :startDate AND :endDate
 			 ORDER BY conversions.order_date DESC
 			 LIMIT 0, $limit"
+
 		);
 
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
@@ -279,6 +280,7 @@ class Orders extends Model
 
 		$combined = [];
 		$active = $this->group_by($index);
+
 		$cancelled = $this->group_cancelled_orders_by($index);
 		$retention = $this->group_average_retention($index);
 
@@ -301,6 +303,7 @@ class Orders extends Model
 			}	else {$combined[$key]['quote'] = null;}
 
 		}
+
 		return $combined;
 	}
 

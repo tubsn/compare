@@ -10,7 +10,7 @@ class Exports extends Controller {
 	public function __construct() {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 		$this->view('CSV');
-		$this->models('Articles,Conversions,Stats,Plenigo');
+		$this->models('Articles,Conversions,Stats,Plenigo,Orders');
 	}
 
 	public function articles() {
@@ -35,8 +35,10 @@ class Exports extends Controller {
 		Session::set('to', $sessionTo);
 
 		$this->view->title = 'LRO-Conversions-'.date("dmY").'.csv';
-		$this->view->render('export/excel-conversions', $viewData);
+		$this->view->export($viewData['conversions']);
+
 	}
+
 
 	public function daily_stats() {
 		$viewData['articles'] = $this->Stats->with_article_data();

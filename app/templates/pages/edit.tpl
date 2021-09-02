@@ -17,11 +17,29 @@
 
 	<hr />
 
-	<form action="" method="post">
+	<form class="mb" action="" method="post">
+		<label>Ressort: 
+			<input type="text" name="ressort" value="<?=$article['ressort']?>">
+		</label>
+		<button type="submit">Ressort Speichern</button>
+	</form>
+
+	<hr />
+
+	<form class="mb" action="" method="post">
 		<label>Pubdate (Englisches Format nutzen!): 
 			<input type="text" name="pubdate" value="<?=$article['pubdate']?>">
 		</label>
 		<button type="submit">Publikationsdatum Speichern</button>
+	</form>
+
+	<hr />
+
+	<form class="mb" action="" method="post">
+		<label>Teaserbild: 
+			<input type="text" name="image" value="<?=$article['image']?>">
+		</label>
+		<button type="submit">Teaserbild Speichern</button>
 	</form>
 
 </div>
