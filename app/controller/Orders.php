@@ -13,7 +13,7 @@ class Orders extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Articles,Orders');
+		$this->models('Articles,Orders,Charts');
 	}
 
 
@@ -48,8 +48,7 @@ class Orders extends Controller {
 			$viewData['cancelQuote'] = round(($viewData['numberOfCancelled'] / $viewData['numberOfOrders']) * 100, 1);
 		} else {$viewData['cancelQuote'] = null;}
 
-		$viewData['barChart'] = $this->Orders->ressorts_for_chart();
-		$viewData['singleChart'] = $this->Orders->orders_for_chart();
+		$viewData['conversionsByRessortChart'] = $this->Charts->get('conversionsByRessortWithValues');
 
 		$viewData['plusOnly'] = count($this->Orders->filter_plus_only($viewData['orders']));
 		$viewData['externalOnly'] = count($this->Orders->filter_external($viewData['orders']));

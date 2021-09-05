@@ -31,37 +31,31 @@ Produzierte Artikel: <b><?=$articles?></b>
 
 <hr/>
 
-
-
 <div class="col-2" style="grid-template-columns: 2fr 1fr;">
 
 	<figure class="mb">
 		<h3 class="text-center">Subscriber nach Ressort</h3>
-		<?php include tpl('charts/bar_chart');?>
+		<?=$charts->get('subscribersByRessort');?>
 	</figure>
 
 	<figure class="mb">
 		<h3 class="text-center">Subscriber im Zeitverlauf</h3>
-		<?php include tpl('charts/single_stat_line');?>
+		<?=$charts->get('subscribersByDate');?>
 	</figure>
 
 </div>
-
-
-<?php $barChart = $barChart2; ?>
-<?php $singleChart = $singleChart2; ?>
 
 <div class="col-2" style="grid-template-columns: 1fr 2fr;">
 
 	<figure class="mb">
 		<h3 class="text-center">Conversions im Zeitverlauf</h3>
-		<?php include tpl('charts/single_stat_line');?>
+		<?=$charts->get('conversionsByDate');?>
 	</figure>
 
 
 	<figure class="mb">
 		<h3 class="text-center">Conversions nach Ressort</h3>
-		<?php include tpl('charts/bar_chart');?>
+		<?=$charts->get('conversionsByRessortWithValues');?>
 	</figure>
 
 </div>
@@ -71,19 +65,16 @@ Produzierte Artikel: <b><?=$articles?></b>
 
 <div class="col-2" style="grid-template-columns: 1fr 1fr;">
 
-<?php $barChart = $barChart3; ?>
-<figure class="">
-	<h3 class="text-center">Ø-Mediatime nach Ressort (in Sekunden)</h3>
-	<?php include tpl('charts/bar_chart');?>
-</figure>
+	<figure class="">
+		<h3 class="text-center">Ø-Mediatime nach Ressort (in Sekunden)</h3>
+		<?=$charts->get('mediatimeByRessort');?>
+	</figure>
 
-<?php $barChart = $barChart4; ?>
-<figure class="">
-	<h3 class="text-center">Pageviews nach Ressort</h3>
-	<?php include tpl('charts/bar_chart');?>
-</figure>
+	<figure class="">
+		<h3 class="text-center">Ø-Pageviews nach Ressort</h3>
+		<?=$charts->get('avgPageviewsByRessort');?>
+	</figure>
 
 </div>
-
 
 </main>

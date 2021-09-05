@@ -82,75 +82,21 @@ class Orders extends Model
 
 	}
 
-	public function orders_for_chart() {
-		$rawOrders = $this->orders_by_date();
 
-		$orders = null; $dates = null;
-		foreach ($rawOrders as $order) {
-			$orders .= $order['orders'] . ',';
-			$dates .= "'" . $order['day'] . "'" . ',';
-		}
-
-		$chart['amount'] = rtrim($orders, ',');
-		$chart['dates'] = rtrim($dates, ',');
-		$chart['color'] = '#df886d';
-		$chart['name'] = 'Conversions';
-
-		return $chart;
-	}
-
-	public function orders_by_date() {
+	public function kpi_grouped_by($kpi, $groupby = 'ressort', $operation = 'sum') {
 
 		$from = strip_tags($this->from);
 		$to = strip_tags($this->to);
 
+		// sum, count or average
+		$operation = $operation . '(' . $kpi . ')';
+
 		$SQLstatement = $this->db->connection->prepare(
-			"SELECT count(order_id) as 'orders', DATE(`order_date`) as 'day'
+			"SELECT $groupby, $operation as $kpi
 			 FROM `conversions`
 			 WHERE DATE(`order_date`) BETWEEN :startDate AND :endDate
-			 GROUP BY day
-			 ORDER BY order_date ASC"
-		);
-
-		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
-		$output = $SQLstatement->fetchall();
-		return $output;
-
-	}
-
-	public function ressorts_for_chart() {
-		$rawOrders = $this->orders_by_ressort();
-
-		//dd($rawOrders);
-
-		$orders = null; $ressorts = null;
-		foreach ($rawOrders as $data) {
-			if (empty($data['article_ressort'])) {continue;}
-			$orders .= $data['orders'] . ',';
-			$ressorts .= "'" . ucfirst($data['article_ressort']) . "'" . ',';
-		}
-
-		$chart['amount'] = rtrim($orders, ',');
-		$chart['dates'] = rtrim($ressorts, ',');
-		$chart['color'] = '#df886d';  // Orange #df886d - Blue #6088b4
-		$chart['name'] = 'Bestellungen';
-		$chart['showValues'] = 'true';
-
-
-		return $chart;
-	}
-
-	public function orders_by_ressort() {
-
-		$from = strip_tags($this->from);
-		$to = strip_tags($this->to);
-
-		$SQLstatement = $this->db->connection->prepare(
-			"SELECT article_ressort, count(order_id) as 'orders'
-			 FROM `conversions`
-			 WHERE DATE(order_date) BETWEEN :startDate AND :endDate
-			 GROUP BY article_ressort
-			 ORDER BY article_ressort ASC"
+			 GROUP BY $groupby
+			 ORDER BY $groupby ASC"
 		);
 
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
@@ -159,6 +105,8 @@ class Orders extends Model
 		return $output;
 
 	}
+
+
 
 
 	public function latest_grouped($limit = 5) {

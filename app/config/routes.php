@@ -65,6 +65,7 @@ $routes->get('/lp/{articleID:\d+}', 'Articles@linkpulse');
 $routes->get('/retresco/{id:\d+}', 'Articles@retresco');
 $routes->get('/cards', 'Lists@cards');
 $routes->get('/test/{id:\d+}', 'Articles@test');
+$routes->get('/test', 'Stats@test');
 
 
 // Exports

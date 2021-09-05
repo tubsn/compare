@@ -25,25 +25,14 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 
 <?php endif; ?>
 
-<?php if (isset($chart) && strlen($chart['dates']) > 12): ?>
-	<figure class="mb">
-	<?php include tpl('charts/ressort_lines');?>
-	</figure>
+
+<?php if (isset($primaryChart)): ?>
+<figure class="mb"><?=$primaryChart;?></figure>
 <?php endif; ?>
 
-<?php if (isset($barChart) && strlen($barChart['dates']) > 12): ?>
-	<figure class="mb">
-
-	<?php include tpl('charts/bar_chart');?>
-	</figure>
+<?php if (isset($secondaryChart)): ?>
+<figure class="mb"><?=$secondaryChart;?></figure>
 <?php endif; ?>
-
-<?php if (isset($singleChart)): ?>
-	<figure class="mb">
-	<?php include tpl('charts/single_stat_line');?>
-	</figure>
-<?php endif; ?>
-
 
 
 <?php if ($articles): ?>

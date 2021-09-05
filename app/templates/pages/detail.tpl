@@ -20,7 +20,7 @@
 
 <section class="text-center">
 
-	<figure style="overflow:hidden; max-height:270px;"><?php include tpl('charts/radial_pageviews')?></figure>
+	<figure style="overflow:hidden; max-height:270px;"><?php include tpl('charts/detail/radial_pageviews')?></figure>
 
 	<?php if ($ressortAverage && $ressortAverage != 1): ?>
 		<small>(Ø-Klicks im Ressort: <?=$ressortAverage?>)</small>
@@ -95,7 +95,7 @@
 
 	<hr style="width:40%"/>
 
-	<figure style="overflow:hidden; max-height:300px;"><?php include tpl('charts/radial_conversions_cancelled')?></figure>
+	<figure style="overflow:hidden; max-height:300px;"><?php include tpl('charts/detail/radial_conversions_cancelled')?></figure>
 
 </section>
 

@@ -11,7 +11,7 @@ class Warmup extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Analytics,Linkpulse,Articles,Conversions,Stats,Orders');
+		$this->models('Analytics,Linkpulse,Articles,Conversions,DailyKPIs,Orders');
 	}
 
 	public function daterange() {
@@ -155,7 +155,7 @@ class Warmup extends Controller {
 		$dailyStats = $analyticsData['details'];
 		$lifeTimeTotals = $analyticsData['totals'];
 		$this->Articles->add_stats($lifeTimeTotals,$id);
-		$this->Stats->add($dailyStats,$id);
+		$this->DailyKPIs->add($dailyStats,$id);
 	}
 
 }

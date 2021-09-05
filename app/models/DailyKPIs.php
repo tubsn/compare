@@ -5,7 +5,7 @@ use \flundr\database\SQLdb;
 use \flundr\mvc\Model;
 use \flundr\utility\Session;
 
-class Stats extends Model
+class DailyKPIs extends Model
 {
 
 	public $from = '0000-00-00';
@@ -16,7 +16,7 @@ class Stats extends Model
 
 	function __construct() {
 		$this->db = new SQLdb(DB_SETTINGS);
-		$this->db->table = 'stats';
+		$this->db->table = 'daily_kpis';
 		$this->db->orderby = 'date';
 		$this->db->order = 'DESC';
 
@@ -50,7 +50,7 @@ class Stats extends Model
 	}
 
 
-	public function convert_to_chart_data($stats) {
+	public function detail_chart_data($stats) {
 
 		if ($stats == null) {return null;}
 
@@ -84,9 +84,10 @@ class Stats extends Model
 	}
 
 
-	public function get_grouped_chart_data($filter = null, $column = 'ressort') {
+	public function combined_kpis_filtered_chart($filter = null, $column = 'ressort') {
 
 		$articles = $this->with_article_data();
+		if (empty($articles)) {return;}
 
 		if ($filter) {
 			$articles = array_filter($articles, function($article) use ($filter, $column) {
@@ -98,12 +99,13 @@ class Stats extends Model
 
 		if (!isset($dailyStats)) {return null;}
 
-		$output['pageviews'] = implode(',', array_column($dailyStats,'pageviews'));
-		$output['sessions'] = implode(',', array_column($dailyStats,'sessions'));
-		$output['conversions'] = implode(',', array_column($dailyStats,'conversions'));
-		$output['dates'] = "'".implode("','", array_keys($dailyStats)) ."'";
+		$chartData['pageviews'] = implode(',', array_column($dailyStats,'pageviews'));
+		$chartData['sessions'] = implode(',', array_column($dailyStats,'sessions'));
+		$chartData['conversions'] = implode(',', array_column($dailyStats,'conversions'));
+		$chartData['dates'] = "'".implode("','", array_keys($dailyStats)) ."'";
 
-		return $output;
+		$charts = new Charts();
+		return $charts->render('charts/combined-kpis', $chartData);
 
 	}
 
@@ -139,17 +141,17 @@ class Stats extends Model
 		$to = strip_tags($this->to);
 
 		$SQLstatement = $this->db->connection->prepare(
-			"SELECT `stats`.*,
+			"SELECT `daily_kpis`.*,
 
 			 Articles.ressort as ressort,
 			 Articles.type as type,
 			 Articles.tag as tag,
 			 Articles.author as author
 
-			 FROM `stats`
+			 FROM `daily_kpis`
 
 			 LEFT JOIN `articles` AS Articles
-	 		 ON `stats`.id = Articles.id
+	 		 ON `daily_kpis`.id = Articles.id
 
 			 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
 

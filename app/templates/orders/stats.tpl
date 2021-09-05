@@ -35,7 +35,7 @@ Es kommt daher zu Abweichungen im Vergleich zur Statistik-Seite (dort wird nach 
 
 </div>
 
-<?php include tpl('charts/bar_chart');?>
+<?=$conversionsByRessortChart;?>
 
 <hr />
 

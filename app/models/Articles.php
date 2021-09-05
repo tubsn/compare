@@ -287,114 +287,23 @@ class Articles extends Model
 
 	}
 
-	public function subscribers_for_chart() {
-		$rawData = $this->subscribers_by_date();
 
-		$subscribers = null; $dates = null;
-		foreach ($rawData as $data) {
-			$subscribers .= $data['subscribers'] . ',';
-			$dates .= "'" . $data['day'] . "'" . ',';
-		}
-
-		$chart['amount'] = rtrim($subscribers, ',');
-		$chart['dates'] = rtrim($dates, ',');
-		$chart['color'] = '#314e6f';
-		$chart['name'] = 'Subscribers';
-
-		return $chart;
-	}
-
-	public function subscribers_by_date() {
+	public function kpi_grouped_by($kpi, $groupby = 'ressort', $operation = 'sum') {
 
 		$from = strip_tags($this->from);
 		$to = strip_tags($this->to);
 
-		$SQLstatement = $this->db->connection->prepare(
-			"SELECT sum(subscribers) as 'subscribers', DATE(`pubdate`) as 'day'
-			 FROM `articles`
-			 WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate
-			 GROUP BY day
-			 ORDER BY pubdate ASC"
-		);
-
-		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
-		$output = $SQLstatement->fetchall();
-		return $output;
-
-	}
-
-
-
-	public function subscribers_by_ressort_chart() {
-		$rawData = $this->subscribers_by_ressort();
-
-		$subscribers = null; $ressorts = null;
-
-		foreach ($rawData as $data) {
-			if (empty($data['ressort'])) {continue;}
-			$subscribers .= $data['subscribers'] . ',';
-			$ressorts .= "'" . ucfirst($data['ressort']) . "'" . ',';
+		if ($operation) {
+			// sum, count or average
+			$kpi = $operation . '(' . $kpi . ') as ' . $kpi;
 		}
 
-		$chart['amount'] = rtrim($subscribers, ',');
-		$chart['dates'] = rtrim($ressorts, ',');
-		$chart['color'] = '#314e6f'; // lighter? #6e94bd
-		$chart['name'] = 'Subscribers';
-
-		return $chart;
-	}
-
-
-	public function subscribers_by_ressort() {
-
-		$from = strip_tags($this->from);
-		$to = strip_tags($this->to);
-
 		$SQLstatement = $this->db->connection->prepare(
-			"SELECT ressort, sum(subscribers) as 'subscribers'
+			"SELECT $groupby, $kpi
 			 FROM `articles`
 			 WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate
-			 GROUP BY ressort
-			 ORDER BY ressort ASC"
-		);
-
-		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
-		$output = $SQLstatement->fetchall();
-		return $output;
-
-	}
-
-
-	public function mediatime_by_ressort_chart() {
-		$rawData = $this->mediatime_by_ressort();
-
-		$mediatime = null; $ressorts = null;
-		foreach ($rawData as $data) {
-			if (empty($data['ressort'])) {continue;}			
-			$mediatime .= round($data['mediatime']) . ',';
-			$ressorts .= "'" . ucfirst($data['ressort']) . "'" . ',';
-		}
-
-		$chart['amount'] = rtrim($mediatime, ',');
-		$chart['dates'] = rtrim($ressorts, ',');
-		$chart['color'] = '#6ea681';
-		$chart['name'] = 'Mediatime';
-
-		return $chart;
-	}
-
-
-	public function mediatime_by_ressort() {
-
-		$from = strip_tags($this->from);
-		$to = strip_tags($this->to);
-
-		$SQLstatement = $this->db->connection->prepare(
-			"SELECT ressort, avg(avgmediatime) as mediatime
-			 FROM `articles`
-			 WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate
-			 GROUP BY ressort
-			 ORDER BY ressort ASC"
+			 GROUP BY $groupby
+			 ORDER BY $groupby ASC"
 		);
 
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
@@ -403,48 +312,6 @@ class Articles extends Model
 		return $output;
 
 	}
-
-	public function pageviews_by_ressort_chart() {
-		$rawData = $this->pageviews_by_ressort();
-
-		$pageviews = null; $ressorts = null;
-		foreach ($rawData as $data) {
-			if (empty($data['ressort'])) {continue;}			
-			$pageviews .= $data['pageviews'] . ',';
-			$ressorts .= "'" . ucfirst($data['ressort']) . "'" . ',';
-		}
-
-		$chart['amount'] = rtrim($pageviews, ',');
-		$chart['dates'] = rtrim($ressorts, ',');
-		$chart['color'] = '#6088b4';
-		$chart['name'] = 'Pageviews';
-
-		return $chart;
-	}
-
-
-	public function pageviews_by_ressort() {
-
-		$from = strip_tags($this->from);
-		$to = strip_tags($this->to);
-
-		$SQLstatement = $this->db->connection->prepare(
-			"SELECT ressort, sum(pageviews) as pageviews
-			 FROM `articles`
-			 WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate
-			 GROUP BY ressort
-			 ORDER BY ressort ASC"
-		);
-
-		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
-		$output = $SQLstatement->fetchall();
-
-		return $output;
-
-	}
-
-
-
 
 
 
@@ -600,10 +467,12 @@ class Articles extends Model
 		if ($ressorts) {
 			$ressorts = explode_and_trim(',', $ressorts);
 			foreach ($ressorts as $key => $ressort) {
+
+				$ressort = "'" . $ressort . "'";
 				if ($key == 0) {
-					$ressortQuery = "AND (ressort = '" . $ressort . "'";
+					$ressortQuery = '&& (ressort = ' . $ressort;
 				}
-				else {$ressortQuery .= " OR ressort = '" . $ressort . "'";}
+				else {$ressortQuery .= ' OR ressort = ' . $ressort;}
 			}
 			$ressortQuery .= ')';
 		}

@@ -12,7 +12,7 @@ class Stats extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Articles,Conversions,Stats,Orders,Plenigo,GlobalKPIs,Linkpulse');
+		$this->models('Articles,Conversions,Orders,Plenigo,GlobalKPIs,Linkpulse,Charts');
 	}
 
 	public function index() {
@@ -33,6 +33,8 @@ class Stats extends Controller {
 		$viewData['authorStats'] = $this->Articles->stats_grouped_by($column = 'author', $order = 'author ASC');
 		$viewData['typeStats'] = $this->Articles->stats_grouped_by($column = 'type', $order = 'conversions DESC');
 		$viewData['tagStats'] = $this->Articles->stats_grouped_by($column = 'tag', $order = 'conversions DESC');
+
+		$viewData['charts'] = $this->Charts;
 
 		Session::set('referer', '/stats');
 		$this->view->title = 'Inhaltsbasierte Statistiken';
@@ -95,14 +97,11 @@ class Stats extends Controller {
 		$viewData['averageRetention'] = $this->Orders->average($this->Orders->filter_cancelled($viewData['orders']),'retention');
 
 		// Charts
-		$viewData['singleChart'] = $this->Articles->subscribers_for_chart();
-		$viewData['barChart'] = $this->Articles->subscribers_by_ressort_chart();
-		$viewData['barChart2'] = $this->Orders->ressorts_for_chart();
-		$viewData['singleChart2'] = $this->Orders->orders_for_chart();
+
+		$viewData['charts'] = $this->Charts;
+
 		//$viewData['combinedChart'][0] = $this->Articles->mediatime_by_ressort_chart();
 		//$viewData['combinedChart'][1] = $this->Articles->pageviews_by_ressort_chart();
-		$viewData['barChart3'] = $this->Articles->mediatime_by_ressort_chart();
-		$viewData['barChart4'] = $this->Articles->pageviews_by_ressort_chart();
 
 		$this->view->title = 'Dashboard';
 		$this->view->render('pages/dashboard', $viewData);
