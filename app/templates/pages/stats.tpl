@@ -25,7 +25,7 @@ Artikel: <b title="davon Plusartikel: <?=$plusarticles?>"><?=$articles?></b> &em
 
 
 
-<div style="display:grid; grid-template-columns: 2fr 1fr; grid-gap:2vw;">
+<div style="display:grid; grid-template-columns: 1fr 1fr 1fr; grid-gap:2vw;">
 
 	<figure class="">
 		<h3 class="text-center">Anzahl Produzierte Artikel</h3>
@@ -33,9 +33,14 @@ Artikel: <b title="davon Plusartikel: <?=$plusarticles?>"><?=$articles?></b> &em
 	</figure>
 
 	<figure class="">
-		<h3 class="text-center">Conversionrate nach Ressort</h3>
-		<?=$charts->get('conversionRateByRessort'); ?>
+		<h3 class="text-center">Gesamt Mediatime nach Ressort</h3>
+		<?=$charts->get('fullMediatimeByRessort'); ?>
 	</figure>
+
+		<figure class="">
+			<h3 class="text-center">Conversionrate nach Ressort</h3>
+			<?=$charts->get('conversionRateByRessort'); ?>
+		</figure>
 
 </div>
 
@@ -57,21 +62,20 @@ Artikel: <b title="davon Plusartikel: <?=$plusarticles?>"><?=$articles?></b> &em
 		<?php endif; ?>
 	</div>
 
+	<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap:2vw;">
 
+		<figure class="">
+			<h3 class="text-center">Subscriber Quote nach Ressort</h3>
+			<?=$charts->get('subscriberQuoteByRessort'); ?>
+		</figure>
 
-<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap:2vw;">
+		<figure class="">
+			<h3 class="text-center">Durchschnittliche Pageviews nach Ressort</h3>
+			<?=$charts->get('avgPageviewsByRessort'); ?>
+		</figure>
 
-	<figure class="">
-		<h3 class="text-center">Subscriber Quote nach Inhaltstyp</h3>
-		<?=$charts->get('subscriberQuote'); ?>
-	</figure>
+	</div>
 
-	<figure class="">
-		<h3 class="text-center">Conversions nach Inhaltstyp</h3>
-		<?=$charts->get('conversionsByType'); ?>
-	</figure>
-
-</div>
 
 	<div>
 		<h1>Statistiken nach Inhaltstyp</h1>
@@ -89,21 +93,19 @@ Artikel: <b title="davon Plusartikel: <?=$plusarticles?>"><?=$articles?></b> &em
 		<?php endif; ?>
 	</div>
 
+	<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap:2vw;">
 
-<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap:2vw;">
+		<figure class="">
+			<h3 class="text-center">Subscriber Quote nach Inhaltstyp</h3>
+			<?=$charts->get('subscriberQuoteByType'); ?>
+		</figure>
 
-	<figure class="">
-		<h3 class="text-center">Subscriber Quote nach Tag</h3>
-		<?=$charts->get('subscriberQuoteByTag'); ?>
-	</figure>
+		<figure class="">
+			<h3 class="text-center">Durchschnittliche Pageviews nach Inhaltstyp</h3>
+			<?=$charts->get('avgPageviewsByType'); ?>
+		</figure>
 
-	<figure class="">
-		<h3 class="text-center">Durchschnittliche Pageviews nach Tag</h3>
-		<?=$charts->get('avgPageviewsByTag'); ?>
-	</figure>
-
-</div>
-
+	</div>
 
 
 
@@ -123,7 +125,19 @@ Artikel: <b title="davon Plusartikel: <?=$plusarticles?>"><?=$articles?></b> &em
 		<?php endif; ?>
 	</div>
 
+	<div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap:2vw;">
 
+		<figure class="">
+			<h3 class="text-center">Subscriber Quote nach #-Tag</h3>
+			<?=$charts->get('subscriberQuoteByTag'); ?>
+		</figure>
+
+		<figure class="">
+			<h3 class="text-center">Durchschnittliche Pageviews nach #-Tag</h3>
+			<?=$charts->get('avgPageviewsByTag'); ?>
+		</figure>
+
+	</div>
 
 
 <?php if (auth_rights('author')): ?>

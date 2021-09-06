@@ -52,6 +52,14 @@ class Charts
 				$chart->color = '#6ea681';
 			break;
 
+			case 'fullMediatimeByRessort':
+				$chart->kpi = 'mediatime';
+				$chart->operation = 'sum';
+				$chart->name = 'Mediatime';
+				$chart->color = '#6ea681';
+				$chart->template = 'charts/default_bar_chart';
+			break;
+
 
 			case 'subscribersByRessort':
 				$chart->kpi = 'subscribers';
@@ -96,11 +104,20 @@ class Charts
 				$chart->color = '#df886d';
 			break;
 
-			case 'avgPageviewsByRessort':
+			case 'avgPageviewsByRessortDashboard':
 				$chart->kpi = 'pageviews';
 				$chart->groupby = 'ressort';
 				$chart->operation = 'avg';
 				//$chart->sort = 'DESC';
+				$chart->name = 'Durchschnittliche Pageviews';
+				$chart->color = '#6088b4';
+			break;
+
+			case 'avgPageviewsByRessort':
+				$chart->kpi = 'pageviews';
+				$chart->groupby = 'ressort';
+				$chart->operation = 'avg';
+				$chart->sort = 'DESC';
 				$chart->name = 'Durchschnittliche Pageviews';
 				$chart->color = '#6088b4';
 			break;
@@ -114,13 +131,22 @@ class Charts
 				$chart->color = '#6088b4';
 			break;
 
+			case 'avgPageviewsByType':
+				$chart->kpi = 'pageviews';
+				$chart->groupby = 'type';
+				$chart->operation = 'avg';
+				$chart->sort = 'DESC';
+				$chart->name = 'Durchschnittliche Pageviews';
+				$chart->color = '#6088b4';
+			break;
+
 			case 'articlesByRessort':
 				$chart->kpi = 'id';
 				$chart->groupby = 'ressort';
 				$chart->operation = 'count';
 				$chart->name = 'produzierte Artikel';
 				$chart->color = '#515151';
-				$chart->showValues = true;
+				//$chart->showValues = true;
 				$chart->template = 'charts/default_bar_chart';
 			break;
 
@@ -146,7 +172,17 @@ class Charts
 				$chart->template = 'charts/default_bar_chart';
 			break;
 
-			case 'subscriberQuote':
+			case 'subscriberQuoteByRessort':
+				$chart->kpi = 'round(sum(subscribers)/sum(pageviews)*100)';
+				$chart->groupby = 'ressort';
+				$chart->operation = null;
+				$chart->name = 'Subscriber Anteil in %';
+				$chart->color = '#314e6f';
+				$chart->showValues = true;
+				$chart->template = 'charts/default_bar_chart';
+			break;
+
+			case 'subscriberQuoteByType':
 				$chart->kpi = 'round(sum(subscribers)/sum(pageviews)*100)';
 				$chart->groupby = 'type';
 				$chart->operation = null;

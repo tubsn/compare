@@ -72,7 +72,7 @@ Produzierte Artikel: <b><?=$articles?></b>
 
 	<figure class="">
 		<h3 class="text-center">Ø-Pageviews nach Ressort</h3>
-		<?=$charts->get('avgPageviewsByRessort');?>
+		<?=$charts->get('avgPageviewsByRessortDashboard');?>
 	</figure>
 
 </div>
