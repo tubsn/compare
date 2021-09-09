@@ -78,9 +78,9 @@
 </tbody>
 </table>
 
-<p>Hinweis: In dieser Liste erscheinen Artikel der letzten 3 Publikations-Tage, die von einer hochentwickelten AI mit folgender Formel
+<p>Hinweis: In dieser Liste erscheinen Artikel der letzten drei Publikations-Tage, die von einer hochentwickelten AI nach folgender Formel
 <i>(conversions * 20) + (pageviews / 1000 * 5) + ((avgmediatime / 10) * 2) + (subscribers / 100 * 3)</i>
-ausgesucht wurden. Sollte etwas fehlen oder zuviel Angezeigt werden passen wir die Formel gern an.</p>
+ausgesucht werden. Sollte etwas fehlen oder zuviel angezeigt werden, passen wir die Formel sofort an.</p>
 
 <p>Alle weiteren Daten im Compare-Tool auf: <a href="<?=PAGEURL?>">reports.lr-digital.de</a></p>
 
