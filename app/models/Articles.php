@@ -494,6 +494,31 @@ class Articles extends Model
 	}
 
 
+	public function score_articles($minScore = 100) {
+
+		$minScore = intval($minScore);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT *,
+			 round(sum(
+			 	(conversions * 20) + (pageviews / 1000 * 5) +
+			 	((avgmediatime / 10) * 2) + (subscribers / 100 * 3)
+			 ),1) as score
+			 FROM `articles`
+			 WHERE (DATE(`pubdate`) BETWEEN :startDate AND :endDate)
+			 GROUP BY id
+			 HAVING score > $minScore
+			 ORDER BY score DESC, pageviews DESC
+			 LIMIT 0, 1000"
+		);
+
+		$SQLstatement->execute([':startDate' => $this->from, ':endDate' => $this->to]);
+		$output = $SQLstatement->fetchall();
+		if (empty($output)) {return null;}
+
+		return $output;
+
+	}
 
 	public function stats_grouped_by($column = 'ressort', $orderby = 'conversions DESC, ressort ASC') {
 

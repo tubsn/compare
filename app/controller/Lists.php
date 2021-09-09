@@ -88,6 +88,29 @@ class Lists extends Controller {
 	}
 
 
+	public function scores() {
+
+		$viewData['articles'] = $this->Articles->score_articles(100);
+
+		$count = 0;
+		if (is_array($viewData['articles'])) {$count = count($viewData['articles']);}
+
+		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
+		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
+		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');
+		$viewData['avgmediatime'] = $this->Articles->average_up($viewData['articles'],'avgmediatime');
+		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
+		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
+		$viewData['numberOfArticles'] = $count;
+
+		$this->view->title = 'Artikel mit mehr als 100 Score Punkten';
+		$this->view->info = 'Score-Formel: (conversions * 20) + (pageviews / 1000 * 5) + ((avgmediatime / 10) * 2) + (subscribers / 100 * 3)';
+		$this->view->referer('/score');
+		$this->view->render('pages/list', $viewData);
+
+	}
+
+
 	public function mediatime() {
 		$viewData['articles'] = $this->Articles->mediatime_only($minimum = 150);
 		$count = 0;
@@ -116,7 +139,7 @@ class Lists extends Controller {
 		if (is_array($viewData['articles'])) {$count = count($viewData['articles']);}
 
 
-		$viewData['primaryChart'] = $this->Charts->get('subscribersByRessort');
+		//$viewData['primaryChart'] = $this->Charts->get('subscribersByRessort');
 		$viewData['secondaryChart'] = $this->Charts->get('subscribersByDate');
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');

@@ -10,7 +10,7 @@ class Exports extends Controller {
 	public function __construct() {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 		$this->view('CSV');
-		$this->models('Articles,Conversions,DailyKPIs,Plenigo,Orders');
+		$this->models('Articles,Analytics,Conversions,DailyKPIs,Plenigo,Orders');
 	}
 
 	public function articles() {
@@ -49,6 +49,16 @@ class Exports extends Controller {
 	public function full_json() {
 		$articles = $this->Articles->list_all();
 		$this->view->json($articles);
+	}
+
+	public function ga_campaigns($days = 30) {
+		$this->view('DefaultLayout');
+		$data = $this->Analytics->utm_campaigns($days);
+		$grouped = $this->Analytics->utm_campaigns($days, true);
+		$this->view->data = $data;
+		$this->view->grouped = $grouped;
+		$this->view->info = 'UTM Kampagnen der letzten ' . $days . ' Tage (ohne Sampling)';
+		$this->view->render('export/dump');
 	}
 
 	public function ressort_stats() {

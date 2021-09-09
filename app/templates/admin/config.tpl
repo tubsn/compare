@@ -5,11 +5,24 @@
 
 <section>
 
-	<h3>Nutzer - Verwaltung</h3>
+	<h3>Nutzerverwaltung</h3>
 	<p>Neue Nutzer angelegen oder verwalten.<br /><br />
 	<a class="button noline" href="/admin/users">zur Userverwaltung</a></p>
 
 <hr />
+
+	<h3>Zusätzliche Dashboards / Newsletter</h3>
+	<p>Übersicht zu laufenden UTM Kampagnen und Newsletter Previews
+		<div style="display:flex; gap:5px; align-items: start;">
+			<a class="button noline" href="/export/campaigns/30">UTM Kampagnen Übersicht</a>
+			<a class="button noline" href="/newsletter/chefredaktion">Chefredaktion Newsletter</a>
+			<a class="button noline" href="/newsletter/sport">Sport Newsletter</a>
+			<a class="button noline" href="/newsletter/nachdrehalert">Nachdreh-Alert</a>
+		</div>
+	</p>
+<hr />
+
+
 
 <h3>Artikel-Import Verwaltung</h3>
 
@@ -31,9 +44,6 @@
 <p>
 Hier können alle Artikel inklusive Klick- und Kündigerstatistik exportiert werden.<br /><br />
 <a class="button noline" href="/export/articles">Artikeldaten als Excel</a> <a class="button" href="/export/conversions">Conversiondaten als Excel</a></p>
-
-<a class="button noline" target="_blank" href="/newsletter/chefredaktion">Export Chefredaktion</a>
-
 
 </section>
 

@@ -25,6 +25,25 @@ class GlobalKPIs extends Model
 		if (Session::get('to')) {$this->to = Session::get('to');}
 	}
 
+	public function stats() {
+
+		$tablename = $this->db->table;
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT sum(pageviews) as pageviews, sum(mediatime) as mediatime, avg(avgmediatime) as avgmediatime
+			 FROM $tablename
+			 WHERE DATE(`date`) BETWEEN :startDate AND :endDate"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetch();
+		if (empty($output)) {return null;}
+		return $output;
+
+	}
+
 	public function sum($field) {
 
 		$from = strip_tags($this->from);

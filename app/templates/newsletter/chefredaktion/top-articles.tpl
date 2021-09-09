@@ -19,7 +19,7 @@ table.fancy:first-of-type {margin-bottom:3em;}
 
 
 
-<?php include tpl('newsletter/latest-conversions');?>
+<?php include tpl('newsletter/chefredaktion/latest-conversions');?>
 
 
 <h1>Top 5 Pageviews (Publikationsdatum gestern)</h1>
@@ -91,6 +91,6 @@ table.fancy:first-of-type {margin-bottom:3em;}
 
 <br/><br/>
 
-<?php include tpl('newsletter/article-list-for-mail');?>
+<?php include tpl('newsletter/chefredaktion/article-list-for-mail');?>
 
 </main>

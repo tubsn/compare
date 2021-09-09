@@ -143,4 +143,28 @@ class Analytics
 
 
 
+	public function utm_campaigns($dayCount = 30, $grouped = false) {
+
+		$this->ga->metrics = 'ga:transactions';
+		$this->ga->from = $dayCount . 'daysAgo';
+		$this->ga->to = 'today';
+		
+		if ($grouped) {
+		$this->ga->dimensions = 'ga:medium';
+		$this->ga->sort = '-ga:transactions';
+		}
+		else {
+		$this->ga->dimensions = 'ga:date,ga:medium,ga:campaign';	
+		$this->ga->sort = '-ga:date';
+		}
+
+		$this->ga->filters = 'ga:transactions>0;ga:medium!=(none);ga:campaign!=(not set)';
+		$this->ga->maxResults = '1000';
+
+		return $this->ga->fetch();
+
+	}
+
+
+
 }

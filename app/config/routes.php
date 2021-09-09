@@ -16,6 +16,7 @@ $routes->get('/tag/{tag}', 'Lists@tag');
 $routes->get('/tag', 'Lists@tag');
 $routes->get('/plus', 'Lists@plus');
 $routes->get('/top5', 'Lists@top5');
+$routes->get('/score', 'Lists@scores');
 $routes->get('/conversions', 'Lists@conversions');
 $routes->get('/pageviews', 'Lists@pageviews');
 $routes->get('/mediatime', 'Lists@mediatime');
@@ -44,6 +45,9 @@ $routes->post('/orders/set_paid_filter', 'Livedata@set_paid_filter');
 $routes->get('/stats', 'Stats@index');
 $routes->get('/dashboard', 'Stats@dashboard');
 
+// Readers
+$routes->get('/user/{id}', 'Readers@detail');
+
 // Article Details
 $routes->get('/artikel/{id:\d+}', 'Articles@detail');
 $routes->get('/artikel/{id:\d+}/edit', 'Articles@edit');
@@ -64,20 +68,20 @@ $routes->get('/leser/{plenigoID}', 'Readers@detail');
 $routes->get('/lp/{articleID:\d+}', 'Articles@linkpulse');
 $routes->get('/retresco/{id:\d+}', 'Articles@retresco');
 $routes->get('/cards', 'Lists@cards');
-$routes->get('/test/{id:\d+}', 'Articles@test');
 $routes->get('/test', 'Stats@test');
-
+$routes->post('/test', 'Stats@test');
 
 // Exports
 $routes->get('/export/articles', 'Exports@articles');
 $routes->get('/export/conversions', 'Exports@conversions');
 $routes->get('/export/json', 'Exports@full_json');
 $routes->get('/export/ressorts', 'Exports@ressort_stats');
+$routes->get('/export/campaigns/{days:\d+}', 'Exports@ga_campaigns');
 
 // Newsletter
 $routes->get('/newsletter/chefredaktion', 'Newsletter@chefredaktion');
 $routes->get('/newsletter/sport', 'Newsletter@sport_newsletter');
-$routes->get('/newsletter/test', 'Newsletter@test');
+$routes->get('/newsletter/nachdrehalert', 'Newsletter@nachdreh_alert');
 
 
 // Admin - Config Area
@@ -91,7 +95,7 @@ $routes->get('/admin/warmup_subscribers', 'Warmup@subscribers');
 $routes->get('/admin/warmup/sources[/{daysago}]', 'Warmup@enrich_conversions_with_ga');
 $routes->get('/admin/warmup/buyintents[/{daysago}]', 'Warmup@enrich_article_with_buy_intents');
 $routes->get('/admin/warmup/{weeksago}', 'Warmup@weeks_ago');
-
+$routes->get('/admin/mailsend', 'Newsletter@trigger_newsletter_sends');
 
 // Admin - Usermanagement
 $routes->get('/admin/users', 'Usermanagement@index');

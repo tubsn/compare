@@ -52,13 +52,14 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 	<th>⌀-MT</th>
 	<th>Conv</th>
 	<th>Künd</th>
+	<?php if (isset($articles[0]['score'])): ?><th>SCR</th><?php endif ?>	
 	<th>Datum</th>
 </tr>
 </thead>
 <tbody>
 <?php foreach ($articles as $article): ?>
 <tr>
-	<td class="narrower text-right"><?=$article['kicker'] ?? '-'?> </td>
+	<td class="narrow text-right" title="<?=$article['kicker'] ?? '-'?>"><?=$article['kicker'] ?? '-'?> </td>
 	<td><?php if ($article['plus']): ?><div class="bluebg"><a title="Statistik-Daten refreshen" class="noline" href="/artikel/<?=$article['id']?>/refresh">+</a></div><?php endif; ?></td>
 
 
@@ -141,7 +142,12 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 
 
 	<td class="narrower"><div<?php if ($article['cancelled'] > 0): ?> class="cancelled"<?php endif; ?>><?=$article['cancelled'] ?? '-'?></div></td>
-	<td data-sortdate="<?=$article['pubdate']?>" ><?=formatDate($article['pubdate'],"d.m.Y")?></td>
+
+	<?php if (isset($article['score'])): ?>
+	<td class="narrower text-right"><div class="score"><?=$article['score']?></div></td>
+	<?php endif ?>
+
+	<td data-sortdate="<?=$article['pubdate']?>" ><?=formatDate($article['pubdate'],"d.m.y")?></td>
 </tr>
 <?php endforeach; ?>
 </tbody>

@@ -38,6 +38,8 @@ define('IMPORT_FEEDS', [
 	'https://www.lr-online.de/nachrichten/kultur/?_XML=RSS',
 ]);
 
+define('TAGESNAMEN', ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag']);
+
 define('TIMEFRAMES', [
 	'heute',
 	'gestern',

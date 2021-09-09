@@ -178,7 +178,7 @@ class Charts
 				$chart->operation = null;
 				$chart->name = 'Subscriber Anteil in %';
 				$chart->color = '#314e6f';
-				$chart->showValues = true;
+				//$chart->showValues = true;
 				$chart->template = 'charts/default_bar_chart';
 			break;
 
@@ -188,7 +188,7 @@ class Charts
 				$chart->operation = null;
 				$chart->name = 'Subscriber Anteil in %';
 				$chart->color = '#314e6f';
-				$chart->showValues = true;
+				//$chart->showValues = true;
 				$chart->template = 'charts/default_bar_chart';
 			break;
 
@@ -198,7 +198,7 @@ class Charts
 				$chart->operation = null;
 				$chart->name = 'Subscriber Anteil in %';
 				$chart->color = '#314e6f';
-				$chart->showValues = true;
+				//$chart->showValues = true;
 				$chart->template = 'charts/default_bar_chart';
 			break;
 

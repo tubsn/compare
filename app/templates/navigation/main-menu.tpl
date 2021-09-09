@@ -15,6 +15,7 @@
 		<li><a href="/mediatime">Mediatime</a></li>
 		<li><a href="/conversions">Conversions</a></li>
 		<li><a href="/top5">Top5</a></li>
+		<?php if (auth_rights('type')): ?><li><a href="/score">Scores</a></li><?php endif; ?>
 		<li><a href="/stats">Inhalts-Statistiken</a></li>
 		<li><a href="/orders">Bestelldaten</a></li>
 	</ul>

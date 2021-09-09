@@ -48,12 +48,7 @@ https://reports.lr-digital.de';
 
 <h3>Linkliste zum Kopieren</h3>
 
-<b>Klicks:</b><br>
-<?php foreach ($pageviews as $article): ?>
-<?=$article['pageviews']?> | <a href="/artikel/<?=$article['id']?>"><?=$article['title']?></a> (ID: <?=$article['id']?>)<br/>
-<?php endforeach ?>
 
-<br>
 <b>Conversions:</b><br>
 <?php foreach ($conversions as $article): ?>
 <?php if ($article['ressort'] == 'plus'): ?>
@@ -61,4 +56,11 @@ https://reports.lr-digital.de';
 <?php else: ?>
 <?=$article['conversions']?> | <a href="/artikel/<?=$article['id']?>"><?=$article['title']?></a> (ID: <?=$article['id']?>)<br/>
 <?php endif; ?>
+<?php endforeach ?>
+
+<br />
+
+<b>Klicks:</b><br>
+<?php foreach ($pageviews as $article): ?>
+<?=$article['pageviews']?> | <a href="/artikel/<?=$article['id']?>"><?=$article['title']?></a> (ID: <?=$article['id']?>)<br/>
 <?php endforeach ?>
