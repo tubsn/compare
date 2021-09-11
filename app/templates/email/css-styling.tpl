@@ -26,6 +26,8 @@
 		.subscribers {display:inline-block; padding:3px; background-color: #9db7d3}
 		.conversions {display:inline-block; padding:3px; background-color: #f7dec3}
 		.mediatime {display:inline-block; padding:3px; background-color: #d6ebdd}
+		.nachdreh-green {background-color: #74d594;}
+		.nachdreh-yellow {background-color: #f0e296;}
 
 		.box {background-color: #eef0f2; padding:20px;}
 

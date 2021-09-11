@@ -54,6 +54,13 @@ class Exports extends Controller {
 	public function ga_campaigns($days = 30) {
 		$this->view('DefaultLayout');
 		$data = $this->Analytics->utm_campaigns($days);
+
+		$data = array_map(function ($set) { 
+			if (isset($set['Transactionid'])) {
+				$set['Transactionid'] = '<a href="/orders/'.$set['Transactionid'].'">'.$set['Transactionid'].'</a>';
+				unset($set['Transactions']);
+			} return $set; }, $data);
+
 		$grouped = $this->Analytics->utm_campaigns($days, true);
 		$this->view->data = $data;
 		$this->view->grouped = $grouped;

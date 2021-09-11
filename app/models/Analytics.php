@@ -154,7 +154,7 @@ class Analytics
 		$this->ga->sort = '-ga:transactions';
 		}
 		else {
-		$this->ga->dimensions = 'ga:date,ga:medium,ga:campaign';	
+		$this->ga->dimensions = 'ga:date,ga:medium,ga:campaign,ga:transactionId';	
 		$this->ga->sort = '-ga:date';
 		}
 

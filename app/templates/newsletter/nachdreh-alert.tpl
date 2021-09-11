@@ -32,7 +32,7 @@
 <?php foreach ($articles as $index => $article): ?>
 	<tr <?php if ($index % 2): ?>style="background:#eee;"<?php endif ?>>
 
-		<?php if ($article['score'] >= 130 ): ?>
+		<?php if ($article['score'] >= 150 ): ?>
 		<td class="center nachdreh-green"><?=round($article['score'])?></td>
 		<?php else: ?>
 		<td class="center nachdreh-yellow"><?=round($article['score'])?></td>

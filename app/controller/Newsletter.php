@@ -82,7 +82,7 @@ class Newsletter extends Controller {
 		$infoMail->cc = ['sebastian.butt@lr-online.de', 'robert.suesse@lr-online.de', 'mariell.begemann@lr-online.de'];
 
 		if ($send) {
-			$infoMail->send('newsletter/email', $viewData);
+			$infoMail->send('newsletter/nachdreh-alert', $viewData);
 		}
 
 		$this->view->render('newsletter/nachdreh-alert', $viewData);
