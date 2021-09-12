@@ -243,10 +243,6 @@ class Charts
 
 	private function to_aphex_chart() {
 
-
-
-
-
 		$metric = null; $dimension = null;
 		foreach ($this->data as $data) {
 

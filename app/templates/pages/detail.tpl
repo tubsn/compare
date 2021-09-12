@@ -309,3 +309,27 @@
 
 </main>
 <?php endif; ?>
+
+
+
+
+<main>
+<div style="display:grid; grid-template-columns: 1fr 1fr 1fr; grid-gap:2vw;">
+
+	<figure class="">
+		<h3 class="text-center">Artikel Emotionsdaten</h3>
+		<?=$emotions?>
+	</figure>
+
+	<figure class="">
+		<h3 class="text-center">Gesamt Mediatime nach Ressort</h3>
+
+	</figure>
+
+		<figure class="">
+			<h3 class="text-center">Conversionrate nach Ressort</h3>
+
+		</figure>
+
+</div>
+</main>

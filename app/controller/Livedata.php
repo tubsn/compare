@@ -14,12 +14,30 @@ class Livedata extends Controller {
 	public function __construct() {
 
 		$this->view('DefaultLayout');
-		$this->models('Plenigo');
+		$this->models('Plenigo,Linkpulse');
 	}
 
 	public function index() {
 		$this->view->redirect('/orders/today');
 	}
+
+
+	public function live_dashboard() {
+
+		$this->start = date('Y-m-d', strtotime('today'));
+		$this->end = date('Y-m-d', strtotime('today'));
+		$orders = $this->Plenigo->orders($this->start, $this->end, $maxOrders=100, $includeAppOrders = 0);
+		$viewData['orders'] = array_reverse($orders);
+
+		$linkpulseLiveData = $this->Linkpulse->today();
+		$viewData['chart']['data'] = $linkpulseLiveData['values'];
+		$viewData['chart']['time'] = $linkpulseLiveData['timestamps'];
+		$viewData['pageviews'] = $linkpulseLiveData['pageviews'];
+
+		$this->view->render('pages/live', $viewData);
+
+	}
+
 
 	public function order($id) {
 
