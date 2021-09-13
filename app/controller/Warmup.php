@@ -11,7 +11,7 @@ class Warmup extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Analytics,Linkpulse,Articles,Conversions,DailyKPIs,Orders');
+		$this->models('Analytics,Linkpulse,Articles,ArticleMeta,Conversions,DailyKPIs,Orders');
 	}
 
 	public function daterange() {
@@ -148,6 +148,26 @@ class Warmup extends Controller {
 
 		echo 'wenn dieser Text erscheint hats geklappt...<br/>';
 		echo 'Processing-Time: <b>'.round((microtime(true)-APP_START)*1000,2) . '</b>ms';
+
+	}
+
+
+	public function topic_clusters() {
+
+		$this->ArticleMeta->import_drive_data();
+
+		$unsetIDs = $this->Articles->get_unset_ids();
+		$topics = $this->ArticleMeta->topics_for($unsetIDs);
+
+		if (empty($topics)) {
+			echo 'nix neues'; return null;
+		}
+
+		dump($topics);
+
+		foreach ($topics as $id => $type) {
+			$this->Articles->update(['type' => $type], $id);
+		}
 
 	}
 

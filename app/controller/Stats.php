@@ -12,7 +12,7 @@ class Stats extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Articles,Conversions,Orders,Plenigo,GlobalKPIs,Linkpulse,Charts');
+		$this->models('Articles,Conversions,Orders,Plenigo,GlobalKPIs,Linkpulse,Charts,ArticlesMeta');
 	}
 
 	public function index() {
@@ -108,22 +108,6 @@ class Stats extends Controller {
 
 	}
 
-	public function live() {
-
-		$this->start = date('Y-m-d', strtotime('today'));
-		$this->end = date('Y-m-d', strtotime('today'));
-		$orders = $this->Plenigo->orders($this->start, $this->end, $maxOrders=100, $includeAppOrders = 0);
-		$viewData['orders'] = array_reverse($orders);
-
-		$linkpulseLiveData = $this->Linkpulse->today();
-		$viewData['chart']['data'] = $linkpulseLiveData['values'];
-		$viewData['chart']['time'] = $linkpulseLiveData['timestamps'];
-		$viewData['pageviews'] = $linkpulseLiveData['pageviews'];
-
-		$this->view->render('pages/live', $viewData);
-
-	}
-
 
 	public function test() {
 
@@ -171,5 +155,12 @@ class Stats extends Controller {
 		$this->view->render('pages/list', $viewData);
 
 	}
+
+	public function arttest() {
+
+		dd($this->ArticlesMeta->import());
+
+	}
+
 
 }

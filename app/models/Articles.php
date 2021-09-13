@@ -78,6 +78,16 @@ class Articles extends Model
 
 	}
 
+	public function get_unset_ids() {
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT id FROM `articles` WHERE type IS NULL LIMIT 0, 5000"
+		);
+		$SQLstatement->execute();
+		$output = $SQLstatement->fetchall(\PDO::FETCH_COLUMN);
+		return $output;
+	}
+
+
 	public function list_by($searchterm, $column, $order = 'pubdate') {
 
 		$from = strip_tags($this->from);

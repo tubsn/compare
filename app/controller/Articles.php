@@ -13,7 +13,7 @@ class Articles extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 		$this->view('DefaultLayout');
 		$this->view->navigation = 'navigation/article-menu';
-		$this->models('Articles,Analytics,DailyKPIs,Conversions,Linkpulse,Plenigo');
+		$this->models('Articles,Analytics,DailyKPIs,Conversions,Linkpulse,Plenigo,ArticleMeta');
 	}
 
 
@@ -60,6 +60,8 @@ class Articles extends Controller {
 		$viewData['gender'] = $this->Conversions->group_by_combined('customer_gender');
 		$viewData['payments'] = $this->Conversions->group_by_combined('order_payment_method');
 		$viewData['cancelled'] = $this->Conversions->cancelled_orders();
+
+		$viewData['emotions'] = $this->ArticleMeta->emotions($id);
 
 		// Rendering
 		$this->view->title = htmlentities($viewData['article']['title']);

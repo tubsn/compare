@@ -7,14 +7,24 @@
 	<p class="condensed">Ressort: <b><?=ucwords($article['ressort'])?></b> | Artikel-ID: <b><?=$article['id']?></b> | Publiziert: <b><?=formatDate($article['pubdate'],"d.m.Y</b> H:i")?>&thinsp;Uhr</p>
 	<p><?=$article['description']?></p>
 
-	<hr>
+	<?php if ($emotions): ?>
 
-	<p>Zusätzliche Artikeldaten abrufen:</p>
-	<p>
-		<a class="button light" href="/artikel/<?=$article['id']?>/medium">Traffic Quellen anzeigen</a>
-		&ensp;
-		<a class="button light mt" href="/retresco/<?=$article['id']?>">Retresco Infos anzeigen (BETA)</a>
-	</p>
+		<div class="col-2" style="grid-template-columns: 2fr 1fr; grid-gap: 0; margin-top:-1em; align-items:center; position:relative; left:-2em;">
+		<figure>
+			<?=$emotions?>
+			<h3 class="text-center" style="position:relative;top:-3em;">Artikel Emotionen</h3>
+		</figure>
+
+		<div class="text-center" style="margin-top:-4em;">
+			<a class="button light" href="/artikel/<?=$article['id']?>/medium">Traffic Quellen anzeigen</a>
+			<br>
+			<a class="button light mt" href="/retresco/<?=$article['id']?>">Retresco Infos anzeigen (BETA)</a>
+		</div>
+
+	</div>
+
+	<?php endif; ?>
+
 
 </article>
 

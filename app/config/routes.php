@@ -22,7 +22,7 @@ $routes->get('/pageviews', 'Lists@pageviews');
 $routes->get('/mediatime', 'Lists@mediatime');
 $routes->get('/subscribers', 'Lists@subscribers');
 $routes->post('/settimeframe', 'Articles@set_timeframe');
-$routes->get('/live', 'Stats@live');
+$routes->get('/live', 'Livedata@live_dashboard');
 
 // Orders
 $routes->get('/orders', 'Orders@stats');
@@ -70,6 +70,7 @@ $routes->get('/retresco/{id:\d+}', 'Articles@retresco');
 $routes->get('/cards', 'Lists@cards');
 $routes->get('/test', 'Stats@test');
 $routes->post('/test', 'Stats@test');
+$routes->get('/art', 'Stats@arttest');
 
 // Exports
 $routes->get('/export/articles', 'Exports@articles');
@@ -89,6 +90,7 @@ $routes->get('/admin', 'Admin@index');
 $routes->post('/admin', 'Admin@save_config');
 $routes->get('/admin/import', 'Import@feeds');
 $routes->get('/admin/orders', 'Import@order_import_form');
+$routes->get('/admin/topics', 'Warmup@topic_clusters');
 $routes->get('/admin/warmup', 'Warmup@daterange');
 $routes->get('/admin/warmup_conversions[/{daysago}]', 'Warmup@conversions');
 $routes->get('/admin/warmup_subscribers', 'Warmup@subscribers');

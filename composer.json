@@ -1,7 +1,8 @@
 {
     "require": {
         "flundr/core": "^2.0",
-        "google/apiclient": "2.0"
+        "google/apiclient": "^2.0",
+        "google/cloud-bigquery": "^1.22"
     },
     "autoload": {
         "psr-4": {
