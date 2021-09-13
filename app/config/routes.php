@@ -90,6 +90,7 @@ $routes->get('/admin', 'Admin@index');
 $routes->post('/admin', 'Admin@save_config');
 $routes->get('/admin/import', 'Import@feeds');
 $routes->get('/admin/orders', 'Import@order_import_form');
+$routes->get('/admin/topics', 'Warmup@topic_clusters');
 $routes->get('/admin/warmup', 'Warmup@daterange');
 $routes->get('/admin/warmup_conversions[/{daysago}]', 'Warmup@conversions');
 $routes->get('/admin/warmup_subscribers', 'Warmup@subscribers');

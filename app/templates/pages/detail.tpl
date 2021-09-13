@@ -16,6 +16,7 @@
 		<a class="button light mt" href="/retresco/<?=$article['id']?>">Retresco Infos anzeigen (BETA)</a>
 	</p>
 
+
 </article>
 
 <section class="text-center">
@@ -112,6 +113,7 @@
 	<small class="mt text-right block">Letztes Update: <?=formatDate($article['refresh'], 'd.m.Y H:i')?> Uhr (<a class="" href="<?=$article['id']?>/refresh">jetzt aktualisieren</a>)</small>
 
 	<?php endif; ?>
+
 </section>
 
 </main>
@@ -312,24 +314,22 @@
 
 
 
+<?php if ($emotions): ?>
 
 <main>
 <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; grid-gap:2vw;">
 
 	<figure class="">
-		<h3 class="text-center">Artikel Emotionsdaten</h3>
-		<?=$emotions?>
 	</figure>
 
 	<figure class="">
-		<h3 class="text-center">Gesamt Mediatime nach Ressort</h3>
-
+		<?=$emotions?>
+		<h3 class="text-center" style="position:relative;top:-3em; left:-0.5em;">Artikel Emotionen</h3>
 	</figure>
 
-		<figure class="">
-			<h3 class="text-center">Conversionrate nach Ressort</h3>
-
-		</figure>
+	<figure class="">
+	</figure>
 
 </div>
 </main>
+<?php endif; ?>

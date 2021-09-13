@@ -27,6 +27,46 @@ class ArticleMeta extends Model
 	}
 
 
+
+	public function topics_for($IDs) {
+		$IDs = implode(',', array_map('intval', $IDs)); // Intval for all IDs
+		$table = $this->db->table;
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT article_id as id, type FROM `$table` WHERE `article_id` IN ($IDs)"
+		);
+
+		$SQLstatement->execute();
+		$topics = $SQLstatement->fetchall(\PDO::FETCH_KEY_PAIR);
+
+		return array_map([$this, 'map_topics'], $topics);
+
+	}
+
+	private function map_topics($topic) {
+		switch ($topic) {
+			case 'Vermischtes: Soziales': 			$topic = 'Soziales'; break;
+			case 'Verkehr/Infrastruktur': 			$topic = 'Politik/Wirtschaft'; break;
+			case 'Vermischtes: Freizeit/Hobbys': 	$topic = 'Tourismus'; break;
+			case 'Sport: Nicht-Fußball': 			$topic = 'Sport'; break;
+			case 'Bildung/Erziehung': 				$topic = 'Bildung'; break;
+			case 'Wirtschaft: Unternehmen': 		$topic = 'Politik/Wirtschaft'; break;
+			case 'Kultur': 							$topic = 'Kultur'; break;
+			case 'Vermischtes: Sonstiges': 			$topic = 'Sonstiges'; break;
+			case 'Vermischtes: Gesundheit': 		$topic = 'Gesundheit'; break;
+			case 'Sport: Fußball': 					$topic = 'Sport'; break;
+			case 'Wirtschaft: Verbraucher': 		$topic = 'Politik/Wirtschaft'; break;
+			case 'Politik': 						$topic = 'Politik/Wirtschaft'; break;
+			case 'Justiz/Kriminalität': 			$topic = 'Crime/Blaulicht'; break;
+			case 'Vermischtes: Wissenschaft': 		$topic = 'Bildung'; break;
+			case 'Katastrophe/Unglück': 			$topic = 'Crime/Blaulicht'; break;
+			case 'Vermischtes: Leute': 				$topic = 'Soziales'; break;
+			default: return null; break;
+		}
+
+		return $topic;
+
+	}
+
 	public function emotions($id = null) {
 
 		$emotions = $this->get($id,'article_emotion')['article_emotion'];
@@ -34,7 +74,7 @@ class ArticleMeta extends Model
 
 		$data = $this->chart_data($emotions);
 
-		$data['color'] = '#d5707d';
+		$data['color'] = '#5f7894';
 		$data['showValues'] = true;
 		$data['name'] = 'Emotions';
 		$data['id'] = 'emotions';
