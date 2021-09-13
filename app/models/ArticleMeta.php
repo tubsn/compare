@@ -2,6 +2,7 @@
 
 namespace app\models;
 use \app\models\Charts;
+use \app\importer\BigQuery;
 use \flundr\database\SQLdb;
 use \flundr\mvc\Model;
 use \flundr\utility\Session;
@@ -25,7 +26,6 @@ class ArticleMeta extends Model
 		$this->from = date('Y-m-d', strtotime('yesterday -6days'));
 		$this->to = date('Y-m-d', strtotime('yesterday'));
 	}
-
 
 
 	public function topics_for($IDs) {
@@ -69,7 +69,9 @@ class ArticleMeta extends Model
 
 	public function emotions($id = null) {
 
-		$emotions = $this->get($id,'article_emotion')['article_emotion'];
+		$emotions = $this->get($id,'article_emotion')['article_emotion'] ?? false;
+		if (!$emotions) {return null;}
+
 		$emotions = json_decode($emotions,true);
 
 		$data = $this->chart_data($emotions);
@@ -91,8 +93,6 @@ class ArticleMeta extends Model
 		$metrics = null;
 
 		ksort($data);
-		//dd($data);
-
 
 		foreach ($data as $key => $value) {
 
@@ -105,16 +105,13 @@ class ArticleMeta extends Model
 		$metrics = rtrim($metrics, ',');
 		$dimensions = rtrim($dimensions, ',');
 
-		//$dimension = "'" . implode("','", array_keys($data)) . "'";
-		//$metric = implode(',', array_values($data));
-
 		return ['metric' => $metrics, 'dimension' => $dimensions];
 
 	}
 
 
-	public function import() {
-		$drive = $this->data_store();
+	public function import_drive_data() {
+		$drive = $this->drive_data_from_bigquery();
 		$drive = array_map([$this, 'map_drive_data'], $drive);
 	}
 
@@ -140,15 +137,13 @@ class ArticleMeta extends Model
 	}
 
 
-	public function save($data) {
+	private function save($data) {
 
 		$table = $this->db->table;
 		$keys = array_keys($data);
 
 		$data = implode(", ",$data);
 		$keys = implode(", ",$keys);
-
-		//dd($keys);
 
 		$stmt = $this->db->connection->prepare(
 			"INSERT INTO `$table` ($keys) VALUES ($data)
@@ -162,17 +157,30 @@ class ArticleMeta extends Model
 			`type`=VALUES(`type`)"
 		);
 
-		//dd($stmt);
-
 		$stmt->execute();
 
 	}
 
 
-	private function data_store() {
-
-		return json_decode($json,1);
-
+	private function drive_data_from_bigquery() {
+		$bigQueryApi = new BigQuery;
+		$query =
+			"SELECT
+			article_publisher_id,
+			article_length,
+			header_length,
+			number_of_words,
+			article_pad,
+			article_preview_pad,
+			article_emotion,
+			article_preview_emotion,
+			categories
+			FROM `artikel-reports-tool.DPA_Drive.dpa_drive_articles`
+			WHERE publisher = 'LR'
+			and published_at_local >= DATE_SUB(CURRENT_DATE, INTERVAL 15 DAY)
+			LIMIT 5000";
+		$data = $bigQueryApi->sql($query);
+		return  $data;
 	}
 
 }

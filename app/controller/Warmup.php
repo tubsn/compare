@@ -154,6 +154,8 @@ class Warmup extends Controller {
 
 	public function topic_clusters() {
 
+		$this->ArticleMeta->import_drive_data();
+
 		$unsetIDs = $this->Articles->get_unset_ids();
 		$topics = $this->ArticleMeta->topics_for($unsetIDs);
 
