@@ -1,7 +1,7 @@
 <?php
 
 namespace app\importer;
-use app\importer\LR_RSS_Adapter;
+use app\importer\RSS_Adapter;
 
 class ArticleImport
 {
@@ -15,7 +15,7 @@ class ArticleImport
 	public function rss($url) {
 
 		$rssData = $this->curl($url);
-		$adapter = new LR_RSS_Adapter;
+		$adapter = new RSS_Adapter;
 		return $adapter->convert($rssData);
 
 	}
@@ -25,11 +25,11 @@ class ArticleImport
 		$url = $this->portalURL . '/' . $articleID . '?_XML=RSS';
 		$curlData = $this->curl_with_redirect($url);
 
-		$url = $curlData['url'];
 
+		$url = $curlData['url'];
 		$rssData = $curlData['data'];
 
-		$adapter = new LR_RSS_Adapter;
+		$adapter = new RSS_Adapter;
 		return $adapter->convert_news_markup($rssData, $url);
 
 	}
@@ -68,7 +68,7 @@ class ArticleImport
 		if ($recievedData === false) {
 			dd(curl_error($ch));
 		}
-		
+
 		$lastUrl = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
 		$responseCode = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
 

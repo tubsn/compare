@@ -9,7 +9,14 @@ error_reporting(E_ALL ^ E_DEPRECATED);
 // Pathing
 define('ROOT', dirname(__DIR__,2) . DIRECTORY_SEPARATOR);
 define('APP', ROOT . 'app' . DIRECTORY_SEPARATOR);
-define('ENV_PATH', ROOT . '.env');
+
+$subdomain = explode('.', $_SERVER['HTTP_HOST'])[0] ?? 'LR';
+switch ($subdomain) {
+	case 'reports-moz': define('ENV_PATH', ROOT . '.env-moz'); break;
+	case 'reports-swp': define('ENV_PATH', ROOT . '.env-swp'); break;
+	default: define('ENV_PATH', ROOT . '.env');	break;
+}
+
 define('CONFIGPATH', APP . 'config' . DIRECTORY_SEPARATOR);
 define('ROUTEFILE', CONFIGPATH . 'routes.php');
 define('TEMPLATES', APP . 'templates' . DIRECTORY_SEPARATOR);

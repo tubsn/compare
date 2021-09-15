@@ -52,7 +52,7 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 	<th>⌀-MT</th>
 	<th>Conv</th>
 	<th>Künd</th>
-	<?php if (isset($articles[0]['score'])): ?><th>SCR</th><?php endif ?>	
+	<?php if (isset($articles[0]['score'])): ?><th>SCR</th><?php endif ?>
 	<th>Datum</th>
 </tr>
 </thead>
@@ -126,7 +126,7 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 	<td><div<?php if ($article['subscribers'] > 750): ?> class="subscribers"<?php endif; ?>><?=number_format($article['subscribers'],0,'.','.') ?? 0?></div></td>
 	<?php endif; ?>
 
-	<?php if ($article['pageviews'] && $article['subscribers']): ?>
+	<?php if ($article['pageviews'] && $article['subscribers'] && ($article['subscribers'] < $article['pageviews'])): ?>
 	<td title="Plus-Leser: <?=$article['subscribers']?>">
 		<div class="indicator plusleser">
 			<div style="width:<?=round($article['subscribers'] / $article['pageviews'] * 100)?>%;"><?=round($article['subscribers'] / $article['pageviews'] * 100)?></div>

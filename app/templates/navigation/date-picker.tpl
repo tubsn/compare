@@ -1,5 +1,15 @@
 <div class="calendar-container">
+
 	<div class="calendar-picker">
+
+		<form style="margin-right:.3em; position:relative; top:1px;" method="post" action="/orders/set_client">
+		<select onchange="if (this.value) window.location.href=this.value" name="portal">
+			<option<?php if (PORTAL == 'LR'): ?> selected<?php endif ?> value="https://reports.lr-digital.de">LR</option>
+			<option<?php if (PORTAL == 'MOZ'): ?> selected<?php endif ?> value="https://reports-moz.lr-digital.de">MOZ</option>
+			<option<?php if (PORTAL == 'SWP'): ?> selected<?php endif ?> value="https://reports-swp.lr-digital.de">SWP</option>
+		</select>
+		</form>
+
 		<form action="/settimeframe" method="post">
 			<select name="timeframe" class="js-timeframe">
 				<?php if (session('timeframe') == 'Zeitraum'): ?>

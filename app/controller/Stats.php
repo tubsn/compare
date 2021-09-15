@@ -160,7 +160,7 @@ class Stats extends Controller {
 
 		$viewData['charts'] = $this->Charts;
 		//articlesByRessort
-		$this->view->render('pages/artikel-entwicklung', $viewData);	
+		$this->view->render('pages/artikel-entwicklung', $viewData);
 
 	}
 

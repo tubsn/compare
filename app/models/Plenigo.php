@@ -173,15 +173,50 @@ class Plenigo
 
 		if (!isset($paths[0])) {return null;}
 
-		if ($paths[0] == 'lausitz') {
-			return $paths[1] ?? $paths[0];
-		}
+		switch (PORTAL) {
 
-		if (isset($paths[1]) && $paths[1] == 'sport') {
-			return $paths[1];
+			case 'LR':
+				if ($paths[0] == 'lausitz') {
+					return $paths[1];
+				}
+
+				if (isset($paths[1]) && $paths[1] == 'sport') {
+					return $paths[1];
+				}
+			break;
+
+			case 'MOZ':
+				if ($paths[0] == 'lokales') {
+					return $paths[1];
+				}
+
+				if ($paths[0] == 'nachrichten') {
+					return $paths[1];
+				}
+
+				if (isset($paths[1]) && $paths[1] == 'sport') {
+					return $paths[1];
+				}
+			break;
+
+			case 'SWP':
+				if ($paths[0] == 'suedwesten') {
+					return $paths[2];
+				}
+
+				if ($paths[0] == 'blaulicht') {
+					return $paths[1];
+				}
+
+				if ($paths[0] == 'sport') {
+					return $paths[1] ?? $paths[0];
+				}
+			break;
+
 		}
 
 		return $paths[0];
+
 
 	}
 

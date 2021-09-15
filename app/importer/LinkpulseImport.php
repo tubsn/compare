@@ -8,9 +8,9 @@ class LinkpulseImport
 {
 
 	const API_BASE_URL = 'https://api5.linkpulse.com/v2.1/query';
-	private $apiKey = LINKPULSE_APIKEY_LR;
-	private $apiSecret = LINKPULSE_SECRET_LR;
-	private $client = 'LR';
+	private $apiKey = LINKPULSE_APIKEY;
+	private $apiSecret = LINKPULSE_SECRET;
+	private $client = PORTAL;
 
 	public function __construct() {
 		$this->adapter = new LinkpulseAdapter();
@@ -18,12 +18,14 @@ class LinkpulseImport
 
 	public function client($client) {
 
+		/*
 		switch ($client) {
 			case 'LR': $this->apiKey = LINKPULSE_APIKEY_LR; $this->apiSecret = LINKPULSE_SECRET_LR; $this->client = 'LR'; break;
 			case 'MOZ': $this->apiKey = LINKPULSE_APIKEY_MOZ; $this->apiSecret = LINKPULSE_SECRET_MOZ; $this->client = 'MOZ'; break;
 			case 'SWP': $this->apiKey = LINKPULSE_APIKEY_SWP; $this->apiSecret = LINKPULSE_SECRET_SWP; $this->client = 'SWP'; break;
 			default: $this->apiKey = LINKPULSE_APIKEY_LR; $this->apiSecret = LINKPULSE_SECRET_LR; break;
 		}
+		*/
 
 	}
 
@@ -101,6 +103,8 @@ class LinkpulseImport
 		if ($recievedData === false) {
 			dd(curl_error($ch));
 		}
+
+		//$statuscode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
 		curl_close ($ch);
 

@@ -8,20 +8,22 @@ class PlenigoAPI
 {
 
 	const API_BASE_URL = 'https://api.plenigo.com/api/v3.0';
-	private $plenigoToken = PLENIGO_TOKEN_LR;
-	private $client = 'LR';
+	private $plenigoToken = PLENIGO_TOKEN;
+	private $client = PORTAL;
 
 	public function __construct() {
 	}
 
 	public function client($client) {
 
+		/*
 		switch ($client) {
 			case 'LR': $this->plenigoToken = PLENIGO_TOKEN_LR; $this->client = 'LR'; break;
 			case 'MOZ': $this->plenigoToken = PLENIGO_TOKEN_MOZ; $this->client = 'MOZ'; break;
 			case 'SWP': $this->plenigoToken = PLENIGO_TOKEN_SWP; $this->client = 'SWP'; break;
 			default: $this->plenigoToken = PLENIGO_TOKEN_LR; $this->client = 'LR'; break;
 		}
+		*/
 
 	}
 
