@@ -28,6 +28,22 @@ class ArticleMeta extends Model
 	}
 
 
+	public function average_emo() {
+
+		$table = $this->db->table;
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT avg(JSON_EXTRACT(article_emotion, '$.emo_aerger')) as Ärger
+			FROM `$table`"
+		);
+
+		$SQLstatement->execute();
+		$data = $SQLstatement->fetchall();
+
+		dd($data);
+
+	}
+
+
 	public function topics_for($IDs) {
 		$IDs = implode(',', array_map('intval', $IDs)); // Intval for all IDs
 		$table = $this->db->table;

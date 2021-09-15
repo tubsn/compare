@@ -140,6 +140,16 @@ class Charts
 				$chart->color = '#6088b4';
 			break;
 
+			case 'articlesByTime':
+				$chart->kpi = 'id';
+				$chart->groupby = "DATE_FORMAT(pubdate,'%Y-%m')";
+				$chart->operation = 'count';
+				$chart->name = 'produzierte Artikel';
+				$chart->color = '#515151';
+				//$chart->showValues = true;
+				$chart->template = 'charts/default_line_chart';
+			break;
+
 			case 'articlesByRessort':
 				$chart->kpi = 'id';
 				$chart->groupby = 'ressort';

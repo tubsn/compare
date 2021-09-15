@@ -156,9 +156,11 @@ class Stats extends Controller {
 
 	}
 
-	public function arttest() {
+	public function artikel() {
 
-		dd($this->ArticlesMeta->import());
+		$viewData['charts'] = $this->Charts;
+		//articlesByRessort
+		$this->view->render('pages/artikel-entwicklung', $viewData);	
 
 	}
 

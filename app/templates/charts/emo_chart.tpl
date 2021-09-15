@@ -19,7 +19,7 @@ let ChartOptions<?=$id?> = {
 	  text: 'Mediatime nach Ressort'
 		},*/
 	colors: ['<?=$color?>'],
-	markers: { size: 4, colors: ['<?=$color?>'], strokeWidth: 2},
+	markers: { size: 3, colors: ['<?=$color?>'], strokeWidth: 1},
 	tooltip: {enabled: true, y: {formatter: function(val) {return val}} },
 	xaxis: {categories: [<?=$dimension?>]},
 	yaxis: {show:false}

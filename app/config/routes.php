@@ -44,6 +44,7 @@ $routes->post('/orders/set_paid_filter', 'Livedata@set_paid_filter');
 // Stats
 $routes->get('/stats', 'Stats@index');
 $routes->get('/dashboard', 'Stats@dashboard');
+$routes->get('/stats/artikel', 'Stats@artikel');
 
 // Readers
 $routes->get('/user/{id}', 'Readers@detail');
