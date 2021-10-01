@@ -152,10 +152,39 @@ class Artikel {
 		this.ttagSelectors = document.querySelectorAll('.js-tag-selector');
 		this.listenToTagSelector(this.ttagSelectors);
 
+		let tableCollapseSelectors = document.querySelectorAll('.js-collapse-table-btn');
+		if (tableCollapseSelectors) {
+			
+			Array.from(tableCollapseSelectors).forEach(button => {
+				button.addEventListener('click', (e) => {
+					let table = document.querySelector('.js-collapse-table');					
+					table.classList.toggle('collapsed');
+				});
+			});
+		}
+
 		// Timeselector Submit on Change
 		let timeframe = document.querySelector('.js-timeframe');
 		if (timeframe) {
 			timeframe.addEventListener('change', () => {timeframe.parentNode.submit();});
+		}
+
+		// Portalselector
+		let portalSelector = document.querySelector('.js-portal-select');
+		if (portalSelector) {
+			portalSelector.addEventListener('change', (e) => {
+				let portal = e.currentTarget.value;
+				let subdomain = 'reports';
+
+				if (portal == 'MOZ') {subdomain = 'reports-moz';}
+				if (portal == 'SWP') {subdomain = 'reports-swp';}
+				if (portal == 'LR') {subdomain = 'reports';}
+
+				let oldPath = window.location.href;
+				let newPath = oldPath.replace(/^[^.]*/, subdomain)
+
+				window.location = 'https://' + newPath;
+			});
 		}
 
 

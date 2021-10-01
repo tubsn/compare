@@ -108,51 +108,17 @@ class Stats extends Controller {
 
 	}
 
+	public function value_articles() {
 
-	public function test() {
+		$this->view->wertschoepfend = $this->Articles->value_articles();
 
-		$db = new \flundr\database\SQLdb(DB_SETTINGS);
-		$db->table = 'articles';
+		$this->view->artikel = array_column($this->view->wertschoepfend,'artikel');
+		$this->view->spielmacher = array_column($this->view->wertschoepfend,'spielmacher');
+		$this->view->stuermer = array_column($this->view->wertschoepfend,'stuermer');
+		$this->view->abwehr = array_column($this->view->wertschoepfend,'abwehr');
+		$this->view->geister = array_column($this->view->wertschoepfend,'geister');
 
-		$from = date('Y-m-d', strtotime('yesterday -6days'));
-		$to = date('Y-m-d', strtotime('yesterday'));
-
-		if (Session::get('from')) {$from = Session::get('from');}
-		if (Session::get('to')) {$to = Session::get('to');}
-
-
-		$kpis['conversions'] = strip_tags($_POST['conversions'] ?? null);
-		$kpis['pageviews'] = strip_tags($_POST['pageviews'] ?? null);
-		$kpis['avgmediatime'] = strip_tags($_POST['avgmediatime'] ?? null);
-		$kpis['subscribers'] = strip_tags($_POST['subscribers'] ?? null);
-		$kpis['cancelled'] = strip_tags($_POST['cancelled'] ?? null);
-
-		$viewData['kpis'] = $kpis;
-
-		$filter = null;
-
-		foreach ($kpis as $kpi => $value) {
-			if (empty($value)) {continue;}
-			$filter .= ' AND ' . $kpi . ' ' . $value;
-		}
-
-		$SQLstatement = $db->connection->prepare(
-			"SELECT *
-			 FROM `articles`
-			 WHERE (DATE(`pubdate`) BETWEEN :startDate AND :endDate)
-			 $filter
-			 ORDER BY pageviews DESC
-			 LIMIT 0, 1000"
-		);
-
-		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
-		$output = $SQLstatement->fetchall();
-
-		$viewData['articles'] = $output ;
-		$this->view->title = 'Gefilterte Artikel: ' . count($output);
-		//$this->view->info = 'blub';
-		$this->view->navigation = 'navigation/kpi-selector';
-		$this->view->render('pages/list', $viewData);
+		$this->view->render('pages/wertschoepfend');
 
 	}
 

@@ -64,6 +64,10 @@ class RSS_Adapter
 		$article['ressort'] = $this->extract_ressort($url);
 		$article['title'] = $item->title->__toString();
 		$article['kicker'] = $item->kicker->__toString();
+		
+		$article['type'] = $item->contenttype->__toString();
+		if (empty($article['type'])) {unset($article['type']);}
+
 		$article['description'] = $item->description->__toString();
 		$article['author'] = $item->author->__toString();
 		$article['plus'] = $item->freemium->__toString() == 'free' ? false : true; // Converts Freemiuminfo to boolean

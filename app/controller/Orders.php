@@ -13,7 +13,7 @@ class Orders extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Articles,Orders,Charts');
+		$this->models('Articles,Orders,Campaigns,Charts');
 	}
 
 
@@ -30,6 +30,20 @@ class Orders extends Controller {
 
 		$this->view->title = 'Bestellübersicht';
 		$this->view->render('orders/list', $viewData);
+
+	}
+
+
+	public function campaigns() {
+
+		$viewData['campaigns'] = $this->Campaigns->list();
+		$viewData['numberOfCampaigns'] = count($viewData['campaigns'] ?? []);
+		$viewData['numberOfCancelled'] = count($this->Campaigns->filter_cancelled($viewData['campaigns']));
+		$viewData['averageRetention'] = $this->Orders->average($this->Campaigns->filter_cancelled($viewData['campaigns']),'retention');
+
+		$this->view->title = 'UTM Kampagnen - Übersicht';
+		$this->view->info = 'Daten aus Google Analytics (ohne Sampling) - Nutzer ohne Tracking-Consent sind ausgeschlossen.';
+		$this->view->render('orders/list-campaigns', $viewData);
 
 	}
 
@@ -57,6 +71,9 @@ class Orders extends Controller {
 		$viewData['type'] = $this->Orders->group_by_combined('article_type');
 		$viewData['tag'] = $this->Orders->group_by_combined('article_tag');
 		$viewData['ressorts'] = $this->Orders->group_by_combined('article_ressort');
+		$viewData['utm_source'] = $this->Orders->group_by_combined('utm_source');
+		$viewData['utm_medium'] = $this->Orders->group_by_combined('utm_medium');
+		$viewData['utm_campaign'] = $this->Orders->group_by_combined('utm_campaign');
 		$viewData['source'] = $this->Orders->group_by_combined('ga_source');
 		$viewData['city'] = $this->Orders->group_by_combined('customer_city');
 		$viewData['plz'] = $this->Orders->group_by_combined('customer_postcode');

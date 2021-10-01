@@ -16,13 +16,64 @@ Conversions: <b class="conversions"><?=count($orders)?></b>	&ensp;
 Pageviews: <b class="pageviews"><?=number_format($pageviews,0,',','.')?></b>
 </h1>
 
-<p><b>Hinweis:</b> Diese Seite befindet sich aktuell im Aufbau!</p>
-
 <?php include tpl('charts/livechart');?>
 
-<h3>letzte eingehende Bestellungen</h3>
+<?php if ($articles): ?>
+<h3>Meist geklickte Artikel (Daten aus Linkpulse):</h3>
 
-<table class="fancy js-sortable wide">
+<table class="fancy js-sortable wide mbig">
+<thead>
+	<tr>
+		<th>Ressort</th>
+		<th>Thumb</th>
+		<th>Titel</th>
+		<th>Pageviews</th>
+		<th>Conversions</th>
+		<th>Subscribers</th>
+		<th>Mediatime</th>
+		<th>Artikel</th>
+	</tr>
+</thead>
+<tbody>
+<?php foreach ($articles as $article): ?>
+	<tr>
+		<td><?=ucfirst($article['ressort'])?></td>
+		<td><img style="height: 35px;"src="<?=$article['image']?>"></td>
+		<td><a href="/artikel/<?=$article['id']?>"><?=$article['title']?></a></td>
+		
+		<?php if ($article['pageviews'] > 2500): ?>
+		<td><span class="pageviews"><?=$article['pageviews']?></span></td>
+		<?php else: ?>			
+		<td><?=$article['pageviews']?></td>			
+		<?php endif ?>
+
+		<?php if ($article['conversions'] > 0): ?>
+		<td><span class="conversions"><?=$article['conversions']?></span></td>
+		<?php else: ?>
+		<td><?=$article['conversions']?></td>
+		<?php endif ?>
+
+		<?php if ($article['subscribers'] > 100): ?>
+		<td><span class="subscribers"><?=$article['subscribers']?></span></td>
+		<?php else: ?>		
+		<td><?=$article['subscribers']?></td>			
+		<?php endif ?>		
+
+		<?php if ($article['avgmediatime'] > 100): ?>
+		<td><span class="greenbg"><?=$article['avgmediatime']?></span></td>
+		<?php else: ?>			
+		<td><?=$article['avgmediatime']?></td>			
+		<?php endif ?>
+		<td><a href="<?=$article['url']?>">öffnen</a></td>
+	</tr>
+<?php endforeach ?>
+</tbody>
+</table>
+<?php endif ?>
+
+<h3>Letzte eingehende Bestellungen (Daten aus Plenigo):</h3>
+<?php if ($orders): ?>
+<table class="fancy js-sortable wide mbig">
 <thead>
 	<tr>
 		<th>ID</th>
@@ -46,6 +97,11 @@ Pageviews: <b class="pageviews"><?=number_format($pageviews,0,',','.')?></b>
 <?php endforeach ?>
 </tbody>
 </table>
+<?php else: ?>
+<p>Aktuell keine Bestellungen</p>
 
+<?php endif ?>
+
+<div class="text-center"><b>Hinweis:</b> Diese Seite befindet sich aktuell im Aufbau!</div>
 
 </main>

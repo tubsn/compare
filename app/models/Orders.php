@@ -42,11 +42,15 @@ class Orders extends Model
 			 ifnull(conversions.article_ressort, articles.ressort) as article_ressort,
 			 articles.author as article_author,
 			 articles.kicker as article_kicker,
-			 articles.pubdate as article_pubdate
+			 articles.pubdate as article_pubdate,
+			 campaigns.utm_source as utm_source,
+			 campaigns.utm_medium as utm_medium,
+			 campaigns.utm_campaign as utm_campaign
 
 			 FROM conversions
 
 			 LEFT JOIN articles ON `id` = conversions.article_id
+			 LEFT JOIN campaigns ON campaigns.order_id = conversions.order_id
 
 			 WHERE DATE(conversions.order_date) BETWEEN :startDate AND :endDate
 			 ORDER BY conversions.order_date DESC

@@ -10,12 +10,12 @@ class Exports extends Controller {
 	public function __construct() {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 		$this->view('CSV');
-		$this->models('Articles,Analytics,Conversions,DailyKPIs,Plenigo,Orders');
+		$this->models('Articles,Analytics,Conversions,Campaigns,DailyKPIs,Plenigo,Orders');
 	}
 
 	public function articles() {
 		$viewData['articles'] = $this->Articles->list_all();
-		$this->view->title = 'LRO-Artikel-'.date("dmY").'.csv';
+		$this->view->title = PORTAL . '-Artikel-'.date("dmY").'.csv';
 		$this->view->render('export/excel-articles', $viewData);
 	}
 
@@ -34,8 +34,44 @@ class Exports extends Controller {
 		Session::set('from', $sessionFrom);
 		Session::set('to', $sessionTo);
 
-		$this->view->title = 'LRO-Conversions-'.date("dmY").'.csv';
+		$this->view->title = PORTAL . '-Conversions-'.date("dmY").'.csv';
 		$this->view->export($viewData['conversions']);
+
+	}
+
+	public function campaigns() {
+
+		$sessionFrom = Session::get('from') ?? '0000-00-00';
+		$sessionTo = Session::get('to') ?? '2099-01-01';
+
+		Session::set('from','0000-00-00');
+		Session::set('to', '2099-01-01');
+
+		$campaigns = $this->Campaigns->list();
+
+		Session::set('from', $sessionFrom);
+		Session::set('to', $sessionTo);
+
+		$this->view->title = PORTAL . '-UTM-Kampagnen-'.date("dmY").'.csv';
+		$this->view->export($campaigns);
+
+	}
+
+	public function value_articles() {
+
+		$sessionFrom = Session::get('from') ?? '0000-00-00';
+		$sessionTo = Session::get('to') ?? '2099-01-01';
+
+		Session::set('from','0000-00-00');
+		Session::set('to', '2099-01-01');
+
+		$artikel = $this->Articles->value_articles();		
+
+		Session::set('from', $sessionFrom);
+		Session::set('to', $sessionTo);
+
+		$this->view->title = 'Wertschoepfende-Artikel.csv';
+		$this->view->export($artikel);
 
 	}
 
@@ -55,6 +91,17 @@ class Exports extends Controller {
 		$this->view('DefaultLayout');
 		$data = $this->Analytics->utm_campaigns($days);
 
+		// Save into Campaigns DB
+		/*
+		foreach ($data as $order) {
+			$campaign['order_id'] = $order['Transactionid'];
+			$campaign['ga_date'] =  date('Y-m-d', strtotime($order['Date']));
+			$campaign['utm_source'] =  $order['Source'];
+			$campaign['utm_medium'] =  $order['Medium'];
+			$campaign['utm_campaign'] =  $order['Campaign'];
+			$this->Campaigns->create_or_update($campaign);
+		}*/
+
 		$data = array_map(function ($set) { 
 			if (isset($set['Transactionid'])) {
 				$set['Transactionid'] = '<a href="/orders/'.$set['Transactionid'].'">'.$set['Transactionid'].'</a>';
@@ -62,10 +109,12 @@ class Exports extends Controller {
 			} return $set; }, $data);
 
 		$grouped = $this->Analytics->utm_campaigns($days, true);
+
 		$this->view->data = $data;
+		$this->view->days = $days;
 		$this->view->grouped = $grouped;
 		$this->view->info = 'UTM Kampagnen der letzten ' . $days . ' Tage (ohne Sampling)';
-		$this->view->render('export/dump');
+		$this->view->render('export/utm-campaigns');
 	}
 
 	public function ressort_stats() {

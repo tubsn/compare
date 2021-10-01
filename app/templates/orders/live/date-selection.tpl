@@ -19,13 +19,11 @@
 </div>
 
 <div>
-<form method="post" action="/orders/set_client">
-<select onchange="this.form.submit()" name="client">
-	<option<?php if (session('client') == 'LR'): ?> selected<?php endif ?>>LR</option>
-	<option<?php if (session('client') == 'SWP'): ?> selected<?php endif ?>>SWP</option>
-	<option<?php if (session('client') == 'MOZ'): ?> selected<?php endif ?>>MOZ</option>
+<select class="js-portal-select" name="portal">
+	<option<?php if (PORTAL == 'LR'): ?> selected<?php endif ?>>LR</option>
+	<option<?php if (PORTAL == 'MOZ'): ?> selected<?php endif ?>>MOZ</option>
+	<option<?php if (PORTAL == 'SWP'): ?> selected<?php endif ?>>SWP</option>
 </select>
-</form>
 </div>
 
 <!--

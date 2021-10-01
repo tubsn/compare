@@ -30,6 +30,10 @@ class Linkpulse
 		return $liveData;
 	}
 
+	public function articles_today() {
+		return $this->api->articles_today();
+	}
+
 	private function convert_to_chart_data($data) {
 
 		$pageviews = null;

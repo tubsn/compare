@@ -105,7 +105,7 @@ class Articles extends Controller {
 		$viewData['article'] = $this->Articles->get($id);
 		$pubDate = $viewData['article']['pubdate'];
 
-		$mediumCache = new RequestCache('ArticleMedium' . $id, 60 * 60);
+		$mediumCache = new RequestCache('ArticleMedium' . $id, 10 * 60);
 		$mediumStats = $mediumCache->get();
 
 		if (!$mediumStats) {

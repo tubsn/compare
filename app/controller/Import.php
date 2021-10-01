@@ -11,7 +11,7 @@ class Import extends Controller {
 	public function __construct() {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 		$this->view('DefaultLayout');
-		$this->models('Articles,Orders,GlobalKPIs');
+		$this->models('Articles,ArticleMeta,Orders,GlobalKPIs,Analytics,Campaigns');
 	}
 
 	public function feeds() {
@@ -37,6 +37,8 @@ class Import extends Controller {
 		}
 
 		$this->import_global_kpis();
+		$this->import_utm_campaigns();
+		$this->ArticleMeta->import_drive_data();
 
 		echo 'Import abgeschlossen! <a href="/admin">zurück</a><br/>';
 		echo 'Processing-Time: <b>'.round((microtime(true)-APP_START)*1000,2) . '</b>ms';
@@ -56,6 +58,20 @@ class Import extends Controller {
 
 	private function import_global_kpis() {
 		$this->GlobalKPIs->import(3);
+	}
+
+	public function import_utm_campaigns($days = 5) {
+
+		$data = $this->Analytics->utm_campaigns($days);
+		foreach ($data as $order) {
+			$campaign['order_id'] = $order['Transactionid'];
+			$campaign['ga_date'] =  date('Y-m-d', strtotime($order['Date']));
+			$campaign['utm_source'] = $order['Source'];
+			$campaign['utm_medium'] = $order['Medium'];
+			$campaign['utm_campaign'] = $order['Campaign'];
+			$this->Campaigns->create_or_update($campaign);
+		}
+
 	}
 
 

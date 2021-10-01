@@ -11,7 +11,7 @@ class Lists extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Articles,DailyKPIs,Orders,Charts');
+		$this->models('Articles,ArticleMeta,DailyKPIs,Orders,Charts');
 	}
 
 	public function index() {
@@ -40,7 +40,7 @@ class Lists extends Controller {
 		$count = 0;
 		if (is_array($viewData['articles'])) {$count = count($viewData['articles']);}
 		$this->view->title = 'Nicht Zugeordnet: ' . $count;
-		$this->view->info = 'Liste aller nicht zugeordneten Artikel für diesen Zeitraum <b>(um alle zu listen oben rechts "alle Daten" einstellen)</b> ';
+		$this->view->info = 'Liste aller nicht zugeordneten Artikel für diesen Zeitraum <b>(um alle zu listen oben rechts "alle Daten" einstellen)</b> | <a href="/admin/topics">Artikel automatisch zuordnen (Beta)</a>';
 		$this->view->referer('/unset');
 		$this->view->render('pages/list', $viewData);
 	}
@@ -90,7 +90,11 @@ class Lists extends Controller {
 
 	public function scores() {
 
-		$viewData['articles'] = $this->Articles->score_articles(100);
+		$minScore = 85;
+
+		if (PORTAL == 'SWP') {$minScore = 125;}
+
+		$viewData['articles'] = $this->Articles->score_articles($minScore);
 
 		$count = 0;
 		if (is_array($viewData['articles'])) {$count = count($viewData['articles']);}
@@ -103,7 +107,7 @@ class Lists extends Controller {
 		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
 		$viewData['numberOfArticles'] = $count;
 
-		$this->view->title = 'Artikel mit mehr als 100 Score Punkten';
+		$this->view->title = 'Artikel mit mehr als ' . $minScore . ' Score Punkten';
 		$this->view->info = 'Score-Formel: (conversions * 20) + (pageviews / 1000 * 5) + ((avgmediatime / 10) * 2) + (subscribers / 100 * 3)';
 		$this->view->referer('/score');
 		$this->view->render('pages/list', $viewData);
@@ -302,10 +306,15 @@ class Lists extends Controller {
 		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
 		$viewData['numberOfArticles'] = $count;
 
+		if ($viewData['articles']) {
+		//	$viewData['emotions'] = $this->ArticleMeta->list_emotions( array_column($viewData['articles'],'id') );
+		}
+
 		$this->view->navigation = 'navigation/tag-menu';
 		$this->view->title = '#Tag - ' . ucwords($tag) . ': ' . $count;
 		$this->view->info = null;
 		$this->view->render('pages/list', $viewData);
+
 	}
 
 
@@ -343,6 +352,69 @@ class Lists extends Controller {
 		$this->view->render('pages/top5list', $viewData);
 	}
 
+
+	public function valueables($type = 'geister') {
+		Session::set('referer', '/valueables');
+
+		$viewData['articles'] = $this->Articles->valueables_by_group($type);
+
+		$this->view->info = 'Es werden maximal 2000 Artikel angezeigt';
+		$this->view->title = ucfirst($type) . ' - Artikel: ' . count($viewData['articles']);
+		$this->view->render('pages/list', $viewData);
+	}
+
+
+
+
+
+	public function filter() {
+
+		Session::set('referer', '/filter');
+
+		$db = new \flundr\database\SQLdb(DB_SETTINGS);
+		$db->table = 'articles';
+
+		$from = date('Y-m-d', strtotime('yesterday -6days'));
+		$to = date('Y-m-d', strtotime('yesterday'));
+
+		if (Session::get('from')) {$from = Session::get('from');}
+		if (Session::get('to')) {$to = Session::get('to');}
+
+
+		$kpis['conversions'] = strip_tags($_POST['conversions'] ?? null);
+		$kpis['pageviews'] = strip_tags($_POST['pageviews'] ?? null);
+		$kpis['avgmediatime'] = strip_tags($_POST['avgmediatime'] ?? null);
+		$kpis['subscribers'] = strip_tags($_POST['subscribers'] ?? null);
+		$kpis['cancelled'] = strip_tags($_POST['cancelled'] ?? null);
+
+		$viewData['kpis'] = $kpis;
+
+		$filter = null;
+
+		foreach ($kpis as $kpi => $value) {
+			if (empty($value)) {continue;}
+			$filter .= ' AND ' . $kpi . ' ' . $value;
+		}
+
+		$SQLstatement = $db->connection->prepare(
+			"SELECT *
+			 FROM `articles`
+			 WHERE (DATE(`pubdate`) BETWEEN :startDate AND :endDate)
+			 $filter
+			 ORDER BY pageviews DESC
+			 LIMIT 0, 1000"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall();
+
+		$viewData['articles'] = $output ;
+		$this->view->title = 'Gefilterte Artikel: ' . count($output);
+		//$this->view->info = 'blub';
+		$this->view->navigation = 'navigation/kpi-selector';
+		$this->view->render('pages/list', $viewData);
+
+	}
 
 
 	private function decode_url($urlString) {

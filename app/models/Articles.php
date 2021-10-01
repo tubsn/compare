@@ -46,7 +46,6 @@ class Articles extends Model
 		if (empty($output)) {return null;}
 		return $output;
 
-
 	}
 
 	public function list_all() {
@@ -80,7 +79,7 @@ class Articles extends Model
 
 	public function get_unset_ids() {
 		$SQLstatement = $this->db->connection->prepare(
-			"SELECT id FROM `articles` WHERE type IS NULL LIMIT 0, 5000"
+			"SELECT id FROM `articles` WHERE type IS NULL LIMIT 0, 10000"
 		);
 		$SQLstatement->execute();
 		$output = $SQLstatement->fetchall(\PDO::FETCH_COLUMN);
@@ -166,7 +165,9 @@ class Articles extends Model
 	}
 
 	public function add_to_database($articles) {
-		$this->save_to_db($articles);
+		foreach ($articles as $article) {
+			$this->create_or_update($article);
+		}
 	}
 
 
@@ -174,13 +175,14 @@ class Articles extends Model
 		$stats = [
 			'pageviews' => $gaData['Pageviews'] ?? 0,
 			'sessions' => $gaData['Sessions'] ?? 0,
-			'subscribers' => $gaData['subscribers'] ?? 0,
-			'buyintent ' => $gaData['buyintent'] ?? null,
-			'conversions' => $gaData['Itemquantity'] ?? 0,
 			'mediatime' => $gaData['Timeonpage'] ?? 0,
 			'avgmediatime' => $gaData['Avgtimeonpage'] ?? 0,
 			'refresh' => date('Y-m-d H:i:s'),
 		];
+
+		if (isset($gaData['buyintent'])) { $stats['buyintent'] = $gaData['buyintent']; }
+		if (isset($gaData['subscribers'])) { $stats['subscribers'] = $gaData['subscribers']; }
+		if (isset($gaData['Itemquantity'])) { $stats['conversions'] = $gaData['Itemquantity']; }
 
 		$this->update($stats,$id);
 	}
@@ -493,7 +495,7 @@ class Articles extends Model
 			 WHERE (DATE(`pubdate`) BETWEEN :startDate AND :endDate)
 			 $ressortQuery
 			 ORDER BY conversions DESC, pageviews DESC
-			 LIMIT 0, 5"
+			 LIMIT 0, 10"
 		);
 
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
@@ -516,6 +518,7 @@ class Articles extends Model
 			 ),1) as score
 			 FROM `articles`
 			 WHERE (DATE(`pubdate`) BETWEEN :startDate AND :endDate)
+			 AND pageviews >= 100
 			 GROUP BY id
 			 HAVING score > $minScore
 			 ORDER BY score DESC, pageviews DESC
@@ -530,17 +533,69 @@ class Articles extends Model
 
 	}
 
+
+	public function value_articles() {
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT ressort,
+			ressort,
+			 COUNT( if(conversions>0 AND subscribers>=100, 1, NULL) ) as spielmacher,
+			 COUNT( if(conversions>0 AND subscribers<=100, 1, NULL) ) as stuermer, 
+			 COUNT( if(conversions=0 AND subscribers>=100, 1, NULL) ) as abwehr, 
+			 COUNT( if(conversions=0 AND subscribers<=100, 1, NULL) ) as geister,
+			 COUNT(id) as artikel
+
+			 FROM `articles`
+			 WHERE (DATE(`pubdate`) BETWEEN :startDate AND :endDate)
+			 AND ressort != '' AND ressort != 'bilder' AND ressort != 'ratgeber'
+			 GROUP BY ressort
+			 ORDER BY spielmacher DESC
+			 LIMIT 0, 1000"
+		);
+
+		$SQLstatement->execute([':startDate' => $this->from, ':endDate' => $this->to]);
+		$output = $SQLstatement->fetchall(\PDO::FETCH_UNIQUE);
+		if (empty($output)) {return null;}
+
+
+		return $output;
+
+	}
+
+	public function valueables_by_group($group) {
+
+		$filter = 'AND conversions=0 AND subscribers<=100';
+		if ($group == 'stuermer') {$filter = 'AND conversions>0 AND subscribers<=100';}
+		if ($group == 'abwehr') {$filter = 'AND conversions=0 AND subscribers>=100';}
+		if ($group == 'spielmacher') {$filter = 'AND conversions>0 AND subscribers>=100';}
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+		$limit = 2000;
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT *
+			 FROM `articles`
+			 WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			 $filter
+			 ORDER BY pubdate DESC
+			 LIMIT 0, $limit"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall();
+		if (empty($output)) {return null;}
+		return $output;
+
+	}
+
+
 	public function stats_grouped_by($column = 'ressort', $orderby = 'conversions DESC, ressort ASC') {
 
 		$column = strip_tags($column);
 		$orderby = strip_tags($orderby);
 		$from = strip_tags($this->from);
 		$to = strip_tags($this->to);
-
-		$cacheExpireMinutes = 1;
-		$statsCache = new RequestCache($column, $cacheExpireMinutes * 60);
-		$cachedData = $statsCache->get();
-		if ($cachedData) {return $cachedData;}
 
 		$SQLstatement = $this->db->connection->prepare(
 
@@ -612,8 +667,6 @@ class Articles extends Model
 		if (empty($output)) {return null;}
 
 		unset($output['']); // somehow there´s some null Type exported
-
-		$statsCache->save($output);
 
 		return $output;
 
@@ -698,54 +751,6 @@ class Articles extends Model
 		if (empty($output)) {return null;}
 
 		return $output['avg('.$field.')'];
-	}
-
-
-	private function save_to_db(array $articles) {
-
-		if (count($articles) < 1 ) {return null;}
-
-		// Implode Fieldnames and add `Backticks`
-		$fieldNames = array_keys($articles[0]);
-		$PDOValueFieldNames = preg_filter('/^/', ':', $fieldNames);
-		$fieldNames = preg_filter('/^/', '`', $fieldNames);
-		$fieldNames = preg_filter('/$/', '`', $fieldNames);
-		$fields = '(' . implode($fieldNames,',') . ')';
-		$PDOValueFieldNames = '(' . implode($PDOValueFieldNames,', ') . ')';
-
-		$updateFields = [];
-		foreach ($fieldNames as $key => $name) {
-			$updateFields[$key] = $name . '=VALUES(' . $name . ')';
-		}
-
-		$updateFields = implode($updateFields,', ');
-
-		$db = $this->db->connection;
-		$stmt = $db->prepare(
-			"INSERT INTO `articles` $fields
-			VALUES $PDOValueFieldNames
-			ON DUPLICATE KEY UPDATE $updateFields"
-		);
-
-		foreach ($articles as $article) {
-
-			$valuesForBinding = [];
-			foreach ($article as $key => $value) {
-				if (empty($value)) {
-					$value = null;
-				}
-				$valuesForBinding[':'.$key] = $value;
-			}
-
-			try {
-				$stmt->execute($valuesForBinding);
-			} catch (\Exception $e) {
-				echo $e;
-			}
-
-		}
-
-		return $stmt->rowCount();
 	}
 
 }

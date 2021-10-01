@@ -4,6 +4,7 @@ namespace app\controller;
 
 use flundr\mvc\Controller;
 use flundr\utility\Session;
+use flundr\utility\Log;
 use flundr\auth\LoginHandler;
 use flundr\auth\PasswordReset;
 use flundr\auth\Auth;

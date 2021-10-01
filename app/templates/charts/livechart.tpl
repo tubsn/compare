@@ -9,7 +9,7 @@ let liveChartOptions = {
 		},
 	],
 	chart: {
-		height: 500,
+		height: 400,
 		type: 'area',
 		toolbar: {show:false},
 		zoom: {enabled:false},

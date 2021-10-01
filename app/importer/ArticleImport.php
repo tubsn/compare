@@ -22,7 +22,7 @@ class ArticleImport
 
 	public function detail_rss($articleID) {
 
-		$url = $this->portalURL . '/' . $articleID . '?_XML=RSS';
+		$url = $this->portalURL . '/' . $articleID . '?_XML=rss';
 		$curlData = $this->curl_with_redirect($url);
 
 

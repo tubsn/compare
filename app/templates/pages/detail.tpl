@@ -242,11 +242,11 @@
 
 	<tr>
 		<td>PlenigoID:</td>
-		<td><a target="_blank" href="https://backend.plenigo.com/h7DjbDhETLTvrgZLaZXA/customers/<?=$conversion['customer_id'];?>/show"><?=$conversion['customer_id'];?></a></td>
+		<td><a target="_blank" href="https://backend.plenigo.com/<?=PLENIGO_COMPANY_ID?>/customers/<?=$conversion['customer_id'];?>/show"><?=$conversion['customer_id'];?></a></td>
 	</tr>
 	<tr>
 		<td>OrderID:</td>
-		<td><a target="_blank" href="https://backend.plenigo.com/h7DjbDhETLTvrgZLaZXA/orders/<?=$conversion['order_id'];?>/show"><?=$conversion['order_id'];?></a></td>
+		<td><a target="_blank" href="https://backend.plenigo.com/<?=PLENIGO_COMPANY_ID?>/orders/<?=$conversion['order_id'];?>/show"><?=$conversion['order_id'];?></a></td>
 	</tr>
 	<tr>
 		<td>Bestelldatum:</td>

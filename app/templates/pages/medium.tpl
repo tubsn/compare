@@ -7,7 +7,7 @@
 <table class="fancy js-sortable">
 	<thead>
 		<th>Prozent</th>
-		<th>Medium</th>
+		<th>Quelle</th>
 		<th>Pageviews</th>
 		<th>Conversions</th>
 	</thead>
@@ -15,7 +15,7 @@
 <?php foreach ($medium as $item): ?>
 	<tr>
 		<td><?=round($item['Pageviews'] / $article['pageviews'] * 100,1)?>&thinsp;%</td>
-		<td><?=$item['Medium']?></td>
+		<td><?=$item['Source']?></td>
 		<td><?=$item['Pageviews']?></td>
 		<td><?=$item['Itemquantity']?></td>
 	</tr>

@@ -53,7 +53,7 @@ class Plenigo
 		dd($order);
 	}
 
-	private function map_order($org) {
+		private function map_order($org) {
 
 		$new['order_id'] = $org['orderId'];
 		$new['order_date'] = date("Y-m-d H:i:s", strtotime($org['orderDate']));
@@ -98,9 +98,22 @@ class Plenigo
 		$new['subscription_internal_title'] = $org['items'][0]['internalTitle'];
 		$new['subscription_product_id'] = $org['items'][0]['productId'];
 		$new['subscription_price'] = $org['items'][0]['price'];
-		$new['subscription_start_date'] = formatDate($org['startDate'], 'Y-m-d H:i:s');
-		$new['subscription_cancellation_date'] = formatDate($org['cancellationDate'], 'Y-m-d H:i:s');
-		$new['subscription_end_date'] = formatDate($org['endDate'], 'Y-m-d H:i:s');
+
+		$new['subscription_start_date'] = null;
+		$new['subscription_cancellation_date'] = null;
+		$new['subscription_end_date'] = null;
+
+		/* Date has to be Converted cause Plenigo saves UTC Dates */
+		if ($org['startDate']) {
+			$new['subscription_start_date'] = date("Y-m-d H:i:s", strtotime($org['startDate']));
+		}
+
+		if ($org['cancellationDate']) {
+			$new['subscription_cancellation_date'] = date("Y-m-d H:i:s", strtotime($org['cancellationDate']));
+		}
+		if ($org['endDate']) {
+			$new['subscription_end_date'] = date("Y-m-d H:i:s", strtotime($org['endDate']));
+		}
 
 		$new['cancelled'] = 0;
 		$new['retention'] = null;

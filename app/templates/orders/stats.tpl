@@ -30,6 +30,7 @@ Es kommt daher zu Abweichungen im Vergleich zur Statistik-Seite (dort wird nach 
 
 	<nav>
 		<a class="button" href="/orders/list">Bestellungen auflisten</a>&ensp;
+		<a class="button" href="/orders/campaigns">UTM Kampagnen</a>&ensp;
 		<a class="button" href="/orders/today">Echtzeitdaten</a>
 	</nav>
 
@@ -47,9 +48,24 @@ Es kommt daher zu Abweichungen im Vergleich zur Statistik-Seite (dort wird nach 
 		<?php $tableName = null;?>
 		<?php include tpl('orders/stats-table');?>
 
-		<?php if (count($source) > 0): ?>
-		<h3>Referer </h3>
-		<?php $tableData = $source;?>
+		<?php if (count($internalTitle) > 0): ?>
+		<h3>Interner Produktname</h3>
+		<?php $tableData = $internalTitle;?>
+		<?php $tableName = null;?>
+		<?php include tpl('orders/stats-table');?>
+		<?php endif; ?>
+
+
+		<?php if (count($utm_source) > 0): ?>
+		<h3>UTM Sources</h3>
+		<?php $tableData = $utm_source;?>
+		<?php $tableName = null;?>
+		<?php include tpl('orders/stats-table');?>
+		<?php endif; ?>
+
+		<?php if (count($utm_medium) > 0): ?>
+		<h3>UTM Medium</h3>
+		<?php $tableData = $utm_medium;?>
 		<?php $tableName = null;?>
 		<?php include tpl('orders/stats-table');?>
 		<?php endif; ?>
@@ -70,11 +86,6 @@ Es kommt daher zu Abweichungen im Vergleich zur Statistik-Seite (dort wird nach 
 	</div>
 
 	<div>
-		<h3>Geschlecht</h3>
-		<?php $tableData = $gender;?>
-		<?php $tableName = null;?>
-		<?php include tpl('orders/stats-table');?>
-
 		<?php if (count($type) > 0): ?>
 		<h3>Artikel nach Inhaltstypen</h3>
 		<?php $tableData = $type;?>
@@ -101,14 +112,37 @@ Es kommt daher zu Abweichungen im Vergleich zur Statistik-Seite (dort wird nach 
 
 	<section class="detail-layout" style="align-items:start">
 
-
 		<div>
-			<?php if (count($plz) > 0): ?>
-			<h3>Postleitzahlen (laut Plenigo)</h3>
-			<?php $tableData = $plz;?>
+
+			<h3>Geschlecht</h3>
+			<?php $tableData = $gender;?>
+			<?php $tableName = null;?>
+			<?php include tpl('orders/stats-table');?>
+			
+			<?php if (count($price) > 0): ?>
+			<h3>Preis</h3>
+			<?php $tableData = $price;?>
 			<?php $tableName = null;?>
 			<?php include tpl('orders/stats-table');?>
 			<?php endif; ?>
+
+			<?php if (count($source) > 0): ?>
+			<h3>Referer </h3>
+			<?php $tableData = $source;?>
+			<?php $tableName = null;?>
+			<?php include tpl('orders/stats-table');?>
+			<?php endif; ?>
+		</div>
+
+		<div>
+
+			<?php if (count($utm_campaign) > 0): ?>
+			<h3>UTM Campaign</h3>
+			<?php $tableData = $utm_campaign;?>
+			<?php $tableName = null;?>
+			<?php include tpl('orders/stats-table');?>
+			<?php endif; ?>	
+
 		</div>
 
 		<div>
@@ -118,25 +152,16 @@ Es kommt daher zu Abweichungen im Vergleich zur Statistik-Seite (dort wird nach 
 			<?php $tableName = null;?>
 			<?php include tpl('orders/stats-table');?>
 			<?php endif; ?>
-		</div>
 
-		<div>
-
-			<?php if (count($internalTitle) > 0): ?>
-			<h3>Interner Produktname</h3>
-			<?php $tableData = $internalTitle;?>
+			<?php if (count($plz) > 0): ?>
+			<h3>Postleitzahlen (laut Plenigo)</h3>
+			<?php $tableData = $plz;?>
 			<?php $tableName = null;?>
 			<?php include tpl('orders/stats-table');?>
 			<?php endif; ?>
-
-			<?php if (count($price) > 0): ?>
-			<h3>Preis</h3>
-			<?php $tableData = $price;?>
-			<?php $tableName = null;?>
-			<?php include tpl('orders/stats-table');?>
-			<?php endif; ?>
-
+	
 		</div>
+
 
 	</section>
 

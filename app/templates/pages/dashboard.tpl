@@ -31,6 +31,7 @@ Produzierte Artikel: <b><?=$articles?></b>
 
 <hr/>
 
+
 <div class="col-2" style="grid-template-columns: 2fr 1fr;">
 
 	<figure class="mb">
@@ -40,7 +41,11 @@ Produzierte Artikel: <b><?=$articles?></b>
 
 	<figure class="mb">
 		<h3 class="text-center">Subscriber im Zeitverlauf</h3>
-		<?=$charts->get('subscribersByDate');?>
+		<?php if (session('timeframe') == 'alle Daten'): ?>
+		<p class="text-center">Grafik im gewählten Zeitraum nicht Verfügbar!</p>
+		<?php else: ?>
+		<?=$charts->get('subscribersByDate');?>				
+		<?php endif ?>
 	</figure>
 
 </div>
@@ -49,7 +54,11 @@ Produzierte Artikel: <b><?=$articles?></b>
 
 	<figure class="mb">
 		<h3 class="text-center">Conversions im Zeitverlauf</h3>
-		<?=$charts->get('conversionsByDate');?>
+		<?php if (session('timeframe') == 'alle Daten'): ?>
+		<p class="text-center">Grafik im gewählten Zeitraum nicht Verfügbar!</p>
+		<?php else: ?>
+		<?=$charts->get('conversionsByDate');?>				
+		<?php endif ?>
 	</figure>
 
 

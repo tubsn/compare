@@ -12,9 +12,9 @@
 <?php foreach ($tableData as $index => $value): ?>
 	<tr>
 		<?php if ($tableName): ?>
-		<td><a href="/<?=strTolower($tableName)?>/<?=$index?>"><?=ucfirst(empty($index)? 'leer' : $index)?></a></td>
+		<td class="narrow"><a href="/<?=strTolower($tableName)?>/<?=$index?>"><?=ucfirst(empty($index)? 'leer' : $index)?></a></td>
 		<?php else: ?>
-		<td><?=ucfirst(empty($index)? 'leer' : $index)?></a></td>
+		<td class="narrow"><?=ucfirst(empty($index)? 'leer' : $index)?></a></td>
 		<?php endif; ?>
 
 		<td><?=$value['all']?></td>

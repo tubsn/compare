@@ -34,6 +34,9 @@ class Livedata extends Controller {
 		$viewData['chart']['time'] = $linkpulseLiveData['timestamps'];
 		$viewData['pageviews'] = $linkpulseLiveData['pageviews'];
 
+		$viewData['articles'] = $this->Linkpulse->articles_today();
+
+		$this->view->title = 'Livedashboard von Heute';
 		$this->view->render('pages/live', $viewData);
 
 	}

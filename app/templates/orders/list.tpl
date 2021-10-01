@@ -6,7 +6,7 @@
 <h1><?=$page['title']?></h1>
 <?php endif; ?>
 
-<p>Übersicht erfasster Bestellungen seit anfang September 2020. Seit dem 23. März 2021 werden die Bestellungen direkt aus Plenigo importiert.</p>
+<p>Übersicht erfasster Bestellungen. Seit dem 23. März 2021 werden die Bestellungen direkt aus Plenigo importiert.</p>
 
 <p class="light-box" style="margin-bottom:2em;">
 Gesamtbestellungen: <b class="conversions"><?=$numberOfOrders?></b>
@@ -40,7 +40,7 @@ Gesamtbestellungen: <b class="conversions"><?=$numberOfOrders?></b>
 
 <?php foreach ($orders as $order): ?>
 <tr class="text-left">
-	<td class="narrow text-left"><a href="https://backend.plenigo.com/h7DjbDhETLTvrgZLaZXA/orders/<?=$order['order_id']?>/show"><?=$order['order_id']?></a></td>
+	<td class="narrow text-left"><a target="_blank" href="https://backend.plenigo.com/<?=PLENIGO_COMPANY_ID?>/orders/<?=$order['order_id']?>/show"><?=$order['order_id']?></a></td>
 	<td class="narrow"><a href="/user/<?=$order['customer_id']?>"><?=$order['customer_id']?></a></td>
 	<td><?=formatDate($order['order_date'],'Y-m-d')?> <span class="hidden"><?=formatDate($order['order_date'],'H:i')?></span></td>
 	<td><?=formatDate($order['order_date'],'H:i')?> Uhr</td>
@@ -50,7 +50,7 @@ Gesamtbestellungen: <b class="conversions"><?=$numberOfOrders?></b>
 	<td><?=$order['order_price']?>&thinsp;€</td>
 	<td><?=$order['order_payment_method']?></td>
 	<td><?=$order['cancelled'] ? '<span class="cancelled">gekündigt</span>' : '' ?></td>
-	<td><?=($order['retention'] == 0) ? '' : $order['retention'] . ' Tage' ?></td>
+	<td><?=(is_null($order['retention'])) ? '' : $order['retention'] . ' Tage' ?></td>
 	<td class="text-right"><a href="/artikel/<?=$order['article_id']?>"><?=$order['article_id']?></a></td>
 
 </tr>

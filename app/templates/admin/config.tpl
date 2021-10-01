@@ -13,18 +13,20 @@
 
 	<h3>Zusätzliche Dashboards / Newsletter</h3>
 	<p>Übersicht zu laufenden UTM Kampagnen und Newsletter Previews
-		<div style="display:flex; gap:5px; align-items: start;">
+		<div style="display:flex; gap:5px; align-items: start; margin-bottom:.5em;">
 			<a class="button noline" href="/export/campaigns/30">UTM Kampagnen Übersicht</a>
 			<a class="button noline" href="/newsletter/chefredaktion">Chefredaktion Newsletter</a>
+		</div>
+		<div style="display:flex; gap:5px; align-items: start;">
 			<a class="button noline" href="/newsletter/sport">Sport Newsletter</a>
 			<a class="button noline" href="/newsletter/nachdrehalert">Nachdreh-Alert</a>
+			<a class="button noline" href="/newsletter/nachdrehalert-score">Nachdreh-Alert Weekly</a>
 		</div>
 	</p>
 <hr />
 
 
-
-<h3>Artikel-Import Verwaltung</h3>
+<h3>Artikel-Importieren</h3>
 
 <p>Normalerweise werden RSS-Feeds einmal täglich um 0.30 Uhr morgens importiert. Hier kann der Import manuell gestartet werden.</p>
 <p>Zur Zeit werden folgende Feeds importiert:</p>
@@ -38,12 +40,20 @@
 
 <p><a class="button noline" href="/admin/import">RSS-Feeds Importieren</a></p>
 
-<hr>
+<hr />
+
 
 <h3>Daten-Exports</h3>
 <p>
-Hier können alle Artikel inklusive Klick- und Kündigerstatistik exportiert werden.<br /><br />
-<a class="button noline" href="/export/articles">Artikeldaten als Excel</a> <a class="button" href="/export/conversions">Conversiondaten als Excel</a></p>
+Hier können Artikel, Conversions und Kampagnendaten inklusive Klick- und Kündigerstatistik als Excel-Datei exportiert werden.
+<div style="display:flex; gap:5px; align-items: start;">
+	<a class="button noline" href="/export/articles">Artikeldaten</a> 
+	<a class="button" href="/export/conversions">Conversiondaten</a>
+	<a class="button" href="/export/campaigns">UTM-Kampagnendaten</a>
+</div>
+</p>
+
+
 
 </section>
 
@@ -66,40 +76,38 @@ Hier können alle Artikel inklusive Klick- und Kündigerstatistik exportiert wer
 
 <section>
 
-
-
-
-	<h3>Plenigo Bestelldaten aktualisieren</h3>
-	<p>Die Bestelldaten für Conversions und Kündiger werden täglich um 3 Uhr morgens aktualisiert.</p>
+	<h3>Plenigo Bestelldaten Importieren</h3>
+	<p>Die Bestelldaten für Conversions und Kündiger werden täglich um 5 Uhr morgens aktualisiert.</p>
 
 	<a class="button noline" href="/admin/orders">Import Manager öffnen</a>
-	<a class="button noline" href="/admin/warmup_conversions">letzte 3 Tage</a>
 	</p>
 
 <hr>
 
+	<h3>Linkpulse - Subscriber Daten</h3>
+	<p>Subscriberdaten werden täglich um 3 Uhr morgens für alle Artikel der letzten 3 Tage, aktualisiert.</p>
+
+	<form method="get" action="/admin/warmup/subscribers">
+		<fieldset class="col-2">
+		<label>von:
+			<input type="date" name="from">
+		</label>
+		<label>bis:
+			<input type="date" name="to">
+		</label>
+	</fieldset>
+	<button class="mb" type="submit">Subscriber-Daten aktualisieren</button>
+	</form>
+
+
+<hr>
 
 	<h3>Google Analytics - Statistik Daten</h3>
-	<p>Die Statistikdaten werden täglich um 1 Uhr morgens für alle Artikel der letzten 3 Tage, aktualisiert.
-		Um 2 Uhr werden zusätzlich alle Artikel der letzten Woche erneuert. Artikel die älter als eine Woche sind werden NICHT automatisch aktualisiert.
+	<p>Die Analytics Daten werden täglich um 3 Uhr morgens für alle Artikel der letzten 3 Tage, aktualisiert.
+		Um 4 Uhr werden zusätzlich Artikel der letzten Woche erneuert. Artikel die älter als eine Woche sind werden NICHT automatisch aktualisiert.
 	</p>
 
-<hr>
-
-	<h3>Analytics-Klickdaten aktualisierungen</h3>
-	<p>Achtung: Diese Abfrage dauert ca. 1-2 Minuten. Je nach Artikel Menge. (Durchschnittlich 300 Artikel pro Woche)</p>
-
-	<p>
-	<a class="button noline" href="/admin/warmup/1">letzte&nbsp;Woche</a>
-	<a class="button noline" href="/admin/warmup/2">vorletzte&nbsp;Woche</a>
-	<a class="button noline" href="/admin/warmup/3">vor&nbsp;3&nbsp;Wochen</a>
-	</p>
-
-<hr>
-
-	<h3>Analytics-Daten für Zeitraum aktualisieren</h3>
 	<p class="box">Achtung: wenn möglich nicht mehr als eine Woche auswählen! die Google Abfrage ist sehr Zeitaufwendig. Wir können kostenlos nur 50000 Artikel pro Monat abfragen.</p>
-
 
 	<form method="get" action="/admin/warmup">
 		<fieldset class="col-2">
@@ -112,6 +120,8 @@ Hier können alle Artikel inklusive Klick- und Kündigerstatistik exportiert wer
 	</fieldset>
 	<button class="mb" type="submit">Analytics-Daten aktualisieren</button>
 	</form>
+
+
 
 </section>
 

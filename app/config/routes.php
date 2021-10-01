@@ -21,12 +21,19 @@ $routes->get('/conversions', 'Lists@conversions');
 $routes->get('/pageviews', 'Lists@pageviews');
 $routes->get('/mediatime', 'Lists@mediatime');
 $routes->get('/subscribers', 'Lists@subscribers');
+$routes->get('/filter', 'Lists@filter');
+$routes->post('/filter', 'Lists@filter');
 $routes->post('/settimeframe', 'Articles@set_timeframe');
 $routes->get('/live', 'Livedata@live_dashboard');
+
+// Valueables
+$routes->get('/valueable', 'Stats@value_articles');
+$routes->get('/valueable/{type}', 'Lists@valueables');
 
 // Orders
 $routes->get('/orders', 'Orders@stats');
 $routes->get('/orders/list', 'Orders@list');
+$routes->get('/orders/campaigns', 'Orders@campaigns');
 $routes->get('/orders/import/{date:[\d]{4}-[\d]{2}-[\d]{2}?}', 'Import@order_import');
 
 $routes->get('/orders/live', 'Livedata@index');
@@ -70,20 +77,21 @@ $routes->get('/lp/{articleID:\d+}', 'Articles@linkpulse');
 $routes->get('/retresco/{id:\d+}', 'Articles@retresco');
 $routes->get('/cards', 'Lists@cards');
 $routes->get('/test', 'Stats@test');
-$routes->post('/test', 'Stats@test');
-$routes->get('/art', 'Stats@arttest');
 
 // Exports
 $routes->get('/export/articles', 'Exports@articles');
 $routes->get('/export/conversions', 'Exports@conversions');
 $routes->get('/export/json', 'Exports@full_json');
 $routes->get('/export/ressorts', 'Exports@ressort_stats');
+$routes->get('/export/value', 'Exports@value_articles');
+$routes->get('/export/campaigns', 'Exports@campaigns');
 $routes->get('/export/campaigns/{days:\d+}', 'Exports@ga_campaigns');
 
 // Newsletter
 $routes->get('/newsletter/chefredaktion', 'Newsletter@chefredaktion');
 $routes->get('/newsletter/sport', 'Newsletter@sport_newsletter');
 $routes->get('/newsletter/nachdrehalert', 'Newsletter@nachdreh_alert');
+$routes->get('/newsletter/nachdrehalert-score', 'Newsletter@nachdreh_alert_score');
 
 
 // Admin - Config Area
@@ -94,7 +102,7 @@ $routes->get('/admin/orders', 'Import@order_import_form');
 $routes->get('/admin/topics', 'Warmup@topic_clusters');
 $routes->get('/admin/warmup', 'Warmup@daterange');
 $routes->get('/admin/warmup_conversions[/{daysago}]', 'Warmup@conversions');
-$routes->get('/admin/warmup_subscribers', 'Warmup@subscribers');
+$routes->get('/admin/warmup/subscribers', 'Warmup@subscribers');
 $routes->get('/admin/warmup/sources[/{daysago}]', 'Warmup@enrich_conversions_with_ga');
 $routes->get('/admin/warmup/buyintents[/{daysago}]', 'Warmup@enrich_article_with_buy_intents');
 $routes->get('/admin/warmup/{weeksago}', 'Warmup@weeks_ago');

@@ -117,7 +117,7 @@ class Charts
 				$chart->kpi = 'pageviews';
 				$chart->groupby = 'ressort';
 				$chart->operation = 'avg';
-				$chart->sort = 'DESC';
+				//$chart->sort = 'DESC';
 				$chart->name = 'Durchschnittliche Pageviews';
 				$chart->color = '#6088b4';
 			break;
@@ -126,7 +126,7 @@ class Charts
 				$chart->kpi = 'pageviews';
 				$chart->groupby = 'tag';
 				$chart->operation = 'avg';
-				$chart->sort = 'DESC';
+				//$chart->sort = 'DESC';
 				$chart->name = 'Durchschnittliche Pageviews';
 				$chart->color = '#6088b4';
 			break;
@@ -135,7 +135,7 @@ class Charts
 				$chart->kpi = 'pageviews';
 				$chart->groupby = 'type';
 				$chart->operation = 'avg';
-				$chart->sort = 'DESC';
+				//$chart->sort = 'DESC';
 				$chart->name = 'Durchschnittliche Pageviews';
 				$chart->color = '#6088b4';
 			break;
@@ -166,7 +166,7 @@ class Charts
 				$chart->operation = null;
 				$chart->name = 'Conversonrate';
 				$chart->color = '#df886d';
-				$chart->sort = 'DESC';
+				//$chart->sort = 'DESC';
 				//$chart->showValues = false;
 				$chart->template = 'charts/default_bar_chart';
 			break;

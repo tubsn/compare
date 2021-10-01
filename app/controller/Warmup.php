@@ -103,10 +103,15 @@ class Warmup extends Controller {
 
 	public function conversions($daysago = 3) {
 
+		/*
+		still need to implement functionality :S
+		*/
 		$dates = [];
 		array_push($dates, date('Y-m-d', strtotime('today')));
 		array_push($dates, date('Y-m-d', strtotime('today -1 day')));
 		array_push($dates, date('Y-m-d', strtotime('today -2 day')));
+		array_push($dates, date('Y-m-d', strtotime('today -3 day')));
+		array_push($dates, date('Y-m-d', strtotime('today -4 day')));
 
 		if ($daysago == 1) {
 			$dates = [];
@@ -154,18 +159,26 @@ class Warmup extends Controller {
 
 	public function topic_clusters() {
 
+		// Refresh is made Daily by cronjob
 		$this->ArticleMeta->import_drive_data();
 
 		$unsetIDs = $this->Articles->get_unset_ids();
+
 		$topics = $this->ArticleMeta->topics_for($unsetIDs);
 
 		if (empty($topics)) {
-			echo 'nix neues'; return null;
+			echo 'nix zuzuordnen'; return null;
 		}
 
-		dump($topics);
+		$articleInfo = $this->Articles->get(array_keys($topics),['id','title']);
 
+		//Automatically set Topic Clusters
+		$counter = 0;
 		foreach ($topics as $id => $type) {
+			$text = '<a href="/artikel/' . $id . '">[' . $id . ']</a> ' . $articleInfo[$counter]['title'] . ' => ' . $type ?? '-';
+			echo $text . '<br />';
+			$counter++;
+			if (empty($type)) {continue;}
 			$this->Articles->update(['type' => $type], $id);
 		}
 

@@ -55,14 +55,34 @@ class LinkpulseImport
 
 	public function article_today($id) {
 
+
+
 		$apiQuery = '?filter%5Brange%5D=today&filter%5Burl%5D=*' . $id . '*&field%5Bpageviews%5D=sum&field%5Bconverted_usercount%5D=sum&field%5Bsubscribers%5D=sum&aggregate=total&page%5Boffset%5D=0&page%5Blimit%5D=100&sort=-pageviews';
 
 		$rawAPIData = $this->curl($apiQuery);
 		$stats = $this->adapter->convert($rawAPIData);
+		$stats = $stats[0];
 
-		return $stats[0]; // Should be only one Hit
+		// Remove null values
+		foreach ($stats as $key => $value) {
+			if (is_null($value)) {
+				unset($stats[$key]);
+			}
+		}
+
+		return $stats; // Should be only one Hit
 
 	}
+
+	public function articles_today() {
+
+		$apiQuery = '?filter%5Brange%5D=today&filter%5Bpagetype%5D=article&field%5Bsection%5D=one&field%5Bpageviews%5D=sum&field%5Bviewtime%5D=median%26listcount&field%5Binscreencnt%5D=sum&field%5Bconverted_usercount%5D=sum&field%5Bsubscribers%5D=sum&field%5Burl%5D=one&aggregate=section%2Curl&page%5Boffset%5D=0&page%5Blimit%5D=10&sort=-pageviews&include=url';
+
+		$rawAPIData = $this->curl($apiQuery);
+		return $this->adapter->convert($rawAPIData);
+
+	}
+
 
 	public function subscribers($id, $pubDate) {
 
@@ -96,6 +116,7 @@ class LinkpulseImport
 		curl_setopt ($ch, CURLOPT_USERPWD, $this->apiKey . ":" . $this->apiSecret);
 		curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, 0);
 		curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, 0);
+		curl_setopt ($ch, CURLOPT_TIMEOUT, 300);
 		curl_setopt ($ch, CURLOPT_HEADER, 0);
 		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
 
@@ -103,8 +124,6 @@ class LinkpulseImport
 		if ($recievedData === false) {
 			dd(curl_error($ch));
 		}
-
-		//$statuscode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
 		curl_close ($ch);
 

@@ -34,9 +34,18 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 <figure class="mb"><?=$secondaryChart;?></figure>
 <?php endif; ?>
 
+<?php if (isset($emotions)): ?>
+	<?php foreach ($emotions as $id => $emo): ?>
+		<?php if (isset($emo['emo_aerger'])): ?>
+		<p><?=$id?> <?=$emo['emo_aerger']?></p>
+		<?php endif ?>		
+	<?php endforeach ?>
+<?php endif ?>
+
+
 
 <?php if ($articles): ?>
-<table class="fancy wide js-sortable condensed">
+<table class="fancy wide js-sortable js-collapse-table condensed collapsed">
 <thead>
 <tr>
 	<th>Dachzeile</th>
@@ -152,6 +161,13 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 <?php endforeach; ?>
 </tbody>
 </table>
+
+<?php if (count($articles) > 99) : ?>
+<div class="text-center">
+<button class="button js-collapse-table-btn">Komplette Tabelle einblenden</button>
+</div>
+<?php endif ?>
+
 <?php else: ?>
 	<p>Für diesen Zeitraum oder diese Suchanfrage sind keine Artikel vorhanden!</p>
 <?php endif; ?>

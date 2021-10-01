@@ -102,8 +102,8 @@ class Analytics
 		$this->ga->metrics = 'ga:pageViews, ga:itemQuantity';
 		$this->ga->from = $from;
 		$this->ga->to = $to;
-		$this->ga->dimensions = 'ga:medium';
-		$this->ga->sort = 'ga:pageViews';
+		$this->ga->dimensions = 'ga:source';
+		$this->ga->sort = '-ga:pageViews';
 		$this->ga->filters = 'ga:pagePath=@' . $articleID;
 		$this->ga->maxResults = '365';
 
@@ -154,7 +154,7 @@ class Analytics
 		$this->ga->sort = '-ga:transactions';
 		}
 		else {
-		$this->ga->dimensions = 'ga:date,ga:medium,ga:campaign,ga:transactionId';	
+		$this->ga->dimensions = 'ga:date,ga:source,ga:medium,ga:campaign,ga:transactionId';	
 		$this->ga->sort = '-ga:date';
 		}
 

@@ -11,10 +11,11 @@
 			<th>Subs</th>
 			<th>Mediatime</th>
 			<th>⌀-MT</th>
-			<th>Kaufimpulse</th>
-			<th>Conversions</th>
-			<th>Conversionrate</th>
-			<th>Gekündigt</th>
+			<th>Impulse</th>
+			<th>Conv</th>
+			<th>Convrate</th>
+			<th>⌀-Conv</th>
+			<th>Künd</th>
 			<th>K-Quote</th>
 		</tr>
 		</thead>
@@ -67,11 +68,15 @@
 			<td><?=round($stats['conversions'] / $stats['sessions'] * 100,3)?>&nbsp;%</td>
 			<?php else: ?><td>0&nbsp;%</td><?php endif; ?>
 
+			<td><?=number_format(($stats['conversions'] / $stats['artikel']),3,'.','.') ?? 0?></td>
+
 			<td><div<?php if ($stats['cancelled'] > 0): ?> class="cancelled"<?php endif; ?>><?=$stats['cancelled'] ?? '0'?></div></td>
 
 			<?php if ($stats['conversions'] > 0): ?>
 			<td><?=round($stats['cancelled'] / $stats['conversions'] * 100,1)?>&nbsp;%</td>
 			<?php else: ?><td>0&nbsp;%</td><?php endif; ?>
+
+
 
 		</tr>
 		<?php endforeach; ?>
