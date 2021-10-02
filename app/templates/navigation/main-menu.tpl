@@ -7,17 +7,55 @@
 <nav class="main-nav">
 	<ul>
 		<li class="compare-logo-li"><a href="/"><span class="compare-logo"></span></a></li>
-		<li><a href="/ressort">Ressorts</a></li>
-		<li><a href="/type">Inhalte</a></li>
-		<li><a href="/tag">#Tags</a></li>
-		<li><a href="/pageviews">Pageviews</a></li>
-		<li><a href="/subscribers">Subscribers</a></li>
-		<li><a href="/mediatime">Mediatime</a></li>
-		<li><a href="/conversions">Conversions</a></li>
-		<li><a href="/valueable">Valueables</a></li>
-		<?php if (auth_rights('type')): ?><li><a href="/score">Scores</a></li><?php endif; ?>
-		<li><a href="/stats">Inhalts-Statistiken</a></li>
-		<li><a href="/orders">Bestelldaten</a></li>
+		<li><a href="/list" aria-haspopup="true">Artikel-Listen</a>
+			<ul class="dropdown" aria-label="submenu">
+				<li><a href="/ressort">nach Ressorts</a></li>
+				<li><a href="/type">nach Themen</a></li>
+				<li><a href="/tag">nach #Tags</a></li>
+
+				<li><a href="/filter">Eigene Filter</a></li>
+			</ul>
+		</li>
+
+		<li><a href="/score" aria-haspopup="true">Toplisten / KPIs</a>
+			<ul class="dropdown" aria-label="submenu">
+				<li><a href="/pageviews">Pageviews</a></li>
+				<li><a href="/subscribers">Subscribers</a></li>
+				<li><a href="/mediatime">Mediatime</a></li>
+				<li><a href="/conversions">Conversions</a></li>
+				<li><a href="/score">Artikel-Score</a></li>
+				<li><a href="/top5">Top5</a></li>
+			</ul>
+		</li>
+
+
+		<li><a href="/valueable" aria-haspopup="true">Wertschöpfende Artikel</a>
+			<ul class="dropdown" aria-label="submenu">
+				<li><a href="/valueable/geister">Geister</a></li>
+				<li><a href="/valueable/abwehr">Abwehr</a></li>
+				<li><a href="/valueable/stuermer">Stürmer</a></li>
+				<li><a href="/valueable/spielmacher">Spielmacher</a></li>
+			</ul>
+		</li>
+
+		<li><a href="/stats" aria-haspopup="true">Inhalts-Statistiken</a>
+			<ul class="dropdown" aria-label="submenu">
+				<li><a href="/stats/ressort">nach Ressort</a></li>
+				<li><a href="/stats/thema">nach Themen</a></li>
+				<li><a href="/stats/tag">nach #Tag</a></li>
+				<li><a href="/stats/artikel">im Zeitverlauf</a></li>
+			</ul>
+		</li>
+
+
+		<li><a href="/orders" aria-haspopup="true">Bestell- und Kündigerdaten</a>
+			<ul class="dropdown" aria-label="submenu">
+				<li><a href="/orders/list">Bestellungen als Liste</a></li>
+				<li><a href="/orders/campaigns">UTM-Kampagnen</a></li>
+				<li><a href="/orders/today">Echtzeit Bestellungen</a></li>
+			</ul>
+		</li>
+
 	</ul>
 
 	<ul>

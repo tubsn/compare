@@ -36,7 +36,9 @@ Es kommt daher zu Abweichungen im Vergleich zur Statistik-Seite (dort wird nach 
 
 </div>
 
+<figure>
 <?=$conversionsByRessortChart;?>
+</figure>
 
 <hr />
 
@@ -118,7 +120,7 @@ Es kommt daher zu Abweichungen im Vergleich zur Statistik-Seite (dort wird nach 
 			<?php $tableData = $gender;?>
 			<?php $tableName = null;?>
 			<?php include tpl('orders/stats-table');?>
-			
+
 			<?php if (count($price) > 0): ?>
 			<h3>Preis</h3>
 			<?php $tableData = $price;?>
@@ -141,7 +143,7 @@ Es kommt daher zu Abweichungen im Vergleich zur Statistik-Seite (dort wird nach 
 			<?php $tableData = $utm_campaign;?>
 			<?php $tableName = null;?>
 			<?php include tpl('orders/stats-table');?>
-			<?php endif; ?>	
+			<?php endif; ?>
 
 		</div>
 
@@ -159,7 +161,7 @@ Es kommt daher zu Abweichungen im Vergleich zur Statistik-Seite (dort wird nach 
 			<?php $tableName = null;?>
 			<?php include tpl('orders/stats-table');?>
 			<?php endif; ?>
-	
+
 		</div>
 
 

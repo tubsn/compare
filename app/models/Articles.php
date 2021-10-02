@@ -540,8 +540,8 @@ class Articles extends Model
 			"SELECT ressort,
 			ressort,
 			 COUNT( if(conversions>0 AND subscribers>=100, 1, NULL) ) as spielmacher,
-			 COUNT( if(conversions>0 AND subscribers<=100, 1, NULL) ) as stuermer, 
-			 COUNT( if(conversions=0 AND subscribers>=100, 1, NULL) ) as abwehr, 
+			 COUNT( if(conversions>0 AND subscribers<=100, 1, NULL) ) as stuermer,
+			 COUNT( if(conversions=0 AND subscribers>=100, 1, NULL) ) as abwehr,
 			 COUNT( if(conversions=0 AND subscribers<=100, 1, NULL) ) as geister,
 			 COUNT(id) as artikel
 
@@ -708,13 +708,18 @@ class Articles extends Model
 
 	}
 
-	public function count($field = '*') {
+	public function count($field = '*', $filter = '') {
 
 		$from = strip_tags($this->from);
 		$to = strip_tags($this->to);
 		$field = strip_tags($field);
 
-		$SQLstatement = $this->db->connection->prepare("SELECT count($field) FROM `articles` WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate");
+		if ($filter != '') {
+			$filter = strip_tags($filter);
+			$filter = 'AND ' . $filter . ' is not null';
+		}
+
+		$SQLstatement = $this->db->connection->prepare("SELECT count($field) FROM `articles` WHERE (DATE(`pubdate`) BETWEEN :startDate AND :endDate) $filter");
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
 
 		$output = $SQLstatement->fetch();
@@ -723,13 +728,18 @@ class Articles extends Model
 	}
 
 
-	public function sum($field) {
+	public function sum($field, $filter = '') {
 
 		$from = strip_tags($this->from);
 		$to = strip_tags($this->to);
 		$field = strip_tags($field);
 
-		$SQLstatement = $this->db->connection->prepare("SELECT sum($field) FROM `articles` WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate");
+		if ($filter != '') {
+			$filter = strip_tags($filter);
+			$filter = 'AND ' . $filter . ' is not null';
+		}
+
+		$SQLstatement = $this->db->connection->prepare("SELECT sum($field) FROM `articles` WHERE (DATE(`pubdate`) BETWEEN :startDate AND :endDate) $filter");
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
 
 		$output = $SQLstatement->fetch();
@@ -738,13 +748,18 @@ class Articles extends Model
 		return $output['sum('.$field.')'];
 	}
 
-	public function average($field) {
+	public function average($field, $filter = '') {
 
 		$from = strip_tags($this->from);
 		$to = strip_tags($this->to);
 		$field = strip_tags($field);
 
-		$SQLstatement = $this->db->connection->prepare("SELECT avg($field) FROM `articles` WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate");
+		if ($filter != '') {
+			$filter = strip_tags($filter);
+			$filter = 'AND ' . $filter . ' is not null';
+		}
+
+		$SQLstatement = $this->db->connection->prepare("SELECT avg($field) FROM `articles` WHERE (DATE(`pubdate`) BETWEEN :startDate AND :endDate) $filter");
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
 
 		$output = $SQLstatement->fetch();

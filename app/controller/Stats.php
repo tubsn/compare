@@ -15,58 +15,6 @@ class Stats extends Controller {
 		$this->models('Articles,Conversions,Orders,Plenigo,GlobalKPIs,Linkpulse,Charts,ArticlesMeta');
 	}
 
-	public function index() {
-
-		Session::set('referer', '/stats');
-
-		$viewData['articles'] = $this->Articles->count('*');
-		$viewData['plusarticles'] = $this->Articles->sum('plus');
-		$viewData['pageviews'] = $this->Articles->sum('pageviews');
-		$viewData['subscribers'] = $this->Articles->sum('subscribers');
-		$viewData['mediatime'] = $this->Articles->sum('mediatime');
-		$viewData['sessions'] = $this->Articles->sum('sessions');
-		$viewData['conversions'] = $this->Articles->sum('conversions');
-		$viewData['buyintents'] = $this->Articles->sum('buyintent');
-		$viewData['cancelled'] = $this->Articles->sum('cancelled');
-
-		$viewData['ressortStats'] = $this->Articles->stats_grouped_by($column = 'ressort', $order = 'conversions DESC, ressort ASC');
-		$viewData['authorStats'] = $this->Articles->stats_grouped_by($column = 'author', $order = 'author ASC');
-		$viewData['typeStats'] = $this->Articles->stats_grouped_by($column = 'type', $order = 'conversions DESC');
-		$viewData['tagStats'] = $this->Articles->stats_grouped_by($column = 'tag', $order = 'conversions DESC');
-
-		$viewData['charts'] = $this->Charts;
-
-		Session::set('referer', '/stats');
-		$this->view->title = 'Inhaltsbasierte Statistiken';
-		$this->view->render('pages/stats', $viewData);
-	}
-
-
-	public function cancellations() {
-
-		/* Cancellations are Displayed in the Orders Controller now */
-
-		$viewData['conversions'] = $this->Conversions->list();
-		$viewData['cancelled'] = $this->Conversions->cancelled_orders();
-		$viewData['types'] = $this->Conversions->group_by_combined('article_type');
-		$viewData['tags'] = $this->Conversions->group_by_combined('article_tag');
-		$viewData['ressorts'] = $this->Conversions->group_by_combined('article_ressort');
-		$viewData['cities'] = $this->Conversions->group_by_combined('ga_city');
-		$viewData['sources'] = $this->Conversions->group_by_combined('ga_source');
-		$viewData['payments'] = $this->Conversions->group_by_combined('subscription_payment_method');
-		$viewData['gender'] = $this->Conversions->group_by_combined('customer_gender');
-		$viewData['authors'] = $this->Conversions->group_by_combined('article_author');
-
-		if (count($viewData['conversions']) > 0) {
-			$viewData['quote'] = count($viewData['cancelled']) / count($viewData['conversions']) * 100;
-		} else {$viewData['quote'] = 0;}
-
-		$this->view->title = 'Kündiger Statistiken';
-		$this->view->render('pages/cancellation-stats', $viewData);
-
-	}
-
-
 	public function dashboard() {
 
 		Session::set('referer', '/');
@@ -105,6 +53,84 @@ class Stats extends Controller {
 
 		$this->view->title = 'Dashboard';
 		$this->view->render('pages/dashboard', $viewData);
+
+	}
+
+	public function ressorts() {
+
+		$viewData['articles'] = $this->Articles->count('*', 'ressort');
+		$viewData['plusarticles'] = $this->Articles->sum('plus', 'ressort');
+		$viewData['pageviews'] = $this->Articles->sum('pageviews', 'ressort');
+		$viewData['subscribers'] = $this->Articles->sum('subscribers', 'ressort');
+		$viewData['mediatime'] = $this->Articles->sum('mediatime', 'ressort');
+		$viewData['sessions'] = $this->Articles->sum('sessions', 'ressort');
+		$viewData['conversions'] = $this->Articles->sum('conversions', 'ressort');
+		$viewData['buyintents'] = $this->Articles->sum('buyintent', 'ressort');
+		$viewData['cancelled'] = $this->Articles->sum('cancelled', 'ressort');
+
+		$viewData['groupedStats'] = $this->Articles->stats_grouped_by($column = 'ressort', $order = 'conversions DESC, ressort ASC');
+		$viewData['chartOne'] = $this->Charts->get('subscriberQuoteByRessort');
+		$viewData['chartOneTitle'] = 'Subscriber Quote nach Ressort';
+		$viewData['chartTwo'] = $this->Charts->get('avgPageviewsByRessort');
+		$viewData['chartTwoTitle'] = 'Durchschnittliche Pageviews nach Ressort';
+
+		Session::set('referer', '/stats/ressort');
+		$this->view->title = 'Statistiken nach Ressort';
+		$this->view->class = 'Ressort';
+		$this->view->urlPrefix = '/ressort/';
+		$this->view->render('stats/stats', $viewData);
+
+	}
+
+	public function themen() {
+
+		$viewData['articles'] = $this->Articles->count('*', 'type');
+		$viewData['plusarticles'] = $this->Articles->sum('plus', 'type');
+		$viewData['pageviews'] = $this->Articles->sum('pageviews', 'type');
+		$viewData['subscribers'] = $this->Articles->sum('subscribers', 'type');
+		$viewData['mediatime'] = $this->Articles->sum('mediatime', 'type');
+		$viewData['sessions'] = $this->Articles->sum('sessions', 'type');
+		$viewData['conversions'] = $this->Articles->sum('conversions', 'type');
+		$viewData['buyintents'] = $this->Articles->sum('buyintent', 'type');
+		$viewData['cancelled'] = $this->Articles->sum('cancelled', 'type');
+
+		$viewData['groupedStats'] = $this->Articles->stats_grouped_by($column = 'type', $order = 'conversions DESC');
+		$viewData['chartOne'] = $this->Charts->get('subscriberQuoteByType');
+		$viewData['chartOneTitle'] = 'Subscriber Quote nach Inhaltstyp';
+		$viewData['chartTwo'] = $this->Charts->get('avgPageviewsByType');
+		$viewData['chartTwoTitle'] = 'Durchschnittliche Pageviews nach Inhaltstyp';
+
+		Session::set('referer', '/stats/themen');
+		$this->view->title = 'Statistiken nach Inhaltstyp / Thema';
+		$this->view->class = 'Thema';
+		$this->view->urlPrefix = '/type/';
+		$this->view->render('stats/stats', $viewData);
+
+	}
+
+	public function tags() {
+
+		$viewData['articles'] = $this->Articles->count('*', 'tag');
+		$viewData['plusarticles'] = $this->Articles->sum('plus', 'tag');
+		$viewData['pageviews'] = $this->Articles->sum('pageviews', 'tag');
+		$viewData['subscribers'] = $this->Articles->sum('subscribers', 'tag');
+		$viewData['mediatime'] = $this->Articles->sum('mediatime', 'tag');
+		$viewData['sessions'] = $this->Articles->sum('sessions', 'tag');
+		$viewData['conversions'] = $this->Articles->sum('conversions', 'tag');
+		$viewData['buyintents'] = $this->Articles->sum('buyintent', 'tag');
+		$viewData['cancelled'] = $this->Articles->sum('cancelled', 'tag');
+
+		$viewData['groupedStats'] = $this->Articles->stats_grouped_by($column = 'tag', $order = 'conversions DESC');
+		$viewData['chartOne'] = $this->Charts->get('subscriberQuoteByTag');
+		$viewData['chartOneTitle'] = 'Subscriber Quote nach #Tag';
+		$viewData['chartTwo'] = $this->Charts->get('avgPageviewsByTag');
+		$viewData['chartTwoTitle'] = 'Durchschnittliche Pageviews nach #Tag';
+
+		Session::set('referer', '/stats/tags');
+		$this->view->title = 'Statistiken nach #-Tag';
+		$this->view->class = 'Tag';
+		$this->view->urlPrefix = '/tag/';
+		$this->view->render('stats/stats', $viewData);
 
 	}
 

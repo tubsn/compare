@@ -14,7 +14,7 @@
 		<?php if ($tableName): ?>
 		<td class="narrow"><a href="/<?=strTolower($tableName)?>/<?=$index?>"><?=ucfirst(empty($index)? 'leer' : $index)?></a></td>
 		<?php else: ?>
-		<td class="narrow"><?=ucfirst(empty($index)? 'leer' : $index)?></a></td>
+		<td class="narrow"><?=ucfirst(empty($index)? 'leer' : $index)?></td>
 		<?php endif; ?>
 
 		<td><?=$value['all']?></td>

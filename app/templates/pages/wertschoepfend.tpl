@@ -6,7 +6,7 @@
 
 
 <p class="light-box" style="margin-bottom:2em;">
-Gesamtproduzierte Artikel: <b><?=array_sum($artikel);?></b> 
+Gesamtproduzierte Artikel: <b><?=array_sum($artikel);?></b>
 &emsp; Geister: <b style="color:#b24646"><?=array_sum($geister);?></b>
 &emsp; Abwehr: <b style="color:#779142"><?=array_sum($abwehr);?></b>
 &emsp; Stürmer: <b style="color:#abbd86"><?=array_sum($stuermer);?></b>
@@ -14,28 +14,28 @@ Gesamtproduzierte Artikel: <b><?=array_sum($artikel);?></b>
 </p>
 
 <p>
-	<b><a href="/valueable/geister">Geister</a>:</b>
+	<b>Geister:</b>
 	Artikel ohne Conversions und mit weniger als 100 Subscriber Views
 	(Sie sorgen weder für Neukunden noch bieten sie relevante Informationen für Bestandskunden)
-	
+
 	<br>
-	<b><a href="/valueable/abwehr">Abwehr</a>:</b>
+	<b>Abwehr:</b>
 	Artikel mit mindestens 100 Subscriber Views
 	(Sie halten unsere Abonnenten/Subscriber im Abo, weil Sie relevante Inhalte bieten)
-	
+
 	<br>
-	<b><a href="/valueable/stuermer">Stürmer</a>:</b>
+	<b>Stürmer:</b>
 	Artikel mit mindestens 1 Conversion
 	(Sie sorgen für Neukunden)
-	
+
 	<br>
-	<b><a href="/valueable/spielmacher">Spielmacher</a>:</b>
+	<b>Spielmacher:</b>
 	Artikel mit mindestens 100 Subscriber Views und mindestens 1 Conversion
 	(Sie halten unsere Abonnenten/Subscriber im Abo, weil Sie relevante Inhalte bieten und generieren Neukunden)
-	
+
 </p>
 
-<div style="float:right"><button class="js-diagramm-change">Stacked / Non - Stacked</button></div>
+<div style="float:right"><button class="button light js-diagramm-change">Stacked / Non - Stacked</button></div>
 
 
 <figure style="max-height:100px; overflow:hidden; width:70%;  margin:0 auto;">
@@ -47,8 +47,8 @@ Gesamtproduzierte Artikel: <b><?=array_sum($artikel);?></b>
 </figure>
 
 <div class="text-center mb">
-<a class="" href="/valueable/geister">Geister-Artikel</a> | 
-<a class="" href="/valueable/abwehr">Abwehr-Artikel</a> | 
+<a class="" href="/valueable/geister">Geister-Artikel</a> |
+<a class="" href="/valueable/abwehr">Abwehr-Artikel</a> |
 <a class="" href="/valueable/stuermer">Stürmer-Artikel</a> |
 <a class="" href="/valueable/spielmacher">Spielmacher-Artikel</a>
 </div>
@@ -81,7 +81,7 @@ Gesamtproduzierte Artikel: <b><?=array_sum($artikel);?></b>
 	<td><?=round(($row['geister'] / $row['artikel'] * 100),2)?>&thinsp;%</td>
 	<td><?=$row['abwehr']?></td>
 	<td><?=round(($row['abwehr'] / $row['artikel'] * 100),2)?>&thinsp;%</td>
-	<td><?=$row['stuermer']?></td>	
+	<td><?=$row['stuermer']?></td>
 	<td><?=round(($row['stuermer'] / $row['artikel'] * 100),2)?>&thinsp;%</td>
 	<td><?=$row['spielmacher']?></td>
 	<td><?=round(($row['spielmacher'] / $row['artikel'] * 100),2)?>&thinsp;%</td>
@@ -278,7 +278,7 @@ let wertschoepfendOptions = {
 	grid: {row: {colors: ['#e5e5e5', 'transparent'], opacity: 0.2}},
 	xaxis: {
 		categories: [
-		<?php foreach ($wertschoepfend as $ressort => $void): ?>		
+		<?php foreach ($wertschoepfend as $ressort => $void): ?>
 			'<?=ucfirst($ressort)?>',
 		<?php endforeach ?>
 		],

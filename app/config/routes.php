@@ -14,7 +14,6 @@ $routes->get('/type/{type}', 'Lists@type');
 $routes->get('/type', 'Lists@type');
 $routes->get('/tag/{tag}', 'Lists@tag');
 $routes->get('/tag', 'Lists@tag');
-$routes->get('/plus', 'Lists@plus');
 $routes->get('/top5', 'Lists@top5');
 $routes->get('/score', 'Lists@scores');
 $routes->get('/conversions', 'Lists@conversions');
@@ -49,8 +48,10 @@ $routes->post('/orders/set_date', 'Livedata@set_date');
 $routes->post('/orders/set_paid_filter', 'Livedata@set_paid_filter');
 
 // Stats
-$routes->get('/stats', 'Stats@index');
-$routes->get('/dashboard', 'Stats@dashboard');
+$routes->get('/stats', 'Stats@dashboard');
+$routes->get('/stats/ressort', 'Stats@ressorts');
+$routes->get('/stats/thema', 'Stats@themen');
+$routes->get('/stats/tag', 'Stats@tags');
 $routes->get('/stats/artikel', 'Stats@artikel');
 
 // Readers
