@@ -35,7 +35,7 @@ h3 + h1 {margin-top:-.5em;}
 
 /* Drop Down Navigation */
 .main-nav li { position: relative;}
-.main-nav ul li ul {visibility: hidden; opacity: 0; position: absolute; display:none;
+.main-nav ul li ul {visibility: hidden; opacity: 0; display:none; position: absolute;
 z-index:99999; border-bottom-left-radius:10px; border-bottom-right-radius:10px;
 /* box-shadow: 0px 5px 9px 10px rgba(0,0,0,0.2); */
 }

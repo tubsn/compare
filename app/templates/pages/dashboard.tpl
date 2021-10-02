@@ -41,11 +41,7 @@ Produzierte Artikel: <b><?=$articles?></b>
 
 	<figure class="mb">
 		<h3 class="text-center">Subscriber im Zeitverlauf</h3>
-		<?php if (session('timeframe') == 'alle Daten'): ?>
-		<p class="text-center">Grafik im gewählten Zeitraum nicht Verfügbar!</p>
-		<?php else: ?>
-		<?=$charts->get('subscribersByDate');?>				
-		<?php endif ?>
+		<?=$charts->get('subscribersByDate');?>
 	</figure>
 
 </div>
@@ -54,11 +50,7 @@ Produzierte Artikel: <b><?=$articles?></b>
 
 	<figure class="mb">
 		<h3 class="text-center">Conversions im Zeitverlauf</h3>
-		<?php if (session('timeframe') == 'alle Daten'): ?>
-		<p class="text-center">Grafik im gewählten Zeitraum nicht Verfügbar!</p>
-		<?php else: ?>
-		<?=$charts->get('conversionsByDate');?>				
-		<?php endif ?>
+		<?=$charts->get('conversionsByDate');?>
 	</figure>
 
 

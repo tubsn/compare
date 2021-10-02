@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use flundr\utility\Session;
 use flundr\rendering\TemplateEngine;
 
 class Charts
@@ -73,6 +74,8 @@ class Charts
 				$chart->name = 'Subscribers';
 				$chart->color = '#314e6f';
 				$chart->template = 'charts/default_line_chart';
+				if ($this->timeframe() > 31) {$chart->groupby = "DATE_FORMAT(pubdate,'%Y-%u')";}
+				if ($this->timeframe() > 91) {$chart->groupby = "DATE_FORMAT(pubdate,'%Y-%m')";}
 			break;
 
 			case 'conversionsByDate':
@@ -83,7 +86,32 @@ class Charts
 				$chart->name = 'Conversions';
 				$chart->color = '#df886d';
 				$chart->template = 'charts/default_line_chart';
+				if ($this->timeframe() > 31) {$chart->groupby = "DATE_FORMAT(order_date,'%Y-%u')";}
+				if ($this->timeframe() > 91) {$chart->groupby = "DATE_FORMAT(order_date,'%Y-%m')";}
 			break;
+
+			case 'conversionsByWeekday':
+				$chart->source = 'Orders';
+				$chart->kpi = 'order_id';
+				$chart->groupby = "DATE_FORMAT(order_date,'%W')";
+				$chart->operation = 'count';
+				$chart->name = 'Conversions';
+				$chart->color = '#df886d';
+				$chart->sort = 'WEEKDAY';
+				$chart->template = 'charts/default_bar_chart';
+			break;
+
+			case 'conversionsByTime':
+				$chart->source = 'Orders';
+				$chart->kpi = 'order_id';
+				$chart->groupby = "DATE_FORMAT(order_date,'%k')";
+				$chart->operation = 'count';
+				$chart->name = 'Conversions';
+				$chart->color = '#df886d';
+				$chart->sort = 'HOUR';
+				$chart->template = 'charts/default_bar_chart';
+			break;
+
 
 			case 'conversionsByRessort':
 				$chart->source = 'Orders';
@@ -117,7 +145,7 @@ class Charts
 				$chart->kpi = 'pageviews';
 				$chart->groupby = 'ressort';
 				$chart->operation = 'avg';
-				//$chart->sort = 'DESC';
+				$chart->sort = 'DESC';
 				$chart->name = 'Durchschnittliche Pageviews';
 				$chart->color = '#6088b4';
 			break;
@@ -126,7 +154,7 @@ class Charts
 				$chart->kpi = 'pageviews';
 				$chart->groupby = 'tag';
 				$chart->operation = 'avg';
-				//$chart->sort = 'DESC';
+				$chart->sort = 'DESC';
 				$chart->name = 'Durchschnittliche Pageviews';
 				$chart->color = '#6088b4';
 			break;
@@ -135,19 +163,41 @@ class Charts
 				$chart->kpi = 'pageviews';
 				$chart->groupby = 'type';
 				$chart->operation = 'avg';
-				//$chart->sort = 'DESC';
+				$chart->sort = 'DESC';
 				$chart->name = 'Durchschnittliche Pageviews';
 				$chart->color = '#6088b4';
 			break;
 
-			case 'articlesByTime':
+			case 'articlesByDate':
 				$chart->kpi = 'id';
-				$chart->groupby = "DATE_FORMAT(pubdate,'%Y-%m')";
+				$chart->groupby = "DATE(pubdate)";
 				$chart->operation = 'count';
 				$chart->name = 'produzierte Artikel';
 				$chart->color = '#515151';
 				//$chart->showValues = true;
 				$chart->template = 'charts/default_line_chart';
+				if ($this->timeframe() > 31) {$chart->groupby = "DATE_FORMAT(pubdate,'%Y-%u')";}
+				if ($this->timeframe() > 91) {$chart->groupby = "DATE_FORMAT(pubdate,'%Y-%m')";}
+			break;
+
+			case 'articlesByWeekday':
+				$chart->kpi = 'id';
+				$chart->groupby = "DATE_FORMAT(pubdate,'%W')";
+				$chart->operation = 'count';
+				$chart->name = 'produzierte Artikel';
+				$chart->color = '#515151';
+				$chart->sort = 'WEEKDAY';
+				$chart->template = 'charts/default_bar_chart';
+			break;
+
+			case 'articlesByTime':
+				$chart->kpi = 'id';
+				$chart->groupby = "DATE_FORMAT(pubdate,'%k')";
+				$chart->operation = 'count';
+				$chart->name = 'produzierte Artikel';
+				$chart->color = '#515151';
+				$chart->sort = 'HOUR';
+				$chart->template = 'charts/default_bar_chart';
 			break;
 
 			case 'articlesByRessort':
@@ -189,6 +239,7 @@ class Charts
 				$chart->name = 'Subscriber Anteil in %';
 				$chart->color = '#314e6f';
 				//$chart->showValues = true;
+				$chart->sort = 'DESC';
 				$chart->template = 'charts/default_bar_chart';
 			break;
 
@@ -198,6 +249,7 @@ class Charts
 				$chart->operation = null;
 				$chart->name = 'Subscriber Anteil in %';
 				$chart->color = '#314e6f';
+				$chart->sort = 'DESC';
 				//$chart->showValues = true;
 				$chart->template = 'charts/default_bar_chart';
 			break;
@@ -208,6 +260,7 @@ class Charts
 				$chart->operation = null;
 				$chart->name = 'Subscriber Anteil in %';
 				$chart->color = '#314e6f';
+				$chart->sort = 'DESC';
 				//$chart->showValues = true;
 				$chart->template = 'charts/default_bar_chart';
 			break;
@@ -273,8 +326,10 @@ class Charts
 
 	public function sort() {
 		if (!$this->sort) {return;}
-		if ($this->sort == 'DESC') {$this->sort_desc();}
-		else {$this->sort_asc();}
+		if ($this->sort == 'DESC') {$this->sort_desc(); return;}
+		if ($this->sort == 'WEEKDAY') {$this->sort_weekday(); return;}
+		if ($this->sort == 'HOUR') {$this->sort_hour(); return;}
+		$this->sort_asc();
 	}
 
 	private function sort_desc() {
@@ -287,6 +342,67 @@ class Charts
 		usort($this->data, function($a, $b) {
 		    return $a[$this->kpi] <=> $b[$this->kpi];
 		});
+	}
+
+	private function sort_hour() {
+
+		$output = [
+			'0' => null,
+			'1' => null,
+			'2' => null,
+			'3' => null,
+			'4' => null,
+			'5' => null,
+			'6' => null,
+			'7' => null,
+			'8' => null,
+			'9' => null,
+			'10' => null,
+			'11' => null,
+			'12' => null,
+			'13' => null,
+			'14' => null,
+			'15' => null,
+			'16' => null,
+			'17' => null,
+			'18' => null,
+			'19' => null,
+			'20' => null,
+			'21' => null,
+			'22' => null,
+			'23' => null,
+		];
+
+		foreach ($this->data as $entry) {
+			$output[$entry[$this->groupby]] = $entry;
+		}
+
+		$output = array_values($output);
+		$this->data = $output;
+
+	}
+
+	private function sort_weekday() {
+
+
+
+		$output = [
+			'Monday' => null,
+			'Tuesday' => null,
+			'Wednesday' => null,
+			'Thursday' => null,
+			'Friday' => null,
+			'Saturday' => null,
+			'Sunday' => null,
+		];
+
+		foreach ($this->data as $entry) {
+			$output[$entry[$this->groupby]] = $entry;
+		}
+
+		$output = array_values($output);
+		$this->data = $output;
+
 	}
 
 	private function load_data() {
@@ -304,5 +420,12 @@ class Charts
 	}
 
 
+	private function timeframe() {
+		$from = new \DateTime(Session::get('from'));
+		$to = new \DateTime(Session::get('to'));
+		$timeframe = $from->diff($to);
+		$days = $timeframe->format('%a');
+		return $days;
+	}
 
 }

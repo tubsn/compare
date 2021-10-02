@@ -62,7 +62,7 @@ class Orders extends Controller {
 			$viewData['cancelQuote'] = round(($viewData['numberOfCancelled'] / $viewData['numberOfOrders']) * 100, 1);
 		} else {$viewData['cancelQuote'] = null;}
 
-		$viewData['conversionsByRessortChart'] = $this->Charts->get('conversionsByRessortWithValues');
+		$viewData['charts'] = $this->Charts;
 
 		$viewData['plusOnly'] = count($this->Orders->filter_plus_only($viewData['orders']));
 		$viewData['externalOnly'] = count($this->Orders->filter_external($viewData['orders']));

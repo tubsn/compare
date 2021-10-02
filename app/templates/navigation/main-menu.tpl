@@ -38,12 +38,12 @@
 			</ul>
 		</li>
 
-		<li><a href="/stats" aria-haspopup="true">Inhalts-Statistiken</a>
+		<li><a href="/stats/ressort" aria-haspopup="true">Inhalts-Statistiken</a>
 			<ul class="dropdown" aria-label="submenu">
 				<li><a href="/stats/ressort">nach Ressort</a></li>
 				<li><a href="/stats/thema">nach Themen</a></li>
 				<li><a href="/stats/tag">nach #Tag</a></li>
-				<li><a href="/stats/artikel">im Zeitverlauf</a></li>
+				<li><a href="/stats/artikel">Artikelpublikationen</a></li>
 			</ul>
 		</li>
 

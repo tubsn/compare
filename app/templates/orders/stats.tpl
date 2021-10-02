@@ -6,6 +6,7 @@
 <h1><?=$page['title']?></h1>
 <?php endif; ?>
 
+
 <p>
 Die Bestelldaten beziehen sich auf den <b>betrachteten Zeitraum</b> und nicht auf das Publikationsdatum des Artikels.
 Es kommt daher zu Abweichungen im Vergleich zur Statistik-Seite (dort wird nach allen Conversions nach lebensdauer Artikel Publikationsdatum gemessen).
@@ -14,8 +15,6 @@ Es kommt daher zu Abweichungen im Vergleich zur Statistik-Seite (dort wird nach 
 
 <p>Die Bestellungen werden seit <b>23. März</b> direkt aus dem SSO System (Plenigo) bezogen. Zur Zeit, die beste Datenquelle die wir haben!<br /> Die <b>Kündigungsdaten sind NICHT Live</b> sie beziehen sich auf den Tag der letzten Statistik-Aktualisierung. Conversions des heutigen Tages werden bis 3 Uhr morgens aufgeführt!
 </p>
-
-
 
 <div class="meta-info-box">
 
@@ -29,16 +28,32 @@ Es kommt daher zu Abweichungen im Vergleich zur Statistik-Seite (dort wird nach 
 	</ul>
 
 	<nav>
-		<a class="button" href="/orders/list">Bestellungen auflisten</a>&ensp;
-		<a class="button" href="/orders/campaigns">UTM Kampagnen</a>&ensp;
-		<a class="button" href="/orders/today">Echtzeitdaten</a>
+		<a class="button light" href="/orders/list">Bestellungen auflisten</a>&ensp;
+		<a class="button light" href="/orders/campaigns">UTM Kampagnen</a>&ensp;
+		<a class="button light" href="/orders/today">Echtzeitdaten</a>
 	</nav>
 
 </div>
 
-<figure>
-<?=$conversionsByRessortChart;?>
+
+<figure class="">
+	<?=$charts->get('conversionsByRessortWithValues');?>
 </figure>
+
+<div class="col-2" style="grid-template-columns: 2fr 1fr;">
+
+	<figure class="">
+		<h3 class="text-center">Bestellungen nach Uhrzeit</h3>
+		<?=$charts->get('conversionsByTime');?>
+	</figure>
+
+
+	<figure class="">
+		<h3 class="text-center">Bestellungen nach Wochentag</h3>
+		<?=$charts->get('conversionsByWeekday');?>
+	</figure>
+
+</div>
 
 <hr />
 
