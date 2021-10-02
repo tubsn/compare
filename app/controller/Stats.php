@@ -51,7 +51,7 @@ class Stats extends Controller {
 		//$viewData['combinedChart'][0] = $this->Articles->mediatime_by_ressort_chart();
 		//$viewData['combinedChart'][1] = $this->Articles->pageviews_by_ressort_chart();
 
-		$this->view->title = 'Dashboard';
+		$this->view->title = 'Compare - Dashboard';
 		$this->view->render('pages/dashboard', $viewData);
 
 	}
@@ -136,6 +136,7 @@ class Stats extends Controller {
 
 	public function value_articles() {
 
+		Session::set('referer', '/valueable');
 		$this->view->wertschoepfend = $this->Articles->value_articles();
 
 		$this->view->artikel = array_column($this->view->wertschoepfend,'artikel');
@@ -144,14 +145,15 @@ class Stats extends Controller {
 		$this->view->abwehr = array_column($this->view->wertschoepfend,'abwehr');
 		$this->view->geister = array_column($this->view->wertschoepfend,'geister');
 
+		$this->view->title = 'Wertschöpfende Artikel';
 		$this->view->render('pages/wertschoepfend');
 
 	}
 
 	public function artikel() {
-
+		Session::set('referer', '/stats/artikel');
 		$viewData['charts'] = $this->Charts;
-		//articlesByRessort
+		$this->view->title = 'Artikel Publikationen';
 		$this->view->render('pages/artikel-entwicklung', $viewData);
 
 	}
