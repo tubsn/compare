@@ -115,6 +115,10 @@ table.compact td, table.compact th {padding: 10px 15px;}
 tr.text-right th {text-align:right;}
 th.text-left {text-align:left !important;}
 
+.indicator-data {display:none;}
+.list-table tbody:hover .indicator-data {display:block;}
+.list-table tbody:hover .indicator.plusleser {display:none;}
+
 .dropdown-selectors {display:grid; grid-template-columns: .65fr .35fr; grid-gap:.5em;}
 .dropdown-selectors select {font-size:0.8em}
 
@@ -126,6 +130,11 @@ th.text-left {text-align:left !important;}
 .deepblue {color: var(--deep-blue)}
 .green {color: var(--green)}
 .redish {color: var(--dark-red)}
+
+.geister {color:#b24646;}
+.abwehr {color:#779142;}
+.stuermer {color:#abbd86;}
+.spielmacher {color:#44a771;}
 
 .light-box {background-color: #eef0f2; display:inline-block; margin-bottom:2em; padding:1em;}
 .meta-info-box ul {display:flex; gap:2em; margin:0; padding:0;}
@@ -142,12 +151,23 @@ th.text-left {text-align:left !important;}
 .conversions { background-color: var(--light-orange); display:inline-block; padding:0.1em .3em; border-radius:1em;}
 .score { background-color: var(--pink); display:inline-block; padding:0.1em .3em; border-radius:1em;}
 .cancelled { background-color: var(--red); display:inline-block; padding:0.1em .3em; border-radius:1em;}
-.bluebg, .orangebg, .greenbg, .pageviews, .subscribers { background-color: var(--light-blue); display:inline-block; padding:0.1em .5em; border-radius:1em;}
+
+.bluebg, .orangebg, .darkorangebg, .greenbg, .pageviews, .subscribers,
+.geisterbg, .abwehrbg, .stuermerbg, .spielmacherbg
+ {background-color: var(--light-blue); display:inline-block; padding:0.1em .5em; border-radius:1em;}
+
 .subscribers {background-color: var(--dark-blue);}
 .greenbg {background-color: var(--light-green);}
 .orangebg {background-color: var(--light-orange);}
+.darkorangebg {background-color: var(--orange);}
+.geisterbg {background-color:#ec9a9a;}
+.abwehrbg {background-color:#b3c68b;}
+.stuermerbg {background-color:#ddeac0;}
+.spielmacherbg {background-color:#83d5a9;}
+
 .nachdreh-green {background-color: #74d594;}
 .nachdreh-yellow {background-color: #f0e296;}
+
 
 
 .type-link, .type-link-light {background-color: #ececec; display:inline-block; padding:0.0em .3em; border-radius:.2em}

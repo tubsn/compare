@@ -78,10 +78,16 @@ class Articles extends Model
 	}
 
 	public function get_unset_ids() {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
 		$SQLstatement = $this->db->connection->prepare(
-			"SELECT id FROM `articles` WHERE type IS NULL LIMIT 0, 10000"
+			"SELECT id FROM `articles` WHERE type IS NULL
+			AND DATE(`pubdate`) BETWEEN :startDate AND :endDate AND type IS NULL
+			LIMIT 0, 10000"
 		);
-		$SQLstatement->execute();
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
 		$output = $SQLstatement->fetchall(\PDO::FETCH_COLUMN);
 		return $output;
 	}

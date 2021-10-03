@@ -2,15 +2,15 @@
 
 <?php include tpl('navigation/date-picker');?>
 
-<h1>Wertschöpfende Artikel, die <span class="greenbg"> Kunden halten: <b><?=array_sum($spielmacher) + array_sum($abwehr);?></b></span> <span class="conversions">Kunden gewinnen: <b><?=array_sum($spielmacher) + array_sum($stuermer);?></b></span></h1>
+<h1>Wertschöpfende Artikel, die Kunden halten: <span class="greenbg"> <b><?=array_sum($spielmacher) + array_sum($abwehr);?></b></span> Kunden gewinnen: <span class="conversions"><b><?=array_sum($spielmacher) + array_sum($stuermer);?></b></span></h1>
 
 
 <p class="light-box" style="margin-bottom:2em;">
 Gesamtproduzierte Artikel: <b><?=array_sum($artikel);?></b>
-&emsp; Geister: <b style="color:#b24646"><?=array_sum($geister);?></b>
-&emsp; Abwehr: <b style="color:#779142"><?=array_sum($abwehr);?></b>
-&emsp; Stürmer: <b style="color:#abbd86"><?=array_sum($stuermer);?></b>
-&emsp; Spielmacher: <b style="color:#44a771"><?=array_sum($spielmacher);?></b>
+&emsp; Geister: <b class="geister"><?=array_sum($geister);?></b>
+&emsp; Abwehr: <b class="abwehr"><?=array_sum($abwehr);?></b>
+&emsp; Stürmer: <b class="stuermer"><?=array_sum($stuermer);?></b>
+&emsp; Spielmacher: <b class="spielmacher"><?=array_sum($spielmacher);?></b>
 </p>
 
 <p>
@@ -47,13 +47,14 @@ Gesamtproduzierte Artikel: <b><?=array_sum($artikel);?></b>
 </figure>
 
 <div class="text-center mb">
-<a class="" href="/valueable/geister">Geister-Artikel</a> |
-<a class="" href="/valueable/abwehr">Abwehr-Artikel</a> |
-<a class="" href="/valueable/stuermer">Stürmer-Artikel</a> |
-<a class="" href="/valueable/spielmacher">Spielmacher-Artikel</a>
+<a class="button light" href="/valueable/geister">Geister-Artikel</a>
+<a class="button light" href="/valueable/abwehr">Abwehr-Artikel</a>
+<a class="button light" href="/valueable/stuermer">Stürmer-Artikel</a>
+<a class="button light" href="/valueable/spielmacher">Spielmacher-Artikel</a>
 </div>
 
 <hr>
+
 
 <table class="fancy js-sortable wide">
 
@@ -77,13 +78,13 @@ Gesamtproduzierte Artikel: <b><?=array_sum($artikel);?></b>
 
 	<td style="text-align:left"><a href="/ressort/<?=$row['ressort']?>"><?=ucfirst($row['ressort'])?></a></td>
 	<td><?=$row['artikel']?></td>
-	<td><?=$row['geister']?></td>
+	<td><span class="geisterbg"><?=$row['geister']?></span></td>
 	<td><?=round(($row['geister'] / $row['artikel'] * 100),2)?>&thinsp;%</td>
-	<td><?=$row['abwehr']?></td>
+	<td><span class="abwehrbg"><?=$row['abwehr']?></span></td>
 	<td><?=round(($row['abwehr'] / $row['artikel'] * 100),2)?>&thinsp;%</td>
-	<td><?=$row['stuermer']?></td>
+	<td><span class="stuermerbg"><?=$row['stuermer']?></span></td>
 	<td><?=round(($row['stuermer'] / $row['artikel'] * 100),2)?>&thinsp;%</td>
-	<td><?=$row['spielmacher']?></td>
+	<td><span class="spielmacherbg"><?=$row['spielmacher']?></span></td>
 	<td><?=round(($row['spielmacher'] / $row['artikel'] * 100),2)?>&thinsp;%</td>
 
 	</tr>

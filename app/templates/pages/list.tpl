@@ -38,14 +38,14 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 	<?php foreach ($emotions as $id => $emo): ?>
 		<?php if (isset($emo['emo_aerger'])): ?>
 		<p><?=$id?> <?=$emo['emo_aerger']?></p>
-		<?php endif ?>		
+		<?php endif ?>
 	<?php endforeach ?>
 <?php endif ?>
 
 
 
 <?php if ($articles): ?>
-<table class="fancy wide js-sortable js-collapse-table condensed collapsed">
+<table class="fancy wide list-table js-sortable js-collapse-table condensed collapsed">
 <thead>
 <tr>
 	<th>Dachzeile</th>
@@ -73,7 +73,7 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 
 
 	<?php if ($article['buyintent']): ?>
-	<td title="Kaufabsichten: <?=$article['buyintent']?>">
+	<td data-sortdate="<?=$article['buyintent']?>" title="Kaufabsichten: <?=$article['buyintent']?>">
 		<div class="indicator buyintent">
 			<?php if ($article['buyintent'] >= 33): ?>
 			<div style="width:100%;"><?=$article['buyintent']?></div>
@@ -83,7 +83,9 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 		</div>
 	</td>
 	<?php else: ?>
-	<td><div class="indicator buyintent"><div>0</div></div></td>
+	<td>
+		<div class="indicator buyintent"><div>0</div></div>
+	</td>
 	<?php endif; ?>
 
 	<td><a href="/artikel/<?=$article['id']?>"><?=$article['title']?></a> </td>
@@ -136,9 +138,13 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 	<?php endif; ?>
 
 	<?php if ($article['pageviews'] && $article['subscribers'] && ($article['subscribers'] < $article['pageviews'])): ?>
-	<td title="Plus-Leser: <?=$article['subscribers']?>">
+	<td data-sortdate="<?=$article['subscribers']?>" title="Plus-Leser: <?=$article['subscribers']?>">
 		<div class="indicator plusleser">
 			<div style="width:<?=round($article['subscribers'] / $article['pageviews'] * 100)?>%;"><?=round($article['subscribers'] / $article['pageviews'] * 100)?></div>
+		</div>
+
+		<div class="indicator-data">
+			<div<?php if ($article['subscribers'] > 750): ?> class="subscribers"<?php endif; ?>><?=number_format($article['subscribers'],0,'.','.') ?? 0?></div>
 		</div>
 	</td>
 	<?php else: ?>

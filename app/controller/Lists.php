@@ -354,17 +354,21 @@ class Lists extends Controller {
 
 
 	public function valueables($type = 'geister') {
-		Session::set('referer', '/valueables');
 
+		Session::set('referer', '/valueables');
 		$viewData['articles'] = $this->Articles->valueables_by_group($type);
 
-		$this->view->info = 'Es werden maximal 2000 Artikel angezeigt';
+		switch ($type) {
+			case 'geister': $this->view->info = 'Artikel ohne Conversions und mit weniger als 100 Subscriber Views (Sie sorgen weder für Neukunden noch bieten sie relevante Informationen für Bestandskunden)'; break;
+			case 'abwehr': $this->view->info = 'Artikel mit mindestens 100 Subscriber Views (Sie halten unsere Abonnenten/Subscriber im Abo, weil Sie relevante Inhalte bieten)'; break;
+			case 'stuermer': $this->view->info = 'Artikel mit mindestens 1 Conversion (Sie sorgen für Neukunden)'; break;
+			case 'spielmacher': $this->view->info = 'Artikel mit mindestens 100 Subscriber Views und mindestens 1 Conversion (Sie halten unsere Abonnenten/Subscriber im Abo, weil Sie relevante Inhalte bieten und generieren Neukunden)'; break;
+			default: $this->view->info = 'Es werden maximal 2000 Artikel angezeigt'; break;
+		}
+
 		$this->view->title = ucfirst($type) . ' - Artikel: ' . count($viewData['articles']);
 		$this->view->render('pages/list', $viewData);
 	}
-
-
-
 
 
 	public function filter() {

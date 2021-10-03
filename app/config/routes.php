@@ -3,7 +3,14 @@
 //Homepage
 $routes->get('/', 'Stats@dashboard');
 
-// Pages
+
+// Teststuff
+$routes->get('/cards', 'Lists@cards');
+$routes->get('/emo', 'Stats@test');
+
+
+
+// Article Lists
 $routes->get('/unset', 'Lists@unset_only');
 $routes->get('/author/{author}', 'Lists@author');
 $routes->get('/author-fuzzy/{author}', 'Lists@author_fuzzy');
@@ -14,6 +21,8 @@ $routes->get('/type/{type}', 'Lists@type');
 $routes->get('/type', 'Lists@type');
 $routes->get('/tag/{tag}', 'Lists@tag');
 $routes->get('/tag', 'Lists@tag');
+
+// KPIs
 $routes->get('/top5', 'Lists@top5');
 $routes->get('/score', 'Lists@scores');
 $routes->get('/conversions', 'Lists@conversions');
@@ -22,8 +31,7 @@ $routes->get('/mediatime', 'Lists@mediatime');
 $routes->get('/subscribers', 'Lists@subscribers');
 $routes->get('/filter', 'Lists@filter');
 $routes->post('/filter', 'Lists@filter');
-$routes->post('/settimeframe', 'Articles@set_timeframe');
-$routes->get('/live', 'Livedata@live_dashboard');
+
 
 // Valueables
 $routes->get('/valueable', 'Stats@value_articles');
@@ -66,18 +74,13 @@ $routes->get('/artikel/{id:\d+}/refresh', 'Articles@refresh');
 $routes->get('/artikel/{id:\d+}/delete', 'Articles@delete');
 $routes->post('/artikel/{id:\d+}', 'Articles@set_type');
 
-// Search
+// Pages
 $routes->get('/search', 'Search@show');
 $routes->get('/favoriten', 'Articles@favilink');
 $routes->get('/favicon', 'Articles@favilink');
-
-// Teststuff
-$routes->get('/leser', 'Readers@index');
-$routes->get('/leser/{plenigoID}', 'Readers@detail');
-$routes->get('/lp/{articleID:\d+}', 'Articles@linkpulse');
+$routes->post('/settimeframe', 'Articles@set_timeframe');
+$routes->get('/live', 'Livedata@live_dashboard');
 $routes->get('/retresco/{id:\d+}', 'Articles@retresco');
-$routes->get('/cards', 'Lists@cards');
-$routes->get('/test', 'Stats@test');
 
 // Exports
 $routes->get('/export/articles', 'Exports@articles');
