@@ -6,7 +6,7 @@
 <b>Plusquote</b> = Plusartikel : Artikel | <b>⌀-Klicks</b> = Klicks : Anzahl aller Artikel |
 <b>Subscriber</b> = User die eingeloggt sind |
 <b>Subscriber %</b> = Subscriber : Klicks | <b>Conversionrate</b> = Conversions : Besuche |
-<b>Kaufimpuls</b> = Klick auf Paywall Produkt <br />
+<b>Reiz</b> = Klick auf Paywall Produkt <br />
 <b>Mediatime</b> = Artikel Lesedauer in Sekunden (Summe aller Nutzer) |
 <b>⌀-Mediatime (MT)</b> = Durchschnittliche Lesedauer des Artikels |
 <b>Kündiger</b> = gekündigte Bestellungen |
