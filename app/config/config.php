@@ -121,7 +121,9 @@ $tags = file_get_contents(CONFIGPATH . PORTAL .DIRECTORY_SEPARATOR . 'artikel_ta
 $tags = explode_and_trim("\n", $tags);
 define('ARTICLE_TAGS', $tags);
 
-define('ARTICLE_AUDIENCES', ['Foodies', 'Gesundheitsbewusste', 'Familien']);
+$audiences = file_get_contents(CONFIGPATH . PORTAL .DIRECTORY_SEPARATOR . 'artikel_audiences.txt');
+$audiences = explode_and_trim("\n", $audiences);
+define('ARTICLE_AUDIENCES', $audiences);
 
 define('MAX_IMPORT_RANGE', 365);
 

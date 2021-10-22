@@ -21,6 +21,7 @@ class Admin extends Controller {
 
 		$viewData['typen'] = file_get_contents(CONFIGPATH . PORTAL .DIRECTORY_SEPARATOR . 'artikel_typen.txt');
 		$viewData['tags'] = file_get_contents(CONFIGPATH . PORTAL . DIRECTORY_SEPARATOR . 'artikel_tags.txt');
+		$viewData['audiences'] = file_get_contents(CONFIGPATH . PORTAL . DIRECTORY_SEPARATOR . 'artikel_audiences.txt');
 
 		$this->view->title = 'Einstellungen';
 		$this->view->render('admin/config', $viewData);
@@ -34,6 +35,10 @@ class Admin extends Controller {
 
 		$tags = strip_tags($_POST['tags']);
 		file_put_contents(CONFIGPATH . PORTAL . DIRECTORY_SEPARATOR . 'artikel_tags.txt', $tags);
+
+		$audiences = strip_tags($_POST['audiences']);
+		file_put_contents(CONFIGPATH . PORTAL . DIRECTORY_SEPARATOR . 'artikel_audiences.txt', $audiences);
+
 
 		$this->view->redirect('/admin');
 
