@@ -39,7 +39,7 @@ Kampagnenbestellungen: <b class="conversions"><?=$numberOfCampaigns?></b>
 <?php foreach ($campaigns as $campaign): ?>
 <tr class="text-left">
 	<td class="narrow text-left"><a target="_blank" href="https://backend.plenigo.com/<?=PLENIGO_COMPANY_ID?>/orders/<?=$campaign['order_id']?>/show"><?=$campaign['order_id']?></a></td>
-	<!--<td class="narrow"><a href="/user/<?=$campaign['customer_id']?>"><?=$campaign['customer_id']?></a></td>-->
+	<!--<td class="narrow"><a href="/readers/<?=$campaign['customer_id']?>"><?=$campaign['customer_id']?></a></td>-->
 	<td><?=formatDate($campaign['order_date'],'Y-m-d')?> <span class="hidden"><?=formatDate($campaign['order_date'],'H:i')?></span></td>
 	<td><?=formatDate($campaign['order_date'],'H:i')?> Uhr</td>
 	<td class="narrow"><?=$campaign['utm_source']?></td>

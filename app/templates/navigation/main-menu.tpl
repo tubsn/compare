@@ -6,14 +6,16 @@
 
 <nav class="main-nav">
 	<ul>
-		<li class="compare-logo-li"><a href="/"><span class="compare-logo"></span></a></li>
+		<li class="compare-logo-li"><a href="/"><span class="compare-logo"></span></a>
+			<ul class="dropdown" aria-label="submenu">
+				<li><a href="/favoriten">Favicon einrichten</a></li>
+			</ul>
+		</li>
 		<li><a href="/list" aria-haspopup="true">Artikel-Listen</a>
 			<ul class="dropdown" aria-label="submenu">
 				<li><a href="/ressort">nach Ressorts</a></li>
 				<li><a href="/type">nach Themen</a></li>
-				<li><a href="/tag">nach #Tags</a></li>
-
-				<li><a href="/filter">Eigene Filter</a></li>
+				<li><a href="/tag">nach #-Tags</a></li>
 			</ul>
 		</li>
 
@@ -25,6 +27,7 @@
 				<li><a href="/conversions">Conversions</a></li>
 				<li><a href="/score">Artikel-Score</a></li>
 				<li><a href="/top5">Top5</a></li>
+				<li><a href="/filter">Eigene Filter</a></li>				
 			</ul>
 		</li>
 
@@ -42,7 +45,7 @@
 			<ul class="dropdown" aria-label="submenu">
 				<li><a href="/stats/ressort">nach Ressort</a></li>
 				<li><a href="/stats/thema">nach Themen</a></li>
-				<li><a href="/stats/tag">nach #Tag</a></li>
+				<li><a href="/stats/tag">nach #-Tag</a></li>
 				<li><a href="/stats/artikel">Artikelpublikationen</a></li>
 			</ul>
 		</li>
@@ -51,6 +54,7 @@
 		<li><a href="/orders" aria-haspopup="true">Bestell- und Kündigerdaten</a>
 			<ul class="dropdown" aria-label="submenu">
 				<li><a href="/orders/list">Bestellungen als Liste</a></li>
+				<li><a href="/readers/list">Bestellungen mit Usergroup (Beta)</a></li>
 				<li><a href="/orders/campaigns">UTM-Kampagnen</a></li>
 				<li><a href="/orders/today">Echtzeit Bestellungen</a></li>
 			</ul>

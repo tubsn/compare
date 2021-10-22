@@ -180,6 +180,22 @@ class Charts
 				if ($this->timeframe() > 91) {$chart->groupby = "DATE_FORMAT(pubdate,'%Y-%m')";}
 			break;
 
+			case 'plusquoteByDate':
+				//$chart->kpi = 'id';
+				//$chart->kpi = 'COUNT(if(plus = 1, 1, 0))';
+				$chart->kpi = 'round(SUM( IF(plus = 1, 1, 0) ) / count(id) * 100,2)';
+
+				$chart->groupby = "DATE(pubdate)";
+				$chart->operation = null;
+				$chart->name = 'Plusquote in %';
+				$chart->color = '#cc9b8d';
+				//$chart->showValues = true;
+				$chart->template = 'charts/default_line_chart';
+				if ($this->timeframe() > 31) {$chart->groupby = "DATE_FORMAT(pubdate,'%Y-%u')";}
+				if ($this->timeframe() > 91) {$chart->groupby = "DATE_FORMAT(pubdate,'%Y-%m')";}
+			break;
+
+
 			case 'articlesByWeekday':
 				$chart->kpi = 'id';
 				$chart->groupby = "DATE_FORMAT(pubdate,'%W')";

@@ -2,20 +2,35 @@
 
 <?php include tpl('navigation/date-picker');?>
 
-<?php if ($page['title']): ?>
-<h1><?=$page['title']?></h1>
-<?php endif; ?>
+<h1>Käufe mit Usersegment</h1>
 
-<p>Übersicht erfasster Bestellungen. Seit dem 23. März 2021 werden die Bestellungen direkt aus Plenigo importiert.</p>
 
 <p class="light-box" style="margin-bottom:2em;">
-Gesamtbestellungen: <b class="conversions"><?=$numberOfOrders?></b>
-&emsp; davon Plusseite: <b class="blue"><?=$plusOnly?></b>
-&emsp; davon Extern: <b class="blue"><?=$externalOnly?></b>
-&emsp; davon Gekündigt: <b class="redish"><?=$numberOfCancelled?></b>
-&emsp; Kündigerquote: <b class="orange"><?=round(($numberOfCancelled / $numberOfOrders) * 100)?>&thinsp;%</b>
-&emsp; ⌀-Haltedauer: <b class="blue"><?=number_format($averageRetention,2,',','.')?> Tage</b>
+
+Gesamt Käufe: <b class="conversions"><?=count($completeOrders)?> </b>
+&emsp;Käufe mit bekanntem Usersegment: <b class="blue"><?=count($orders)?> </b>
+&emsp; Kündiger: <b class="redish"><?=count($cancelled)?> </b>
+<?php if (count($orders) > 0): ?>
+&emsp; Kündigerquote: <b class="orange"><?=round(count($cancelled) / count($orders) *100,2)?>&thinsp;%</b>
+<?php endif ?>
+
 </p>
+
+
+<div class="box">
+<select name="portal" onchange="window.location = '/readers/list/' + this.value">
+	<option value="">Usersegment Wählen:</option>
+	<option <?php if ($segment == 'champion'): ?>selected<?php endif ?>>champion</option>
+	<option <?php if ($segment == 'fly-by'): ?>selected<?php endif ?>>fly-by</option>
+	<option <?php if ($segment == 'low-usage-irregular'): ?>selected<?php endif ?>>low-usage-irregular</option>
+	<option <?php if ($segment == 'high-usage-irregular'): ?>selected<?php endif ?>>high-usage-irregular</option>
+	<option <?php if ($segment == 'loyal'): ?>selected<?php endif ?>>loyal</option>
+	<option <?php if ($segment == 'non-engaged'): ?>selected<?php endif ?>>non-engaged</option>
+	<option <?php if ($segment == 'unknown'): ?>selected<?php endif ?>>unknown</option>
+</select>
+</div>
+
+
 
 
 <?php if ($orders): ?>
@@ -28,7 +43,7 @@ Gesamtbestellungen: <b class="conversions"><?=$numberOfOrders?></b>
 	<th>Uhrzeit</th>
 	<th>Ressort</th>
 	<th>Produkt</th>
-	<th>Bezeichnung</th>
+	<th>UserSegment</th>
 	<th>Preis</th>
 	<th>Bezahlmethode</th>
 	<th>Gekündigt</th>
@@ -46,7 +61,7 @@ Gesamtbestellungen: <b class="conversions"><?=$numberOfOrders?></b>
 	<td><?=formatDate($order['order_date'],'H:i')?> Uhr</td>
 	<td><?=ucfirst($order['article_ressort'])?></td>
 	<td class="narrow"><?=$order['order_title']?></td>
-	<td class="narrow"><?=$order['subscription_internal_title'] ?? $order['order_title']?></td>
+	<td class="narrow"><?=$order['user_segment']?></td>
 	<td><?=$order['order_price']?>&thinsp;€</td>
 	<td><?=$order['order_payment_method']?></td>
 	<td><?=$order['cancelled'] ? '<span class="cancelled">gekündigt</span>' : '' ?></td>

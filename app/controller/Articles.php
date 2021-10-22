@@ -273,6 +273,10 @@ class Articles extends Controller {
 				Session::set('from', date('Y-m-d', strtotime('yesterday -6days')));
 				Session::set('to', date('Y-m-d', strtotime('yesterday')));
 			break;
+			case 'letzte 30 Tage':
+				Session::set('from', date('Y-m-d', strtotime('yesterday -30days')));
+				Session::set('to', date('Y-m-d', strtotime('yesterday')));
+			break;			
 			case 'aktuelle Woche':
 				Session::set('from', date('Y-m-d', strtotime('monday this week')));
 				Session::set('to', date('Y-m-d', strtotime('sunday this week')));

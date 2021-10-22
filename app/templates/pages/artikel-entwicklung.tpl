@@ -14,6 +14,12 @@ Artikel Entwicklung nach Publikationsdatum
 	</figure>
 
 
+	<figure class="mb">
+		<h3 class="text-center">Anteil an Plusartikeln im Zeitverlauf</h3>
+		<?=$charts->get('plusquoteByDate');?>
+	</figure>
+
+
 <div class="col-2" style="grid-template-columns: 2fr 1fr;">
 
 

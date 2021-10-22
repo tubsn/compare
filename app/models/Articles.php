@@ -547,8 +547,8 @@ class Articles extends Model
 			ressort,
 			 COUNT( if(conversions>0 AND subscribers>=100, 1, NULL) ) as spielmacher,
 			 COUNT( if(conversions>0 AND subscribers<=100, 1, NULL) ) as stuermer,
-			 COUNT( if(conversions=0 AND subscribers>=100, 1, NULL) ) as abwehr,
-			 COUNT( if(conversions=0 AND subscribers<=100, 1, NULL) ) as geister,
+			 COUNT( if((conversions IS NULL OR conversions=0) AND subscribers>=100, 1, NULL) ) as abwehr,
+			 COUNT( if((conversions IS NULL OR conversions=0) AND subscribers<=100, 1, NULL) ) as geister,
 			 COUNT(id) as artikel
 
 			 FROM `articles`
@@ -570,14 +570,14 @@ class Articles extends Model
 
 	public function valueables_by_group($group) {
 
-		$filter = 'AND conversions=0 AND subscribers<=100';
+		$filter = 'AND (conversions IS NULL OR conversions=0) AND subscribers<=100';
 		if ($group == 'stuermer') {$filter = 'AND conversions>0 AND subscribers<=100';}
-		if ($group == 'abwehr') {$filter = 'AND conversions=0 AND subscribers>=100';}
+		if ($group == 'abwehr') {$filter = 'AND (conversions IS NULL OR conversions=0) AND subscribers>=100';}
 		if ($group == 'spielmacher') {$filter = 'AND conversions>0 AND subscribers>=100';}
 
 		$from = strip_tags($this->from);
 		$to = strip_tags($this->to);
-		$limit = 2000;
+		$limit = 5000;
 
 		$SQLstatement = $this->db->connection->prepare(
 			"SELECT *

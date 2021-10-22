@@ -11,44 +11,9 @@
 	First-Seen: <?=formatDate($user['first_seen'],'Y-m-d h:i')?><br />
 	Last-Seen: <?=formatDate($user['last_seen'],'Y-m-d h:i')?><br />
 	Mediatime letzte Woche: <?=$user['media_time_last_week']?><br />
-	Mediatime Gesamt: <?=$user['media_time_total']?><br />
+	Mediatime Gesamt: <?=$user['media_time_total']?><br /><br />
 
-	<!--
-	<?php if ($subscriptions): ?>
-	<h3>Abos:</h3>
-	<?php foreach ($subscriptions as $subscription): ?>
-	<div class="box">
-		<h3><?=$subscription['title']?></h3>
-		ProduktID: <?=$subscription['productId']?><br />
-		Preis: <?=$subscription['price']?> <?=$subscription['currency']?><br />
-		Bezahlmethode: <?=$subscription['paymentMethod']?><br />
-		Start: <?=date('d.m.Y H:i',$subscription['startDate'])?> Uhr<br />
-		<?php if ($subscription['cancellationDate']): ?>
-		Kündigung: <?=date('d.m.Y H:i',$subscription['cancellationDate'])?> Uhr<br />
-		<?php endif ?>		
-	</div>		
-	<?php endforeach ?>
-	<?php else: ?>
-	<p>keine aktiven Abos</p>
-	<?php endif ?>
-
-
-	<?php if ($products): ?>
-	<h3>Gekaufte Produkte:</h3>
-	<?php foreach ($products as $product): ?>
-	<div class="box">
-		Produkt: <?=$product['title']?> (ID: <?=$product['id']?>)<br />
-		Bezahlmethode: <?=$product['paymentMethod']?><br />
-		Preis: <?=$product['price']?> <?=$product['currency']?><br />
-		Typ: <?=$product['productType']?><br />
-		Startdatum:  <?=date('d.m.Y H:i',$product['startDate'])?> Uhr<br />
-		Enddatum: <?=$product['endDate'] ?? 'offen'?><br />
-	</div>		
-	<?php endforeach ?>
-	<?php else: ?>
-	<p>keine aktiven Produkte</p>
-	<?php endif ?>
-	-->
+	<p>- Platzhalter für Liste laufender Abos -</p>
 
 	<hr/>
 

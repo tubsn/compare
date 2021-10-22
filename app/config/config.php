@@ -129,6 +129,7 @@ define('TIMEFRAMES', [
 	'heute',
 	'gestern',
 	'letzte 7 Tage',
+	'letzte 30 Tage',	
 	'aktuelle Woche',
 	'letzte Woche',
 	'vorletzte Woche',

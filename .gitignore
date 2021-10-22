@@ -4,6 +4,7 @@
 /app/config/artikel_tags.txt
 /app/config/artikel_typen.txt
 /app/config/config.php
+/app/config/*/
 /public/storage
 /public/uploads
 /public/assets

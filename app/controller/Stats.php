@@ -100,7 +100,7 @@ class Stats extends Controller {
 		$viewData['chartTwo'] = $this->Charts->get('avgPageviewsByType');
 		$viewData['chartTwoTitle'] = 'Durchschnittliche Pageviews nach Inhaltstyp';
 
-		Session::set('referer', '/stats/themen');
+		Session::set('referer', '/stats/thema');
 		$this->view->title = 'Statistiken nach Inhaltstyp / Thema';
 		$this->view->class = 'Thema';
 		$this->view->urlPrefix = '/type/';
@@ -126,7 +126,7 @@ class Stats extends Controller {
 		$viewData['chartTwo'] = $this->Charts->get('avgPageviewsByTag');
 		$viewData['chartTwoTitle'] = 'Durchschnittliche Pageviews nach #Tag';
 
-		Session::set('referer', '/stats/tags');
+		Session::set('referer', '/stats/tag');
 		$this->view->title = 'Statistiken nach #-Tag';
 		$this->view->class = 'Tag';
 		$this->view->urlPrefix = '/tag/';

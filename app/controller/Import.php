@@ -11,7 +11,7 @@ class Import extends Controller {
 	public function __construct() {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 		$this->view('DefaultLayout');
-		$this->models('Articles,ArticleMeta,Orders,GlobalKPIs,Analytics,Campaigns');
+		$this->models('Articles,ArticleMeta,Orders,GlobalKPIs,Analytics,Campaigns,Readers');
 	}
 
 	public function feeds() {
@@ -55,6 +55,11 @@ class Import extends Controller {
 		$orders = $this->Orders->import($date);
 		$this->view->json($orders);
 	}
+
+	public function import_readers() {
+		$this->Readers->import_readers();
+	}
+
 
 	private function import_global_kpis() {
 		$this->GlobalKPIs->import(3);

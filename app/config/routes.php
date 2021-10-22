@@ -63,7 +63,9 @@ $routes->get('/stats/tag', 'Stats@tags');
 $routes->get('/stats/artikel', 'Stats@artikel');
 
 // Readers
-$routes->get('/user/{id}', 'Readers@detail');
+$routes->get('/readers/{id:[\d]{12}?}', 'Readers@detail');
+$routes->get('/readers/list[/{segment}]', 'Readers@list');
+$routes->get('/readers/import', 'Import@import_readers');
 
 // Article Details
 $routes->get('/artikel/{id:\d+}', 'Articles@detail');
