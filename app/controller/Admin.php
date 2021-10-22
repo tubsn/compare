@@ -46,6 +46,10 @@ class Admin extends Controller {
 
 	public function cluster_manager() {
 
+		if (!Auth::has_right('type')) {
+			throw new \Exception("Sie haben keine Berechtigung diese Seite aufzurufen", 403);
+		}
+
 		$viewData['types'] = $this->Articles->count_distinct('type');
 		$viewData['tags'] = $this->Articles->count_distinct('tag');
 		$viewData['audiences'] = $this->Articles->count_distinct('audience');
@@ -64,6 +68,10 @@ class Admin extends Controller {
 	}
 
 	public function set_clusters() {
+
+		if (!Auth::has_right('type')) {
+			throw new \Exception("Sie haben keine Berechtigung diese Seite aufzurufen", 403);
+		}
 
 		if (isset($_POST['type'])) {$newClusterGroup = 'type'; $newClusterValue = strip_tags($_POST['type']);}
 		if (isset($_POST['audience'])) {$newClusterGroup = 'audience'; $newClusterValue = strip_tags($_POST['audience']);}
