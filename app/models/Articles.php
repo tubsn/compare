@@ -77,6 +77,26 @@ class Articles extends Model
 
 	}
 
+	public function list_no_audience() {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT *
+			 FROM `articles`
+			 WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate AND audience IS NULL
+			 ORDER BY pubdate DESC
+			 LIMIT 0, 5000"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall();
+		if (empty($output)) {return null;}
+		return $output;
+
+	}
+
 	public function get_unset_ids() {
 
 		$from = strip_tags($this->from);
@@ -155,6 +175,72 @@ class Articles extends Model
 
 	}
 
+	public function count_distinct($column) {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$distinct = $this->list_distinct($column);
+
+		$out = [];
+		foreach ($distinct as $group) {
+
+			$SQLstatement = $this->db->connection->prepare(
+				"SELECT count(id) as count FROM `articles`
+				WHERE (DATE(`pubdate`) BETWEEN :startDate AND :endDate)
+				AND $column = '$group'");
+			$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+
+			$count = $SQLstatement->fetch()['count'];
+			$out[$group] = $count;
+
+		}
+
+		return $out;
+
+	}
+
+	public function bulk_change_cluster($oldClusterValue, $oldClusterGroup, $newClusterValue, $newClusterGroup) {
+
+		if (empty($newClusterValue)) {throw new \Exception("Clustername darf nicht leer sein", 400);}
+		if (empty($newClusterGroup)) {throw new \Exception("Neue Clustergruppe darf nicht leer sein", 400);}
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+		$oldClusterGroup = strip_tags($oldClusterGroup);
+		$newClusterGroup = strip_tags($newClusterGroup);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"UPDATE `articles`
+			SET `$newClusterGroup` = :newClusterValue
+			WHERE (DATE(`pubdate`) BETWEEN :startDate AND :endDate) AND `$oldClusterGroup` = :oldClusterValue");
+
+
+		$SQLstatement->execute([
+			':startDate' => $from,
+			':endDate' => $to,
+			':oldClusterValue' => $oldClusterValue,
+			':newClusterValue' => $newClusterValue,
+		]);
+
+		return $SQLstatement->rowCount();
+
+	}
+
+	public function reset_cluster($clusterValue, $clusterGroup) {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+		$clusterGroup = strip_tags($clusterGroup);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"UPDATE `articles`
+			SET `$clusterGroup` = NULL
+			WHERE (DATE(`pubdate`) BETWEEN :startDate AND :endDate) AND `$clusterGroup` = :clusterValue");
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to, ':clusterValue' => $clusterValue,]);
+		return $SQLstatement->rowCount();
+
+	}
 
 	public function field($articleID, $fieldname) {
 		return $this->get($articleID,$fieldname)[$fieldname];
@@ -175,7 +261,6 @@ class Articles extends Model
 			$this->create_or_update($article);
 		}
 	}
-
 
 	public function add_stats($gaData, $id) {
 		$stats = [

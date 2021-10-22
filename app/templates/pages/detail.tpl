@@ -1,4 +1,4 @@
-<main class="detail-layout">
+<main class="detail-layout" style="margin-bottom:-2em">
 
 <article>
 	<h3><?=$article['kicker'] ?? 'Dachzeile'?>&nbsp;<?php if ($article['plus']): ?><span class="plus-artikel bluebg">+</span><?php endif; ?></h3>
@@ -22,7 +22,7 @@
 
 </article>
 
-<section class="text-center">
+<section class="text-center" style="position:relative; top:-3em;">
 
 	<figure style="overflow:hidden; max-height:270px;"><?php include tpl('charts/detail/radial_pageviews')?></figure>
 
@@ -50,10 +50,35 @@
 	<p>Ressort: <a href="/ressort/<?=urlencode($article['ressort'])?>"><?=ucwords($article['ressort'])?></a><br/>
 
 		<?php if (auth_rights('type')): ?>
-		Autor: <a href="/author/<?=urlencode($article['author'])?>"><?=$article['author']?></a></p>
+		Autor: <a href="/author/<?=urlencode($article['author'])?>"><?=$article['author']?></a>
 		<?php else: ?>
-		Autor: <?=$article['author']?></p>
+		Autor: <?=$article['author']?>
 		<?php endif ?>
+
+		<?php if (auth_rights('audience')): ?>
+		<div style="text-align:center; max-width:300px; margin:0 auto; display:flex; gap:.5em; ">
+		Audience:
+		<select class="js-audience-selector" data-id="<?=$article['id']?>" style="font-size:0.8em;">
+				<option value="0">nicht vergeben</option>
+				<?php if ($article['audience']): ?>
+				<option selected value="<?=$article['audience']?>"><?=$article['audience']?></option>
+				<?php endif ?>
+				<?php foreach (ARTICLE_AUDIENCES as $audience): ?>
+				<?php if ($article['audience'] == $audience) {continue;} ?>
+				<option value="<?=$audience?>"><?=$audience?></option>
+				<?php endforeach ?>
+		</select>
+		</div>
+
+		<?php else: ?>
+		<?php if ($article['audience']): ?>
+		<br />Audience: <span class="audience"><a class="noline" href="/audience/<?=urlencode(str_replace('/', '-slash-', $article['audience']))?>"><?=$article['audience']?></a></span>
+		<?php else: ?>
+		<br />Audience: nicht gesetzt
+		<?php endif; ?>
+		<?php endif; ?>
+
+	</p>
 
 	<?php if (auth_rights('type')): ?>
 	<h3>Inhalts-Kategorie:</h3>

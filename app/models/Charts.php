@@ -159,6 +159,15 @@ class Charts
 				$chart->color = '#6088b4';
 			break;
 
+			case 'avgPageviewsByAudience':
+				$chart->kpi = 'pageviews';
+				$chart->groupby = 'audience';
+				$chart->operation = 'avg';
+				$chart->sort = 'DESC';
+				$chart->name = 'Durchschnittliche Pageviews';
+				$chart->color = '#6088b4';
+			break;
+
 			case 'avgPageviewsByType':
 				$chart->kpi = 'pageviews';
 				$chart->groupby = 'type';
@@ -262,6 +271,17 @@ class Charts
 			case 'subscriberQuoteByType':
 				$chart->kpi = 'round(sum(subscribers)/sum(pageviews)*100)';
 				$chart->groupby = 'type';
+				$chart->operation = null;
+				$chart->name = 'Subscriber Anteil in %';
+				$chart->color = '#314e6f';
+				$chart->sort = 'DESC';
+				//$chart->showValues = true;
+				$chart->template = 'charts/default_bar_chart';
+			break;
+
+			case 'subscriberQuoteByAudience':
+				$chart->kpi = 'round(sum(subscribers)/sum(pageviews)*100)';
+				$chart->groupby = 'audience';
 				$chart->operation = null;
 				$chart->name = 'Subscriber Anteil in %';
 				$chart->color = '#314e6f';

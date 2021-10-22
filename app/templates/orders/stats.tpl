@@ -57,7 +57,7 @@ Es kommt daher zu Abweichungen im Vergleich zur Statistik-Seite (dort wird nach 
 
 <hr />
 
-<section class="detail-layout" style="align-items:start;">
+<section class="detail-layout" style="align-items:start; gap:2em;">
 
 	<div>
 		<h3>Produkt</h3>
@@ -103,6 +103,13 @@ Es kommt daher zu Abweichungen im Vergleich zur Statistik-Seite (dort wird nach 
 	</div>
 
 	<div>
+		<?php if (count($audience) > 0): ?>
+		<h3>Artikel nach Audience</h3>
+		<?php $tableData = $audience;?>
+		<?php $tableName = 'Audience';?>
+		<?php include tpl('orders/stats-table');?>
+		<?php endif; ?>
+
 		<?php if (count($type) > 0): ?>
 		<h3>Artikel nach Inhaltstypen</h3>
 		<?php $tableData = $type;?>
@@ -127,7 +134,7 @@ Es kommt daher zu Abweichungen im Vergleich zur Statistik-Seite (dort wird nach 
 
 	<summary>weitere Statistiken einblenden</summary>
 
-	<section class="detail-layout" style="align-items:start">
+	<section class="detail-layout" style="align-items:start; gap:2em;">
 
 		<div>
 

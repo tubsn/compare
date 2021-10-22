@@ -3,7 +3,7 @@
 switch (PORTAL) {
 
 	case 'LR':
-	
+
 		define('PORTAL_URL', 'https://www.lr-online.de');
 		define('PORTAL_NAME', 'LR');
 
@@ -121,6 +121,8 @@ $tags = file_get_contents(CONFIGPATH . PORTAL .DIRECTORY_SEPARATOR . 'artikel_ta
 $tags = explode_and_trim("\n", $tags);
 define('ARTICLE_TAGS', $tags);
 
+define('ARTICLE_AUDIENCES', ['Foodies', 'Gesundheitsbewusste', 'Familien']);
+
 define('MAX_IMPORT_RANGE', 365);
 
 define('TAGESNAMEN', ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag']);
@@ -129,7 +131,7 @@ define('TIMEFRAMES', [
 	'heute',
 	'gestern',
 	'letzte 7 Tage',
-	'letzte 30 Tage',	
+	'letzte 30 Tage',
 	'aktuelle Woche',
 	'letzte Woche',
 	'vorletzte Woche',

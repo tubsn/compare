@@ -15,6 +15,7 @@
 			<ul class="dropdown" aria-label="submenu">
 				<li><a href="/ressort">nach Ressorts</a></li>
 				<li><a href="/type">nach Themen</a></li>
+				<li><a href="/audience">nach Audiences</a></li>
 				<li><a href="/tag">nach #-Tags</a></li>
 			</ul>
 		</li>
@@ -27,7 +28,7 @@
 				<li><a href="/conversions">Conversions</a></li>
 				<li><a href="/score">Artikel-Score</a></li>
 				<li><a href="/top5">Top5</a></li>
-				<li><a href="/filter">Eigene Filter</a></li>				
+				<li><a href="/filter">Eigene Filter</a></li>
 			</ul>
 		</li>
 
@@ -45,6 +46,7 @@
 			<ul class="dropdown" aria-label="submenu">
 				<li><a href="/stats/ressort">nach Ressort</a></li>
 				<li><a href="/stats/thema">nach Themen</a></li>
+				<li><a href="/stats/audience">nach Audiences</a></li>
 				<li><a href="/stats/tag">nach #-Tag</a></li>
 				<li><a href="/stats/artikel">Artikelpublikationen</a></li>
 			</ul>
@@ -60,6 +62,15 @@
 			</ul>
 		</li>
 
+		<?php if (auth_rights('type, audience')): ?>
+		<li><a href="/unclassified/types">Artikel zuordnen</a>
+			<ul class="dropdown" aria-label="submenu">
+				<li><a href="/unclassified/types">Unbestimmte Themen</a></li>
+				<li><a href="/unclassified/audiences">Unbestimmte Audiences</a></li>
+			</ul>
+		</li>
+		<?php endif; ?>
+
 	</ul>
 
 	<ul>
@@ -69,9 +80,15 @@
 				<button type="submit"></button>
 			</form>
 		</li>
-		<?php if (auth_rights('type')): ?>
-		<li><a href="/unset">Unbestimmte Artikel</a></li>
-		<li><a href="/admin" title="Einstellungen">Einstellungen</a></li>
+		<?php if (auth_rights('type, audience')): ?>
+		<li><a href="/admin" title="Einstellungen">Einstellungen</a>
+			<ul class="dropdown rightmenu" aria-label="submenu">
+				<li><a href="/admin/users">Nutzerverwaltung</a></li>
+				<li><a href="/admin/cluster">Cluster-Manager</a></li>
+				<li><a href="/admin/orders">Conversion Import</a></li>
+			</ul>
+
+		</li>
 		<?php endif; ?>
 		<li class="login-icon">
 			<a href="/profile" title="Nutzer">

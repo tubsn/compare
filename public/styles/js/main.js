@@ -148,16 +148,20 @@ class Artikel {
 		this.typeSelectors = document.querySelectorAll('.js-type-selector');
 		this.listenToTypeSelector(this.typeSelectors);
 
+		// Audienceselectors
+		this.audienceSelectors = document.querySelectorAll('.js-audience-selector');
+		this.listenToAudienceSelector(this.audienceSelectors);
+
 		// Tagselectors
-		this.ttagSelectors = document.querySelectorAll('.js-tag-selector');
-		this.listenToTagSelector(this.ttagSelectors);
+		this.tagSelectors = document.querySelectorAll('.js-tag-selector');
+		this.listenToTagSelector(this.tagSelectors);
 
 		let tableCollapseSelectors = document.querySelectorAll('.js-collapse-table-btn');
 		if (tableCollapseSelectors) {
-			
+
 			Array.from(tableCollapseSelectors).forEach(button => {
 				button.addEventListener('click', (e) => {
-					let table = document.querySelector('.js-collapse-table');					
+					let table = document.querySelector('.js-collapse-table');
 					table.classList.toggle('collapsed');
 				});
 			});
@@ -247,6 +251,42 @@ class Artikel {
 
 		let data = new FormData();
 		data.append('tag', articleType);
+
+		fetch('/artikel/'+id, {
+			method: 'POST',
+			credentials: 'same-origin',
+			body: data
+		})
+			.then(response => {
+				if(response.status === 404) {
+					console.log(response.text()); return null;
+				}
+				return response.text();
+			})
+			.then(phpresponse => {
+				console.log(phpresponse);
+				//window.location.reload();
+			})
+			.catch(error => {
+				console.error(`Oops: ${error}`);
+			});
+	}
+
+	listenToAudienceSelector(selectElements) {
+		if (!selectElements) {return;}
+		let _this = this;
+		Array.from(selectElements).forEach(selectBox => {
+		    selectBox.addEventListener('change', (e) => {
+				let id = selectBox.getAttribute('data-id');
+				_this.saveAudience(e.target.value, id);
+		    });
+		});
+	}
+
+	saveAudience(articleType, id) {
+
+		let data = new FormData();
+		data.append('audience', articleType);
 
 		fetch('/artikel/'+id, {
 			method: 'POST',

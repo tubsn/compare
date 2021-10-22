@@ -36,11 +36,20 @@ class Lists extends Controller {
 
 	public function unset_only() {
 		$viewData['articles'] = $this->Articles->list_unset();
-
 		$count = 0;
 		if (is_array($viewData['articles'])) {$count = count($viewData['articles']);}
-		$this->view->title = 'Nicht Zugeordnet: ' . $count;
+		$this->view->title = 'Artikel ohne Themenzuweisung: ' . $count;
 		$this->view->info = 'Liste aller nicht zugeordneten Artikel für diesen Zeitraum <b>(um alle zu listen oben rechts "alle Daten" einstellen)</b> | <a href="/admin/topics">Artikel automatisch zuordnen (Beta)</a>';
+		$this->view->referer('/unset');
+		$this->view->render('pages/list', $viewData);
+	}
+
+	public function unset_audience_only() {
+		$viewData['articles'] = $this->Articles->list_no_audience();
+		$count = 0;
+		if (is_array($viewData['articles'])) {$count = count($viewData['articles']);}
+		$this->view->title = 'Artikel ohne Audience: ' . $count;
+		$this->view->info = 'Liste aller Artikel ohne Audience für diesen Zeitraum <b>(um alle zu listen oben rechts "alle Daten" einstellen)</b>';
 		$this->view->referer('/unset');
 		$this->view->render('pages/list', $viewData);
 	}
@@ -281,6 +290,32 @@ class Lists extends Controller {
 
 		$this->view->navigation = 'navigation/type-menu';
 		$this->view->title = $type . ' - Artikel: ' . $count;
+		$this->view->render('pages/list', $viewData);
+	}
+
+	public function audience($audience = null) {
+		Session::set('referer', '/audience/'.$audience);
+
+		$viewData['audienceList'] = $this->Articles->list_distinct('audience');
+		if (is_null($audience)) {$audience = $viewData['audienceList'][0] ?? '';}
+
+		$audience = $this->decode_url($audience);
+		$viewData['articles'] = $this->Articles->list_by($audience, 'audience');
+		$viewData['primaryChart'] = $this->DailyKPIs->combined_kpis_filtered_chart($audience, 'audience');
+
+		$count = 0;
+		if (is_array($viewData['articles'])) {$count = count($viewData['articles']);}
+
+		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
+		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
+		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');
+		$viewData['avgmediatime'] = $this->Articles->average_up($viewData['articles'],'avgmediatime');
+		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
+		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
+		$viewData['numberOfArticles'] = $count;
+
+		$this->view->navigation = 'navigation/audience-menu';
+		$this->view->title = 'Audience: ' . $audience . ' - Artikel: ' . $count;
 		$this->view->render('pages/list', $viewData);
 	}
 

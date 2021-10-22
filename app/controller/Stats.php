@@ -108,6 +108,32 @@ class Stats extends Controller {
 
 	}
 
+	public function audiences() {
+
+		$viewData['articles'] = $this->Articles->count('*', 'audience');
+		$viewData['plusarticles'] = $this->Articles->sum('plus', 'audience');
+		$viewData['pageviews'] = $this->Articles->sum('pageviews', 'audience');
+		$viewData['subscribers'] = $this->Articles->sum('subscribers', 'audience');
+		$viewData['mediatime'] = $this->Articles->sum('mediatime', 'audience');
+		$viewData['sessions'] = $this->Articles->sum('sessions', 'audience');
+		$viewData['conversions'] = $this->Articles->sum('conversions', 'audience');
+		$viewData['buyintents'] = $this->Articles->sum('buyintent', 'audience');
+		$viewData['cancelled'] = $this->Articles->sum('cancelled', 'audience');
+
+		$viewData['groupedStats'] = $this->Articles->stats_grouped_by($column = 'audience', $order = 'conversions DESC');
+		$viewData['chartOne'] = $this->Charts->get('subscriberQuoteByAudience');
+		$viewData['chartOneTitle'] = 'Subscriber Quote nach Audience';
+		$viewData['chartTwo'] = $this->Charts->get('avgPageviewsByAudience');
+		$viewData['chartTwoTitle'] = 'Durchschnittliche Pageviews nach Audience';
+
+		Session::set('referer', '/stats/audience');
+		$this->view->title = 'Statistiken nach Audiences';
+		$this->view->class = 'Audience';
+		$this->view->urlPrefix = '/audience/';
+		$this->view->render('stats/stats', $viewData);
+
+	}
+
 	public function tags() {
 
 		$viewData['articles'] = $this->Articles->count('*', 'tag');

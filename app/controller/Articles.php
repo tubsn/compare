@@ -221,6 +221,12 @@ class Articles extends Controller {
 			$this->Articles->set(['tag' => $tag], $id);
 		}
 
+		if (isset($_POST['audience']) && $_POST['audience'] != '') {
+			$audience = strip_tags($_POST['audience']);
+			if ($audience == '0') {$audience = null;}
+			$this->Articles->set(['audience' => $audience], $id);
+		}
+
 	}
 
 	public function set_timeframe() {
@@ -276,7 +282,7 @@ class Articles extends Controller {
 			case 'letzte 30 Tage':
 				Session::set('from', date('Y-m-d', strtotime('yesterday -30days')));
 				Session::set('to', date('Y-m-d', strtotime('yesterday')));
-			break;			
+			break;
 			case 'aktuelle Woche':
 				Session::set('from', date('Y-m-d', strtotime('monday this week')));
 				Session::set('to', date('Y-m-d', strtotime('sunday this week')));

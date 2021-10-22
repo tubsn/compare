@@ -70,6 +70,7 @@ class Orders extends Controller {
 
 		$viewData['type'] = $this->Orders->group_by_combined('article_type');
 		$viewData['tag'] = $this->Orders->group_by_combined('article_tag');
+		$viewData['audience'] = $this->Orders->group_by_combined('article_audience');
 		$viewData['ressorts'] = $this->Orders->group_by_combined('article_ressort');
 		$viewData['utm_source'] = $this->Orders->group_by_combined('utm_source');
 		$viewData['utm_medium'] = $this->Orders->group_by_combined('utm_medium');

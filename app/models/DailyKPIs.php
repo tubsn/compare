@@ -146,6 +146,7 @@ class DailyKPIs extends Model
 			 Articles.ressort as ressort,
 			 Articles.type as type,
 			 Articles.tag as tag,
+			 Articles.audience as audience,
 			 Articles.author as author
 
 			 FROM `daily_kpis`

@@ -11,7 +11,8 @@ $routes->get('/emo', 'Stats@test');
 
 
 // Article Lists
-$routes->get('/unset', 'Lists@unset_only');
+$routes->get('/unclassified/types', 'Lists@unset_only');
+$routes->get('/unclassified/audiences', 'Lists@unset_audience_only');
 $routes->get('/author/{author}', 'Lists@author');
 $routes->get('/author-fuzzy/{author}', 'Lists@author_fuzzy');
 $routes->get('/list', 'Lists@index');
@@ -19,6 +20,8 @@ $routes->get('/ressort/{ressort}', 'Lists@ressort');
 $routes->get('/ressort', 'Lists@ressort');
 $routes->get('/type/{type}', 'Lists@type');
 $routes->get('/type', 'Lists@type');
+$routes->get('/audience/{audience}', 'Lists@audience');
+$routes->get('/audience', 'Lists@audience');
 $routes->get('/tag/{tag}', 'Lists@tag');
 $routes->get('/tag', 'Lists@tag');
 
@@ -60,6 +63,7 @@ $routes->get('/stats', 'Stats@dashboard');
 $routes->get('/stats/ressort', 'Stats@ressorts');
 $routes->get('/stats/thema', 'Stats@themen');
 $routes->get('/stats/tag', 'Stats@tags');
+$routes->get('/stats/audience', 'Stats@audiences');
 $routes->get('/stats/artikel', 'Stats@artikel');
 
 // Readers
@@ -113,6 +117,10 @@ $routes->get('/admin/warmup/sources[/{daysago}]', 'Warmup@enrich_conversions_wit
 $routes->get('/admin/warmup/buyintents[/{daysago}]', 'Warmup@enrich_article_with_buy_intents');
 $routes->get('/admin/warmup/{weeksago}', 'Warmup@weeks_ago');
 $routes->get('/admin/mailsend', 'Newsletter@trigger_newsletter_sends');
+
+// Admin - Typemanager
+$routes->get('/admin/cluster', 'Admin@cluster_manager');
+$routes->post('/admin/cluster', 'Admin@set_clusters');
 
 // Admin - Usermanagement
 $routes->get('/admin/users', 'Usermanagement@index');

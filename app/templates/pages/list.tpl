@@ -50,9 +50,10 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 <tr>
 	<th>Dachzeile</th>
 	<th></th>
-	<th>Impuls</th>
+	<th>Reiz</th>
 	<th>Titel</th>
-	<th>Inhaltstyp</th>
+	<th>Audience</th>
+	<th>Inhalt</th>
 	<th>Ressort</th>
 	<?php if (auth_rights('author')): ?><th>Autor</th><?php endif; ?>
 	<?php if (!isset($showSubscribersInTable)): ?><th>Klicks</th><?php endif; ?>
@@ -89,6 +90,27 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 	<?php endif; ?>
 
 	<td><a href="/artikel/<?=$article['id']?>"><?=$article['title']?></a> </td>
+
+	<?php if (auth_rights('audience')): ?>
+		<td class="select-audiences">
+		<select class="js-audience-selector" data-id="<?=$article['id']?>">
+				<option value="0">...</option>
+				<?php if ($article['audience']): ?>
+				<option selected value="<?=$article['audience']?>"><?=$article['audience']?></option>
+				<?php endif ?>
+				<?php foreach (ARTICLE_AUDIENCES as $audience): ?>
+				<?php if ($article['audience'] == $audience) {continue;} ?>
+				<option value="<?=$audience?>"><?=$audience?></option>
+				<?php endforeach ?>
+		</select>
+		</td>
+	<?php else: ?>
+		<?php if ($article['audience']): ?>
+		<td><a class="audience-link" href="/audience/<?=urlencode(str_replace('/', '-slash-', $article['audience']))?>"><?=$article['audience']?></a></td>
+		<?php else: ?>
+		<td>-</td>
+		<?php endif; ?>
+	<?php endif; ?>
 
 	<td class="type">
 		<?php if (auth_rights('type')): ?>

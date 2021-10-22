@@ -47,7 +47,7 @@
 <p>
 Hier können Artikel, Conversions und Kampagnendaten inklusive Klick- und Kündigerstatistik als Excel-Datei exportiert werden.
 <div style="display:flex; gap:5px; align-items: start;">
-	<a class="button noline" href="/export/articles">Artikeldaten</a> 
+	<a class="button noline" href="/export/articles">Artikeldaten</a>
 	<a class="button" href="/export/conversions">Conversiondaten</a>
 	<a class="button" href="/export/campaigns">UTM-Kampagnendaten</a>
 </div>
@@ -58,14 +58,17 @@ Hier können Artikel, Conversions und Kampagnendaten inklusive Klick- und Kündi
 </section>
 
 <section>
-	<h3>Artikeltypen und Subkategorien festlegen</h3>
+	<h3>Audiences, Themencluster und Tags festlegen</h3>
+	<a href="/admin/cluster" class="button mb">Cluster-Manager öffnen (Themen verschieben)</a>
 	<p>Hier werden mögliche Artikel Inhaltstypen eingestellt. Die Typen können gelöscht werden, bereits gesetzte Artikel behalten ihren Typen bei. Für neue Artikel ist der gelöschte Typ nicht mehr auswählbar. (Nützlich für Zeitlich begrenzte Serien - Reihenfolge ist relevant)</p>
-	<p>Artikeltypen:</p>
+
+
+	<h3>Themen:</h3>
 
 	<form class="mb" action="" method="post">
 	<textarea name="typen" class="artikel-typen"><?=$typen?></textarea>
 
-	<p>Subkategorien:</p>
+	<h3>#-Hashtags:</h3>
 
 	<textarea name="tags" class="artikel-tags mt"><?=$tags?></textarea>
 	<button type="submit">Artikel Kategorien speichern</button>

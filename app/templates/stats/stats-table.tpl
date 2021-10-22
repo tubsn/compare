@@ -1,8 +1,8 @@
 <table class="fancy mb wide js-sortable">
 <thead>
 <tr class="text-right">
-	<th class="text-left"><?=$class?></th>
 	<th>Artikel</th>
+	<th class="text-left"><?=$class?></th>
 	<th style="text-align:center">Plus-Artikel</th>
 	<th>+Quote</th>
 	<th>Klicks</th>
@@ -22,8 +22,8 @@
 <tbody>
 <?php foreach ($groupedStats as $group => $stats): ?>
 <tr class="text-right">
-	<td title="<?=ucwords($group)?>" class="narrower text-left"><a href="<?=$urlPrefix . urlencode(str_replace('/', '-slash-', $group))?>"><?=ucwords($group)?></a></td>
 	<td title="davon Plusartikel: <?=$stats['plus']?>"><?=$stats['artikel']?></td>
+	<td title="<?=ucwords($group)?>" class="narrower text-left"><a href="<?=$urlPrefix . urlencode(str_replace('/', '-slash-', $group))?>"><?=ucwords($group)?></a></td>
 
 	<td title="Plusartikel: <?=$stats['plus']?>"><?=round($stats['plus'] / $stats['artikel'] * 100,1)?>&nbsp;%</td>
 
