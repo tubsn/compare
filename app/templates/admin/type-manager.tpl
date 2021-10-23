@@ -6,7 +6,7 @@
 
 	<p>Hier lassen sich <b>Kategorien, Audiences und Tags verwalten</b> und Artikel entsprechend neu Zuweisen.<br> Die in der Datenbank vorhandenen Cluster werden per <b>Type-Ahead-Feld</b> gelistet (einfach im Eingabefeld losschreiben oder Doppelklicken). <br>Es werden nur Artikel <b>in dem ausgewählten Datumszeitraum</b> (oben rechts) angezeigt bzw. verändert.</br>
 	</p>
-	<p>Konvertieren entfernt die ursprüngliche Themenzuweisung am Artikel! - die Artikel sind dann nicht mehr Zugeordnet.</p>
+	<p>Achtung: durch das Konvertieren wird die ursprüngliche Clusterzuweisung am Artikel entfernt! - die Artikel sind dann nicht mehr Zugeordnet.</p>
 
 	<div class="box" style="background-color:#b33d3d; color:white"><b>BITTE ULTRA VORSICHTIG SEIN!</b> - Eingaben genau prüfen! Eine Zuweisung lässt sich nicht mehr Rückgängig machen!</div>
 

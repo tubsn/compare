@@ -23,7 +23,7 @@ class Import extends Controller {
 
 			$articles = $import->rss($feed);
 
-			dd($articles);
+			//dd($articles);
 
 			$articles = array_filter($articles, function($article) {
 				$dpaFilterPattern = "/\b(?:dpa)\b/i"; // Filter DPA
