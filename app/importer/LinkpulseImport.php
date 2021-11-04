@@ -55,8 +55,6 @@ class LinkpulseImport
 
 	public function article_today($id) {
 
-
-
 		$apiQuery = '?filter%5Brange%5D=today&filter%5Burl%5D=*' . $id . '*&field%5Bpageviews%5D=sum&field%5Bconverted_usercount%5D=sum&field%5Bsubscribers%5D=sum&aggregate=total&page%5Boffset%5D=0&page%5Blimit%5D=100&sort=-pageviews';
 
 		$rawAPIData = $this->curl($apiQuery);
@@ -106,6 +104,30 @@ class LinkpulseImport
 
 	}
 
+
+	public function ressort_stats($from = null, $to = null) {
+
+		if (is_null($from)) {$from = date('Ymd');}
+		else {$from = formatDate($from,'Ymd');}
+
+		if (is_null($to)) {$to = date('Ymd');}
+		else {$to = formatDate($to,'Ymd');}
+
+		if (PORTAL == 'LR') {$domain = 'lr-online.de';}
+		if (PORTAL == 'MOZ') {$domain = 'moz.de';}
+		if (PORTAL == 'SWP') {$domain = 'swp.de';}
+
+		$timeframe = '?filter[from]=' . $from . '&filter[to]=' . $to . 'T23%3A59%3A59'; // 23:59
+		$query = '&filter%5Bsection%5D=!%2F%7C!%3Cempty%3E&filter%5Bdomain%5D=' . $domain . '&field%5Bsection%5D=one&field%5Bpageviews%5D=sum&field%5Bviewtime%5D=median%26listcount&field%5Binscreencnt%5D=sum&field%5Bviewtimesum%5D=sum&field%5Bconverted_usercount%5D=sum&field%5Bsubscribers%5D=sum&aggregate=section&page%5Boffset%5D=0&page%5Blimit%5D=100&sort=-pageviews';
+
+		$apiQuery = $timeframe . $query;
+		$rawAPIData = $this->curl($apiQuery);
+
+		//dd($rawAPIData);
+
+		return $this->adapter->convert($rawAPIData);
+
+	}
 
 	private function curl($path) {
 

@@ -104,6 +104,8 @@ $routes->get('/newsletter/sport', 'Newsletter@sport_newsletter');
 $routes->get('/newsletter/nachdrehalert', 'Newsletter@nachdreh_alert');
 $routes->get('/newsletter/nachdrehalert-score', 'Newsletter@nachdreh_alert_score');
 
+// Incentives
+$routes->get('/incentives', 'Incentives@incentives');
 
 // Admin - Config Area
 $routes->get('/admin', 'Admin@index');
