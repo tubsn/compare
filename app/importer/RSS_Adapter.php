@@ -40,8 +40,6 @@ class RSS_Adapter
 		$article['author'] = $components[0]->AdministrativeMetadata->xpath('Property[@FormalName="Author"]')[0]['Value']->__toString();
 		$article['plus'] = $xml->NewsItem->NewsManagement->accessRights->__toString()  == 'available to subscribers only' ? true : false;
 
-		// This is the last Edit timestamp - Pubdate is not available
-		//$timestamp = $xml->NewsItem->NewsManagement->ThisRevisionCreated->__toString();
 		$timestamp = $xml->NewsItem->Identification->NewsIdentifier->DateId->__toString();
 		$article['pubdate'] = date('Y-m-d H:i:s', strtotime($timestamp));
 
@@ -101,41 +99,20 @@ class RSS_Adapter
 		switch (PORTAL) {
 
 			case 'LR':
-				if ($paths[0] == 'lausitz') {
-					return $paths[1];
-				}
-
-				if (isset($paths[1]) && $paths[1] == 'sport') {
-					return $paths[1];
-				}
+				if ($paths[0] == 'lausitz') {return $paths[1];}
+				if ($paths[0] == 'ratgeber' || $paths[0] == 'blaulicht') {return 'nachrichten';}
+				if (isset($paths[1]) && $paths[1] == 'sport') {return $paths[1];}
 			break;
 
 			case 'MOZ':
-				if ($paths[0] == 'lokales') {
-					return $paths[1];
-				}
-
-				if ($paths[0] == 'nachrichten') {
-					return $paths[1];
-				}
-
-				if (isset($paths[1]) && $paths[1] == 'sport') {
-					return $paths[1];
-				}
+				if ($paths[0] == 'lokales') {return $paths[1];}
+				if ($paths[0] == 'nachrichten') {return $paths[1];}
+				if (isset($paths[1]) && $paths[1] == 'sport') {return $paths[1];}
 			break;
 
 			case 'SWP':
-				if ($paths[0] == 'suedwesten') {
-					return $paths[2];
-				}
-
-				if ($paths[0] == 'blaulicht') {
-					return $paths[1];
-				}
-
-				if ($paths[0] == 'sport') {
-					return $paths[1] ?? $paths[0];
-				}
+				if ($paths[0] == 'lokales') {return $paths[1];}
+				if ($paths[0] == 'sport') {return $paths[0];}				
 			break;
 
 		}

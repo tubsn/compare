@@ -258,6 +258,7 @@ class Articles extends Model
 
 	public function add_to_database($articles) {
 		foreach ($articles as $article) {
+			if (empty($article['id'])) {continue;}
 			$this->create_or_update($article);
 		}
 	}
@@ -778,6 +779,35 @@ class Articles extends Model
 		$output = $SQLstatement->fetchall(\PDO::FETCH_KEY_PAIR);
 		if (empty($output)) {return null;}
 		return $output;
+
+	}
+
+	public function audiences_by_ressort() {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$audiences = $this->list_distinct('audience');
+
+		$audienceArray = [];
+
+		foreach ($audiences as $audience) {
+
+			$SQLstatement = $this->db->connection->prepare(
+				"SELECT ressort, count(*)
+				 FROM `articles`
+				 WHERE `audience` = '$audience'
+				 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate
+				 GROUP BY ressort
+				 ORDER BY count(*) DESC"
+			);
+
+			$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+			$output = $SQLstatement->fetchall(\PDO::FETCH_KEY_PAIR);
+			$audienceArray[$audience] = $output;
+		}
+
+		return $audienceArray;
 
 	}
 

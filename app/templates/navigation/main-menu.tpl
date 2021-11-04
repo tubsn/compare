@@ -49,6 +49,7 @@
 				<li><a href="/stats/audience">nach Audiences</a></li>
 				<li><a href="/stats/tag">nach #-Tag</a></li>
 				<li><a href="/stats/artikel">Artikelpublikationen</a></li>
+				<li><a href="/stats/audience-by-ressort">Audience nach Ressort</a></li>
 			</ul>
 		</li>
 

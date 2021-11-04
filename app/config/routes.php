@@ -64,6 +64,7 @@ $routes->get('/stats/ressort', 'Stats@ressorts');
 $routes->get('/stats/thema', 'Stats@themen');
 $routes->get('/stats/tag', 'Stats@tags');
 $routes->get('/stats/audience', 'Stats@audiences');
+$routes->get('/stats/audience-by-ressort', 'Stats@audience_by_ressorts');
 $routes->get('/stats/artikel', 'Stats@artikel');
 
 // Readers

@@ -52,8 +52,8 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 	<th></th>
 	<th>Reiz</th>
 	<th>Titel</th>
-	<th>Audience</th>
 	<th>Inhalt</th>
+	<th>Audience</th>
 	<th>Ressort</th>
 	<?php if (auth_rights('author')): ?><th>Autor</th><?php endif; ?>
 	<?php if (!isset($showSubscribersInTable)): ?><th>Klicks</th><?php endif; ?>
@@ -91,27 +91,6 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 
 	<td><a href="/artikel/<?=$article['id']?>"><?=$article['title']?></a> </td>
 
-	<?php if (auth_rights('audience')): ?>
-		<td class="select-audiences">
-		<select class="js-audience-selector" data-id="<?=$article['id']?>">
-				<option value="0">...</option>
-				<?php if ($article['audience']): ?>
-				<option selected value="<?=$article['audience']?>"><?=$article['audience']?></option>
-				<?php endif ?>
-				<?php foreach (ARTICLE_AUDIENCES as $audience): ?>
-				<?php if ($article['audience'] == $audience) {continue;} ?>
-				<option value="<?=$audience?>"><?=$audience?></option>
-				<?php endforeach ?>
-		</select>
-		</td>
-	<?php else: ?>
-		<?php if ($article['audience']): ?>
-		<td><a class="audience-link" href="/audience/<?=urlencode(str_replace('/', '-slash-', $article['audience']))?>"><?=$article['audience']?></a></td>
-		<?php else: ?>
-		<td>-</td>
-		<?php endif; ?>
-	<?php endif; ?>
-
 	<td class="type">
 		<?php if (auth_rights('type')): ?>
 		<div class="dropdown-selectors">
@@ -138,12 +117,33 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 		</select>
 		</div>
 		<?php elseif ($article['type'] != ''): ?>
-		<a class="type-link" href="/type/<?=urlencode(str_replace('/', '-slash-', $article['type']))?>"><?=$article['type']?></a>
-		<?php if ($article['tag']): ?><br/><a class="type-link-light" href="/tag/<?=urlencode(str_replace('/', '-slash-', $article['tag']))?>"><?=$article['tag']?></a><?php endif; ?>
+		<a title="<?=$article['type']?>" class="type-link" href="/type/<?=urlencode(str_replace('/', '-slash-', $article['type']))?>"><?=$article['type']?></a>
+		<?php if ($article['tag']): ?><br/><a title="<?=$article['tag']?>" class="type-link-light" href="/tag/<?=urlencode(str_replace('/', '-slash-', $article['tag']))?>"><?=$article['tag']?></a><?php endif; ?>
 		<?php else: ?>
 		-
 		<?php endif; ?>
 	</td>
+
+	<?php if (auth_rights('audience')): ?>
+		<td class="select-audiences">
+		<select class="js-audience-selector" data-id="<?=$article['id']?>">
+				<option value="0">...</option>
+				<?php if ($article['audience']): ?>
+				<option selected value="<?=$article['audience']?>"><?=$article['audience']?></option>
+				<?php endif ?>
+				<?php foreach (ARTICLE_AUDIENCES as $audience): ?>
+				<?php if ($article['audience'] == $audience) {continue;} ?>
+				<option value="<?=$audience?>"><?=$audience?></option>
+				<?php endforeach ?>
+		</select>
+		</td>
+	<?php else: ?>
+		<?php if ($article['audience']): ?>
+		<td><a title="<?=$article['audience']?>" class="audience-link" href="/audience/<?=urlencode(str_replace('/', '-slash-', $article['audience']))?>"><?=$article['audience']?></a></td>
+		<?php else: ?>
+		<td>-</td>
+		<?php endif; ?>
+	<?php endif; ?>
 
 
 	<td class="nowrap"><a href="/ressort/<?=urlencode(str_replace('/', '-slash-', $article['ressort']))?>"><?=ucwords($article['ressort'])?></a></td>

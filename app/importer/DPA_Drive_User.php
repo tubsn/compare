@@ -7,7 +7,7 @@ use \flundr\cache\RequestCache;
 class DPA_Drive_User
 {
 
-	const API_BASE_URL = 'https://paywall-api-dev-4il4eytndq-ey.a.run.app';
+	const API_BASE_URL = 'https://user-api.me.drive-news.de';
 	private $apiUser = DRIVE_USER_API_USERNAME;
 	private $apiPassword = DRIVE_USER_API_PASSWORD;
 	private $bearerToken = null;

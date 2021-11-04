@@ -102,6 +102,7 @@ class ArticleMeta extends Model
 			}
 		}
 
+		/*
 		if (PORTAL == 'MOZ') {
 			switch ($topic) {
 				case 'Vermischtes: Soziales': 			$topic = 'Soziales'; break;
@@ -123,6 +124,7 @@ class ArticleMeta extends Model
 				default: return null; break;
 			}
 		}
+		*/
 
 		if (PORTAL == 'SWP') {
 			switch ($topic) {

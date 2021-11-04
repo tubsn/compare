@@ -7,14 +7,14 @@ class ArticleImport
 {
 
 	function __construct() {
-
 		$this->portalURL = PORTAL_URL;
-
 	}
 
 	public function rss($url) {
 
 		$rssData = $this->curl($url);
+		if (empty($rssData)) {throw new \Exception('Import Error at: ' . $url);}
+
 		$adapter = new RSS_Adapter;
 		return $adapter->convert($rssData);
 

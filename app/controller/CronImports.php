@@ -34,6 +34,27 @@ class CronImports extends Controller {
 
 	}
 
+	public function analytics_longtail() {
+
+		$from = date('Y-m-d', strtotime('today -7 days'));
+		$to = date('Y-m-d', strtotime('today -4 day'));
+
+		$articles = $this->Articles->by_date_range($from, $to);
+
+		foreach ($articles as $article) {
+			$id = $article['id'];
+			$pubDate = formatDate($article['pubdate'],'Y-m-d');
+			$gaData = $this->Analytics->by_article_id($id, $pubDate);
+			unset($gaData['totals']['Itemquantity']); // Don't Overwrite Plenigo Conversions
+			
+			$this->save_article_stats($gaData, $id);
+
+			echo $id . ' Weekly Stats updatet | ' . date('H:i:s') . "\r\n";
+		}
+
+	}
+
+
 	private function save_article_stats($analyticsData, $id) {
 		$dailyStats = $analyticsData['details'];
 		$lifeTimeTotals = $analyticsData['totals'];

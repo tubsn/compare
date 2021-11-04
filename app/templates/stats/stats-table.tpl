@@ -9,9 +9,10 @@
 	<th>⌀-Klicks</th>
 	<th style="text-align:center">%-Subs</th>
 	<th>Subs</th>
+	<th>⌀-Subs</th>
 	<th>Mediatime</th>
 	<th>⌀-MT</th>
-	<th>Impulse</th>
+	<th>K-Reiz</th>
 	<th>Conv</th>
 	<th>Convrate</th>
 	<th>⌀-Conv</th>
@@ -48,6 +49,8 @@
 	<?php endif; ?>
 
 	<td><?=number_format($stats['subscribers'],0,'.','.') ?? 0?></td>
+	<td><span class="<?php if (($stats['subscribers'] / $stats['artikel']) > 99): ?>subscribers<?php endif ?>"><?=number_format(($stats['subscribers'] / $stats['artikel']),0,'.','.') ?? 0?></span></td>
+
 
 
 	<td title="Mediatime: <?=$stats['mediatime']?>">

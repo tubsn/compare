@@ -176,6 +176,22 @@ class Stats extends Controller {
 
 	}
 
+	public function audience_by_ressorts() {
+
+		Session::set('referer', '/stats/audience-by-ressort');
+
+		$this->view->ressortList = $this->Articles->list_distinct('ressort');
+		$this->view->audiencesByRessort = $this->Articles->audiences_by_ressort();
+		$this->view->summedAudiences = $this->Articles->kpi_grouped_by('audience','ressort','count');
+
+		//dd($this->view->audiencesByRessort);
+
+		$this->view->title = 'Publizierte Audience Artikel nach Ressort';
+		$this->view->render('pages/audiences-by-ressort');
+
+	}
+
+
 	public function artikel() {
 		Session::set('referer', '/stats/artikel');
 		$viewData['charts'] = $this->Charts;

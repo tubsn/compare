@@ -42,13 +42,19 @@ class Articles extends Controller {
 		// Ressort Starts
 		$ressortStats = $this->Articles->stats_grouped_by('ressort')[$viewData['article']['ressort']] ?? null;
 
+		//dump($ressortStats);
+
 		if ($ressortStats['pageviews'] > 0) {$ressortPageviewsAverage = $ressortStats['pageviews'] / $ressortStats['artikel'];}
 		else {$ressortPageviewsAverage = 1;}
+
+		if ($ressortStats['subscribers'] > 0) {$ressortSubsAverage = $ressortStats['subscribers'] / $ressortStats['artikel'];}
+		else {$ressortSubsAverage = 1;}
 
 		$pageViewsToRessort = ($viewData['article']['pageviews'] / $ressortPageviewsAverage * 100);
 
 		$viewData['ressortAverage'] = round($ressortPageviewsAverage);
 		$viewData['ressortRank'] = round($pageViewsToRessort);
+		$viewData['ressortAvgergeSubs'] = round($ressortSubsAverage);
 
 		// Detailled Conversion / Transaction Stats
 		$this->Conversions->articleID = $id;

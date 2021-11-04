@@ -44,6 +44,12 @@
 	<?php if ($article['buyintent']): ?>
 	&ensp; Nutzer mit Kaufabsicht: <span class="orangebg"><?=$article['buyintent']?></span>
 	<?php endif; ?>
+
+
+	<?php if ($ressortAvgergeSubs && $ressortAvgergeSubs != 1): ?>
+	<br />Subscribers: <span class="subscribers"><?=$article['subscribers']?></span> <small>(Ø-Ressort: <?=$ressortAvgergeSubs?>)</small>
+	<?php endif; ?>
+
 	</p>
 
 

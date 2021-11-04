@@ -4,6 +4,7 @@ namespace app\controller;
 use flundr\mvc\Controller;
 use flundr\auth\Auth;
 use flundr\cache\RequestCache;
+use \flundr\utility\Log;
 use app\importer\ArticleImport;
 
 class Import extends Controller {
@@ -21,19 +22,20 @@ class Import extends Controller {
 
 		foreach ($feeds as $feed) {
 
-			$articles = $import->rss($feed);
-
-			//dd($articles);
+			try {$articles = $import->rss($feed);}
+			catch (\Exception $e) {
+				Log::error($e->getMessage());
+				echo $e->getMessage() . '<br/>';
+			}
 
 			$articles = array_filter($articles, function($article) {
 				$dpaFilterPattern = "/\b(?:dpa)\b/i"; // Filter DPA
 				if (preg_match($dpaFilterPattern,$article['author'])) {return null;}
-				if ($article['ressort'] == 'Bilder') {return null;}  // Filter Bildergalerien
+				if (strtolower($article['ressort']) == 'bilder') {return null;}  // Filter Bildergalerien
 				return $article;
 			});
 
 			$articles = array_values($articles); // Reindex the array Keys
-
 			$this->Articles->add_to_database($articles);
 
 		}
