@@ -163,7 +163,7 @@ th.text-left {text-align:left !important;}
 .cancelled { background-color: var(--red); display:inline-block; padding:0.1em .3em; border-radius:1em;}
 
 .bluebg, .orangebg, .darkorangebg, .greenbg, .pageviews, .subscribers,
-.geisterbg, .abwehrbg, .stuermerbg, .spielmacherbg
+.geisterbg, .abwehrbg, .stuermerbg, .spielmacherbg, .num-articles
  {background-color: var(--light-blue); display:inline-block; padding:0.1em .5em; border-radius:1em;}
 
 .subscribers {background-color: var(--dark-blue);}
@@ -174,6 +174,7 @@ th.text-left {text-align:left !important;}
 .abwehrbg {background-color:#b3c68b;}
 .stuermerbg {background-color:#ddeac0;}
 .spielmacherbg {background-color:#83d5a9;}
+.num-articles {background-color:#e6e6e6; padding:0.1em .3em;}
 
 .nachdreh-green {background-color: #74d594;}
 .nachdreh-yellow {background-color: #f0e296;}

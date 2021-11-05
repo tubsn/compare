@@ -180,13 +180,34 @@ class Stats extends Controller {
 
 		Session::set('referer', '/stats/audience-by-ressort');
 
-		$this->view->ressortList = $this->Articles->list_distinct('ressort');
-		$this->view->audiencesByRessort = $this->Articles->audiences_by_ressort();
-		$this->view->summedAudiences = $this->Articles->kpi_grouped_by('audience','ressort','count');
+		$ressortList = $this->Articles->list_distinct('ressort');
+		$audiencesByRessort = $this->Articles->audiences_by_ressort();
+		$summedRessorts = $this->Articles->kpi_grouped_by('audience','ressort','count');
+		$summedAudiences = $this->Articles->kpi_grouped_by('ressort','audience','count');
 
-		//dd($this->view->audiencesByRessort);
+		if (PORTAL == 'MOZ') {
+			$filteredRessorts = ['nachrichten','politik','bilder','panorama'];
+			$ressortList = array_filter($ressortList, function($ressort) use ($filteredRessorts) {
+				if (in_array($ressort, $filteredRessorts)) {return null;}
+				return $ressort;
+			});
 
-		$this->view->title = 'Publizierte Audience Artikel nach Ressort';
+			$summedRessorts = array_filter($summedRessorts, function($ressort) use ($filteredRessorts){
+				if (in_array($ressort['ressort'], $filteredRessorts)) {return null;}
+				return $ressort;
+			});
+		}
+
+		$audienceList = array_column($summedAudiences, 'audience');
+		$audienceValues = array_column($summedAudiences, 'ressort');
+		$summedAudiences = array_combine($audienceList, $audienceValues);
+
+		$this->view->ressortList = $ressortList;
+		$this->view->audiencesByRessort = $audiencesByRessort;
+		$this->view->summedAudiences = $summedAudiences;
+		$this->view->summedRessorts = $summedRessorts;
+
+		$this->view->title = 'Audience Artikel nach Ressort';
 		$this->view->render('pages/audiences-by-ressort');
 
 	}

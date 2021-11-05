@@ -11,6 +11,10 @@ class Incentives extends Controller {
 
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
+		if (!Auth::has_right('incentive')) {
+			throw new \Exception("Nothing to see here", 404);
+		}
+
 		$this->view('DefaultLayout');
 		$this->models('Linkpulse');
 	}
@@ -18,9 +22,7 @@ class Incentives extends Controller {
 
 	public function incentives() {
 
-		echo $this->Linkpulse->ressort_stats_base();
-
-		die;
+		//echo $this->Linkpulse->ressort_stats_base();
 
 		$from = Session::get('from') ?? date('Y-m-d', strtotime('yesterday -6days'));
 		$to = Session::get('to') ?? date('Y-m-d', strtotime('yesterday'));

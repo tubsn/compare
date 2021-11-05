@@ -18,6 +18,7 @@ class CronImports extends Controller {
 
 		$articles = $this->Articles->by_date_range($from, $to);
 
+		$updatedArticles = 0;
 		foreach ($articles as $article) {
 			$id = $article['id'];
 			$pubDate = formatDate($article['pubdate'],'Y-m-d');
@@ -29,8 +30,11 @@ class CronImports extends Controller {
 
 			$this->save_article_stats($gaData, $id);
 
-			echo $id . ' Stats updatet | ' . date('H:i:s') . "\r\n";
+			$updatedArticles++;
+			echo '.';
 		}
+
+		echo $updatedArticles . ' Articles updatet | ' . date('H:i:s') . "\r\n";
 
 	}
 
@@ -46,7 +50,7 @@ class CronImports extends Controller {
 			$pubDate = formatDate($article['pubdate'],'Y-m-d');
 			$gaData = $this->Analytics->by_article_id($id, $pubDate);
 			unset($gaData['totals']['Itemquantity']); // Don't Overwrite Plenigo Conversions
-			
+
 			$this->save_article_stats($gaData, $id);
 
 			echo $id . ' Weekly Stats updatet | ' . date('H:i:s') . "\r\n";

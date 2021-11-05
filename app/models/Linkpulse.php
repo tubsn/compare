@@ -64,7 +64,7 @@ class Linkpulse
 
 	public function ressort_stats($from,$to) {
 
-		$cache = new RequestCache($from . $to . PORTAL, 0);
+		$cache = new RequestCache($from . $to . PORTAL, 60*60);
 		$cachedData = $cache->get();
 		if ($cachedData) {return $cachedData;}
 
@@ -75,6 +75,8 @@ class Linkpulse
 			$allStats = $this->api->ressort_stats($range['from'], $range['to']);
 
 			if (!is_array($allStats)) {
+				echo 'Achtung: ' . $range['from'] . ' - ' .  $range['to'] . ' Importfehler!';
+				$cache->flush();
 				continue;
 			}
 

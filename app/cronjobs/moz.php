@@ -51,4 +51,7 @@ catch (\Exception $e) {echo 'Error: ',  $e->getMessage(), "\n";}
 try {$cron->conversions();}
 catch (\Exception $e) {echo 'Error: ',  $e->getMessage(), "\n";}
 
+try {$cron->analytics_longtail();}
+catch (\Exception $e) {echo 'Error: ',  $e->getMessage(), "\n";}
+
 echo 'Jobs Done - Processing-Time: <b>'.round((microtime(true)-APP_START)*1000,2) . '</b>ms' . "\r\n";

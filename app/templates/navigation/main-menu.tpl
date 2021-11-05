@@ -15,8 +15,8 @@
 			<ul class="dropdown" aria-label="submenu">
 				<li><a href="/ressort">nach Ressorts</a></li>
 				<li><a href="/type">nach Themen</a></li>
-				<li><a href="/audience">nach Audiences</a></li>
 				<li><a href="/tag">nach #-Tags</a></li>
+				<li><a href="/audience">nach Audiences</a></li>
 			</ul>
 		</li>
 
@@ -46,10 +46,10 @@
 			<ul class="dropdown" aria-label="submenu">
 				<li><a href="/stats/ressort">nach Ressort</a></li>
 				<li><a href="/stats/thema">nach Themen</a></li>
-				<li><a href="/stats/audience">nach Audiences</a></li>
 				<li><a href="/stats/tag">nach #-Tag</a></li>
-				<li><a href="/stats/artikel">Artikelpublikationen</a></li>
-				<li><a href="/stats/audience-by-ressort">Audience nach Ressort</a></li>
+				<li><a href="/stats/audience">nach Audiences</a></li>
+				<li><a href="/stats/audience-by-ressort">Audiences nach Ressort</a></li>
+				<li><a href="/stats/artikel">Publikationszeiten</a></li>
 			</ul>
 		</li>
 

@@ -7,6 +7,25 @@ switch (PORTAL) {
 		define('PORTAL_URL', 'https://www.lr-online.de');
 		define('PORTAL_NAME', 'LR');
 
+		define('RESSORT_MAPPING', [
+			'cottbus' => 'cos',
+			'elsterwerda' => 'els',
+			'energie-cottbus' => 'fce',
+			'finsterwalde' => 'fin',
+			'forst' => 'for',
+			'guben' => 'gub',
+			'herzberg' => 'her',
+			'hoyerswerda' => 'hoy',
+			'luckau' => 'luc',
+			'luebben' => 'lue',
+			'luebbenau' => 'cal',
+			'nachrichten' => 'nac',
+			'senftenberg' => 'sfb',
+			'sport' => 'spo',
+			'spremberg' => 'spr',
+			'weisswasser' => 'wwr',
+		]);
+
 		define('IMPORT_FEEDS', [
 			'https://www.lr-online.de/?_XML=RSS',
 			'https://www.lr-online.de/energie-cottbus/?_XML=RSS',
@@ -36,6 +55,37 @@ switch (PORTAL) {
 
 		define('PORTAL_URL', 'https://www.moz.de');
 		define('PORTAL_NAME', 'MOZ');
+
+		define('RESSORT_MAPPING', [
+			'angermuende' => 'ang',
+			'bad-belzig' => 'bel',
+			'bad-freienwalde' => 'bfw',
+			'beeskow' => 'bee',
+			'berlin' => 'bln',
+			'bernau' => 'ber',
+			'bilder' => 'bil',
+			'brandenburg' => 'bra',
+			'brandenburg-havel' => 'bhv',
+			'eberswalde' => 'ebw',
+			'eisenhuettenstadt' => 'eis',
+			'erkner' => 'erk',
+			'falkensee' => 'fal',
+			'frankfurt-oder' => 'fra',
+			'fuerstenwalde' => 'fue',
+			'gransee' => 'gra',
+			'hennigsdorf' => 'hen',
+			'kultur' => 'kul',
+			'neuruppin' => 'neu',
+			'oranienburg' => 'ora',
+			'panorama' => 'pan',
+			'politik' => 'pol',
+			'rathenow' => 'rat',
+			'schwedt' => 'scw',
+			'seelow' => 'see',
+			'sport' => 'spo',
+			'strausberg' => 'str',
+			'wirtschaft' => 'wir',
+		]);
 
 		define('IMPORT_FEEDS', [
 			'https://www.moz.de/?_XML=RSS',
