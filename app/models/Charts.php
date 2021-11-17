@@ -12,9 +12,11 @@ class Charts
 	public $kpi;
 	public $groupby = 'ressort';
 	public $operation = 'sum';
+	public $filter = null;
 	public $sort = null;
 	public $showValues;
 	public $color;
+	public $height = 300;
 	public $template = 'charts/default_bar_chart';
 	public $name;
 
@@ -33,6 +35,14 @@ class Charts
 		return $this->predefined($name);
 	}
 
+	public function new($chartData) {
+		return $this->create($chartData);
+	}
+
+	public function create($chartData) {
+		$chartData['id'] = uniqid();
+		return $this->render($chartData['template'], $chartData);
+	}
 
 	public function predefined($name) {
 
@@ -131,6 +141,55 @@ class Charts
 				$chart->showValues = true;
 				$chart->color = '#df886d';
 			break;
+
+			case 'cancellationsByRessortFirstDay':
+				$chart->source = 'Orders';
+				$chart->kpi = 'order_id';
+				$chart->groupby = 'article_ressort';
+				$chart->filter = 'cancelled = 1 AND retention = 0';
+				$chart->operation = 'count';
+				$chart->name = 'Kündiger';
+				$chart->showValues = true;
+				$chart->color = '#f77474';
+				$chart->sort = 'ASC';
+			break;
+
+			case 'cancellationsByRessortFreeMonth31':
+				$chart->source = 'Orders';
+				$chart->kpi = 'order_id';
+				$chart->groupby = 'article_ressort';
+				$chart->filter = 'cancelled = 1 AND retention < 31';
+				$chart->operation = 'count';
+				$chart->name = 'Kündiger';
+				$chart->showValues = true;
+				$chart->color = '#f77474';
+				$chart->sort = 'ASC';
+			break;
+
+			case 'cancellationsByRessortFreeMonth90':
+				$chart->source = 'Orders';
+				$chart->kpi = 'order_id';
+				$chart->groupby = 'article_ressort';
+				$chart->filter = 'cancelled = 1 AND retention < 90';
+				$chart->operation = 'count';
+				$chart->name = 'Kündiger';
+				$chart->showValues = true;
+				$chart->color = '#f77474';
+				$chart->sort = 'ASC';
+			break;
+
+			case 'avgRetentionByRessort':
+				$chart->source = 'Orders';
+				$chart->kpi = 'retention';
+				$chart->groupby = 'article_ressort';
+				$chart->filter = 'cancelled = 1';
+				$chart->operation = 'avg';
+				$chart->name = 'Haltedauer';
+				$chart->showValues = true;
+				$chart->color = '#f77474';
+				$chart->sort = 'DESC';
+			break;
+
 
 			case 'avgPageviewsByRessortDashboard':
 				$chart->kpi = 'pageviews';
@@ -308,8 +367,6 @@ class Charts
 
 	}
 
-
-
 	public function init() {
 
 		$this->chartID = uniqid();
@@ -331,6 +388,7 @@ class Charts
 			'metric' => $this->metric,
 			'dimension' => $this->dimension,
 			'color' => $this->color,
+			'height' => $this->height,
 			'showValues' => $this->showValues,
 			'name' => $this->name,
 			'id' => $this->chartID,
@@ -420,8 +478,6 @@ class Charts
 
 	private function sort_weekday() {
 
-
-
 		$output = [
 			'Monday' => null,
 			'Tuesday' => null,
@@ -451,7 +507,8 @@ class Charts
 		$this->data = $datasource->kpi_grouped_by(
 			$this->kpi,
 			$this->groupby,
-			$this->operation
+			$this->operation,
+			$this->filter
 		);
 	}
 

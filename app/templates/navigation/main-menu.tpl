@@ -61,6 +61,7 @@
 			<ul class="dropdown" aria-label="submenu">
 				<li><a href="/orders/list">Bestellungen als Liste</a></li>
 				<li><a href="/readers/list">Bestellungen mit Usergroup (Beta)</a></li>
+				<li><a href="/orders/cancellations">Kündigerverhalten</a></li>
 				<li><a href="/orders/campaigns">UTM-Kampagnen</a></li>
 				<li><a href="/orders/today">Echtzeit Bestellungen</a></li>
 			</ul>

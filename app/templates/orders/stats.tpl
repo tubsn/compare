@@ -6,7 +6,6 @@
 <h1><?=$page['title']?></h1>
 <?php endif; ?>
 
-
 <p>
 Die Bestelldaten beziehen sich auf den <b>betrachteten Zeitraum</b> und nicht auf das Publikationsdatum des Artikels.
 Es kommt daher zu Abweichungen im Vergleich zur Statistik-Seite (dort wird nach allen Conversions nach lebensdauer Artikel Publikationsdatum gemessen).

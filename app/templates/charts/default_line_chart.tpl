@@ -9,7 +9,7 @@ let ChartOptions<?=$id?> = {
 		},
 	],
 	chart: {
-		height: 300,
+		height: <?=$height ?? 300?>,
 		type: 'area',
 		toolbar: {show:false},
 		zoom: {enabled:false},

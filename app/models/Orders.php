@@ -5,6 +5,7 @@ use \flundr\mvc\Model;
 use \flundr\database\SQLdb;
 use \flundr\utility\Session;
 use \flundr\cache\RequestCache;
+use \app\models\Charts;
 
 class Orders extends Model
 {
@@ -88,7 +89,7 @@ class Orders extends Model
 	}
 
 
-	public function kpi_grouped_by($kpi, $groupby = 'ressort', $operation = 'sum') {
+	public function kpi_grouped_by($kpi, $groupby = 'ressort', $operation = 'sum', $filter = null) {
 
 		$from = strip_tags($this->from);
 		$to = strip_tags($this->to);
@@ -96,10 +97,15 @@ class Orders extends Model
 		// sum, count or average
 		$operation = $operation . '(' . $kpi . ')';
 
+		if (!is_null($filter)) {
+			$filter = 'AND ' . $filter;
+		}
+
 		$SQLstatement = $this->db->connection->prepare(
 			"SELECT $groupby, $operation as $kpi
 			 FROM `conversions`
 			 WHERE DATE(`order_date`) BETWEEN :startDate AND :endDate
+			 $filter
 			 GROUP BY $groupby
 			 ORDER BY $groupby ASC"
 		);
@@ -228,6 +234,77 @@ class Orders extends Model
 		return $retentionDays;
 	}
 
+
+	public function cancelled_by_retention_days($filter = null) {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+		if (!is_null($filter)) {$filter = 'AND ' . $filter;}
+
+		$SQLstatement = $this->db->connection->prepare(
+
+			"SELECT
+			 conversions.retention as days,
+			 count(conversions.order_id) as cancelled_orders
+
+			 FROM conversions
+			 LEFT JOIN articles ON articles.id = conversions.article_id
+			 WHERE DATE(conversions.order_date) BETWEEN :startDate AND :endDate
+			 AND conversions.cancelled != 0
+			 $filter
+			 /*
+			 #AND ifnull(conversions.article_ressort, articles.ressort) = 'cottbus'
+			 articles.type as type,
+			 articles.type as tag,
+			 articles.audience as audience,
+			 ifnull(conversions.article_ressort, articles.ressort) as ressort,
+			 articles.author as author,
+			 articles.cancelled as cancelled
+			 */
+			 GROUP BY conversions.retention
+			 ORDER BY CAST(days AS UNSIGNED) ASC"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$orders = $SQLstatement->fetchall();
+		return $orders;
+
+	}
+
+	public function cancelled_by_retention_days_chart($filter = null) {
+		$orders = $this->cancelled_by_retention_days($filter);
+		return $this->retention_days_to_chart($orders);
+	}
+
+
+	private function retention_days_to_chart($retentions) {
+
+		$charts = new Charts();
+
+		$metric = '';
+		$dimension = '';
+
+		foreach ($retentions as $set) {
+			$metric .= $set['cancelled_orders'] . ',';
+			$dimension .= "'Tag " . $set['days'] . "'" . ',';
+		}
+
+		$metric = rtrim($metric, ',');
+		$dimension = rtrim($dimension, ',');
+
+		$data = [
+			'metric' => $metric,
+			'dimension' => $dimension,
+			'color' => '#f77474',
+			'height' => 400,
+			'showValues' => null,
+			'name' => 'Kündiger',
+			'id' => uniqid(),
+		];
+
+		return $charts->render('charts/default_bar_chart', $data);
+
+	}
 
 
 	public function group_by_combined($index) {

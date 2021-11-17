@@ -88,4 +88,39 @@ class Orders extends Controller {
 
 	}
 
+
+	public function cancellations() {
+
+		Session::set('referer', '/orders/cancellations');
+
+		$this->view->title = 'Kündigerverhalten im Detail';
+		$this->view->info = null;
+
+		$viewData['orders'] = $this->Orders->list();
+		$viewData['numberOfOrders'] = count($viewData['orders'] ?? []);
+		$viewData['numberOfCancelled'] = count($this->Orders->filter_cancelled($viewData['orders']));
+
+		if ($viewData['orders']) {
+			$viewData['cancelQuote'] = round(($viewData['numberOfCancelled'] / $viewData['numberOfOrders']) * 100, 1);
+		} else {$viewData['cancelQuote'] = null;}
+
+		$viewData['charts'] = $this->Charts;
+
+		$viewData['plusOnly'] = count($this->Orders->filter_plus_only($viewData['orders']));
+		$viewData['externalOnly'] = count($this->Orders->filter_external($viewData['orders']));
+		$viewData['averageRetention'] = $this->Orders->average($this->Orders->filter_cancelled($viewData['orders']),'retention');
+
+
+		$viewData['churnSameDay'] = $this->Orders->sum_up($this->Orders->cancelled_by_retention_days('retention = 0'),'cancelled_orders');
+		$viewData['churn30'] = $this->Orders->sum_up($this->Orders->cancelled_by_retention_days('retention < 31'),'cancelled_orders');
+		$viewData['churn90'] = $this->Orders->sum_up($this->Orders->cancelled_by_retention_days('retention < 90'),'cancelled_orders');
+		$viewData['churnAfter90'] = $this->Orders->sum_up($this->Orders->cancelled_by_retention_days('retention > 90'),'cancelled_orders');
+
+		$viewData['retentionChart'] = $this->Orders->cancelled_by_retention_days_chart();
+		//$viewData['retentionChart1M'] = $this->Orders->cancelled_by_retention_days_chart("conversions.subscription_internal_title LIKE '%1M%'");
+
+		$this->view->render('orders/cancellations', $viewData);
+
+	}
+
 }

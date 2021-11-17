@@ -49,10 +49,12 @@ $routes->get('/orders/import/{date:[\d]{4}-[\d]{2}-[\d]{2}?}', 'Import@order_imp
 $routes->get('/orders/live', 'Livedata@index');
 $routes->get('/orders/yesterday', 'Livedata@orders_yesterday');
 $routes->get('/orders/today', 'Livedata@orders_today');
+$routes->get('/orders/cancellations', 'Orders@cancellations');
 $routes->get('/orders/{id:\d+}', 'Livedata@order');
 $routes->get('/orders/{date}', 'Livedata@orders_date');
 $routes->get('/orders/customer/{id:\d+}', 'Livedata@customer');
 $routes->get('/orders/subscription/{id:\d+}', 'Livedata@subscription');
+
 
 $routes->post('/orders/set_client', 'Livedata@set_client');
 $routes->post('/orders/set_date', 'Livedata@set_date');

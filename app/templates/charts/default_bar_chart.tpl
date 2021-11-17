@@ -11,7 +11,7 @@ let ChartOptions<?=$id?> = {
 	chart: {
 		type: 'bar',
 		toolbar: {show:false},
-		height: 300,
+		height: <?=$height ?? 300?>,
 
 	},
 	tooltip: {
