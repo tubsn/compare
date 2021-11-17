@@ -50,6 +50,9 @@
 				<li><a href="/stats/audience">nach Audiences</a></li>
 				<li><a href="/stats/audience-by-ressort">Audiences nach Ressort</a></li>
 				<li><a href="/stats/artikel">Publikationszeiten</a></li>
+				<?php if (auth_rights('incentive')): ?>
+				<li class="hightlight"><a href="/incentives">Halbjahresvergleich</a></li>
+				<?php endif; ?>
 			</ul>
 		</li>
 

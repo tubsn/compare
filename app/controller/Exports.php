@@ -10,7 +10,7 @@ class Exports extends Controller {
 	public function __construct() {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 		$this->view('CSV');
-		$this->models('Articles,Analytics,Conversions,Campaigns,DailyKPIs,Plenigo,Orders');
+		$this->models('Articles,Analytics,Conversions,Campaigns,DailyKPIs,Plenigo,Orders,Linkpulse');
 	}
 
 	public function articles() {
@@ -143,5 +143,59 @@ class Exports extends Controller {
 
 	}
 
+	public function linkpulse_halftime() {
+
+		$baseStats = $this->Linkpulse->ressort_stats_cache();
+		$baseStats = $this->average_data($baseStats, 34);
+		ksort($baseStats);
+
+		$this->view->title = 'Linkpulse-Halbjahreszahlen.csv';
+		$this->view->export($baseStats);
+
+	}
+
+	public function linkpulse_current() {
+
+		$from = Session::get('from') ?? date('Y-m-d', strtotime('yesterday -6days'));
+		$to = Session::get('to') ?? date('Y-m-d', strtotime('yesterday'));
+		$weeks = $this->calculate_weeks($from, $to);
+
+		$currentStats = $this->Linkpulse->ressort_stats($from, $to);
+		$currentStats = $this->average_data($currentStats, $weeks);
+		ksort($currentStats);
+
+		$this->view->title = 'Linkpulse-Aktuellezahlen.csv';
+		$this->view->export($currentStats);
+
+	}
+
+	/* Used By Linkpulse Export */
+
+	private function calculate_weeks($from, $to) {
+
+		$origin = date_create($from);
+		$target = date_create($to);
+		$interval = date_diff($origin, $target);
+
+		return round($interval->format('%a') / 7);
+
+	}
+
+	/* Used By Linkpulse Export */
+
+	private function average_data($data, $avgBase = 34) {
+
+		return array_map(function($set) use ($avgBase) {
+			$set['pageviews'] = round($set['pageviews'] / $avgBase,2);
+			$set['subscribers'] = round($set['subscribers'] / $avgBase,2);
+			$set['conversions'] = round($set['conversions'] / $avgBase,2);
+			$set['mediatime'] = round($set['mediatime'] / $avgBase,2);
+			$set['avgmediatime'] = round($set['avgmediatime'],2);
+			return $set;
+		}, $data);
+
+	}
+
+		
 
 }

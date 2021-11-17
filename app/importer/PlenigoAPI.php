@@ -54,7 +54,6 @@ class PlenigoAPI
 		*/
 
 		$data = array_merge($data, $additionalData);
-
 		return $data;
 
 	}

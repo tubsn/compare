@@ -257,7 +257,7 @@
 <details>
 	<summary>Einzelauflistung aller Käufe</summary>
 
-<section class="detail-layout">
+<section class="detail-layout" style="gap:2em;">
 
 <?php foreach ($conversions as $conversion): ?>
 

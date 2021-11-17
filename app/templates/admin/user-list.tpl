@@ -10,13 +10,17 @@ width:18px; height:18px; margin-left:0.3em; top:3px; background-image:url('/styl
 
 	<h1><?=$page['title'] ?? 'User-Profiles'?></h1>
 
+	<div class="box">Folgende Rechtegruppen stehen zur Verfügung:
+		<p>"<b>type</b>" = Artikel Themen und Tags setzen | "<b>author</b>" = Autoren vergleich | "<b>audience</b>" = Verwalten von Audiences am Artikel | "<b>incentive</b>" = Zugriff auf Pokerchips.<br/>Rechte können kommasepariert, kombiniert werden!</p>
+	</div>
+
 	<table class="fancy wide">
 		<tr>
 			<th>ID</th>
 			<th>E-Mail</th>
 			<th>Vorname</th>
 			<th>Nachname</th>
-			<th>Gruppen</th>
+			<th>Abteilung</th>
 			<th>Rechte</th>
 			<th>Löschen</th>
 		</tr>

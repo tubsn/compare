@@ -17,7 +17,7 @@
 	<fieldset><legend>Zusatzinfos</legend>
 		<label>Vorname: <input name="firstname" value="<?=$user['firstname']?>"></label>
 		<label>Nachname: <input name="lastname" value="<?=$user['lastname']?>"></label>
-		<label>Gruppen: <input name="groups" value="<?=$user['groups']?>"></label>
+		<label>Abteilung: <input name="groups" value="<?=$user['groups']?>"></label>
 		<label>Rechte: <input name="rights" value="<?=$user['rights']?>"></label>
 	</fieldset>
 

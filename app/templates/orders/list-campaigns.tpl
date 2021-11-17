@@ -49,7 +49,7 @@ Kampagnenbestellungen: <b class="conversions"><?=$numberOfCampaigns?></b>
 	<td><?=$campaign['order_price']?>&thinsp;€</td>
 	<!--<td><?=$campaign['subscription_internal_title']?></td>-->
 	<td><?=$campaign['cancelled'] ? '<span class="cancelled">gekündigt</span>' : '' ?></td>
-	<td><?=(is_null($campaign['retention'])) ? '' : $campaign['retention'] . ' Tage' ?></td>
+	<td data-sortdate="<?=$campaign['retention']?>"><?=(is_null($campaign['retention'])) ? '' : $campaign['retention'] . ' Tage' ?></td>
 	<td class="text-right"><?=ucfirst($campaign['article_ressort'])?></td>
 	<td class="text-right"><a href="/artikel/<?=$campaign['article_id']?>"><?=$campaign['article_id']?></a></td>
 

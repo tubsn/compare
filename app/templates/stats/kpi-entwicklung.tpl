@@ -8,6 +8,7 @@
 .bronze {background:#ec8e49;}
 .silver {background:#b7b7b7;}
 .gold {background:#fdd765;}
+.negative {background:#dd7474;}
 </style>
 
 <table class="fancy mb wide js-sortable">
@@ -35,7 +36,10 @@
 
 <hr>
 
-<h3>KPIs im Selektierten Zeitraum</h3>
+
+<details>
+<summary>Kennzahlen im selektierten Zeitraum</summary>
+
 <table class="fancy mb wide js-sortable">
 <thead>
 <tr>
@@ -59,8 +63,13 @@
 </tbody>
 </table>
 
+<a class="button" href="/export/linkpulse/current">Aktuelle Daten exportieren</a>
 
-<h3>KPIs - Jahresdurchschnitts Werte</h3>
+</details>
+
+<details>
+<summary>Jahres-Durchschnitts-Werte</summary>
+
 <table class="fancy mb wide js-sortable">
 <thead>
 <tr>
@@ -84,6 +93,9 @@
 </tbody>
 </table>
 
+<a class="button" href="/export/linkpulse/halftime">Jahres Daten exportieren</a>
+
+</details>
 
 
 </main>

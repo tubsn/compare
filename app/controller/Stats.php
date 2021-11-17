@@ -185,18 +185,19 @@ class Stats extends Controller {
 		$summedRessorts = $this->Articles->kpi_grouped_by('audience','ressort','count');
 		$summedAudiences = $this->Articles->kpi_grouped_by('ressort','audience','count');
 
-		if (PORTAL == 'MOZ') {
-			$filteredRessorts = ['nachrichten','politik','bilder','panorama'];
-			$ressortList = array_filter($ressortList, function($ressort) use ($filteredRessorts) {
-				if (in_array($ressort, $filteredRessorts)) {return null;}
-				return $ressort;
-			});
+		$filteredRessorts = [];
+		if (PORTAL == 'LR') {$filteredRessorts = ['bilder','ratgeber'];}
+		if (PORTAL == 'MOZ') {$filteredRessorts = ['nachrichten','politik','bilder','panorama','themen','wissen','anzeigen','lokales'];}
 
-			$summedRessorts = array_filter($summedRessorts, function($ressort) use ($filteredRessorts){
-				if (in_array($ressort['ressort'], $filteredRessorts)) {return null;}
-				return $ressort;
-			});
-		}
+		$ressortList = array_filter($ressortList, function($ressort) use ($filteredRessorts) {
+			if (in_array($ressort, $filteredRessorts)) {return null;}
+			return $ressort;
+		});
+
+		$summedRessorts = array_filter($summedRessorts, function($ressort) use ($filteredRessorts){
+			if (in_array($ressort['ressort'], $filteredRessorts)) {return null;}
+			return $ressort;
+		});
 
 		$audienceList = array_column($summedAudiences, 'audience');
 		$audienceValues = array_column($summedAudiences, 'ressort');

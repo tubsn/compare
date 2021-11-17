@@ -47,8 +47,8 @@ class Incentives extends Controller {
 		$this->view->ressorts = $finalStats;
 
 		Session::set('referer', '/incentives');
-		$this->view->title = 'Wettkampf um die Pokerchips';
-		$this->view->render('stats/linkpulse-stats');
+		$this->view->title = 'Entwicklung im Vergleich zum ersten Halbjahr';
+		$this->view->render('stats/kpi-entwicklung');
 
 	}
 
@@ -99,18 +99,22 @@ class Incentives extends Controller {
 			if ($set['pageviews'] >= 10) {$set['pvclass'] = 'bronze';}
 			if ($set['pageviews'] >= 20) {$set['pvclass'] = 'silver';}
 			if ($set['pageviews'] >= 30) {$set['pvclass'] = 'gold';}
+			if ($set['pageviews'] <= -20) {$set['pvclass'] = 'negative';}
 
 			if ($set['subscribers'] >= 10) {$set['subclass'] = 'bronze';}
 			if ($set['subscribers'] >= 20) {$set['subclass'] = 'silver';}
 			if ($set['subscribers'] >= 30) {$set['subclass'] = 'gold';}
+			if ($set['subscribers'] <= -20) {$set['subclass'] = 'negative';}
 
 			if ($set['conversions'] >= 10) {$set['convclass'] = 'bronze';}
 			if ($set['conversions'] >= 20) {$set['convclass'] = 'silver';}
 			if ($set['conversions'] >= 30) {$set['convclass'] = 'gold';}
+			if ($set['conversions'] <= -20) {$set['convclass'] = 'negative';}
 
 			if ($set['mediatime'] >= 10) {$set['mclass'] = 'bronze';}
 			if ($set['mediatime'] >= 20) {$set['mclass'] = 'silver';}
 			if ($set['mediatime'] >= 30) {$set['mclass'] = 'gold';}
+			if ($set['mediatime'] <= -20) {$set['mclass'] = 'negative';}
 
 			return $set;
 		}, $data);

@@ -65,6 +65,8 @@ animation: menu-scroll-in 0.1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;}
 /* Bugfix for Textintend Right */
 .main-nav ul li ul li a:after {content: "\0000a0";  letter-spacing: 0.5em;}
 
+.main-nav ul li ul li.hightlight {background-color: #315984;}
+
 .main-logo {width:80px; position:absolute; left:48.5%; top:1%;}
 .main-logo:hover {animation: wobble 0.7s both;}
 

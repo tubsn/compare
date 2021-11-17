@@ -45,6 +45,7 @@ class RSS_Adapter
 
 		if (isset($xml->NewsItem->xpath('NewsComponent[@Duid="leadImage"]//NewsComponent')[0]->ContentItem['Href'])) {
 			$article['image'] = $xml->NewsItem->xpath('NewsComponent[@Duid="leadImage"]//NewsComponent')[0]->ContentItem['Href']->__toString();
+			$article['image'] = PORTAL_URL . $article['image'];
 		}
 		else {$article['image'] = null;}
 

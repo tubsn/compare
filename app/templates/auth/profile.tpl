@@ -19,7 +19,7 @@
 			<td><?=auth('lastname');?></td>
 		</tr>
 		<tr>
-			<td>Gruppen:</td>
+			<td>Abteilung:</td>
 			<td><?=auth('groups');?></td>
 		</tr>
 		<tr>

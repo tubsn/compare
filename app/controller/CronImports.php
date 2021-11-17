@@ -31,7 +31,6 @@ class CronImports extends Controller {
 			$this->save_article_stats($gaData, $id);
 
 			$updatedArticles++;
-			echo '.';
 		}
 
 		echo $updatedArticles . ' Articles updatet | ' . date('H:i:s') . "\r\n";
@@ -45,6 +44,7 @@ class CronImports extends Controller {
 
 		$articles = $this->Articles->by_date_range($from, $to);
 
+		$updatedArticles = 0;
 		foreach ($articles as $article) {
 			$id = $article['id'];
 			$pubDate = formatDate($article['pubdate'],'Y-m-d');
@@ -53,8 +53,10 @@ class CronImports extends Controller {
 
 			$this->save_article_stats($gaData, $id);
 
-			echo $id . ' Weekly Stats updatet | ' . date('H:i:s') . "\r\n";
+			$updatedArticles++;
 		}
+		
+		echo $updatedArticles . ' Articles - Weekly Stats updatet | ' . date('H:i:s') . "\r\n";
 
 	}
 
@@ -131,7 +133,7 @@ class CronImports extends Controller {
 
 		foreach ($dates as $day) {
 			$this->Orders->import($day);
-			echo 'Conversions für ' . $day . ' importiert | ' . date('H:i:s') . "\r\n";
+			echo 'Conversions fuer ' . $day . ' importiert | ' . date('H:i:s') . "\r\n";
 		}
 
 		$this->enrich_conversions_with_ga();

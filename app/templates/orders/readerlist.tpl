@@ -65,7 +65,7 @@ Gesamt Käufe: <b class="conversions"><?=count($completeOrders)?> </b>
 	<td><?=$order['order_price']?>&thinsp;€</td>
 	<td><?=$order['order_payment_method']?></td>
 	<td><?=$order['cancelled'] ? '<span class="cancelled">gekündigt</span>' : '' ?></td>
-	<td><?=(is_null($order['retention'])) ? '' : $order['retention'] . ' Tage' ?></td>
+	<td data-sortdate="<?=$order['retention']?>"><?=(is_null($order['retention'])) ? '' : $order['retention'] . ' Tage' ?></td>
 	<td class="text-right"><a href="/artikel/<?=$order['article_id']?>"><?=$order['article_id']?></a></td>
 
 </tr>

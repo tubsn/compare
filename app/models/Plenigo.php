@@ -34,6 +34,8 @@ class Plenigo
 		if (isset($order['errorCode'])) {return null;}
 
 		$subscription = $this->active_subscription($order);
+		$subscription['orderDate'] = $order['orderDate']; // Keep original Orderdate
+
 		$subscription = $this->map_subscription_data($subscription);
 
 		$customer = $this->map_customer($order);
@@ -121,7 +123,7 @@ class Plenigo
 		if ($new['subscription_cancellation_date']) {
 			$new['cancelled'] = 1;
 
-			$start = new \DateTime(formatDate($org['startDate'], 'Y-m-d'));
+			$start = new \DateTime(formatDate($org['orderDate'], 'Y-m-d'));
 			$end = new \DateTime(formatDate($org['cancellationDate'], 'Y-m-d'));
 			$interval = $start->diff($end);
 			$new['retention'] = $interval->format('%r%a');
@@ -186,50 +188,29 @@ class Plenigo
 
 		if (!isset($paths[0])) {return null;}
 
+
 		switch (PORTAL) {
 
 			case 'LR':
-				if ($paths[0] == 'lausitz') {
-					return $paths[1];
-				}
-
-				if (isset($paths[1]) && $paths[1] == 'sport') {
-					return $paths[1];
-				}
+				if ($paths[0] == 'lausitz') {return $paths[1];}
+				if ($paths[0] == 'ratgeber' || $paths[0] == 'blaulicht') {return 'nachrichten';}
+				if (isset($paths[1]) && $paths[1] == 'sport') {return $paths[1];}
 			break;
 
 			case 'MOZ':
-				if ($paths[0] == 'lokales') {
-					return $paths[1];
-				}
-
-				if ($paths[0] == 'nachrichten') {
-					return $paths[1];
-				}
-
-				if (isset($paths[1]) && $paths[1] == 'sport') {
-					return $paths[1];
-				}
+				if ($paths[0] == 'lokales') {return $paths[1];}
+				if ($paths[0] == 'nachrichten') {return $paths[1];}
+				if (isset($paths[1]) && $paths[1] == 'sport') {return $paths[1];}
 			break;
 
 			case 'SWP':
-				if ($paths[0] == 'suedwesten') {
-					return $paths[2];
-				}
-
-				if ($paths[0] == 'blaulicht') {
-					return $paths[1];
-				}
-
-				if ($paths[0] == 'sport') {
-					return $paths[1] ?? $paths[0];
-				}
+				if ($paths[0] == 'lokales') {return $paths[1];}
+				if ($paths[0] == 'sport') {return $paths[0];}				
 			break;
 
 		}
 
-		return $paths[0];
-
+		return $paths[0] ?? 'unbekannt';
 
 	}
 
