@@ -1,14 +1,16 @@
-Crime/Blaulicht
-Familien
-Foodies
-Pendler
-Rettungsengel
-Teslanians
-Unioner
-Industriebeschäftigte Uckermark
-Ekoianer
-Tierfreunde
-Häuslebauer/ Berlinflüchtlinge
-Amateurfußball
-Deutsch-Polnische Nachbarn
-Sonstiges
+Vermischtes: Soziales
+Verkehr/Infrastruktur
+Vermischtes: Freizeit/Hobbys
+Sport: Nicht-Fußball
+Bildung/Erziehung
+Wirtschaft: Unternehmen
+Kultur
+Vermischtes: Sonstiges
+Vermischtes: Gesundheit
+Sport: Fußball
+Wirtschaft: Verbraucher
+Politik
+Justiz/Kriminalität
+Vermischtes: Wissenschaft
+Katastrophe/Unglück
+Vermischtes: Leute

@@ -204,6 +204,7 @@ class Plenigo
 			break;
 
 			case 'SWP':
+				if ($paths[0] == 'suedwesten') {return $paths[2];}
 				if ($paths[0] == 'lokales') {return $paths[1];}
 				if ($paths[0] == 'sport') {return $paths[0];}				
 			break;

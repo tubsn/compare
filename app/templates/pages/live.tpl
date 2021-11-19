@@ -64,7 +64,7 @@ Pageviews: <b class="pageviews"><?=number_format($pageviews,0,',','.')?></b>
 		<?php else: ?>			
 		<td><?=$article['avgmediatime']?></td>			
 		<?php endif ?>
-		<td><a href="<?=$article['url']?>">öffnen</a></td>
+		<td><a href="https://<?=$article['url']?>">öffnen</a></td>
 	</tr>
 <?php endforeach ?>
 </tbody>
@@ -87,7 +87,7 @@ Pageviews: <b class="pageviews"><?=number_format($pageviews,0,',','.')?></b>
 <tbody>
 <?php foreach ($orders as $order): ?>
 	<tr>
-		<td><a href="https://backend.plenigo.com/h7DjbDhETLTvrgZLaZXA/orders/<?=$order['order_id']?>/show"><?=$order['order_id']?></a></td>
+		<td><a href="https://backend.plenigo.com/<?=PLENIGO_COMPANY_ID?>/orders/<?=$order['order_id']?>/show"><?=$order['order_id']?></a></td>
 		<td><?=$order['order_date']?></td>
 		<td><?=$order['order_title']?></td>
 		<td><?=$order['order_price']?></td>

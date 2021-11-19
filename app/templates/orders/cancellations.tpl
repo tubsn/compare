@@ -18,9 +18,10 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 		<li>Gesamtbestellungen: <b class="conversions"><?=$numberOfOrders?></b></li>
 
 		<li>davon Gekündigt: <b class="redish"><?=$numberOfCancelled?></b></li>
-		<li>Kündigerquote: <b class="orange"><?=$cancelQuote?>&thinsp;%</b></li>
-		<li title="Anzahl: <?=$churn90?>">Kündigerquote nach 90-Tagen: <b class="orange"><?=round($churn90 / $numberOfOrders * 100,1)?>&thinsp;%</b></li>
-		<li title="Anzahl: <?=$churn30?>">Kündigerquote nach 30-Tagen: <b class="orange"><?=round($churn30 / $numberOfOrders * 100,1)?>&thinsp;%</b></li>
+		<li>Kündigerquote Heute: <b class="orange"><?=$cancelQuote?>&thinsp;%</b></li>
+		<li title="Anzahl: <?=$churn90?>">K-Quote nach 90-Tagen: <b class="orange"><?=round($churn90 / $numberOfOrders * 100,1)?>&thinsp;%</b></li>
+		<li title="Anzahl: <?=$churn30?>">K-Quote nach 30-Tagen: <b class="orange"><?=round($churn30 / $numberOfOrders * 100,1)?>&thinsp;%</b></li>
+		<li title="Anzahl: <?=$churnSameDay?>">K-Quote am Bestelltag: <b class="orange"><?=round($churnSameDay / $numberOfOrders * 100,1)?>&thinsp;%</b></li>
 
 
 		<li>⌀-Haltedauer: <b class="blue"><?=number_format($averageRetention,2,',','.')?> Tage</b></li>

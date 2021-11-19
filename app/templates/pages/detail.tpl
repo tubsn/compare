@@ -134,7 +134,7 @@
 
 </section>
 
-<section>
+<section style="position:relative;">
 	<?php if ($stats): ?>
 	<h3>Artikelaufrufe:</h3>
 	<?php include tpl('charts/linechart')?>

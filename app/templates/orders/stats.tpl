@@ -23,12 +23,11 @@ Es kommt daher zu Abweichungen im Vergleich zur Statistik-Seite (dort wird nach 
 		<li>davon Extern: <b class="blue"><?=$externalOnly?></b></li>
 		<li>davon Gekündigt: <b class="redish"><?=$numberOfCancelled?></b></li>
 		<li>Kündigerquote: <b class="orange"><?=$cancelQuote?>&thinsp;%</b></li>
+		<li title="Anzahl: <?=$churnSameDay?>">Kündigerquote am Bestelltag: <b class="orange"><?=round($churnSameDay / $numberOfOrders * 100,1)?>&thinsp;%</b></li>
 		<li>⌀-Haltedauer: <b class="blue"><?=number_format($averageRetention,2,',','.')?> Tage</b></li>
 	</ul>
 
 	<nav>
-		<a class="button light" href="/orders/list">Bestellungen auflisten</a>&ensp;
-		<a class="button light" href="/orders/campaigns">UTM Kampagnen</a>&ensp;
 		<a class="button light" href="/orders/today">Echtzeitdaten</a>
 	</nav>
 
