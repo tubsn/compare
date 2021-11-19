@@ -3,32 +3,60 @@
 <script>
 let ChartOptions<?=$id?> = {
 	series: [
+		<?php if (is_array($metric)): ?>
+		<?php foreach ($metric as $index => $currentMetric): ?>
+		{
+			name: '<?php if (is_array($name)): ?><?=$name[$index]?><?php else: ?><?=$name?><?php endif; ?>',
+			<?php if (is_array($color)): ?>color: '<?=$color[$index]?>',<?php endif; ?>
+			data: [<?=$currentMetric?>],
+		},
+		<?php endforeach; ?>
+		<?php else: ?>
 		{
 			name: '<?=$name?>', color: '<?=$color?>',
 			data: [<?=$metric?>],
 		},
+		<?php endif; ?>
 	],
 	chart: {
 		height: <?=$height ?? 300?>,
+		<?php if (isset($area) && $area == false): ?>
+		type: 'line',
+		<?php else: ?>
 		type: 'area',
+		<?php endif; ?>
 		toolbar: {show:false},
 		zoom: {enabled:false},
 		sparkline: {enabled: false},
+		<?php if (isset($stacked) && $stacked == true): ?>
+		stacked: true,
+		<?php else: ?>
 		stacked: false,
-
+		<?php endif; ?>
 	},
-
+	<?php if (is_array($metric) && !is_array($color)): ?>
+	theme: {
+		monochrome: {
+			enabled: true,
+			color: '<?=$color?>',
+			shadeTo: 'light',
+			shadeIntensity: 0.7
+		}
+	},
+	<?php endif; ?>
+	<?php if (isset($legend)): ?>
 	legend: {
 	show:true,
-	position: 'top',
+	position: '<?=$legend?>',
 	horizontalAlign: 'center',
-	onItemHover: {
-		highlightDataSeries: false
-	},
+	onItemHover: {highlightDataSeries: true},
 	floating: true,
 	offsetY: 0,
 	offsetX: 0,
 	},
+	<?php else: ?>
+	legend: {show:false,},
+	<?php endif; ?>
 
 	stroke: {curve: 'smooth'},
 	dataLabels: {enabled: false,},

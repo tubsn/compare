@@ -13,7 +13,7 @@ class Orders extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Articles,Orders,Campaigns,Charts');
+		$this->models('Articles,Orders,Campaigns,LongtermKPIs,Charts');
 	}
 
 
@@ -94,7 +94,7 @@ class Orders extends Controller {
 
 		Session::set('referer', '/orders/cancellations');
 
-		$this->view->title = 'Kündigerverhalten im Detail';
+		$this->view->title = 'Kündigerverhalten und Entwicklung';
 		$this->view->info = null;
 
 		$viewData['orders'] = $this->Orders->list();
@@ -119,6 +119,9 @@ class Orders extends Controller {
 
 		$viewData['retentionChart'] = $this->Orders->cancelled_by_retention_days_chart();
 		//$viewData['retentionChart1M'] = $this->Orders->cancelled_by_retention_days_chart("conversions.subscription_internal_title LIKE '%1M%'");
+
+		$cancellations = $this->LongtermKPIs->cancellations();
+		$this->view->longterm = $this->LongtermKPIs->as_chartdata($cancellations);
 
 		$this->view->render('orders/cancellations', $viewData);
 

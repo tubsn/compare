@@ -68,6 +68,7 @@ $routes->get('/stats/tag', 'Stats@tags');
 $routes->get('/stats/audience', 'Stats@audiences');
 $routes->get('/stats/audience-by-ressort', 'Stats@audience_by_ressorts');
 $routes->get('/stats/artikel', 'Stats@artikel');
+$routes->get('/stats/compared', 'LongtermAnalysis@overview');
 
 // Readers
 $routes->get('/readers/{id:[\d]{12}?}', 'Readers@detail');

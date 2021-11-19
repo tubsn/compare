@@ -19,9 +19,11 @@ let ChartOptions<?=$id?> = {
         yaxis: {
           show: false
         },
-        legend: {
-          position: 'bottom'
-        },
+		<?php if (isset($legend)): ?>
+		legend: {position: '<?=$legend?>'},
+		<?php else: ?>
+		legend: {show:false,},
+		<?php endif; ?>
 		plotOptions: {
 		    pie: {
 		      donut: {

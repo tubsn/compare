@@ -184,6 +184,7 @@ class Charts
 				$chart->groupby = 'article_ressort';
 				$chart->filter = 'cancelled = 1';
 				$chart->operation = 'avg';
+				$chart->height = '300';
 				$chart->name = 'Haltedauer';
 				$chart->showValues = true;
 				$chart->color = '#f77474';
@@ -416,6 +417,11 @@ class Charts
 		$this->metric = rtrim($metric, ',');
 		$this->dimension = rtrim($dimension, ',');
 
+	}
+
+	public function implode($array, $asInteger = false) {
+		if ($asInteger) {return implode($array, ",");}
+		return "'" . implode($array, "','") . "'";
 	}
 
 	public function sort() {

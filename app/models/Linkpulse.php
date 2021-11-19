@@ -202,7 +202,7 @@ class Linkpulse
 	}
 
 
-	private function split_date_range($from, $to, $interval = 7) {
+	public function split_date_range($from, $to, $interval = 7) {
 
 		$period = new \DatePeriod(
 			new \DateTime($from),
