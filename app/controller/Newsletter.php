@@ -11,7 +11,7 @@ class Newsletter extends Controller {
 	public function __construct() {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 		$this->view('BlankLayout');
-		$this->models('Articles,Orders,GlobalKPIs');
+		$this->models('Articles,Orders,DailyKPIs');
 	}
 
 	public function chefredaktion() {
@@ -71,9 +71,9 @@ class Newsletter extends Controller {
 
 		$yesterday = date('Y-m-d', strtotime('yesterday'));
 
-		$this->GlobalKPIs->from = $yesterday;
-		$this->GlobalKPIs->to = $yesterday;
-		$viewData['stats'] = $this->GlobalKPIs->stats();
+		$this->DailyKPIs->from = $yesterday;
+		$this->DailyKPIs->to = $yesterday;
+		$viewData['stats'] = $this->DailyKPIs->stats();
 
 		$this->Orders->from = $yesterday;
 		$this->Orders->to = $yesterday;
@@ -115,9 +115,9 @@ class Newsletter extends Controller {
 
 		$yesterday = date('Y-m-d', strtotime('yesterday'));
 
-		$this->GlobalKPIs->from = $start;
-		$this->GlobalKPIs->to = $end;
-		$viewData['stats'] = $this->GlobalKPIs->stats();
+		$this->DailyKPIs->from = $start;
+		$this->DailyKPIs->to = $end;
+		$viewData['stats'] = $this->DailyKPIs->stats();
 
 		$this->Orders->from = $start;
 		$this->Orders->to = $end;

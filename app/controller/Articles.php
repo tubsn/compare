@@ -13,7 +13,7 @@ class Articles extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 		$this->view('DefaultLayout');
 		$this->view->navigation = 'navigation/article-menu';
-		$this->models('Articles,Analytics,DailyKPIs,Conversions,Linkpulse,Plenigo,ArticleMeta');
+		$this->models('Articles,Analytics,ArticleKPIs,Conversions,Linkpulse,Plenigo,ArticleMeta');
 	}
 
 
@@ -36,8 +36,8 @@ class Articles extends Controller {
 		}
 
 		// Returns Stats aggregated by Day for this ID
-		$viewData['stats'] = $this->DailyKPIs->by_id($id);
-		$viewData['chart'] = $this->DailyKPIs->detail_chart_data($viewData['stats']);
+		$viewData['stats'] = $this->ArticleKPIs->by_id($id);
+		$viewData['chart'] = $this->ArticleKPIs->detail_chart_data($viewData['stats']);
 
 		// Ressort Starts
 		$ressortStats = $this->Articles->stats_grouped_by('ressort')[$viewData['article']['ressort']] ?? null;
@@ -179,7 +179,7 @@ class Articles extends Controller {
 		$lifeTimeTotals['subscribers'] = $subscribers;
 
 		$this->Articles->add_stats($lifeTimeTotals,$id);
-		$this->DailyKPIs->add($dailyStats,$id);
+		$this->ArticleKPIs->add($dailyStats,$id);
 
 		if ($lifeTimeTotals['Itemquantity'] < 0) { return; }
 
@@ -208,7 +208,7 @@ class Articles extends Controller {
 	public function delete($id) {
 		if (!auth_rights('type')) {$this->view->redirect('/login');}
 		$this->Articles->delete($id);
-		$this->DailyKPIs->delete($id);
+		$this->ArticleKPIs->delete($id);
 		$this->view->redirect('/');
 	}
 

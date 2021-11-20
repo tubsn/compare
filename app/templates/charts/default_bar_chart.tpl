@@ -39,7 +39,25 @@ let ChartOptions<?=$id?> = {
 	},
 	<?php endif; ?>
 	tooltip: {
-		enabled: <?php if (isset($showValues)): ?>false<?php else: ?>true<?php endif; ?>,
+		<?php if (isset($showValues) && $showValues == true): ?>
+		enabled: false,
+		<?php else: ?>
+		enabled: true,
+		<?php endif; ?>
+		<?php if (isset($percent) && $percent == true): ?>
+        y: {
+          formatter: function(value) {
+              return value + '&thinsp;%'
+          },
+        },
+		<?php endif; ?>
+		<?php if (isset($seconds) && $seconds == true): ?>
+        y: {
+          formatter: function(value) {
+              return value + '&thinsp;s'
+          },
+        },
+		<?php endif; ?>
 	},
 
 	grid: {
@@ -67,7 +85,11 @@ let ChartOptions<?=$id?> = {
 	<?php endif; ?>
 	dataLabels: {
 		textAnchor: 'middle',
-		enabled: <?=$showValues ?? 'false'?>,
+		<?php if (isset($showValues) && $showValues == false): ?>
+		enabled: false,
+		<?php else: ?>
+		enabled: true,
+		<?php endif; ?>
   		offsetX: 0,
   		offsetY: 20,
 		style: {
@@ -98,6 +120,16 @@ let ChartOptions<?=$id?> = {
 				fontFamily: 'fira sans, sans-serif',
 				fontWeight: 400,
 			},
+			<?php if (isset($prefix)): ?>
+			formatter: function (value) {
+				return '<?=$prefix?>' + value;
+			},
+			<?php endif; ?>
+			<?php if (isset($suffix)): ?>
+			formatter: function (value) {
+				return value + '<?=$suffix?>';
+			},
+			<?php endif; ?>
 		},
 	}
 };

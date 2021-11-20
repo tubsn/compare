@@ -10,7 +10,7 @@ class Exports extends Controller {
 	public function __construct() {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 		$this->view('CSV');
-		$this->models('Articles,Analytics,Conversions,Campaigns,DailyKPIs,Plenigo,Orders,Linkpulse');
+		$this->models('Articles,Analytics,Conversions,Campaigns,ArticleKPIs,Plenigo,Orders,Linkpulse');
 	}
 
 	public function articles() {
@@ -77,7 +77,7 @@ class Exports extends Controller {
 
 
 	public function daily_stats() {
-		$viewData['articles'] = $this->DailyKPIs->with_article_data();
+		$viewData['articles'] = $this->ArticleKPIs->with_article_data();
 		$this->view->title = 'LRO-Daily-'.date("dmY").'.csv';
 		$this->view->render('export/excel-dailystats', $viewData);
 	}

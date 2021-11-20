@@ -15,12 +15,12 @@ Artikel Entwicklung nach Publikationsdatum
 
 	<figure>
 		<h3 class="text-center">Artikel nach Uhrzeit</h3>
-		<?=$charts->get('articlesByTime');?>
+		<?=$charts->get('articles_by_time');?>
 	</figure>
 
 	<figure>
 		<h3 class="text-center">Artikel nach Wochentag</h3>
-		<?=$charts->get('articlesByWeekday');?>
+		<?=$charts->get('articles_by_weekday');?>
 	</figure>
 
 
@@ -28,13 +28,13 @@ Artikel Entwicklung nach Publikationsdatum
 
 	<figure class="mb">
 		<h3 class="text-center">Artikel im Zeitverlauf</h3>
-		<?=$charts->get('articlesByDate');?>
+		<?=$charts->get('articles_by_date');?>
 	</figure>
 
 
 	<figure class="mb">
 		<h3 class="text-center">Anteil an Plusartikeln im Zeitverlauf</h3>
-		<?=$charts->get('plusquoteByDate');?>
+		<?=$charts->get('plusquote_by_date');?>
 	</figure>
 
 

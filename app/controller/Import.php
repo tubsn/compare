@@ -12,7 +12,7 @@ class Import extends Controller {
 	public function __construct() {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 		$this->view('DefaultLayout');
-		$this->models('Articles,ArticleMeta,Orders,GlobalKPIs,Analytics,Campaigns,Readers');
+		$this->models('Articles,ArticleMeta,Orders,DailyKPIs,Analytics,Campaigns,Readers');
 	}
 
 	public function feeds() {
@@ -66,7 +66,7 @@ class Import extends Controller {
 
 
 	private function import_global_kpis() {
-		$this->GlobalKPIs->import(3);
+		$this->DailyKPIs->import(3);
 	}
 
 	public function import_utm_campaigns($days = 5) {

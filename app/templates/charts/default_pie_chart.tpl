@@ -43,6 +43,16 @@ let ChartOptions<?=$id?> = {
         },
         xaxis: {
           categories: [<?=$dimension?>]
+			<?php if (isset($prefix)): ?>
+			formatter: function (value) {
+				return '<?=$prefix?>' + value;
+			},
+			<?php endif; ?>
+			<?php if (isset($suffix)): ?>
+			formatter: function (value) {
+				return value + '<?=$suffix?>';
+			},
+			<?php endif; ?>
         },
         yaxis: {
           tickAmount: 7,

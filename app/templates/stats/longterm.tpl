@@ -10,8 +10,8 @@
 	<figure class="mb">
 		<h3 class="text-center">Bestellungen</h3>
 		<?=$charts->create([
-			'metric' => $cancellations['orders'],
-			'dimension' => $cancellations['dimensions'],
+			'metric' => $longterm['orders'],
+			'dimension' => $longterm['dimensions'],
 			'color' => '#6ea681',
 			'height' => 350,
 			'name' => 'Bestellungen',
@@ -23,8 +23,8 @@
 	<figure class="mb">
 		<h3 class="text-center">Aktive Kunden des Monats (stand jetzt)</h3>
 		<?=$charts->create([
-			'metric' => $cancellations['active'],
-			'dimension' => $cancellations['dimensions'],
+			'metric' => $longterm['active'],
+			'dimension' => $longterm['dimensions'],
 			'color' => '#6088b4',
 			'height' => 350,
 			'name' => 'Bestellungen',
@@ -35,8 +35,8 @@
 	<figure class="mb">
 		<h3 class="text-center">Kündigerquote (Gesamt)</h3>
 		<?=$charts->create([
-			'metric' => $cancellations['quote'],
-			'dimension' => $cancellations['dimensions'],
+			'metric' => $longterm['quote'],
+			'dimension' => $longterm['dimensions'],
 			'color' => '#f77474',
 			'height' => 350,
 			'name' => 'Tag 1 Kündiger',
@@ -52,8 +52,8 @@
 	<figure class="mb">
 		<h3 class="text-center">Entwicklung Kündigerquote (am Bestelltag)</h3>
 		<?=$charts->create([
-			'metric' => $cancellations['quoteChurnSameDay'],
-			'dimension' => $cancellations['dimensions'],
+			'metric' => $longterm['quoteChurnSameDay'],
+			'dimension' => $longterm['dimensions'],
 			'color' => '#f77474',
 			'height' => 350,
 			'name' => 'Tag 1 Kündiger',
@@ -64,8 +64,8 @@
 	<figure class="mb">
 		<h3 class="text-center">Kündigerquote (nach 30 Tagen)</h3>
 		<?=$charts->create([
-			'metric' => $cancellations['quoteChurn30'],
-			'dimension' => $cancellations['dimensions'],
+			'metric' => $longterm['quoteChurn30'],
+			'dimension' => $longterm['dimensions'],
 			'color' => '#f77474',
 			'height' => 350,
 			'name' => 'Kündiger nach 30 Tagen',
@@ -76,8 +76,8 @@
 	<figure class="mb">
 		<h3 class="text-center">Kündigerquote (nach 90 Tagen)</h3>
 		<?=$charts->create([
-			'metric' => $cancellations['quoteChurn90'],
-			'dimension' => $cancellations['dimensions'],
+			'metric' => $longterm['quoteChurn90'],
+			'dimension' => $longterm['dimensions'],
 			'color' => '#f77474',
 			'height' => 350,
 			'name' => 'Bestellungen',

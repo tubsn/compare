@@ -166,7 +166,7 @@ class ArticleMeta extends Model
 		$data['name'] = 'Emotions';
 		$data['id'] = 'emotions';
 
-		$chart = new Charts();
+		$chart = new Chartengine();
 		return  $chart->render('charts/emo_chart', $data);
 
 	}

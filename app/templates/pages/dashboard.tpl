@@ -36,12 +36,12 @@ Produzierte Artikel: <b><?=$articles?></b>
 
 	<figure class="mb">
 		<h3 class="text-center">Subscriber nach Ressort</h3>
-		<?=$charts->get('subscribersByRessort');?>
+		<?=$charts->get('subscribers_by', 'ressort');?>
 	</figure>
 
 	<figure class="mb">
 		<h3 class="text-center">Subscriber im Zeitverlauf</h3>
-		<?=$charts->get('subscribersByDate');?>
+		<?=$charts->get('subscribers_by_date');?>
 	</figure>
 
 </div>
@@ -50,13 +50,13 @@ Produzierte Artikel: <b><?=$articles?></b>
 
 	<figure class="mb">
 		<h3 class="text-center">Conversions im Zeitverlauf</h3>
-		<?=$charts->get('conversionsByDate');?>
+		<?=$charts->get('conversions_by_date');?>
 	</figure>
 
 
 	<figure class="mb">
 		<h3 class="text-center">Conversions nach Ressort</h3>
-		<?=$charts->get('conversionsByRessortWithValues');?>
+		<?=$charts->get('conversions_by', 'article_ressort');?>
 	</figure>
 
 </div>
@@ -68,12 +68,12 @@ Produzierte Artikel: <b><?=$articles?></b>
 
 	<figure class="">
 		<h3 class="text-center">Ø-Mediatime nach Ressort (in Sekunden)</h3>
-		<?=$charts->get('mediatimeByRessort');?>
+		<?=$charts->get('mediatime_by', 'ressort');?>
 	</figure>
 
 	<figure class="">
 		<h3 class="text-center">Ø-Pageviews nach Ressort</h3>
-		<?=$charts->get('avgPageviewsByRessortDashboard');?>
+		<?=$charts->get('avg_pageviews_by', 'ressort');?>
 	</figure>
 
 </div>

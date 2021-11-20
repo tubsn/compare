@@ -39,6 +39,7 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 			'color' => '#f77474',
 			'height' => 300,
 			'area' => true,
+			'percent' => true,
 			'name' => 'Kündiger nach 90 Tagen',
 			'template' => 'charts/default_line_chart',
 		]);?>
@@ -53,7 +54,7 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 			'height' => 300,
 			'area' => true,
 			'stacked' => true,
-			//'showValues' => true,
+			'showValues' => false,
 			'xfont' => '13px',
 			//'legend' => 'top',
 			'name' => ['Zugänge', 'davon gekündigt'],
@@ -78,7 +79,7 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 
 <figure class="" style="margin-bottom:2em;">
 	<h3 class="text-center">Verteilung - Kündigungszeitpunkt nach Haltedauer in Tagen</h3>
-	<?=$retentionChart?>
+	<?=$charts->get('cancelled_by_retention_days', 400);?>
 </figure>
 
 
@@ -92,6 +93,7 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 			'color' => '#f77474',
 			'height' => 600,
 			'area' => false,
+			'percent' => true,
 			'legend' => 'top',
 			'name' => ['Kündigerquote nach 90 Tagen', 'Kündigerquote nach 30 Tagen', 'Quote-Bestelltag Kündiger'],
 			'template' => 'charts/default_line_chart',
@@ -115,7 +117,7 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 
 		<figure class="">
 			<h3 class="text-center">Durchschnittliche Haltedauer unter Kündigern in Tagen</h3>
-			<?=$charts->get('avgRetentionByRessort');?>
+			<?=$charts->get('avg_retention_by');?>
 		</figure>
 	</div>
 

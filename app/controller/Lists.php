@@ -11,7 +11,7 @@ class Lists extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Articles,ArticleMeta,DailyKPIs,Orders,Charts');
+		$this->models('Articles,ArticleMeta,ArticleKPIs,Orders,Charts');
 	}
 
 	public function index() {
@@ -59,7 +59,7 @@ class Lists extends Controller {
 		$count = 0;
 		if (is_array($viewData['articles'])) {$count = count($viewData['articles']);}
 
-		$viewData['primaryChart'] = $this->Charts->get('conversionsByDate');
+		$viewData['primaryChart'] = $this->Charts->get('conversions_by_date');
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
@@ -80,7 +80,7 @@ class Lists extends Controller {
 		$count = 0;
 		if (is_array($viewData['articles'])) {$count = count($viewData['articles']);}
 
-		$viewData['primaryChart'] = $this->DailyKPIs->combined_kpis_filtered_chart();
+		$viewData['primaryChart'] = $this->ArticleKPIs->combined_kpis_filtered_chart();
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
@@ -129,7 +129,7 @@ class Lists extends Controller {
 		$count = 0;
 		if (is_array($viewData['articles'])) {$count = count($viewData['articles']);}
 
-		$viewData['primaryChart'] = $this->Charts->get('mediatimeByRessort');
+		$viewData['primaryChart'] = $this->Charts->get('mediatime_by', 'ressort');
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
@@ -153,7 +153,7 @@ class Lists extends Controller {
 
 
 		//$viewData['primaryChart'] = $this->Charts->get('subscribersByRessort');
-		$viewData['secondaryChart'] = $this->Charts->get('subscribersByDate');
+		$viewData['secondaryChart'] = $this->Charts->get('subscribers_by_date');
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
@@ -179,7 +179,7 @@ class Lists extends Controller {
 
 		$author = $this->decode_url($author);
 		$viewData['articles'] = $this->Articles->list_by($author, 'author');
-		$viewData['primaryChart'] = $this->DailyKPIs->combined_kpis_filtered_chart($author, 'author');
+		$viewData['primaryChart'] = $this->ArticleKPIs->combined_kpis_filtered_chart($author, 'author');
 
 		$count = 0;
 		if (is_array($viewData['articles'])) {$count = count($viewData['articles']);}
@@ -206,7 +206,7 @@ class Lists extends Controller {
 
 		$author = $this->decode_url($author);
 		$viewData['articles'] = $this->Articles->list_by_fuzzy($author, 'author');
-		$viewData['primaryChart'] = $this->DailyKPIs->combined_kpis_filtered_chart($author, 'author');
+		$viewData['primaryChart'] = $this->ArticleKPIs->combined_kpis_filtered_chart($author, 'author');
 
 		$count = 0;
 		if (is_array($viewData['articles'])) {$count = count($viewData['articles']);}
@@ -247,7 +247,7 @@ class Lists extends Controller {
 		$ressort = $this->decode_url($ressort);
 
 		$viewData['articles'] = $this->Articles->list_by($ressort, 'ressort');
-		$viewData['primaryChart'] = $this->DailyKPIs->combined_kpis_filtered_chart($ressort, 'ressort');
+		$viewData['primaryChart'] = $this->ArticleKPIs->combined_kpis_filtered_chart($ressort, 'ressort');
 
 		$count = 0;
 		if (is_array($viewData['articles'])) {$count = count($viewData['articles']);}
@@ -275,7 +275,7 @@ class Lists extends Controller {
 
 		$type = $this->decode_url($type);
 		$viewData['articles'] = $this->Articles->list_by($type, 'type');
-		$viewData['primaryChart'] = $this->DailyKPIs->combined_kpis_filtered_chart($type, 'type');
+		$viewData['primaryChart'] = $this->ArticleKPIs->combined_kpis_filtered_chart($type, 'type');
 
 		$count = 0;
 		if (is_array($viewData['articles'])) {$count = count($viewData['articles']);}
@@ -301,7 +301,7 @@ class Lists extends Controller {
 
 		$audience = $this->decode_url($audience);
 		$viewData['articles'] = $this->Articles->list_by($audience, 'audience');
-		$viewData['primaryChart'] = $this->DailyKPIs->combined_kpis_filtered_chart($audience, 'audience');
+		$viewData['primaryChart'] = $this->ArticleKPIs->combined_kpis_filtered_chart($audience, 'audience');
 
 		$count = 0;
 		if (is_array($viewData['articles'])) {$count = count($viewData['articles']);}
@@ -328,7 +328,7 @@ class Lists extends Controller {
 		$tag = $this->decode_url($tag);
 
 		$viewData['articles'] = $this->Articles->list_by($tag, 'tag');
-		$viewData['primaryChart'] = $this->DailyKPIs->combined_kpis_filtered_chart($tag, 'tag');
+		$viewData['primaryChart'] = $this->ArticleKPIs->combined_kpis_filtered_chart($tag, 'tag');
 
 		$count = 0;
 		if (is_array($viewData['articles'])) {$count = count($viewData['articles']);}

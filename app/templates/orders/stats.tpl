@@ -33,22 +33,30 @@ Es kommt daher zu Abweichungen im Vergleich zur Statistik-Seite (dort wird nach 
 
 </div>
 
+<div class="col-2" style="grid-template-columns: 1fr 2fr;">
 
-<figure class="">
-	<?=$charts->get('conversionsByRessortWithValues');?>
-</figure>
+	<figure>
+		<h3 class="text-center">Bestellentwicklung seit April</h3>
+		<?=$charts->get('longterm_orders');?>
+	</figure>
+
+	<figure>
+		<h3 class="text-center">Bestellungen nach Ressort</h3>
+		<?=$charts->get('conversions_by','article_ressort');?>
+	</figure>
+
+</div>
 
 <div class="col-2" style="grid-template-columns: 2fr 1fr;">
 
 	<figure class="">
 		<h3 class="text-center">Bestellungen nach Uhrzeit</h3>
-		<?=$charts->get('conversionsByTime');?>
+		<?=$charts->get('conversions_by_daytime');?>
 	</figure>
-
 
 	<figure class="">
 		<h3 class="text-center">Bestellungen nach Wochentag</h3>
-		<?=$charts->get('conversionsByWeekday');?>
+		<?=$charts->get('conversions_by_weekday');?>
 	</figure>
 
 </div>

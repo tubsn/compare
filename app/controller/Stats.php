@@ -12,7 +12,7 @@ class Stats extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Articles,Conversions,Orders,Plenigo,GlobalKPIs,Linkpulse,Charts,ArticlesMeta');
+		$this->models('Articles,Conversions,Orders,Plenigo,DailyKPIs,Linkpulse,Charts,ArticlesMeta');
 	}
 
 	public function dashboard() {
@@ -22,8 +22,8 @@ class Stats extends Controller {
 		$viewData['articles'] = $this->Articles->count('*');
 		$viewData['subscribers'] = $this->Articles->sum('subscribers');
 		$viewData['avgmediatime'] = $this->Articles->average('avgmediatime');
-		//$viewData['avgmediatime'] = $this->GlobalKPIs->avg('avgmediatime');
-		$viewData['pageviews'] = $this->GlobalKPIs->sum('pageviews');
+		//$viewData['avgmediatime'] = $this->DailyKPIs->avg('avgmediatime');
+		$viewData['pageviews'] = $this->DailyKPIs->sum('pageviews');
 
 		// Mediatime
 		$viewData['mediatime'] = $this->Articles->sum('mediatime');
@@ -69,9 +69,9 @@ class Stats extends Controller {
 		$viewData['cancelled'] = $this->Articles->sum('cancelled', 'ressort');
 
 		$viewData['groupedStats'] = $this->Articles->stats_grouped_by($column = 'ressort', $order = 'conversions DESC, ressort ASC');
-		$viewData['chartOne'] = $this->Charts->get('subscriberQuoteByRessort');
+		$viewData['chartOne'] = $this->Charts->get('subscriberquote_by', ['ressort', 'DESC']);
 		$viewData['chartOneTitle'] = 'Subscriber Quote nach Ressort';
-		$viewData['chartTwo'] = $this->Charts->get('avgPageviewsByRessort');
+		$viewData['chartTwo'] = $this->Charts->get('avg_pageviews_by', ['ressort', 'DESC']);
 		$viewData['chartTwoTitle'] = 'Durchschnittliche Pageviews nach Ressort';
 
 		Session::set('referer', '/stats/ressort');
@@ -95,9 +95,10 @@ class Stats extends Controller {
 		$viewData['cancelled'] = $this->Articles->sum('cancelled', 'type');
 
 		$viewData['groupedStats'] = $this->Articles->stats_grouped_by($column = 'type', $order = 'conversions DESC');
-		$viewData['chartOne'] = $this->Charts->get('subscriberQuoteByType');
+
+		$viewData['chartOne'] = $this->Charts->get('subscriberquote_by', ['type', 'DESC']);
 		$viewData['chartOneTitle'] = 'Subscriber Quote nach Inhaltstyp';
-		$viewData['chartTwo'] = $this->Charts->get('avgPageviewsByType');
+		$viewData['chartTwo'] = $this->Charts->get('avg_pageviews_by', ['type', 'DESC']);
 		$viewData['chartTwoTitle'] = 'Durchschnittliche Pageviews nach Inhaltstyp';
 
 		Session::set('referer', '/stats/thema');
@@ -121,9 +122,10 @@ class Stats extends Controller {
 		$viewData['cancelled'] = $this->Articles->sum('cancelled', 'audience');
 
 		$viewData['groupedStats'] = $this->Articles->stats_grouped_by($column = 'audience', $order = 'conversions DESC');
-		$viewData['chartOne'] = $this->Charts->get('subscriberQuoteByAudience');
+
+		$viewData['chartOne'] = $this->Charts->get('subscriberquote_by', ['audience', 'DESC']);
 		$viewData['chartOneTitle'] = 'Subscriber Quote nach Audience';
-		$viewData['chartTwo'] = $this->Charts->get('avgPageviewsByAudience');
+		$viewData['chartTwo'] = $this->Charts->get('avg_pageviews_by', ['audience', 'DESC']);
 		$viewData['chartTwoTitle'] = 'Durchschnittliche Pageviews nach Audience';
 
 		Session::set('referer', '/stats/audience');
@@ -147,9 +149,9 @@ class Stats extends Controller {
 		$viewData['cancelled'] = $this->Articles->sum('cancelled', 'tag');
 
 		$viewData['groupedStats'] = $this->Articles->stats_grouped_by($column = 'tag', $order = 'conversions DESC');
-		$viewData['chartOne'] = $this->Charts->get('subscriberQuoteByTag');
+		$viewData['chartOne'] = $this->Charts->get('subscriberquote_by', ['tag', 'DESC']);
 		$viewData['chartOneTitle'] = 'Subscriber Quote nach #Tag';
-		$viewData['chartTwo'] = $this->Charts->get('avgPageviewsByTag');
+		$viewData['chartTwo'] = $this->Charts->get('avg_pageviews_by', ['tag', 'DESC']);
 		$viewData['chartTwoTitle'] = 'Durchschnittliche Pageviews nach #Tag';
 
 		Session::set('referer', '/stats/tag');

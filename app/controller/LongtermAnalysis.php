@@ -13,15 +13,13 @@ class LongtermAnalysis extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Charts,LongtermKPIs');
+		$this->models('Charts,Longterm');
 	}
 
 	public function overview() {
 
 		$this->view->charts = $this->Charts;
-
-		$cancellations = $this->LongtermKPIs->cancellations();
-		$this->view->cancellations = $this->LongtermKPIs->as_chartdata($cancellations);
+		$this->view->longterm = $this->Longterm->chartdata('orders');
 
 		$this->view->title = 'Langzeit Analysen';
 		$this->view->render('stats/longterm');

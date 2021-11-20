@@ -7,7 +7,7 @@ use app\importer\ArticleImport;
 class CronImports extends Controller {
 
 	public function __construct() {
-		$this->models('Analytics,Linkpulse,Articles,ArticleMeta,Conversions,DailyKPIs,Orders,GlobalKPIs,Campaigns');
+		$this->models('Analytics,Linkpulse,Articles,ArticleMeta,Conversions,ArticleKPIs,Orders,DailyKPIs,Campaigns');
 	}
 
 
@@ -65,7 +65,7 @@ class CronImports extends Controller {
 		$dailyStats = $analyticsData['details'];
 		$lifeTimeTotals = $analyticsData['totals'];
 		$this->Articles->add_stats($lifeTimeTotals,$id);
-		$this->DailyKPIs->add($dailyStats,$id);
+		$this->ArticleKPIs->add($dailyStats,$id);
 	}
 
 	public function feeds() {
@@ -98,7 +98,7 @@ class CronImports extends Controller {
 
 
 	public function import_global_kpis() {
-		$this->GlobalKPIs->import(3);
+		$this->DailyKPIs->import(3);
 		echo 'Global KPIs importiert | ' . date('H:i:s') . "\r\n";
 	}
 

@@ -64,12 +64,51 @@ let ChartOptions<?=$id?> = {
 	xaxis: {
 		categories: [<?=$dimension?>],
 		crosshairs: {show: true},
-		tooltip: {enabled: false}
+		tooltip: {enabled: false},
+
+		labels: {
+			style: {
+				<?php if (isset($xfont)): ?>
+				fontSize: '<?=$xfont?>',
+				<?php else: ?>
+				fontSize: '13px',
+				<?php endif; ?>
+				fontFamily: 'fira sans, sans-serif',
+				fontWeight: 400,
+			},
+			<?php if (isset($prefix)): ?>
+			formatter: function (value) {
+				return '<?=$prefix?>' + value;
+			},
+			<?php endif; ?>
+			<?php if (isset($suffix)): ?>
+			formatter: function (value) {
+				return value + '<?=$suffix?>';
+			},
+			<?php endif; ?>
+		},
+
+
 	},
 
 	grid: {row: {colors: ['#e5e5e5', 'transparent'], opacity: 0.2}},
-	//legend: {show:true},
 
+	tooltip: {
+		<?php if (isset($percent) && $percent == true): ?>
+        y: {
+          formatter: function(value) {
+              return value + '&thinsp;%'
+          },
+        },
+		<?php endif; ?>
+		<?php if (isset($seconds) && $seconds == true): ?>
+        y: {
+          formatter: function(value) {
+              return value + '&thinsp;s'
+          },
+        },
+		<?php endif; ?>
+	},
 }
 
 let Chart<?=$id?> = new ApexCharts(document.querySelector("#Chart-<?=$id?>"), ChartOptions<?=$id?>);

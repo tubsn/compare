@@ -6,7 +6,7 @@ use \flundr\mvc\Model;
 use \flundr\utility\Session;
 use flundr\cache\RequestCache;
 
-class LongtermKPIs extends Model
+class Longterm extends Model
 {
 
 	public $from = '0000-00-00';
@@ -16,20 +16,31 @@ class LongtermKPIs extends Model
 	protected $db;
 
 	function __construct() {
+		/*
 		$this->db = new SQLdb(DB_SETTINGS);
-		$this->db->table = 'daily_kpis';
+		$this->db->table = 'longterm_kpis';
 		$this->db->orderby = 'date';
 		$this->db->order = 'DESC';
-
-		$this->from = date('Y-m-d', strtotime('yesterday -6days'));
-		$this->to = date('Y-m-d', strtotime('yesterday'));
+		*/
 
 		$this->Orders = new Orders();
 
 	}
 
+	public function chartdata($kpi) {
 
-	public function cancellations($start = null) {
+		switch ($kpi) {
+			case 'orders': $data = $this->orders(); break;
+			default: break;
+		}
+
+		$charts = new Charts();
+		return $charts->convert($data);
+
+	}
+
+
+	public function orders($start = null) {
 
 		$cache = new RequestCache('cancellcationdata' . $start . PORTAL, 5*60);
 		$cachedData = $cache->get();
@@ -57,7 +68,7 @@ class LongtermKPIs extends Model
 
 			$output[$dimension]['orders'] = $orders;
 			$output[$dimension]['cancelled'] = $cancelled;
-			$output[$dimension]['cancelledNegative'] = $cancelled * -1;			
+			$output[$dimension]['cancelledNegative'] = $cancelled * -1;
 			$output[$dimension]['active'] = $orders - $cancelled;
 			$output[$dimension]['quote'] = round($cancelled / $orders * 100,2);
 			$output[$dimension]['churnSameDay'] = $churnSameDay;
@@ -74,36 +85,6 @@ class LongtermKPIs extends Model
 		return $output;
 
 	}
-
-
-	public function as_chartdata($data) {
-
-		$charts = new Charts();
-		$output['dimensions'] = array_keys($data);
-		$kpis = array_keys(array_values($data)[0]);
-
-		foreach ($kpis as $key) {$output[$key] = [];}
-
-		foreach ($data as $set) {
-			foreach ($set as $key => $value) {
-				array_push($output[$key], $value);
-			}
-		}
-
-		foreach ($output as $key => $value) {
-			$output[$key] = $charts->implode($value);
-		}
-
-		return $output;
-
-	}
-
-	private function to_chartdata() {
-
-
-
-	}
-
 
 	public function monthly_date_range($from, $to = null) {
 
@@ -134,8 +115,6 @@ class LongtermKPIs extends Model
 		return $dates;
 
 	}
-
-
 
 
 }

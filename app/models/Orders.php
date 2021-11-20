@@ -266,44 +266,14 @@ class Orders extends Model
 		);
 
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
-		$orders = $SQLstatement->fetchall();
+		$orders = $SQLstatement->fetchall(\PDO::FETCH_UNIQUE);
 		return $orders;
 
 	}
 
 	public function cancelled_by_retention_days_chart($filter = null) {
-		$orders = $this->cancelled_by_retention_days($filter);
-		return $this->retention_days_to_chart($orders);
-	}
-
-
-	private function retention_days_to_chart($retentions) {
-
 		$charts = new Charts();
-
-		$metric = '';
-		$dimension = '';
-
-		foreach ($retentions as $set) {
-			$metric .= $set['cancelled_orders'] . ',';
-			$dimension .= "'Tag " . $set['days'] . "'" . ',';
-		}
-
-		$metric = rtrim($metric, ',');
-		$dimension = rtrim($dimension, ',');
-
-		$data = [
-			'metric' => $metric,
-			'dimension' => $dimension,
-			'color' => '#f77474',
-			'height' => 400,
-			'showValues' => null,
-			'name' => 'Kündiger',
-			'id' => uniqid(),
-		];
-
-		return $charts->render('charts/default_bar_chart', $data);
-
+		return $charts->cancelled_by_retention_days();
 	}
 
 
