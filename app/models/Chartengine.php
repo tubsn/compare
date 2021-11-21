@@ -129,9 +129,15 @@ class Chartengine
 
 	}
 
-	public function implode($array, $asInteger = false) {
+	public function implode($array, $asInteger = false, $caps = false) {
+
+		if ($caps) {$array = array_map(function ($set) { return ucfirst($set); }, $array);}
 		if ($asInteger) {return implode($array, ",");}
 		return "'" . implode($array, "','") . "'";
+	}
+
+	public function implode_with_caps($array) {
+		return $this->implode($array,false,true);
 	}
 
 	public function sort() {

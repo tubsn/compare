@@ -70,6 +70,10 @@ $routes->get('/stats/audience-by-ressort', 'Stats@audience_by_ressorts');
 $routes->get('/stats/artikel', 'Stats@artikel');
 $routes->get('/stats/compared', 'LongtermAnalysis@overview');
 
+// Apis
+$routes->get('/churncalc[/{product}]', 'LongtermAnalysis@churnAPI');
+
+
 // Readers
 $routes->get('/readers/{id:[\d]{12}?}', 'Readers@detail');
 $routes->get('/readers/list[/{segment}]', 'Readers@list');

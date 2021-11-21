@@ -51,7 +51,7 @@ class Charts
 	********  Start of Predifined Charts ********
 	*/
 
-	public function cancelled_by_retention_days() {
+	public function cancellations_by_retention_days($height = 400) {
 
 		$orders = new Orders();
 		$orders = $this->convert($orders->cancelled_by_retention_days());
@@ -60,10 +60,45 @@ class Charts
 			'metric' => $orders['cancelled_orders'],
 			'dimension' => $orders['dimensions'],
 			'color' => '#f77474',
-			'height' => 400,
+			'height' => $height,
 			'showValues' => false,
 			'name' => 'Kündiger',
 			'prefix' => 'Tag ',
+			'template' => 'charts/default_bar_chart',
+		];
+
+		return $this->create($data);
+
+	}
+
+	public function first_day_churns_by($group = 'article_ressort') {
+
+		$orders = new Orders();
+		$conversions = $orders->group_by($group);
+		$churners = $orders->group_by($group, 'retention = 0');
+
+		if (empty($churners)) {return '<span class="orangebg">Keine Daten für <b>'.$group.'</b></span>';}
+
+		// Calculate Churn Quote
+		$churnersPercent = $churners;
+		foreach ($churnersPercent as $key => $value) {
+			if (!isset($conversions[$key])) {continue;}
+			$churnersPercent[$key] = round($value / $conversions[$key] * 100,1);
+		}
+
+		$dimension = $this->engine->implode_with_caps(array_keys($churners));
+		$churners = $this->engine->implode(array_values($churners));
+		$churnersPercent = $this->engine->implode(array_values($churnersPercent));
+
+		$data = [
+			'metric' => [$churners, $churnersPercent],
+			'dimension' => $dimension,
+			'color' => '#f77474',
+			'height' => 400,
+			'showValues' => false,
+			'name' => ['Kündiger am Bestelltag','Anteil an Gesamtbestellungen'],
+			//'percent' => true,
+			'legend' => 'top',
 			'template' => 'charts/default_bar_chart',
 		];
 

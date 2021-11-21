@@ -28,11 +28,11 @@ class Orders extends Model
 
 	}
 
-	public function list() {
+	public function list($filter = null) {
 
 		$from = strip_tags($this->from);
 		$to = strip_tags($this->to);
-		$limit = 10000;
+		if (!is_null($filter)) {$filter = 'AND ' . strip_tags($filter);}
 
 		$SQLstatement = $this->db->connection->prepare(
 
@@ -55,8 +55,8 @@ class Orders extends Model
 			 LEFT JOIN campaigns ON campaigns.order_id = conversions.order_id
 
 			 WHERE DATE(conversions.order_date) BETWEEN :startDate AND :endDate
-			 ORDER BY conversions.order_date DESC
-			 LIMIT 0, $limit"
+			 $filter
+			 ORDER BY conversions.order_date DESC"
 
 		);
 
@@ -72,14 +72,12 @@ class Orders extends Model
 
 		$from = strip_tags($this->from);
 		$to = strip_tags($this->to);
-		$limit = 5000;
 
 		$SQLstatement = $this->db->connection->prepare(
 			"SELECT *
 			 FROM `conversions`
 			 WHERE DATE(`order_date`) BETWEEN :startDate AND :endDate
-			 ORDER BY order_date DESC
-			 LIMIT 0, $limit"
+			 ORDER BY order_date DESC"
 		);
 
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
@@ -161,20 +159,52 @@ class Orders extends Model
 	}
 
 
-	public function count() {
+	public function count($filter = null) {
 		$from = strip_tags($this->from);
 		$to = strip_tags($this->to);
+
+		if (!is_null($filter)) {
+			$filter = strip_tags($filter);
+			$filter = 'AND ' . $filter;
+		}
 
 		$SQLstatement = $this->db->connection->prepare(
 			"SELECT count(*) as orders
 			 FROM `conversions`
-			 WHERE DATE(`order_date`) BETWEEN :startDate AND :endDate"
+			 WHERE DATE(`order_date`) BETWEEN :startDate AND :endDate
+			 $filter"
 		);
 
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
 		$output = $SQLstatement->fetch();
 		return $output['orders'];
 
+	}
+
+	public function count_cancelled() {
+		return $this->count('cancelled = 1');
+	}
+
+	public function list_distinct($column) {
+
+		$column = strip_tags($column);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT DISTINCT $column FROM `conversions`
+			 WHERE $column is not null
+			 ORDER BY $column ASC"
+		);
+		$SQLstatement->execute();
+		return $SQLstatement->fetchall(\PDO::FETCH_COLUMN);
+
+	}
+
+	public function products() {
+		return $this->list_distinct('subscription_title');
+	}
+
+	public function product_titles() {
+		return $this->list_distinct('subscription_internal_title');
 	}
 
 	public function without_ga_sources($dayCount = 5) {
@@ -190,8 +220,8 @@ class Orders extends Model
 	}
 
 
-	public function group_by($index) {
-		$orders = $this->list();
+	public function group_by($index, $filter = null) {
+		$orders = $this->list($filter);
 		$data = array_column($orders, $index);
 		$data = @array_count_values($data); // @ Surpresses Warnings with Null Values
 		arsort($data);
@@ -239,8 +269,9 @@ class Orders extends Model
 
 		$from = strip_tags($this->from);
 		$to = strip_tags($this->to);
-		if (!is_null($filter)) {$filter = 'AND ' . $filter;}
+		if (!is_null($filter)) {$filter = 'AND ' . strip_tags($filter);}
 
+		// Join Articles deactivated until needed
 		$SQLstatement = $this->db->connection->prepare(
 
 			"SELECT
@@ -248,7 +279,7 @@ class Orders extends Model
 			 count(conversions.order_id) as cancelled_orders
 
 			 FROM conversions
-			 LEFT JOIN articles ON articles.id = conversions.article_id
+			 #LEFT JOIN articles ON articles.id = conversions.article_id
 			 WHERE DATE(conversions.order_date) BETWEEN :startDate AND :endDate
 			 AND conversions.cancelled != 0
 			 $filter

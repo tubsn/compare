@@ -57,9 +57,8 @@ class Longterm extends Model
 			$this->Orders->from = $period['from'];
 			$this->Orders->to = $period['to'];
 
-			$orders = $this->Orders->list();
-			$cancelled = count($this->Orders->filter_cancelled($orders)) ?? 0;
-			$orders = count($orders) ?? 0;
+			$orders = $this->Orders->count();
+			$cancelled = $this->Orders->count_cancelled();
 
 			$churnSameDay = $this->Orders->sum_up($this->Orders->cancelled_by_retention_days('retention = 0'),'cancelled_orders');
 			$churn30 = $this->Orders->sum_up($this->Orders->cancelled_by_retention_days('retention < 31'),'cancelled_orders');

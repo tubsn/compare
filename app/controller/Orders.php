@@ -100,6 +100,7 @@ class Orders extends Controller {
 		$viewData['orders'] = $this->Orders->list();
 		$viewData['numberOfOrders'] = count($viewData['orders'] ?? []);
 		$viewData['numberOfCancelled'] = count($this->Orders->filter_cancelled($viewData['orders']));
+		$viewData['firstDayChurners'] = $this->Orders->group_by('article_ressort', 'retention = 0');
 
 		if ($viewData['orders']) {
 			$viewData['cancelQuote'] = round(($viewData['numberOfCancelled'] / $viewData['numberOfOrders']) * 100, 1);

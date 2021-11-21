@@ -8,7 +8,7 @@ class DefaultLayout extends htmlView {
 	// Page Header Information is available in the Templates
 	// as a $page Array. It can be accessed via $page['title']
 
-	public $title = 'Content DB';
+	public $title = 'Compare';
 	public $description = 'Datenbank für publizierte Artikel';
 	public $css = ['/styles/css/defaults.css', '/styles/css/main.css'];
 	public $fonts = 'https://fonts.googleapis.com/css?family=Fira+Sans:400,400i,600|Fira+Sans+Condensed:400,600';
