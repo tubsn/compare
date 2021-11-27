@@ -235,6 +235,20 @@ class Articles extends Controller {
 
 	}
 
+	public function switch_portal() {
+
+		$page = strip_tags($_GET['page'] ?? '/');
+		$from = strip_tags($_GET['from'] ?? null);
+		$to = strip_tags($_GET['to'] ?? null);
+
+		Session::set('timeframe', 'Zeitraum');
+		if ($from) {Session::set('from', $from);}
+		if ($to) {Session::set('to', $to);}
+
+		$this->view->redirect($page);
+
+	}
+
 	public function set_timeframe() {
 
 		if (isset($_POST['timeframe'])) {
@@ -264,7 +278,6 @@ class Articles extends Controller {
 		$this->view->redirect($_SERVER['HTTP_REFERER']);
 
 	}
-
 
 	private function dates_from_timeframe($timeframe) {
 

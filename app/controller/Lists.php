@@ -11,7 +11,7 @@ class Lists extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Articles,ArticleMeta,ArticleKPIs,Orders,Charts');
+		$this->models('Articles,ArticleMeta,ArticleKPIs,Orders,Charts,Discover');
 	}
 
 	public function index() {
@@ -403,6 +403,18 @@ class Lists extends Controller {
 
 		$this->view->title = ucfirst($type) . ' - Artikel: ' . count($viewData['articles']);
 		$this->view->render('pages/list', $viewData);
+	}
+
+	public function discover() {
+
+		$this->view->chart = $this->Charts->discover_articles_by();
+		$this->view->chart2 = $this->Charts->discover_articles_by_date();
+
+		$this->view->title = 'Artikel, die bei Google Discover gelistet waren';
+		$this->view->info = 'Hier werden Artikel gelistet, die bei Google Discover gelistet wurden. D-Klicks und Impressions werden jeweils aus den importierten Daten aus der Search Console gespeist. (Achtung: die Discover Daten werden nur bei Bedarf aktualisiert)';
+		$this->view->articles = $this->Discover->list();
+		$this->view->render('pages/discover');
+
 	}
 
 

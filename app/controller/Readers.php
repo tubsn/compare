@@ -12,13 +12,15 @@ class Readers extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Articles,Readers,Orders');
+		$this->models('Articles,Readers,Orders,Plenigo');
 	}
 
 
 	public function detail($id) {
 
 		$viewData['user'] = $this->Readers->get_from_api($id);
+		$viewData['user']['additionalData'] = $this->Plenigo->customer_additional_data($id);
+
 		$this->view->render('pages/reader-detail',$viewData);
 
 	}

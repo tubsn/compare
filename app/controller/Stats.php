@@ -69,8 +69,8 @@ class Stats extends Controller {
 		$viewData['cancelled'] = $this->Articles->sum('cancelled', 'ressort');
 
 		$viewData['groupedStats'] = $this->Articles->stats_grouped_by($column = 'ressort', $order = 'conversions DESC, ressort ASC');
-		$viewData['chartOne'] = $this->Charts->get('subscriberquote_by', ['ressort', 'DESC']);
-		$viewData['chartOneTitle'] = 'Subscriber Quote nach Ressort';
+		$viewData['chartOne'] = $this->Charts->get('avg_subscribers_by', ['ressort', 'DESC']);
+		$viewData['chartOneTitle'] = 'Durchschnittliche Subscriber nach Ressort';
 		$viewData['chartTwo'] = $this->Charts->get('avg_pageviews_by', ['ressort', 'DESC']);
 		$viewData['chartTwoTitle'] = 'Durchschnittliche Pageviews nach Ressort';
 
@@ -96,8 +96,8 @@ class Stats extends Controller {
 
 		$viewData['groupedStats'] = $this->Articles->stats_grouped_by($column = 'type', $order = 'conversions DESC');
 
-		$viewData['chartOne'] = $this->Charts->get('subscriberquote_by', ['type', 'DESC']);
-		$viewData['chartOneTitle'] = 'Subscriber Quote nach Inhaltstyp';
+		$viewData['chartOne'] = $this->Charts->get('avg_subscribers_by', ['type', 'DESC']);
+		$viewData['chartOneTitle'] = 'Durchschnittliche Subscriber nach Inhaltstyp';
 		$viewData['chartTwo'] = $this->Charts->get('avg_pageviews_by', ['type', 'DESC']);
 		$viewData['chartTwoTitle'] = 'Durchschnittliche Pageviews nach Inhaltstyp';
 
@@ -123,8 +123,8 @@ class Stats extends Controller {
 
 		$viewData['groupedStats'] = $this->Articles->stats_grouped_by($column = 'audience', $order = 'conversions DESC');
 
-		$viewData['chartOne'] = $this->Charts->get('subscriberquote_by', ['audience', 'DESC']);
-		$viewData['chartOneTitle'] = 'Subscriber Quote nach Audience';
+		$viewData['chartOne'] = $this->Charts->get('avg_subscribers_by', ['audience', 'DESC']);
+		$viewData['chartOneTitle'] = 'Durchschnittliche Subscriber nach Audience';
 		$viewData['chartTwo'] = $this->Charts->get('avg_pageviews_by', ['audience', 'DESC']);
 		$viewData['chartTwoTitle'] = 'Durchschnittliche Pageviews nach Audience';
 
@@ -149,8 +149,8 @@ class Stats extends Controller {
 		$viewData['cancelled'] = $this->Articles->sum('cancelled', 'tag');
 
 		$viewData['groupedStats'] = $this->Articles->stats_grouped_by($column = 'tag', $order = 'conversions DESC');
-		$viewData['chartOne'] = $this->Charts->get('subscriberquote_by', ['tag', 'DESC']);
-		$viewData['chartOneTitle'] = 'Subscriber Quote nach #Tag';
+		$viewData['chartOne'] = $this->Charts->get('avg_subscribers_by', ['tag', 'DESC']);
+		$viewData['chartOneTitle'] = 'Durchschnittliche Subscriber nach #Tag';
 		$viewData['chartTwo'] = $this->Charts->get('avg_pageviews_by', ['tag', 'DESC']);
 		$viewData['chartTwoTitle'] = 'Durchschnittliche Pageviews nach #Tag';
 
@@ -188,8 +188,8 @@ class Stats extends Controller {
 		$summedAudiences = $this->Articles->kpi_grouped_by('ressort','audience','count');
 
 		$filteredRessorts = [];
-		if (PORTAL == 'LR') {$filteredRessorts = ['bilder','ratgeber'];}
-		if (PORTAL == 'MOZ') {$filteredRessorts = ['nachrichten','politik','bilder','panorama','themen','wissen','anzeigen','lokales'];}
+		if (PORTAL == 'LR') {$filteredRessorts = ['bilder','ratgeber','blaulicht','unbekannt','leser_service'];}
+		if (PORTAL == 'MOZ') {$filteredRessorts = ['nachrichten','politik','bilder','panorama','themen','wissen','anzeigen','lokales','unbekannt'];}
 
 		$ressortList = array_filter($ressortList, function($ressort) use ($filteredRessorts) {
 			if (in_array($ressort, $filteredRessorts)) {return null;}

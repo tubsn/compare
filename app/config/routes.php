@@ -24,6 +24,7 @@ $routes->get('/audience/{audience}', 'Lists@audience');
 $routes->get('/audience', 'Lists@audience');
 $routes->get('/tag/{tag}', 'Lists@tag');
 $routes->get('/tag', 'Lists@tag');
+$routes->get('/discover', 'Lists@discover');
 
 // KPIs
 $routes->get('/top5', 'Lists@top5');
@@ -93,6 +94,7 @@ $routes->get('/search', 'Search@show');
 $routes->get('/favoriten', 'Articles@favilink');
 $routes->get('/favicon', 'Articles@favilink');
 $routes->post('/settimeframe', 'Articles@set_timeframe');
+$routes->get('/switch-portal', 'Articles@switch_portal');
 $routes->get('/live', 'Livedata@live_dashboard');
 $routes->get('/retresco/{id:\d+}', 'Articles@retresco');
 
@@ -120,6 +122,8 @@ $routes->get('/incentives', 'Incentives@incentives');
 $routes->get('/admin', 'Admin@index');
 $routes->post('/admin', 'Admin@save_config');
 $routes->get('/admin/import', 'Import@feeds');
+$routes->get('/admin/discover', 'Admin@discover_upload');
+$routes->post('/admin/discover', 'Admin@discover_upload');
 $routes->get('/admin/orders', 'Import@order_import_form');
 $routes->get('/admin/topics', 'Warmup@topic_clusters');
 $routes->get('/admin/warmup', 'Warmup@daterange');

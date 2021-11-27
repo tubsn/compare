@@ -11,7 +11,7 @@ class Admin extends Controller {
 	public function __construct() {
 		$this->view('DefaultLayout');
 		$this->view->templates['footer'] = null;
-		$this->models('Articles');
+		$this->models('Articles,Discover');
 		$this->Auth = new LoginHandler();
 	}
 
@@ -25,6 +25,20 @@ class Admin extends Controller {
 
 		$this->view->title = 'Einstellungen';
 		$this->view->render('admin/config', $viewData);
+	}
+
+	public function discover_upload() {
+
+		if (isset($_FILES['uploads']) && is_array($_FILES['uploads'])) {
+			$filePath = $_FILES['uploads']['tmp_name'][0];
+			$importedData = $this->Discover->import($filePath);
+			echo 'Discover Data Importiert!';
+			dump($importedData);
+			die;
+		}
+
+		$this->view->render('admin/upload-form');
+
 	}
 
 

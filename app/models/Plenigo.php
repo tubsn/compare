@@ -25,6 +25,11 @@ class Plenigo
 	}
 
 
+	public function customer_additional_data($id) {
+		$id = strip_tags($id);
+		return $this->api->customer_additional_data($id);
+	}
+
 
 	public function order_with_details($orderID) {
 

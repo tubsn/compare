@@ -31,7 +31,7 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 
 	<figure class="mb">
 		<h3 class="text-center">Entwicklung Kündigerquote</h3>
-		<p class="text-center">(Steigt mit zunehmender Zeit)</p>
+		<p class="nt text-center">(Steigt mit zunehmender Zeit)</p>
 		<?=$charts->create([
 			'metric' => $longterm['quote'],
 			'dimension' => $longterm['dimensions'],
@@ -46,7 +46,7 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 
 	<figure class="mb">
 		<h3 class="text-center">Bestelleingang und Kündiger pro Monat</h3>
-		<p class="text-center">Abgänge beziehen sich hier auf die Zugänge des Monats.</p>
+		<p class="nt text-center">Abgänge beziehen sich hier auf die Zugänge des Monats.</p>
 		<?=$charts->create([
 			'metric' => [$longterm['orders'], $longterm['cancelledNegative']],
 			'dimension' => $longterm['dimensions'],
@@ -63,7 +63,7 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 
 	<figure class="">
 		<h3 class="text-center">Anteile Kündiger-Cluster</h3>
-		<p class="text-center">Eingeteilt nach Kündigerzeiträumen</p>
+		<p class="nt text-center">Eingeteilt nach Kündigerzeiträumen</p>
 		<?=$charts->create([
 			'metric' => $churnSameDay . ',' . $churn30 . ',' . $churn90 . ',' . $churnAfter90 ,
 			'dimension' => "'am 1 Tag gekündigt','innerhalb 30 Tagen',' innerhalb 90 Tagen', 'nach 90 Tagen'",
@@ -77,18 +77,20 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 
 </div>
 
+
 <figure class="" style="margin-bottom:2em;">
 	<h3 class="text-center">Verteilung - Kündigungszeitpunkt nach Haltedauer in Tagen</h3>
-	<p class="text-center">Hier lassen sich kritische Zeiträume ablesen, zu denen Nutzer gehäuft ihr Abo Kündigen (z.B. nach 30 Tagen).</p>
+	<p class="nt text-center">Hier lassen sich kritische Zeiträume ablesen, zu denen Nutzer gehäuft ihr Abo Kündigen (z.B. nach 30 Tagen).</p>
 	<?=$charts->get('cancellations_by_retention_days', 400);?>
 </figure>
+
 
 
 <div class="col-2" style="grid-template-columns: 1fr 1fr;">
 
 	<figure class="mb">
 		<h3 class="text-center">Entwicklung Kündigerquoten nach Zeitspanne</h3>
-		<p class="text-center">Rückwirkende Kündigerquoten vergangener Monate nach einem, 30 oder 90 Tagen.</p>
+		<p class="nt text-center">Rückwirkende Kündigerquoten vergangener Monate nach einem, 30 oder 90 Tagen.</p>
 		<?=$charts->create([
 			'metric' => [$longterm['quoteChurn90'], $longterm['quoteChurn30'], $longterm['quoteChurnSameDay'], ],
 			'dimension' => $longterm['dimensions'],
@@ -105,7 +107,7 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 	<div>
 		<figure class="mb">
 			<h3 class="text-center">Monatlicher Zuwachs an Netto-Neukunden</h3>
-			<p class="text-center">Tatsächliches Abowachstum (schrumpft kontinuierlich durch neue Kündigungen).</p>
+			<p class="nt text-center">Tatsächliches Abowachstum (schrumpft kontinuierlich durch neue Kündigungen).</p>
 			<?=$charts->create([
 				'metric' => $longterm['active'],
 				'dimension' => $longterm['dimensions'],
@@ -120,7 +122,7 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 
 		<figure class="">
 			<h3 class="text-center">Durchschnittliche Haltedauer unter Kündigern in Tagen</h3>
-			<p class="text-center">Wenn Nutzer kündigen wo halten Abos am längsten?</p>
+			<p class="nt text-center">Wenn Nutzer kündigen wo halten Abos am längsten?</p>
 			<?=$charts->get('avg_retention_by');?>
 		</figure>
 	</div>
@@ -128,8 +130,9 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 </div>
 
 
+
 <h3 class="text-center">Leser die am Bestelltag kündigten nach Cluster</h3>
-<p class="text-center">Hier lässt sich ablesen, in welchem Ressort Nutzer häufig, direkt am ersten Tag Kündigen (Anteil).</p>
+<p class="nt text-center">Hier lässt sich ablesen, in welchem Ressort Nutzer häufig, direkt am ersten Tag Kündigen (Anteil).</p>
 
 <div class="col-2" style="grid-template-columns: 1fr 1fr ; align-items: center; justify-items: center; margin-top: 2em; margin-bottom:0em;">
 
@@ -155,10 +158,5 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 
 
 </div>
-
-<details>
-<summary>Daten einblenden</summary>
-	<?=dump_table($firstDayChurners)?>
-</details>
 
 </main>

@@ -17,6 +17,7 @@
 				<li><a href="/type">nach Themen</a></li>
 				<li><a href="/tag">nach #-Tags</a></li>
 				<li><a href="/audience">nach Audiences</a></li>
+				<li><a href="/discover">Google Discover Artikel</a></li>
 			</ul>
 		</li>
 
@@ -91,7 +92,8 @@
 			<ul class="dropdown rightmenu" aria-label="submenu">
 				<li><a href="/admin/users">Nutzerverwaltung</a></li>
 				<li><a href="/admin/cluster">Cluster-Manager</a></li>
-				<li><a href="/admin/orders">Conversion Import</a></li>
+				<li><a href="/admin/discover">Discover-Import</a></li>
+				<li><a href="/admin/orders">Conversion-Import</a></li>
 			</ul>
 
 		</li>

@@ -79,6 +79,11 @@ class PlenigoAPI
 		return $data;
 	}
 
+	public function customer_additional_data($id) {
+		$data = $this->curl('/customers/' . $id . '/additionalData');
+		return $data;
+	}
+
 
 	private function curl($path, $data = null) {
 

@@ -14,6 +14,7 @@
 	Mediatime Gesamt: <?=$user['media_time_total']?><br /><br />
 
 	<p>- Platzhalter für Liste laufender Abos -</p>
+	<p><?=dump($user['additionalData'])?></p>
 
 	<hr/>
 

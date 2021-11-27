@@ -3,7 +3,7 @@
 	<div class="calendar-picker">
 
 		<div class="calendar-portal">
-		<select class="js-portal-select" name="portal">
+		<select class="js-portal-select" name="portal" data-from="<?=session('from')?>" data-to="<?=session('to')?>">
 			<option<?php if (PORTAL == 'LR'): ?> selected<?php endif ?>>LR</option>
 			<option<?php if (PORTAL == 'MOZ'): ?> selected<?php endif ?>>MOZ</option>
 			<option<?php if (PORTAL == 'SWP'): ?> selected<?php endif ?>>SWP</option>

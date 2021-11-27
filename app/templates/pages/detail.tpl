@@ -38,7 +38,7 @@
 
 	<p>
 	<?php if ($article['subscribers']): ?>
-	Plus-Leser-Anteil: <span title="Registrierte Leser: <?=$article['subscribers']?>" class="bluebg"><?=round($article['subscribers'] / $article['pageviews'] * 100)?>%</span>
+	Subscriber-Anteil: <span title="Registrierte Leser: <?=$article['subscribers']?>" class="bluebg"><?=round($article['subscribers'] / $article['pageviews'] * 100)?>%</span>
 	<?php endif; ?>
 
 	<?php if ($article['buyintent']): ?>

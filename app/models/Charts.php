@@ -157,6 +157,19 @@ class Charts
 
 	}
 
+	public function avg_subscribers_by($group = 'ressort', $sort = null) {
+
+		$chart = new Chartengine();
+		$chart->kpi = 'subscribers';
+		$chart->groupby = $group;
+		$chart->operation = 'avg';
+		$chart->sort = $sort;
+		$chart->name = 'Durchschnittliche Subscribers';
+		$chart->color = '#314e6f';
+		return $chart->init();
+
+	}
+
 	public function subscribers_by_date() {
 
 		$chart = new Chartengine();
@@ -339,6 +352,49 @@ class Charts
 		return $chart->init();
 
 	}
+
+	public function discover_articles_by($group = 'ressort', $sort = null) {
+
+		$chart = new Chartengine();
+		$chart->kpi = 'SUM( IF(discover = 1, 1, 0) )';
+		$chart->groupby = $group;
+		$chart->operation = null;
+		$chart->name = 'Discover Artikel';
+		$chart->color = '#515151';
+		$chart->showValues = false;
+		$chart->sort = $sort;
+		$chart->template = 'charts/default_bar_chart';
+
+		return $chart->init();
+
+	}
+
+	public function discover_articles_by_date($sort = null) {
+
+		$chart = new Chartengine();
+		$chart->kpi = 'SUM( IF(discover = 1, 1, 0) )';
+		$chart->groupby = 'DATE(pubdate)';
+		$chart->operation = null;
+		$chart->name = 'Discover Artikel';
+		$chart->color = '#515151';
+		$chart->showValues = false;
+		$chart->sort = $sort;
+		$chart->template = 'charts/default_line_chart';
+
+		if ($this->timeframe() > 31) {
+			$chart->groupby = "DATE_FORMAT(pubdate,'%Y-%u')";
+			$chart->suffix = ' KW';
+		}
+
+		if ($this->timeframe() > 91) {
+			$chart->groupby = "DATE_FORMAT(pubdate,'%Y-%m')";
+			$chart->suffix = null;
+		}
+
+		return $chart->init();
+
+	}
+
 
 	public function plusquote_by_date() {
 

@@ -115,8 +115,6 @@ class Orders extends Controller {
 		$viewData['churn90'] = $this->Orders->sum_up($this->Orders->cancelled_by_retention_days('retention < 90'),'cancelled_orders');
 		$viewData['churnAfter90'] = $this->Orders->sum_up($this->Orders->cancelled_by_retention_days('retention > 90'),'cancelled_orders');
 
-		//$viewData['retentionChart1M'] = $this->Orders->cancelled_by_retention_days_chart("conversions.subscription_internal_title LIKE '%1M%'");
-
 		$this->view->charts = $this->Charts;
 		$this->view->longterm = $this->Longterm->chartdata('orders');
 
