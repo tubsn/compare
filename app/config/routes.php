@@ -44,6 +44,10 @@ $routes->get('/valueable/{type}', 'Lists@valueables');
 // Orders
 $routes->get('/orders', 'Orders@stats');
 $routes->get('/orders/list', 'Orders@list');
+$routes->get('/orders/map/local', 'Orders@map_local');
+$routes->get('/orders/map/germany', 'Orders@map_germany');
+$routes->get('/orders/map/local/cancelled', 'Orders@map_local_cancelled');
+$routes->get('/orders/map/germany/cancelled', 'Orders@map_germany_cancelled');
 $routes->get('/orders/campaigns', 'Orders@campaigns');
 $routes->get('/orders/import/{date:[\d]{4}-[\d]{2}-[\d]{2}?}', 'Import@order_import');
 
@@ -55,7 +59,6 @@ $routes->get('/orders/{id:\d+}', 'Livedata@order');
 $routes->get('/orders/{date}', 'Livedata@orders_date');
 $routes->get('/orders/customer/{id:\d+}', 'Livedata@customer');
 $routes->get('/orders/subscription/{id:\d+}', 'Livedata@subscription');
-
 
 $routes->post('/orders/set_client', 'Livedata@set_client');
 $routes->post('/orders/set_date', 'Livedata@set_date');

@@ -13,7 +13,7 @@ class Orders extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Articles,Orders,Campaigns,Longterm,Charts');
+		$this->models('Articles,Orders,Campaigns,Longterm,Charts,Maps');
 	}
 
 
@@ -121,5 +121,37 @@ class Orders extends Controller {
 		$this->view->render('orders/cancellations', $viewData);
 
 	}
+
+	public function map_local($cancelled = false) {
+
+		$datasets = count($this->Orders->group_by('customer_postcode') ?? 0);
+		$this->view->title = 'Verteilung von Käufen nach Postleitzahl - Datensätze: ' . $datasets;
+
+		if ($cancelled) {
+			$this->view->showCancelled = true;
+			$this->view->title = 'Kündigerquote nach Postleitzahl - Datensätze: ' . $datasets;
+		}
+
+		$this->view->PLZs = $this->Maps->colored_geo_orders();
+		$this->view->render('orders/map-local');
+	}
+
+	public function map_germany($cancelled = false) {
+
+		$datasets = count($this->Orders->group_by('customer_postcode') ?? 0);
+		$this->view->title = 'Verteilung von Käufen nach Postleitzahl - Datensätze: ' . $datasets;
+
+		if ($cancelled) {
+			$this->view->showCancelled = true;
+			$this->view->title = 'Kündigerquote nach Postleitzahl - Datensätze: ' . $datasets;
+		}
+
+		$this->view->PLZs = $this->Maps->colored_geo_orders_3steps();
+		$this->view->render('orders/map-germany');
+	}
+
+	public function map_local_cancelled() {$this->map_local(true);}
+	public function map_germany_cancelled() {$this->map_germany(true);}
+
 
 }
