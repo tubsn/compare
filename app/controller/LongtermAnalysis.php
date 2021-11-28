@@ -16,6 +16,45 @@ class LongtermAnalysis extends Controller {
 		$this->models('Charts,Longterm,Orders');
 	}
 
+
+	public function all_portals() {
+
+		$orderData = $this->Longterm->portal_orders();
+		$kpiData = $this->Longterm->portal_KPIs();
+
+		$swp['order'] = $this->Charts->convert($orderData['SWP']);
+		$moz['order'] = $this->Charts->convert($orderData['MOZ']);
+		$lr['order'] = $this->Charts->convert($orderData['LR']);
+
+		$swp['kpi'] = $this->Charts->convert($kpiData['SWP']);
+		$moz['kpi'] = $this->Charts->convert($kpiData['MOZ']);
+		$lr['kpi'] = $this->Charts->convert($kpiData['LR']);
+
+		$this->view->orderData = $orderData;
+		$this->view->kpiData = $kpiData;
+
+		$this->view->swp = $swp;
+		$this->view->moz = $moz;
+		$this->view->lr = $lr;
+
+		$this->view->charts = $this->Charts;
+
+		$this->view->title = 'Compare -> Compare² -> Compare³ - Portal-Vergleich';
+		$this->view->templates['footer'] = null;
+		$this->view->render('stats/portals');
+
+	}
+
+
+
+	public function provide_portal_orders() {
+		$this->view->json($this->Longterm->orders());
+	}
+
+	public function provide_portal_kpis() {
+		$this->view->json($this->Longterm->kpis());
+	}
+
 	public function overview() {
 
 		$this->view->charts = $this->Charts;

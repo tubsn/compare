@@ -74,9 +74,13 @@ $routes->get('/stats/audience-by-ressort', 'Stats@audience_by_ressorts');
 $routes->get('/stats/artikel', 'Stats@artikel');
 $routes->get('/stats/compared', 'LongtermAnalysis@overview');
 
+// Portal Compare
+$routes->get('/portals', 'LongtermAnalysis@all_portals');
+
 // Apis
 $routes->get('/churncalc[/{product}]', 'LongtermAnalysis@churnAPI');
-
+$routes->get('/api/orders', 'LongtermAnalysis@provide_portal_orders');
+$routes->get('/api/kpis', 'LongtermAnalysis@provide_portal_kpis');
 
 // Readers
 $routes->get('/readers/{id:[\d]{12}?}', 'Readers@detail');

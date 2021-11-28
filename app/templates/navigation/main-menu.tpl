@@ -70,6 +70,8 @@
 			</ul>
 		</li>
 
+		<li><a href="/portals" aria-haspopup="true">Portalvergleich</a></li>
+
 		<?php if (auth_rights('type, audience')): ?>
 		<li><a href="/unclassified/types">Artikel zuordnen</a>
 			<ul class="dropdown" aria-label="submenu">

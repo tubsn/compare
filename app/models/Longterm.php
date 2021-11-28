@@ -1,10 +1,11 @@
 <?php
 
 namespace app\models;
+use app\importer\PortalImport;
 use \flundr\database\SQLdb;
 use \flundr\mvc\Model;
 use \flundr\utility\Session;
-use flundr\cache\RequestCache;
+use \flundr\cache\RequestCache;
 
 class Longterm extends Model
 {
@@ -23,7 +24,38 @@ class Longterm extends Model
 		$this->db->order = 'DESC';
 		*/
 
+		$this->Portals = new PortalImport();
 		$this->Orders = new Orders();
+		$this->KPIs = new DailyKPIs();
+
+	}
+
+
+	public function portal_KPIs() {
+
+		$cache = new RequestCache('portalkpis', 30*60);
+		$portalData = $cache->get();
+
+		if (empty($portalData)) {
+			$portalData = $this->Portals->KPIs();
+			$cache->save($portalData);
+		}
+
+		return $portalData;
+
+	}
+
+	public function portal_orders() {
+
+		$cache = new RequestCache('portalorders', 30*60);
+		$portalData = $cache->get();
+
+		if (empty($portalData)) {
+			$portalData = $this->Portals->orders();
+			$cache->save($portalData);
+		}
+
+		return $portalData;
 
 	}
 
@@ -39,6 +71,32 @@ class Longterm extends Model
 
 	}
 
+
+	public function kpis($start = null) {
+
+		if (is_null($start)) {$start = '2020-10-01';}
+		$periods = $this->monthly_date_range($start);
+
+		$output = [];
+		foreach ($periods as $period) {
+
+			$dimension = $period['month']->format('Y-m');
+
+			$this->KPIs->from = $period['from'];
+			$this->KPIs->to = $period['to'];
+
+			$pageviews = $this->KPIs->sum('pageviews');
+			$avgmediatime = $this->KPIs->avg('avgmediatime');
+
+			$output[$dimension]['pageviews'] = $pageviews;
+			$output[$dimension]['pageviewsmio'] = round($pageviews/1000000,2);
+			$output[$dimension]['avgmediatime'] = round($avgmediatime,2);
+
+		}
+
+		return $output;
+
+	}
 
 	public function orders($start = null) {
 
