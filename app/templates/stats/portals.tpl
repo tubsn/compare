@@ -165,9 +165,9 @@
 
 <hr>
 
-<h1 class="text-center">Kundenverteilung</h1>
+<h1 class="text-center">Bestelldaten - Geografische Verteilung</h1>
 
-<img src="/maps/vergleich-map-nov21.png">
+<img src="/maps/vergleich-map-kuendiger-nov21.jpg">
 
 
 

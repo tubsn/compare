@@ -97,7 +97,7 @@ class Orders extends Controller {
 
 		Session::set('referer', '/orders/cancellations');
 
-		$this->view->title = 'Kündigerverhalten und Entwicklung';
+		$this->view->title = 'Kundenverhalten und Kündigerentwicklung';
 		$this->view->info = null;
 
 		$viewData['orders'] = $this->Orders->list();
@@ -113,6 +113,14 @@ class Orders extends Controller {
 		$viewData['aboshopOnly'] = count($this->Orders->filter_aboshop($viewData['orders']));
 		$viewData['externalOnly'] = count($this->Orders->filter_external($viewData['orders']));
 		$viewData['averageRetention'] = $this->Orders->average($this->Orders->filter_cancelled($viewData['orders']),'retention');
+
+		$viewData['monthlyActiveTimespan'] = $this->Charts->convert($this->Orders->customers_timespan('month'));
+
+		$yearlyCustomers = $this->Orders->customers_timespan('year',false);
+		$viewData['activeAfterOneYear'] = $yearlyCustomers[1]['orders'];
+		$viewData['yearlyActiveTimespan'] = $this->Charts->convert_as_integer($yearlyCustomers);
+
+		//dd($viewData['yearlyActiveTimespan']);
 
 		$viewData['churnSameDay'] = $this->Orders->sum_up($this->Orders->cancelled_by_retention_days('retention = 0'),'cancelled_orders');
 		$viewData['churn30'] = $this->Orders->sum_up($this->Orders->cancelled_by_retention_days('retention < 31'),'cancelled_orders');

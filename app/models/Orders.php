@@ -289,7 +289,43 @@ class Orders extends Model
 
 	}
 
+	public function customers_timespan($timeunit = 'month', $filterCancelled = true) {
 
+		$from = '2000-01-01';
+		$to = '2050-01-01';
+
+		$timeunit = strip_tags($timeunit);
+		switch ($timeunit) {
+			case 'day': $timeunit = 'day'; break;
+			case 'week': $timeunit = 'week'; break;
+			case 'year': $timeunit = 'year'; break;
+			case 'quarter': $timeunit = 'quarter'; break;
+			default: $timeunit = 'month'; break;
+		}
+
+		if ($filterCancelled == true) {
+			$filterCancelled = "AND (`cancelled` IS NULL OR `cancelled` = 0)";
+		} else {$filterCancelled = '';}
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT TIMESTAMPDIFF($timeunit, CURDATE(), order_date)*-1 as timespan, count(*) as orders
+
+			 FROM `conversions`
+			 WHERE DATE(`order_date`) BETWEEN :startDate AND :endDate
+			 $filterCancelled
+			 AND CURDATE() > order_date
+
+			 GROUP BY timespan
+			 ORDER BY order_date DESC
+			 "
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall(\PDO::FETCH_UNIQUE);
+
+		return $output;
+
+	}
 
 
 	public function cancelled_by_retention_days($filter = null) {

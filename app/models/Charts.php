@@ -18,8 +18,12 @@ class Charts
 		return $this->engine->chart_from_scratch($chartData);
 	}
 
-	public function convert($array) {
-		return $this->engine->array_to_chartdata($array);
+	public function convert($array, $metricAsInteger = false) {
+		return $this->engine->array_to_chartdata($array, $metricAsInteger);
+	}
+
+	public function convert_as_integer($array) {
+		return $this->engine->array_to_chartdata($array, true);
 	}
 
 	public function cut($chartDataString, $amountOfElements = 1) {

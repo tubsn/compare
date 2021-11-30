@@ -35,10 +35,6 @@ class Chartengine
 	private $datasource;
 	private $data;
 
-	public function new($chartData) {
-		return $this->create($chartData);
-	}
-
 	public function chart_from_scratch($chartData) {
 
 		if (isset($chartData['template'])) {
@@ -88,7 +84,7 @@ class Chartengine
 
 	}
 
-	public function array_to_chartdata($data) {
+	public function array_to_chartdata($data, $asInteger = false) {
 
 		$output['dimensions'] = array_keys($data);
 		$kpis = array_keys(array_values($data)[0]);
@@ -102,7 +98,7 @@ class Chartengine
 		}
 
 		foreach ($output as $key => $value) {
-			$output[$key] = $this->implode($value);
+			$output[$key] = $this->implode($value, $asInteger);
 		}
 
 		return $output;

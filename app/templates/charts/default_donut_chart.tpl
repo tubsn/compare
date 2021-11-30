@@ -14,7 +14,7 @@ let ChartOptions<?=$id?> = {
         },
         stroke: {
           width: 1,
-          colors: undefined
+          //colors: undefined
         },
         yaxis: {
           show: false

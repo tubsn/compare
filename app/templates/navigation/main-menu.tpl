@@ -63,7 +63,7 @@
 				<li><a href="/orders/list">Bestelldaten als Tabelle</a></li>
 				<li><a href="/orders/map/local">Bestelldaten als Karte</a></li>
 				<!--<li><a href="/readers/list">Bestellungen mit Usergroup (Beta)</a></li>-->
-				<li><a href="/orders/cancellations">Kündigerverhalten</a></li>
+				<li><a href="/orders/cancellations">Kundenverhalten</a></li>
 				<!--<li><a href="/stats/compared">Kündigerverhalten (Longterm)</a></li>-->
 				<li><a href="/orders/campaigns">UTM-Kampagnen</a></li>
 				<li><a href="/orders/today">Echtzeit Bestelleingang</a></li>

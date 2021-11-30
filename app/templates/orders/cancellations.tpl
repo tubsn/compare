@@ -83,7 +83,7 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 
 	<figure class="mb">
 		<h3 class="text-center">Aktivkunden nach Aktivitätsdauer</h3>
-		<p class="nt text-center">Kunden, die nach ihrem Probezeitraum von 31 oder 90 Tagen noch im Abo waren. (NP)</p>
+		<p class="nt text-center">Kunden, die nach ihrem Probezeitraum von 31 oder 91 Tagen noch im Abo waren. (NP)</p>
 		<?=$charts->create([
 			'metric' => [$charts->cut($longterm['active'],1),
 			 			 $charts->cut($longterm['activeAfter90'],1),
@@ -119,10 +119,48 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 
 </div>
 
+<div class="col-2" style="grid-template-columns: 1fr 4fr;">
+
+
+	<figure class="mb">
+		<h3 class="text-center">Langzeit Leser</h3>
+		<p class="nt text-center"><?=$activeAfterOneYear ?? 0?> Kunden waren bzw. sind länger als ein Jahr aktiv.</p>
+		<?=$charts->create([
+			'metric' => $yearlyActiveTimespan['orders'],
+			'dimension' => "'Im ersten Jahr', 'im zweiten Jahr'",
+			'color' => '#4e6783',
+			'height' => 300,
+			'showValues' => false,
+			'name' => 'Aktive Kunden',
+			'prefix' => 'Jahr ',
+			'name' => ['Im ersten Jahr', 'im zweiten Jahr'],
+			'template' => 'charts/default_donut_chart',
+		]);?>
+	</figure>
+
+
+	<figure class="mb">
+		<h3 class="text-center">Verteilung aktiver Kunden nach Monaten</h3>
+		<p class="nt text-center">In der Grafik erkennt man wie sich unsere Treue Leserschaft aufteilt.</p>
+		<?=$charts->create([
+			'metric' => $monthlyActiveTimespan['orders'],
+			'dimension' => $monthlyActiveTimespan['dimensions'],
+			'color' => '#4e6783',
+			'height' => 300,
+			'showValues' => false,
+			'name' => 'Aktive Kunden',
+			'prefix' => 'Monat ',
+			'name' => 'Kunden in diesem Monat',
+			'template' => 'charts/default_bar_chart',
+		]);?>
+	</figure>
+
+
+</div>
 
 <figure class="" style="margin-bottom:1em;">
 	<h3 class="text-center">Verteilung - Kündigungszeitpunkt nach Haltedauer in Tagen</h3>
-	<p class="nt text-center">Hier lassen sich kritische Zeiträume ablesen, zu denen Nutzer gehäuft ihr Abo Kündigen (z.B. nach 30 Tagen).</p>
+	<p class="nt text-center">Hier lassen sich kritische Zeiträume ablesen, zu denen Nutzer gehäuft ihr Abo Kündigen (Abhängig vom eingestellten Zeitraum).</p>
 	<?=$charts->get('cancellations_by_retention_days', 400);?>
 </figure>
 
