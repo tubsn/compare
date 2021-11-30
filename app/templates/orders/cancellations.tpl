@@ -83,10 +83,13 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 
 	<figure class="mb">
 		<h3 class="text-center">Aktivkunden nach Aktivitätsdauer</h3>
-		<p class="nt text-center">Kunden, die nach ihrem Probezeitraum von 31 oder 90 Tagen noch im Abo waren.</p>
+		<p class="nt text-center">Kunden, die nach ihrem Probezeitraum von 31 oder 90 Tagen noch im Abo waren. (NP)</p>
 		<?=$charts->create([
-			'metric' => [$longterm['active'], $longterm['activeAfter90'], $longterm['activeAfter30'], $longterm['orders']],
-			'dimension' => $longterm['dimensions'],
+			'metric' => [$charts->cut($longterm['active'],1),
+			 			 $charts->cut($longterm['activeAfter90'],1),
+			  	 		 $charts->cut($longterm['activeAfter30'],1),
+			  	 		 $charts->cut($longterm['orders'],1)],
+			'dimension' => $charts->cut($longterm['dimensions'],1),
 			'color' => ['#a2b495', '#aeb9c5', '#8a9aad' ,'#4f6884'],
 			'height' => 300,
 			'stacked' => false,
