@@ -83,7 +83,7 @@ class RSS_Adapter
 		// Regex search for the ID = -8Digits.html
 		$searchPattern = "/-(\d{8}).html/";
 		preg_match($searchPattern, $url, $matches);
-		return $matches[1]; // First Match should be the ID
+		return $matches[1] ?? NULL; // First Match should be the ID
 	}
 
 	private function extract_ressort($url) {
@@ -113,7 +113,7 @@ class RSS_Adapter
 
 			case 'SWP':
 				if ($paths[0] == 'lokales') {return $paths[1];}
-				if ($paths[0] == 'sport') {return $paths[0];}				
+				if ($paths[0] == 'sport') {return $paths[0];}
 			break;
 
 		}
