@@ -27,6 +27,7 @@ class Longterm extends Model
 		$this->Portals = new PortalImport();
 		$this->Orders = new Orders();
 		$this->KPIs = new DailyKPIs();
+		$this->Articles = new Articles();
 
 	}
 
@@ -71,6 +72,11 @@ class Longterm extends Model
 
 	}
 
+	public function started_payment() {
+
+		return $this->Orders->active_after_days();
+
+	}
 
 	public function kpis($start = null) {
 
@@ -84,13 +90,33 @@ class Longterm extends Model
 
 			$this->KPIs->from = $period['from'];
 			$this->KPIs->to = $period['to'];
+			$this->Articles->from = $period['from'];
+			$this->Articles->to = $period['to'];
 
 			$pageviews = $this->KPIs->sum('pageviews');
+			$articles = $this->Articles->count();
+			$plus = $this->Articles->count('*', 'plus = 1');
+
+			$spielmacher = $this->Articles->count('*', 'conversions>0 AND subscribers>=100' );
+			$geister = $this->Articles->count('*', '(conversions IS NULL OR conversions=0) AND subscribers<=100' );
+
 			$avgmediatime = $this->KPIs->avg('avgmediatime');
 
 			$output[$dimension]['pageviews'] = $pageviews;
 			$output[$dimension]['pageviewsmio'] = round($pageviews/1000000,2);
 			$output[$dimension]['avgmediatime'] = round($avgmediatime,2);
+			$output[$dimension]['articles'] = $articles;
+			$output[$dimension]['plusarticles'] = $plus;
+			$output[$dimension]['spielmacher'] = $spielmacher;
+			$output[$dimension]['geister'] = $geister;
+
+			if ($articles > 0) {
+				$output[$dimension]['quoteSpielmacher'] = round($spielmacher / $articles * 100,2);
+			} else {$output[$dimension]['quoteSpielmacher'] = 0;}
+
+			if ($articles > 0) {
+				$output[$dimension]['quoteGeister'] = round($geister / $articles * 100,2);
+			} else {$output[$dimension]['quoteGeister'] = 0;}
 
 		}
 
@@ -100,7 +126,7 @@ class Longterm extends Model
 
 	public function orders($start = null) {
 
-		$cache = new RequestCache('cancellcationdata' . $start . PORTAL, 5*60);
+		$cache = new RequestCache('cancellcationdata' . $start . PORTAL, 10*60);
 		$cachedData = $cache->get();
 		if ($cachedData) {return $cachedData;}
 
@@ -136,9 +162,34 @@ class Longterm extends Model
 			$output[$dimension]['quoteChurn90'] = round($churn90 / $orders * 100,2);
 			$output[$dimension]['churnAfter90'] = $churnAfter90;
 			$output[$dimension]['quoteChurnAfter90'] = round($churnAfter90 / $orders * 100,2);
+
+			$output[$dimension]['activeAfter30'] = null;
+			$output[$dimension]['activeAfter90'] = null;
+
+			/*
+			$output[$dimension]['quoteActiveAfter30'] = null;
+			$output[$dimension]['quoteActiveAfter90'] = null;
+			*/
+
+		}
+
+		$this->Orders->from = $start;
+		$this->Orders->to = date('Y-m-d', strtotime('today'));
+		$activeAfter30 = $this->Orders->active_after_days(30);
+		$activeAfter90 = $this->Orders->active_after_days(90);
+
+		foreach ($activeAfter30 as $month => $data) {
+			$output[$month]['activeAfter30'] = $data['active'];
+			$output[$month]['quoteActiveAfter30'] = round($data['active'] / $output[$month]['orders'] * 100,2);
+		}
+
+		foreach ($activeAfter90 as $month => $data) {
+			$output[$month]['activeAfter90'] = $data['active'];
+			$output[$month]['quoteActiveAfter90'] = round($data['active'] / $output[$month]['orders'] * 100,2);
 		}
 
 		$cache->save($output);
+
 		return $output;
 
 	}

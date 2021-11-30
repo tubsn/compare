@@ -22,6 +22,14 @@ class Charts
 		return $this->engine->array_to_chartdata($array);
 	}
 
+	public function cut($chartDataString, $amountOfElements = 1) {
+		return $this->engine->cutoff($chartDataString, $amountOfElements);
+	}
+
+	public function cut_left($chartDataString, $amountOfElements = 1) {
+		return $this->engine->cutoff_left($chartDataString, $amountOfElements);
+	}
+
 	public function get($chartname, $parameters = null) {
 
 		if (!method_exists($this, $chartname)) {

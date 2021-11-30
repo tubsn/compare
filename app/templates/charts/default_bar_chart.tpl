@@ -24,6 +24,9 @@ let ChartOptions<?=$id?> = {
 		height: <?=$height ?? 300?>,
 		<?php if (isset($stacked) && $stacked == true): ?>
 		stacked: true,
+		<?php if (isset($stackedTo100) && $stackedTo100 == true): ?>
+		stackType: '100%',
+		<?php endif; ?>
 		<?php else: ?>
 		stacked: false,
 		<?php endif; ?>

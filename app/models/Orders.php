@@ -265,6 +265,33 @@ class Orders extends Model
 	}
 
 
+	public function active_after_days($days = 30) {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT DATE_FORMAT(`order_date`, '%Y-%m') as order_month, count(*) as active
+			 FROM `conversions`
+			 WHERE DATE(`order_date`) BETWEEN :startDate AND :endDate
+			 #AND (`cancelled` IS NULL OR `cancelled` = 0)
+			 #AND DATEDIFF(CURDATE(), order_date) > :days
+			 AND (DATEDIFF(subscription_cancellation_date, order_date) > :days OR (`cancelled` IS NULL OR `cancelled` = 0))
+			 AND DATEDIFF(CURDATE(), order_date) > :days
+			 GROUP BY order_month
+			 ORDER BY order_date DESC
+			 "
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to, ':days' => $days]);
+		$output = $SQLstatement->fetchall(\PDO::FETCH_UNIQUE);
+		return $output;
+
+	}
+
+
+
+
 	public function cancelled_by_retention_days($filter = null) {
 
 		$from = strip_tags($this->from);
@@ -350,14 +377,21 @@ class Orders extends Model
 	public function filter_plus_only($orders) {
 		if (empty($orders)) {return [];}
 		return array_filter($orders, function($order) {
-			if ($order['article_ressort'] == 'plus') {return $order;}
+			if ($order['order_origin'] == 'Plusseite') {return $order;}
 		});
 	}
 
 	public function filter_external($orders) {
 		if (empty($orders)) {return [];}
 		return array_filter($orders, function($order) {
-			if ($order['article_ressort'] == '' && $order['article_id'] == '') {return $order;}
+			if ($order['order_origin'] == 'Extern') {return $order;}
+		});
+	}
+
+	public function filter_aboshop($orders) {
+		if (empty($orders)) {return [];}
+		return array_filter($orders, function($order) {
+			if ($order['order_origin'] == 'Aboshop') {return $order;}
 		});
 	}
 

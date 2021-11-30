@@ -20,7 +20,8 @@ Es kommt daher zu Abweichungen im Vergleich zur Statistik-Seite (dort wird nach 
 	<ul>
 		<li>Gesamtbestellungen: <b class="conversions"><?=$numberOfOrders?></b></li>
 		<li>davon Plusseite: <b class="blue"><?=$plusOnly?></b></li>
-		<li>davon Extern: <b class="blue"><?=$externalOnly?></b></li>
+		<li>davon Aboshop: <b class="blue"><?=$aboshopOnly?></b></li>
+		<!--<li>davon Extern: <b class="blue"><?=$externalOnly?></b></li>-->
 		<li>davon Gekündigt: <b class="redish"><?=$numberOfCancelled?></b></li>
 		<li>Kündigerquote: <b class="orange"><?=$cancelQuote?>&thinsp;%</b></li>
 		<li title="Anzahl: <?=$churnSameDay?>">Kündigerquote am Bestelltag: <b class="orange"><?=round($churnSameDay / $numberOfOrders * 100,1)?>&thinsp;%</b></li>
@@ -96,6 +97,12 @@ Es kommt daher zu Abweichungen im Vergleich zur Statistik-Seite (dort wird nach 
 	</div>
 
 	<div>
+
+		<h3>Kaufursprung</h3>
+		<?php $tableData = $origin;?>
+		<?php $tableName = null;?>
+		<?php include tpl('orders/stats-table');?>
+
 		<h3>Bezahlarten</h3>
 		<?php $tableData = $payment;?>
 		<?php $tableName = null;?>

@@ -41,7 +41,9 @@ class Stats extends Controller {
 		} else {$viewData['cancelQuote'] = null;}
 
 		$viewData['plusOnly'] = count($this->Orders->filter_plus_only($viewData['orders']));
+		$viewData['aboshopOnly'] = count($this->Orders->filter_aboshop($viewData['orders']));
 		$viewData['externalOnly'] = count($this->Orders->filter_external($viewData['orders']));
+
 		$viewData['averageRetention'] = $this->Orders->average($this->Orders->filter_cancelled($viewData['orders']),'retention');
 
 		// Charts

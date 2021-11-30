@@ -109,6 +109,21 @@ class Chartengine
 
 	}
 
+	public function cutoff($chartDataString, $amountOfElements) {
+		if ($amountOfElements == 0) {return $chartDataString;}
+		$output = explode(',', $chartDataString);
+		array_splice($output, $amountOfElements * -1);
+		return implode(',', $output);
+	}
+
+	public function cutoff_left($chartDataString, $amountOfElements) {
+		if ($amountOfElements == 0) {return $chartDataString;}
+		$output = explode(',', $chartDataString);
+		array_splice($output, 0, $amountOfElements);
+		return implode(',', $output);
+	}
+
+
 	private function to_aphex_chart() {
 
 		$metric = null; $dimension = null;
@@ -130,10 +145,11 @@ class Chartengine
 	}
 
 	public function implode($array, $asInteger = false, $caps = false) {
-
 		if ($caps) {$array = array_map(function ($set) { return ucfirst($set); }, $array);}
 		if ($asInteger) {return implode($array, ",");}
-		return "'" . implode($array, "','") . "'";
+		$string = "'" . implode($array, "','") . "'";
+		$string = str_replace("''", 'null', $string);
+		return $string;
 	}
 
 	public function implode_with_caps($array) {

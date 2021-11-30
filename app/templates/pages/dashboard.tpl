@@ -22,7 +22,7 @@
 Produzierte Artikel: <b><?=$articles?></b>
 &emsp; Subscribers: <b class="deepblue"><?=number_format($subscribers,0,',','.')?></b>
 &emsp; Conversions Plusseite: <b class="blue"><?=$plusOnly?></b>
-&emsp; Conversions Extern: <b class="blue"><?=$externalOnly?></b>
+&emsp; Conversions Aboshop: <b class="blue"><?=$aboshopOnly?></b>
 &emsp; ⌀-Mediatime: <b class="green"><?=number_format($avgmediatime,0,',','.')?>&thinsp;s</b>
 &emsp; Gekündigt: <b class="redish"><?=$numberOfCancelled?></b>
 &emsp; Kündigerquote: <b class="orange"><?=$cancelQuote?>&thinsp;%</b>

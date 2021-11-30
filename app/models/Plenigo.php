@@ -60,7 +60,7 @@ class Plenigo
 		dd($order);
 	}
 
-		private function map_order($org) {
+	private function map_order($org) {
 
 		$new['order_id'] = $org['orderId'];
 		$new['order_date'] = date("Y-m-d H:i:s", strtotime($org['orderDate']));
@@ -70,14 +70,23 @@ class Plenigo
 		$new['order_payment_method'] = $org['paymentMethod'];
 
 		if (isset($org['data']['sourceUrl'])) {
-			$new['order_source'] = $org['data']['sourceUrl'];
-			$new['article_id'] = $this->extract_id($org['data']['sourceUrl']);
-			$new['article_ressort'] = $this->extract_ressort($org['data']['sourceUrl']);
+
+			$url = $org['data']['sourceUrl'];
+
+			$new['order_source'] = $url;
+			$new['order_origin'] = $this->extract_order_origin($url);
+
+			if ($new['order_origin'] == 'Artikel') {
+				$new['article_id'] = $this->extract_id($url);
+				$new['article_ressort'] = $this->extract_ressort($url);
+			}
+
 		}
 
 		return $new;
 
 	}
+
 
 	private function active_subscription($order) {
 
@@ -171,6 +180,32 @@ class Plenigo
 	}
 
 
+	private function extract_order_origin($url) {
+
+		if (empty($url)) {return 'Extern';}
+
+		$host = parse_url($url, PHP_URL_HOST);
+		$path = parse_url($url, PHP_URL_PATH);
+		$path = trim ($path, '/');
+		$paths = explode('/',$path);
+
+		$testUrls = ['lro-int.swp.de', 'int.swp.de', 'moz-int.swp.de',
+					 'lro.int.red.swp.de', 'int.red.swp.de', 'moz.int.red.swp.de'];
+		if (in_array($host, $testUrls)) {return 'Test';}
+
+		$shopUrls = ['abo.lr-online.de', 'abo.moz.de', 'abo.swp.de'];
+		if (in_array($host, $shopUrls)) {return 'Aboshop';}
+
+		if (strTolower($paths[0] ?? null) == 'plus') {return 'Plusseite';}
+
+		$pageUrls = ['www.lr-online.de', 'www.moz.de', 'www.swp.de'];
+		if (in_array($host, $pageUrls)) {return 'Artikel';}
+
+		return 'Extern';
+
+	}
+
+
 	private function extract_id($url) {
 		// Regex search for the ID = -8Digits.html
 		$searchPattern = "/-(\d{8}).html/";
@@ -211,7 +246,7 @@ class Plenigo
 			case 'SWP':
 				if ($paths[0] == 'suedwesten') {return $paths[2];}
 				if ($paths[0] == 'lokales') {return $paths[1];}
-				if ($paths[0] == 'sport') {return $paths[0];}				
+				if ($paths[0] == 'sport') {return $paths[0];}
 			break;
 
 		}

@@ -65,16 +65,20 @@ class LongtermAnalysis extends Controller {
 
 	}
 
+
+	public function started_payment() {
+
+		dd($this->Longterm->started_payment());
+
+	}
+
+
+
 	public function churnAPI($product = 'LR+__LR P08 3M PP3') {
-
-
 
 		//$data = $this->Orders->cancelled_by_retention_days();
 		dd($data);
 		//if (!is_null($filter)) {$filter = 'AND ' . strip_tags($filter);}
-
-
-
 
 		$retention = intval($_GET['days'] ?? 30);
 

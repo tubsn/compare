@@ -25,6 +25,7 @@ class Orders extends Controller {
 		$viewData['numberOfOrders'] = count($viewData['orders'] ?? []);
 		$viewData['numberOfCancelled'] = count($this->Orders->filter_cancelled($viewData['orders']));
 		$viewData['plusOnly'] = count($this->Orders->filter_plus_only($viewData['orders']));
+		$viewData['aboshopOnly'] = count($this->Orders->filter_aboshop($viewData['orders']));
 		$viewData['externalOnly'] = count($this->Orders->filter_external($viewData['orders']));
 		$viewData['averageRetention'] = $this->Orders->average($this->Orders->filter_cancelled($viewData['orders']),'retention');
 
@@ -66,6 +67,7 @@ class Orders extends Controller {
 		$viewData['charts'] = $this->Charts;
 
 		$viewData['plusOnly'] = count($this->Orders->filter_plus_only($viewData['orders']));
+		$viewData['aboshopOnly'] = count($this->Orders->filter_aboshop($viewData['orders']));
 		$viewData['externalOnly'] = count($this->Orders->filter_external($viewData['orders']));
 		$viewData['averageRetention'] = $this->Orders->average($this->Orders->filter_cancelled($viewData['orders']),'retention');
 
@@ -73,6 +75,7 @@ class Orders extends Controller {
 		$viewData['tag'] = $this->Orders->group_by_combined('article_tag');
 		$viewData['audience'] = $this->Orders->group_by_combined('article_audience');
 		$viewData['ressorts'] = $this->Orders->group_by_combined('article_ressort');
+		$viewData['origin'] = $this->Orders->group_by_combined('order_origin');
 		$viewData['utm_source'] = $this->Orders->group_by_combined('utm_source');
 		$viewData['utm_medium'] = $this->Orders->group_by_combined('utm_medium');
 		$viewData['utm_campaign'] = $this->Orders->group_by_combined('utm_campaign');
@@ -107,6 +110,7 @@ class Orders extends Controller {
 		} else {$viewData['cancelQuote'] = null;}
 
 		$viewData['plusOnly'] = count($this->Orders->filter_plus_only($viewData['orders']));
+		$viewData['aboshopOnly'] = count($this->Orders->filter_aboshop($viewData['orders']));
 		$viewData['externalOnly'] = count($this->Orders->filter_external($viewData['orders']));
 		$viewData['averageRetention'] = $this->Orders->average($this->Orders->filter_cancelled($viewData['orders']),'retention');
 
@@ -117,6 +121,8 @@ class Orders extends Controller {
 
 		$this->view->charts = $this->Charts;
 		$this->view->longterm = $this->Longterm->chartdata('orders');
+
+		//dd($this->view->longterm);
 
 		$this->view->render('orders/cancellations', $viewData);
 

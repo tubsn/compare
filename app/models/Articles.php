@@ -649,7 +649,6 @@ class Articles extends Model
 		$output = $SQLstatement->fetchall(\PDO::FETCH_UNIQUE);
 		if (empty($output)) {return null;}
 
-
 		return $output;
 
 	}

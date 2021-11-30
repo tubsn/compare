@@ -11,7 +11,8 @@
 <p class="light-box" style="margin-bottom:2em;">
 Gesamtbestellungen: <b class="conversions"><?=$numberOfOrders?></b>
 &emsp; davon Plusseite: <b class="blue"><?=$plusOnly?></b>
-&emsp; davon Extern: <b class="blue"><?=$externalOnly?></b>
+&emsp; davon Aboshop: <b class="blue"><?=$aboshopOnly?></b>
+<!--&emsp; davon Extern: <b class="blue"><?=$externalOnly?></b>-->
 &emsp; davon Gekündigt: <b class="redish"><?=$numberOfCancelled?></b>
 &emsp; Kündigerquote: <b class="orange"><?=round(($numberOfCancelled / $numberOfOrders) * 100)?>&thinsp;%</b>
 &emsp; ⌀-Haltedauer: <b class="blue"><?=number_format($averageRetention,2,',','.')?> Tage</b>
@@ -26,9 +27,10 @@ Gesamtbestellungen: <b class="conversions"><?=$numberOfOrders?></b>
 	<th class="text-left">UserID</th>
 	<th>Bestelldatum</th>
 	<th>Uhrzeit</th>
+	<th>Ursprung</th>
 	<th>Ressort</th>
 	<th>Produkt</th>
-	<th>Bezeichnung</th>
+	<!--<th>Bezeichnung</th>-->
 	<th>Preis</th>
 	<th>Bezahlmethode</th>
 	<th>Gekündigt</th>
@@ -44,9 +46,10 @@ Gesamtbestellungen: <b class="conversions"><?=$numberOfOrders?></b>
 	<td class="narrow"><a href="/readers/<?=$order['customer_id']?>"><?=$order['customer_id']?></a></td>
 	<td><?=formatDate($order['order_date'],'Y-m-d')?> <span class="hidden"><?=formatDate($order['order_date'],'H:i')?></span></td>
 	<td><?=formatDate($order['order_date'],'H:i')?> Uhr</td>
+	<td><?=$order['order_origin']?></td>
 	<td><?=ucfirst($order['article_ressort'])?></td>
 	<td class="narrow"><?=$order['order_title']?></td>
-	<td class="narrow"><?=$order['subscription_internal_title'] ?? $order['order_title']?></td>
+	<!--<td class="narrow"><?=$order['subscription_internal_title'] ?? $order['order_title']?></td>-->
 	<td><?=$order['order_price']?>&thinsp;€</td>
 	<td><?=$order['order_payment_method']?></td>
 	<td><?=$order['cancelled'] ? '<span class="cancelled">gekündigt</span>' : '' ?></td>

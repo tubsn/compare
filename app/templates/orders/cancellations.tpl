@@ -27,11 +27,12 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 
 </div>
 
+
 <div class="col-2" style="grid-template-columns: 1fr 1.5fr 1fr; margin-top: 2em; margin-bottom:0em;">
 
 	<figure class="mb">
 		<h3 class="text-center">Entwicklung Kündigerquote</h3>
-		<p class="nt text-center">(Steigt mit zunehmender Zeit)</p>
+		<p class="nt text-center">Quote steigt mit zunehmender Zeit.</p>
 		<?=$charts->create([
 			'metric' => $longterm['quote'],
 			'dimension' => $longterm['dimensions'],
@@ -78,12 +79,49 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 </div>
 
 
-<figure class="" style="margin-bottom:2em;">
+<div class="col-2" style="grid-template-columns: 2fr 1fr;">
+
+	<figure class="mb">
+		<h3 class="text-center">Aktivkunden nach Aktivitätsdauer</h3>
+		<p class="nt text-center">Kunden, die nach ihrem Probezeitraum von 31 oder 90 Tagen noch im Abo waren.</p>
+		<?=$charts->create([
+			'metric' => [$longterm['active'], $longterm['activeAfter90'], $longterm['activeAfter30'], $longterm['orders']],
+			'dimension' => $longterm['dimensions'],
+			'color' => ['#a2b495', '#aeb9c5', '#8a9aad' ,'#4f6884'],
+			'height' => 300,
+			'stacked' => false,
+			'area' => false,
+			'showValues' => false,
+			'legend' => 'top',
+			'name' => ['heute noch aktiv', 'mindestens 91 Tage aktiv', 'mindestens 31 Tage aktiv', 'Bestelleingang'],
+			'template' => 'charts/default_bar_chart',
+		]);?>
+	</figure>
+
+	<figure class="mb">
+		<h3 class="text-center">Eintritt ins Bezahlabo</h3>
+		<p class="nt text-center">Anteil an aktiven Kunden nach Probezeitraum.</p>
+		<?=$charts->create([
+			'metric' => [$longterm['quoteActiveAfter30'], $longterm['quoteActiveAfter90']],
+			'dimension' => $longterm['dimensions'],
+			'color' => ['#7e91aa', '#314e6f'],
+			'height' => 300,
+			'percent' => true,
+			'area' => true,
+			'legend' => 'top',
+			'name' => ['mindestens 31 Tage aktiv', 'mindestens 91 Tage aktiv'],
+			'template' => 'charts/default_line_chart',
+		]);?>
+	</figure>
+
+</div>
+
+
+<figure class="" style="margin-bottom:1em;">
 	<h3 class="text-center">Verteilung - Kündigungszeitpunkt nach Haltedauer in Tagen</h3>
 	<p class="nt text-center">Hier lassen sich kritische Zeiträume ablesen, zu denen Nutzer gehäuft ihr Abo Kündigen (z.B. nach 30 Tagen).</p>
 	<?=$charts->get('cancellations_by_retention_days', 400);?>
 </figure>
-
 
 
 <div class="col-2" style="grid-template-columns: 1fr 1fr;">
@@ -105,6 +143,8 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 	</figure>
 
 	<div>
+
+
 		<figure class="mb">
 			<h3 class="text-center">Monatlicher Zuwachs an Netto-Neukunden</h3>
 			<p class="nt text-center">Tatsächliches Abowachstum (schrumpft kontinuierlich durch neue Kündigungen).</p>
@@ -125,6 +165,8 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 			<p class="nt text-center">Wenn Nutzer kündigen wo halten Abos am längsten?</p>
 			<?=$charts->get('avg_retention_by');?>
 		</figure>
+
+
 	</div>
 
 </div>
