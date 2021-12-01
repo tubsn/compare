@@ -126,7 +126,7 @@ class Longterm extends Model
 
 	public function orders($start = null) {
 
-		$cache = new RequestCache('cancellcationdata' . $start . PORTAL, 10*60);
+		$cache = new RequestCache('cancellcationdata' . $start . PORTAL, 0*60);
 		$cachedData = $cache->get();
 		if ($cachedData) {return $cachedData;}
 
@@ -153,15 +153,26 @@ class Longterm extends Model
 			$output[$dimension]['cancelled'] = $cancelled;
 			$output[$dimension]['cancelledNegative'] = $cancelled * -1;
 			$output[$dimension]['active'] = $orders - $cancelled;
-			$output[$dimension]['quote'] = round($cancelled / $orders * 100,2);
 			$output[$dimension]['churnSameDay'] = $churnSameDay;
-			$output[$dimension]['quoteChurnSameDay'] = round($churnSameDay / $orders * 100,2);
 			$output[$dimension]['churn30'] = $churn30;
-			$output[$dimension]['quoteChurn30'] = round($churn30 / $orders * 100,2);
 			$output[$dimension]['churn90'] = $churn90;
-			$output[$dimension]['quoteChurn90'] = round($churn90 / $orders * 100,2);
 			$output[$dimension]['churnAfter90'] = $churnAfter90;
-			$output[$dimension]['quoteChurnAfter90'] = round($churnAfter90 / $orders * 100,2);
+
+			if (!$orders == 0) {
+				$output[$dimension]['quote'] = round($cancelled / $orders * 100,2);
+				$output[$dimension]['quoteChurnSameDay'] = round($churnSameDay / $orders * 100,2);
+				$output[$dimension]['quoteChurn30'] = round($churn30 / $orders * 100,2);
+				$output[$dimension]['quoteChurn90'] = round($churn90 / $orders * 100,2);
+				$output[$dimension]['quoteChurnAfter90'] = round($churnAfter90 / $orders * 100,2);
+			}
+
+			else {
+				$output[$dimension]['quote'] = 0;
+				$output[$dimension]['quoteChurnSameDay'] = 0;
+				$output[$dimension]['quoteChurn30'] = 0;
+				$output[$dimension]['quoteChurn90'] = 0;
+				$output[$dimension]['quoteChurnAfter90'] = 0;
+			}
 
 			$output[$dimension]['activeAfter30'] = null;
 			$output[$dimension]['activeAfter90'] = null;
@@ -180,12 +191,18 @@ class Longterm extends Model
 
 		foreach ($activeAfter30 as $month => $data) {
 			$output[$month]['activeAfter30'] = $data['active'];
-			$output[$month]['quoteActiveAfter30'] = round($data['active'] / $output[$month]['orders'] * 100,2);
+			if ($output[$month]['orders'] > 0) {
+				$output[$month]['quoteActiveAfter30'] = round($data['active'] / $output[$month]['orders'] * 100,2);
+			}
+			else {$output[$month]['quoteActiveAfter30'] = 0;}
 		}
 
 		foreach ($activeAfter90 as $month => $data) {
 			$output[$month]['activeAfter90'] = $data['active'];
-			$output[$month]['quoteActiveAfter90'] = round($data['active'] / $output[$month]['orders'] * 100,2);
+			if ($output[$month]['orders'] > 0) {
+				$output[$month]['quoteActiveAfter90'] = round($data['active'] / $output[$month]['orders'] * 100,2);
+			}
+			else {$output[$month]['quoteActiveAfter90'] = 0;}
 		}
 
 		$cache->save($output);

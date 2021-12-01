@@ -65,7 +65,7 @@ class Exports extends Controller {
 		Session::set('from','0000-00-00');
 		Session::set('to', '2099-01-01');
 
-		$artikel = $this->Articles->value_articles();		
+		$artikel = $this->Articles->value_articles();
 
 		Session::set('from', $sessionFrom);
 		Session::set('to', $sessionTo);
@@ -102,7 +102,7 @@ class Exports extends Controller {
 			$this->Campaigns->create_or_update($campaign);
 		}*/
 
-		$data = array_map(function ($set) { 
+		$data = array_map(function ($set) {
 			if (isset($set['Transactionid'])) {
 				$set['Transactionid'] = '<a href="/orders/'.$set['Transactionid'].'">'.$set['Transactionid'].'</a>';
 				unset($set['Transactions']);
@@ -164,6 +164,17 @@ class Exports extends Controller {
 		$currentStats = $this->average_data($currentStats, $weeks);
 		ksort($currentStats);
 
+		$output_with_ressort = [];
+		$index = 0;
+		foreach ($currentStats as $ressort => $data) {
+			$output_with_ressort[$index]['ressort'] = $ressort;
+			foreach ($data as $key => $void) {
+				$output_with_ressort[$index][$key] = $data[$key];
+			}
+			$index++;
+		}
+		$currentStats = $output_with_ressort;
+
 		$this->view->title = 'Linkpulse-Aktuellezahlen.csv';
 		$this->view->export($currentStats);
 
@@ -196,6 +207,6 @@ class Exports extends Controller {
 
 	}
 
-		
+
 
 }
