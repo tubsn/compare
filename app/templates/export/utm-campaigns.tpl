@@ -32,7 +32,16 @@
 table td.narrow {max-width:100%;}
 </style>
 
-	<div style="display:flex; align-items:start; gap:2em;">
+<?php if (isset($clicks) && (!empty($clicks))): ?>
+	<h3>Pageviews Agentur Kampagne - 3 Für 3 </h3>
+<div style="display:flex; align-items:start; gap:2em;">
+	<?=dump_table($clicks);?>
+	<?=dump_table($clicksgrouped);?>
+</div>
+<?php endif; ?>
+
+
+<div style="display:flex; align-items:start; gap:2em;">
 	<?=dump_table($data);?>
 	<?=dump_table($grouped);?>
 </div>

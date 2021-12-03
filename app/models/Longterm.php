@@ -81,7 +81,12 @@ class Longterm extends Model
 	public function kpis($start = null) {
 
 		if (is_null($start)) {$start = '2020-10-01';}
-		$periods = $this->monthly_date_range($start);
+
+		if (date('j') <= 15) {
+			$to = date('Y-m-d', strtotime('last day of last month'));
+		} else {$to = null;}
+
+		$periods = $this->monthly_date_range($start, $to);
 
 		$output = [];
 		foreach ($periods as $period) {
@@ -95,10 +100,11 @@ class Longterm extends Model
 
 			$pageviews = $this->KPIs->sum('pageviews');
 			$articles = $this->Articles->count();
-			$plus = $this->Articles->count('*', 'plus = 1');
+			$plus = $this->Articles->count_with_filter('plus = 1');
 
-			$spielmacher = $this->Articles->count('*', 'conversions>0 AND subscribers>=100' );
-			$geister = $this->Articles->count('*', '(conversions IS NULL OR conversions=0) AND subscribers<=100' );
+
+			$spielmacher = $this->Articles->count_with_filter('conversions>0 AND subscribers>=100');
+			$geister = $this->Articles->count_with_filter('(conversions IS NULL OR conversions=0) AND subscribers <= 100');
 
 			$avgmediatime = $this->KPIs->avg('avgmediatime');
 
@@ -131,7 +137,12 @@ class Longterm extends Model
 		if ($cachedData) {return $cachedData;}
 
 		if (is_null($start)) {$start = '2021-04-01';}
-		$periods = $this->monthly_date_range($start);
+
+		if (date('j') <= 15) {
+			$to = date('Y-m-d', strtotime('last day of last month'));
+		} else {$to = null;}
+
+		$periods = $this->monthly_date_range($start, $to);
 
 		$output = [];
 		foreach ($periods as $period) {
@@ -185,7 +196,7 @@ class Longterm extends Model
 		}
 
 		$this->Orders->from = $start;
-		$this->Orders->to = date('Y-m-d', strtotime('today'));
+		$this->Orders->to = $to;
 		$activeAfter30 = $this->Orders->active_after_days(30);
 		$activeAfter90 = $this->Orders->active_after_days(90);
 

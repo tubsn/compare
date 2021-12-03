@@ -227,4 +227,16 @@ class Stats extends Controller {
 	}
 
 
+	public function freecharts() {
+
+		$this->view->active = $this->Orders->active_after_days(60);
+
+		$this->view->charts = $this->Charts;
+		Session::set('referer', '/freecharts');
+		$this->view->title = 'Überblick';
+		$this->view->render('stats/testcharts');
+
+	}
+
+
 }

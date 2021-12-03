@@ -148,13 +148,13 @@ class Analytics
 		$this->ga->metrics = 'ga:transactions';
 		$this->ga->from = $dayCount . 'daysAgo';
 		$this->ga->to = 'today';
-		
+
 		if ($grouped) {
 		$this->ga->dimensions = 'ga:medium';
 		$this->ga->sort = '-ga:transactions';
 		}
 		else {
-		$this->ga->dimensions = 'ga:date,ga:source,ga:medium,ga:campaign,ga:transactionId';	
+		$this->ga->dimensions = 'ga:date,ga:source,ga:medium,ga:campaign,ga:transactionId';
 		$this->ga->sort = '-ga:date';
 		}
 
@@ -165,6 +165,67 @@ class Analytics
 
 	}
 
+	public function utm_campaigns_shop($dayCount = 30, $grouped = false) {
+
+		if (PORTAL == 'LR') {
+			$this->ga->profileViewID = 204494427;
+		}
+
+		if (PORTAL == 'MOZ') {
+			$this->ga->profileViewID = 227572285;
+		}
+
+		if (PORTAL == 'SWP') {
+			throw new \Exception("SWP Analytics Zugriff nicht aktiviert", 1);
+		}
+
+		$this->ga->metrics = 'ga:transactions';
+		$this->ga->from = $dayCount . 'daysAgo';
+		$this->ga->to = 'today';
+
+		if ($grouped) {
+		$this->ga->dimensions = 'ga:medium';
+		$this->ga->sort = '-ga:transactions';
+		}
+		else {
+		$this->ga->dimensions = 'ga:date,ga:source,ga:medium,ga:campaign,ga:transactionId';
+		$this->ga->sort = '-ga:date';
+		}
+
+		$this->ga->filters = 'ga:transactions>0;ga:medium!=(none);ga:campaign!=(not set)';
+		$this->ga->maxResults = '1000';
+
+		return $this->ga->fetch();
+
+	}
+
+	public function shop_campaign($campaignName = null, $dayCount = 30, $grouped = false) {
+
+		$campaignName = strip_tags($campaignName);
+
+		if (PORTAL == 'LR') {$this->ga->profileViewID = 204494427;}
+		if (PORTAL == 'MOZ') {$this->ga->profileViewID = 227572285;}
+		if (PORTAL == 'SWP') {throw new \Exception("SWP Analytics Zugriff nicht aktiviert", 1);}
+
+		$this->ga->metrics = 'ga:pageviews';
+		$this->ga->from = $dayCount . 'daysAgo';
+		$this->ga->to = 'today';
+
+		if ($grouped) {
+		$this->ga->dimensions = 'ga:source';
+		$this->ga->sort = '-ga:pageviews';
+		}
+		else {
+		$this->ga->dimensions = 'ga:campaign,ga:source,ga:medium,ga:date';
+		$this->ga->sort = '-ga:date';
+		}
+
+		$this->ga->filters = 'ga:pageviews>0;ga:medium!=(none);ga:campaign==' . $campaignName;
+		$this->ga->maxResults = '1000';
+
+		return $this->ga->fetch();
+
+	}
 
 
 }

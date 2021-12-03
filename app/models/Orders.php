@@ -291,7 +291,7 @@ class Orders extends Model
 
 	public function customers_timespan($timeunit = 'month', $filterCancelled = true) {
 
-		$from = '2000-01-01';
+		$from = '2021-04-01';
 		$to = '2050-01-01';
 
 		$timeunit = strip_tags($timeunit);

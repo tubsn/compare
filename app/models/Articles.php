@@ -847,6 +847,21 @@ class Articles extends Model
 		return $output['count('.$field.')'];
 	}
 
+	public function count_with_filter($filter = null) {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT count(*) as amount FROM `articles`
+			WHERE (DATE(`pubdate`) BETWEEN :startDate AND :endDate)
+			AND $filter");
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetch();
+		if (empty($output)) {return null;}
+		return $output['amount'];
+	}
+
 
 	public function sum($field, $filter = '') {
 

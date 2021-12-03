@@ -29,10 +29,17 @@ class Import extends Controller {
 			}
 
 			$articles = array_filter($articles, function($article) {
+
+				// Always Import Articles with Audience
+				if (isset($article['audience']) && !empty($article['audience'])) {return $article;}
+
 				$dpaFilterPattern = "/\b(?:dpa)\b/i"; // Filter DPA
 				if (preg_match($dpaFilterPattern,$article['author'])) {return null;}
+
 				if (strtolower($article['ressort']) == 'bilder') {return null;}  // Filter Bildergalerien
+
 				return $article;
+
 			});
 
 			$articles = array_values($articles); // Reindex the array Keys

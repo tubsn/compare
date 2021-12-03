@@ -7,7 +7,7 @@ $routes->get('/', 'Stats@dashboard');
 // Teststuff
 $routes->get('/cards', 'Lists@cards');
 $routes->get('/emo', 'Stats@test');
-
+$routes->get('/freecharts', 'Stats@freecharts');
 
 
 // Article Lists
@@ -115,6 +115,7 @@ $routes->get('/export/ressorts', 'Exports@ressort_stats');
 $routes->get('/export/value', 'Exports@value_articles');
 $routes->get('/export/campaigns', 'Exports@campaigns');
 $routes->get('/export/campaigns/{days:\d+}', 'Exports@ga_campaigns');
+$routes->get('/export/campaigns/shop/{days:\d+}', 'Exports@ga_campaigns_shop');
 $routes->get('/export/linkpulse/current', 'Exports@linkpulse_current');
 $routes->get('/export/linkpulse/halftime', 'Exports@linkpulse_halftime');
 

@@ -105,8 +105,9 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 		<h3 class="text-center">Eintritt ins Bezahlabo</h3>
 		<p class="nt text-center">Anteil an aktiven Kunden nach Probezeitraum.</p>
 		<?=$charts->create([
-			'metric' => [$longterm['quoteActiveAfter30'], $longterm['quoteActiveAfter90']],
-			'dimension' => $longterm['dimensions'],
+			'metric' => [$charts->cut($longterm['quoteActiveAfter30'],1),
+			 			 $charts->cut($longterm['quoteActiveAfter90'],1)],
+			'dimension' => $charts->cut($longterm['dimensions'],1),
 			'color' => ['#7e91aa', '#314e6f'],
 			'height' => 300,
 			'percent' => true,
@@ -124,7 +125,7 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 
 	<figure class="mb">
 		<h3 class="text-center">Langzeit Leser</h3>
-		<p class="nt text-center"><?=$activeAfterOneYear ?? 0?> Kunden waren bzw. sind länger als ein Jahr aktiv.</p>
+		<p class="nt text-center"><?=$activeAfterOneYear ?? 0?> Kunden waren bzw. sind länger als ein Jahr aktiv. <b>(Datenbasis seit April 21)</b></p>
 		<?=$charts->create([
 			'metric' => $yearlyActiveTimespan['orders'],
 			'dimension' => "'Im ersten Jahr', 'im zweiten Jahr'",
@@ -141,7 +142,7 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 
 	<figure class="mb">
 		<h3 class="text-center">Verteilung aktiver Kunden nach Monaten</h3>
-		<p class="nt text-center">In der Grafik erkennt man wie sich unsere Treue Leserschaft aufteilt.</p>
+		<p class="nt text-center">In der Grafik erkennt man wie sich unsere Treue Leserschaft aufteilt. <b>(Datenbasis seit April 21)</b></p>
 		<?=$charts->create([
 			'metric' => $monthlyActiveTimespan['orders'],
 			'dimension' => $monthlyActiveTimespan['dimensions'],

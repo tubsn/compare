@@ -287,8 +287,10 @@
 	<figure class="mb">
 		<h3 class="text-center">Anteil an aktiven Kunden nach 30 Tagen</h3>
 		<?=$charts->create([
-			'metric' => [$lr['order']['quoteActiveAfter30'], $moz['order']['quoteActiveAfter30'], $swp['order']['quoteActiveAfter30']],
-			'dimension' => $lr['order']['dimensions'],
+			'metric' => [$charts->cut($lr['order']['quoteActiveAfter30'],1),
+			 			 $charts->cut($moz['order']['quoteActiveAfter30'],1),
+			  	 		 $charts->cut($swp['order']['quoteActiveAfter30'],1)],
+			'dimension' => $charts->cut($swp['order']['dimensions'],1),
 			'color' => ['#df886d', '#0967a8', '#e50046'],
 			'height' => 350,
 			'legend' => 'top',
@@ -303,8 +305,10 @@
 	<figure class="mb">
 		<h3 class="text-center">Anteil an aktiven Kunden nach 90 Tagen</h3>
 		<?=$charts->create([
-			'metric' => [$lr['order']['quoteActiveAfter90'], $moz['order']['quoteActiveAfter90'], $swp['order']['quoteActiveAfter90']],
-			'dimension' => $lr['order']['dimensions'],
+			'metric' => [$charts->cut($lr['order']['quoteActiveAfter90'],1),
+			 			 $charts->cut($moz['order']['quoteActiveAfter90'],1),
+			  	 		 $charts->cut($swp['order']['quoteActiveAfter90'],1)],
+			'dimension' => $charts->cut($swp['order']['dimensions'],1),
 			'color' => ['#df886d', '#0967a8', '#e50046'],
 			'height' => 350,
 			'legend' => 'top',
