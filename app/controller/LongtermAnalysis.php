@@ -21,6 +21,7 @@ class LongtermAnalysis extends Controller {
 
 		$orderData = $this->Longterm->portal_orders();
 		$kpiData = $this->Longterm->portal_KPIs();
+		$combinedData = $this->Longterm->combine_portal_data($orderData, $kpiData);
 
 		$swp['order'] = $this->Charts->convert($orderData['SWP']);
 		$moz['order'] = $this->Charts->convert($orderData['MOZ']);
@@ -29,6 +30,10 @@ class LongtermAnalysis extends Controller {
 		$swp['kpi'] = $this->Charts->convert($kpiData['SWP']);
 		$moz['kpi'] = $this->Charts->convert($kpiData['MOZ']);
 		$lr['kpi'] = $this->Charts->convert($kpiData['LR']);
+
+		$swp['quotes'] = $this->Charts->convert($combinedData['SWP']);
+		$moz['quotes'] = $this->Charts->convert($combinedData['MOZ']);
+		$lr['quotes'] = $this->Charts->convert($combinedData['LR']);
 
 		$this->view->orderData = $orderData;
 		$this->view->kpiData = $kpiData;
@@ -44,6 +49,7 @@ class LongtermAnalysis extends Controller {
 		$this->view->render('stats/portals');
 
 	}
+
 
 
 

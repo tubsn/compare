@@ -22,6 +22,11 @@ let ChartOptions<?=$id?> = {
 		type: 'bar',
 		toolbar: {show:false},
 		height: <?=$height ?? 300?>,
+		<?php if (isset($animation) && $animation == false): ?>
+		animations: {enabled: false},
+		<?php else: ?>
+		animations: {enabled: true},
+		<?php endif; ?>		
 		<?php if (isset($stacked) && $stacked == true): ?>
 		stacked: true,
 		<?php if (isset($stackedTo100) && $stackedTo100 == true): ?>

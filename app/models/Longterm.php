@@ -102,6 +102,7 @@ class Longterm extends Model
 			$articles = $this->Articles->count();
 			$plus = $this->Articles->count_with_filter('plus = 1');
 
+			$scoreArticles = count($this->Articles->score_articles());
 
 			$spielmacher = $this->Articles->count_with_filter('conversions>0 AND subscribers>=100');
 			$geister = $this->Articles->count_with_filter('(conversions IS NULL OR conversions=0) AND subscribers <= 100');
@@ -115,14 +116,12 @@ class Longterm extends Model
 			$output[$dimension]['plusarticles'] = $plus;
 			$output[$dimension]['spielmacher'] = $spielmacher;
 			$output[$dimension]['geister'] = $geister;
+			$output[$dimension]['scoreArticles'] = $scoreArticles;
 
-			if ($articles > 0) {
-				$output[$dimension]['quoteSpielmacher'] = round($spielmacher / $articles * 100,2);
-			} else {$output[$dimension]['quoteSpielmacher'] = 0;}
-
-			if ($articles > 0) {
-				$output[$dimension]['quoteGeister'] = round($geister / $articles * 100,2);
-			} else {$output[$dimension]['quoteGeister'] = 0;}
+			$output[$dimension]['quoteScore'] = percentage($scoreArticles, $articles);
+			$output[$dimension]['quotePlus'] = percentage($plus, $articles);
+			$output[$dimension]['quoteSpielmacher'] = percentage($spielmacher, $articles);
+			$output[$dimension]['quoteGeister'] = percentage($geister, $articles);
 
 		}
 
@@ -132,7 +131,7 @@ class Longterm extends Model
 
 	public function orders($start = null) {
 
-		$cache = new RequestCache('cancellcationdata' . $start . PORTAL, 0*60);
+		$cache = new RequestCache('cancellcationdata' . $start . PORTAL, 30*60);
 		$cachedData = $cache->get();
 		if ($cachedData) {return $cachedData;}
 
@@ -168,30 +167,19 @@ class Longterm extends Model
 			$output[$dimension]['churn30'] = $churn30;
 			$output[$dimension]['churn90'] = $churn90;
 			$output[$dimension]['churnAfter90'] = $churnAfter90;
+			$output[$dimension]['churnProbe'] = $churn30;
 
-			if (!$orders == 0) {
-				$output[$dimension]['quote'] = round($cancelled / $orders * 100,2);
-				$output[$dimension]['quoteChurnSameDay'] = round($churnSameDay / $orders * 100,2);
-				$output[$dimension]['quoteChurn30'] = round($churn30 / $orders * 100,2);
-				$output[$dimension]['quoteChurn90'] = round($churn90 / $orders * 100,2);
-				$output[$dimension]['quoteChurnAfter90'] = round($churnAfter90 / $orders * 100,2);
-			}
+			$output[$dimension]['quote'] = percentage($cancelled, $orders);
+			$output[$dimension]['quoteChurnSameDay'] = percentage($churnSameDay, $orders);
+			$output[$dimension]['quoteChurn30'] = percentage($churn30, $orders);
+			$output[$dimension]['quoteChurn90'] = percentage($churn90, $orders);
+			$output[$dimension]['quoteChurnAfter90'] = percentage($churnAfter90, $orders);
+			$output[$dimension]['quoteChurnProbe'] = percentage($churn30, $orders);
 
-			else {
-				$output[$dimension]['quote'] = 0;
-				$output[$dimension]['quoteChurnSameDay'] = 0;
-				$output[$dimension]['quoteChurn30'] = 0;
-				$output[$dimension]['quoteChurn90'] = 0;
-				$output[$dimension]['quoteChurnAfter90'] = 0;
-			}
-
+			$output[$dimension]['activeAfterProbe'] = null;
 			$output[$dimension]['activeAfter30'] = null;
 			$output[$dimension]['activeAfter90'] = null;
-
-			/*
-			$output[$dimension]['quoteActiveAfter30'] = null;
-			$output[$dimension]['quoteActiveAfter90'] = null;
-			*/
+			$output[$dimension]['activeAfter6M'] = null;
 
 		}
 
@@ -199,21 +187,35 @@ class Longterm extends Model
 		$this->Orders->to = $to;
 		$activeAfter30 = $this->Orders->active_after_days(30);
 		$activeAfter90 = $this->Orders->active_after_days(90);
+		$activeAfter6M = $this->Orders->active_after_days(180);
 
 		foreach ($activeAfter30 as $month => $data) {
 			$output[$month]['activeAfter30'] = $data['active'];
-			if ($output[$month]['orders'] > 0) {
-				$output[$month]['quoteActiveAfter30'] = round($data['active'] / $output[$month]['orders'] * 100,2);
-			}
-			else {$output[$month]['quoteActiveAfter30'] = 0;}
+			$output[$month]['activeAfterProbe'] = $data['active'];
+			$output[$month]['quoteActiveAfter30'] = percentage($data['active'], $output[$month]['orders']);
+			$output[$month]['quoteActiveAfterProbe'] = percentage($data['active'], $output[$month]['orders']);
 		}
 
 		foreach ($activeAfter90 as $month => $data) {
 			$output[$month]['activeAfter90'] = $data['active'];
-			if ($output[$month]['orders'] > 0) {
-				$output[$month]['quoteActiveAfter90'] = round($data['active'] / $output[$month]['orders'] * 100,2);
+			$output[$month]['quoteActiveAfter90'] = percentage($data['active'], $output[$month]['orders']);
+		}
+
+		foreach ($activeAfter6M as $month => $data) {
+			$output[$month]['activeAfter6M'] = $data['active'];
+			$output[$month]['quoteActiveAfter6M'] = percentage($data['active'], $output[$month]['orders']);
+		}
+
+		if (PORTAL == 'LR') {
+			foreach ($output as $month => $data) {
+				$monthAsNumber = date('m', strtotime($month));
+				if ($monthAsNumber >=8) {
+					$output[$month]['churnProbe'] = $data['churn90'];
+					$output[$month]['quoteChurnProbe'] = $data['quoteChurn90'];
+					$output[$month]['activeAfterProbe'] = $data['activeAfter90'];
+					$output[$month]['quoteActiveAfterProbe'] = $data['quoteActiveAfter90'];
+				}
 			}
-			else {$output[$month]['quoteActiveAfter90'] = 0;}
 		}
 
 		$cache->save($output);
@@ -221,6 +223,40 @@ class Longterm extends Model
 		return $output;
 
 	}
+
+	public function combine_portal_data($orderData, $kpiData) {
+
+		$output = [];
+		foreach ($orderData as $portal => $void) {
+			$output[$portal] = $this->combine($orderData[$portal], $kpiData[$portal]);
+		}
+
+		return $output;
+	}
+
+	public function combine($orderData, $kpiData) {
+		$combined = [];
+		foreach ($orderData as $month => $dataset) {
+
+			$traffic = $kpiData[$month]['pageviews'];
+			$articles = $kpiData[$month]['articles'];
+			$plus = $kpiData[$month]['plusarticles'];
+			$orders = $orderData[$month]['orders'];
+			$active = $orderData[$month]['active'];
+			$active30 = $orderData[$month]['activeAfter30'];
+			$activeProbe = $orderData[$month]['activeAfterProbe'] ?? 0;
+
+			$combined[$month]['plusOrderQuote'] = percentage($orders, $plus);
+			$combined[$month]['articlesOrderQuote'] = percentage($orders, $articles);
+			$combined[$month]['plusActiveQuote'] = percentage($active, $plus);
+			$combined[$month]['articlesActiveQuote'] = percentage($active, $articles);
+			$combined[$month]['articlesActiveAfterProbe'] = percentage($activeProbe, $articles);
+			$combined[$month]['trafficOrdersQuote'] = percentage($orders, $traffic,4);
+			$combined[$month]['trafficActiveQuote'] = percentage($active, $traffic,4);
+		}
+		return $combined;
+	}
+
 
 	public function monthly_date_range($from, $to = null) {
 

@@ -27,12 +27,17 @@ let ChartOptions<?=$id?> = {
 		<?php endif; ?>
 		toolbar: {show:false},
 		zoom: {enabled:false},
+		<?php if (isset($animation) && $animation == false): ?>
+		animations: {enabled: false},
+		<?php else: ?>
+		animations: {enabled: true},
+		<?php endif; ?>
 		sparkline: {enabled: false},
 		<?php if (isset($stacked) && $stacked == true): ?>
 		stacked: true,
 		<?php if (isset($stackedTo100) && $stackedTo100 == true): ?>
 		stackType: '100%',
-		<?php endif; ?>		
+		<?php endif; ?>
 		<?php else: ?>
 		stacked: false,
 		<?php endif; ?>

@@ -1,12 +1,25 @@
 <main>
 
-<h1 class="text-center"><?=$page['title'] ?? 'Statistiken'?></h1>
+<h1 class="text-center">Portalvergleich LR, MOZ und SWP</h1>
+<p class="nt text-center">Hinweis: Für Einige Kennzahlen stehen alle Zeiträume zur Verfügung und sind daher abgeschnitten.</p>
 
-<hr>
 
-<h1 class="text-center">KPI Daten Portalweit</h1>
+<div class="col-2" style="grid-template-columns: 1fr 1fr 1fr; margin-top:2em;">
 
-<div class="col-2" style="grid-template-columns: 1fr 1fr 1fr">
+	<figure class="mb">
+		<h3 class="text-center">Bestelleingang Entwicklung</h3>
+		<?=$charts->create([
+			'metric' => [$lr['order']['orders'], $moz['order']['orders'], $swp['order']['orders']],
+			'dimension' => $lr['order']['dimensions'],
+			'color' => ['#df886d', '#0967a8', '#e50046'],
+			'height' => 350,
+			'legend' => 'top',
+			'area' => false,
+			'name' => ['LR', 'MOZ', 'SWP'],
+			'template' => 'charts/default_line_chart',
+		]);?>
+	</figure>
+
 
 	<figure class="mb">
 		<h3 class="text-center">Pageviews Entwicklung in Millionen (GA)</h3>
@@ -20,23 +33,6 @@
 			'showValues' => false,
 			'name' => ['LR', 'MOZ', 'SWP'],
 			'template' => 'charts/default_line_chart',
-		]);?>
-	</figure>
-
-	<figure class="mb">
-		<h3 class="text-center">Traffic Anteil (GA)</h3>
-		<?=$charts->create([
-			'metric' => [$lr['kpi']['pageviewsmio'], $moz['kpi']['pageviewsmio'], $swp['kpi']['pageviewsmio']],
-			'dimension' => $lr['kpi']['dimensions'],
-			'color' => ['#df886d', '#0967a8', '#e50046'],
-			'height' => 350,
-			'legend' => 'top',
-			'area' => false,
-			'showValues' => false,
-			'stacked' => true,
-			'stackedTo100' => true,
-			'name' => ['LR', 'MOZ', 'SWP'],
-			'template' => 'charts/default_bar_chart',
 		]);?>
 	</figure>
 
@@ -57,35 +53,128 @@
 </div>
 
 
-<div class="col-2" style="grid-template-columns: 1fr 1fr 1fr 1fr">
+
+
+<div class="col-2" style="grid-template-columns: 1fr 1fr">
+
+	<figure class="mb">
+		<h3 class="text-center">Bestelleingang Anteile</h3>
+		<?=$charts->create([
+			'metric' => [$lr['order']['orders'], $moz['order']['orders'], $swp['order']['orders']],
+			'dimension' => $lr['order']['dimensions'],
+			'color' => ['#df886d', '#0967a8', '#e50046'],
+			'height' => 300,
+			'legend' => 'top',
+			'showValues' => false,
+			'stacked' => true,
+			'stackedTo100' => true,
+			'area' => false,
+			'name' => ['LR', 'MOZ', 'SWP'],
+			'template' => 'charts/default_bar_chart',
+		]);?>
+	</figure>
+
+	<figure class="mb">
+		<h3 class="text-center">Traffic Anteile (GA)</h3>
+		<?=$charts->create([
+			'metric' => [$lr['kpi']['pageviewsmio'], $moz['kpi']['pageviewsmio'], $swp['kpi']['pageviewsmio']],
+			'dimension' => $lr['kpi']['dimensions'],
+			'color' => ['#df886d', '#0967a8', '#e50046'],
+			'height' => 300,
+			'legend' => 'top',
+			'area' => false,
+			'showValues' => false,
+			'stacked' => true,
+			'stackedTo100' => true,
+			'name' => ['LR', 'MOZ', 'SWP'],
+			'template' => 'charts/default_bar_chart',
+		]);?>
+	</figure>
+
+
+</div>
+
+
+
+
+<div class="col-2" style="grid-template-columns: 1fr 1fr 1fr">
+
+	<figure class="mb">
+		<h3 class="text-center">Verhältnis von Bestellungen zu produzierten Artikeln</h3>
+		<?=$charts->create([
+			'metric' => [$charts->cut($lr['quotes']['articlesOrderQuote'],0),
+			 			 $charts->cut($moz['quotes']['articlesOrderQuote'],0),
+			  	 		 'null,' . $charts->cut_left($swp['quotes']['articlesOrderQuote'],1)],
+			'dimension' => $charts->cut($swp['quotes']['dimensions'],0),
+			'color' => ['#df886d', '#0967a8', '#e50046'],
+			'height' => 350,
+			'legend' => 'top',
+			'area' => false,
+			'animation' => false,
+			'percent' => true,
+			'showValues' => false,
+			'name' => ['LR', 'MOZ', 'SWP'],
+			'template' => 'charts/default_line_chart',
+		]);?>
+	</figure>
+
 	<figure class="mb">
 		<h3 class="text-center">Produzierte Artikel</h3>
 		<?=$charts->create([
-			'metric' => [$charts->cut_left($lr['kpi']['articles'],3),
-			 			 $charts->cut_left($moz['kpi']['articles'],3),
-			  	 		 $charts->cut_left($swp['kpi']['articles'],3)],
-			'dimension' => $charts->cut_left($swp['kpi']['dimensions'],3),
+			'metric' => [$charts->cut_left($lr['kpi']['articles'],7),
+			 			 $charts->cut_left($moz['kpi']['articles'],7),
+			  	 		 $charts->cut_left($swp['kpi']['articles'],7)],
+			'dimension' => $charts->cut_left($swp['kpi']['dimensions'],7),
 			'color' => ['#df886d', '#0967a8', '#e50046'],
 			'height' => 350,
 			'legend' => 'top',
 			'area' => false,
 			'showValues' => false,
 			'name' => ['LR', 'MOZ', 'SWP'],
-			'template' => 'charts/default_line_chart',
+			'template' => 'charts/default_bar_chart',
 		]);?>
 	</figure>
 
+
 	<figure class="mb">
-		<h3 class="text-center">Produzierte Plus Artikel</h3>
+		<h3 class="text-center">Verhältnis von Aktiv Kunden zu produzierten Artikeln</h3>
 		<?=$charts->create([
-			'metric' => [$charts->cut_left($lr['kpi']['plusarticles'],3),
-			 			 $charts->cut_left($moz['kpi']['plusarticles'],3),
-			  	 		 $charts->cut_left($swp['kpi']['plusarticles'],3)],
-			'dimension' => $charts->cut_left($swp['kpi']['dimensions'],3),
+			'metric' => [$charts->cut($lr['quotes']['articlesActiveQuote'],0),
+			 			 $charts->cut($moz['quotes']['articlesActiveQuote'],0),
+			  	 		 'null,' . $charts->cut_left($swp['quotes']['articlesActiveQuote'],1)],
+			'dimension' => $charts->cut($swp['quotes']['dimensions'],0),
 			'color' => ['#df886d', '#0967a8', '#e50046'],
 			'height' => 350,
 			'legend' => 'top',
 			'area' => false,
+			'animation' => false,
+			'percent' => true,
+			'showValues' => false,
+			'name' => ['LR', 'MOZ', 'SWP'],
+			'template' => 'charts/default_line_chart',
+		]);?>
+	</figure>
+
+
+</div>
+
+
+
+
+<div class="col-2" style="grid-template-columns: 1fr 1fr 1fr 1fr">
+
+	<figure class="mb">
+		<h3 class="text-center">Plusartikel-Quote</h3>
+		<?=$charts->create([
+			'metric' => [$charts->cut_left($lr['kpi']['quotePlus'],7),
+			 			 $charts->cut_left($moz['kpi']['quotePlus'],7),
+			  	 		 $charts->cut_left($swp['kpi']['quotePlus'],7)],
+			'dimension' => $charts->cut_left($swp['kpi']['dimensions'],7),
+			'color' => ['#df886d', '#0967a8', '#e50046'],
+			'height' => 350,
+			'legend' => 'top',
+			'area' => false,
+			'percent' => true,
 			'showValues' => false,
 			'name' => ['LR', 'MOZ', 'SWP'],
 			'template' => 'charts/default_line_chart',
@@ -93,7 +182,7 @@
 	</figure>
 
 	<figure class="mb">
-		<h3 class="text-center">Anteil-Spielmacher Artikel</h3>
+		<h3 class="text-center">Spielmacher-Quote</h3>
 		<?=$charts->create([
 			'metric' => [$charts->cut_left($lr['kpi']['quoteSpielmacher'],7),
 			 			 $charts->cut_left($moz['kpi']['quoteSpielmacher'],7),
@@ -111,7 +200,7 @@
 	</figure>
 
 	<figure class="mb">
-		<h3 class="text-center">Anteil-Geister Artikel</h3>
+		<h3 class="text-center">Geister-Quote</h3>
 		<?=$charts->create([
 			'metric' => [$charts->cut_left($lr['kpi']['quoteGeister'],7),
 			 			 $charts->cut_left($moz['kpi']['quoteGeister'],7),
@@ -128,7 +217,26 @@
 		]);?>
 	</figure>
 
+	<figure class="mb">
+		<h3 class="text-center">Score > 100-Quote</h3>
+		<?=$charts->create([
+			'metric' => [$charts->cut_left($lr['kpi']['quoteScore'],11),
+			 			 $charts->cut_left($moz['kpi']['quoteScore'],11),
+			  	 		 $charts->cut_left($swp['kpi']['quoteScore'],11)],
+			'dimension' => $charts->cut_left($swp['kpi']['dimensions'],11),
+			'color' => ['#df886d', '#0967a8', '#e50046'],
+			'height' => 350,
+			'legend' => 'top',
+			'area' => false,
+			'percent' => true,
+			'showValues' => false,
+			'name' => ['LR', 'MOZ', 'SWP'],
+			'template' => 'charts/default_line_chart',
+		]);?>
+	</figure>
+
 </div>
+
 
 
 <details>
@@ -165,7 +273,7 @@
 
 <hr>
 
-<h1 class="text-center">Bestelldaten - Geografische Verteilung</h1>
+<h1 class="text-center">Geografische Verteilung der Bestelldaten</h1>
 
 <img src="/maps/vergleich-map-kuendiger-nov21.jpg">
 
@@ -174,8 +282,10 @@
 <hr>
 
 <h1 class="text-center">Bestell- und Kündigerdaten</h1>
+<p class="nt text-center">Die Gesamtkündigungs-Quote wächst ganz natürlich mit zunehmender Zeit. Kongruent dazu sinkt die Menge der aktiv gehaltenden Kunden. <br/>Kündigerquoten nach X Tagen sind eingefrorene Kennzahlen. </p>
 
-<div class="col-2" style="grid-template-columns: 1fr 1fr 1fr">
+
+<div class="col-2" style="grid-template-columns: 1fr 1fr 1fr; margin-top:2em;">
 
 	<figure class="mb">
 		<h3 class="text-center">Eingehende Bestellungen</h3>
@@ -193,7 +303,7 @@
 
 
 	<figure class="mb">
-		<h3 class="text-center">Aktive Kunden</h3>
+		<h3 class="text-center">Aktuell ungekündigte (Aktive-) Kunden</h3>
 		<?=$charts->create([
 			'metric' => [$lr['order']['active'], $moz['order']['active'], $swp['order']['active']],
 			'dimension' => $lr['order']['dimensions'],
@@ -279,10 +389,10 @@
 
 
 <hr>
-<h1 class="text-center">Aktiv Kunden (NP - Kunden nach Probezeitraum)</h1>
+<h1 class="text-center">Aktive / Ungekündigte Kunden</h1>
+<p class="nt text-center">Anzahl von Kunden, die nach einem gewissen Zeitraum (z.B. ihrem Probezeitraum), noch nicht gekündigt hatten. Bezogen auf den Bestellmonat des Kunden. <br>Beispiel: Von den Bestellern im August verblieben nach X-Tagen noch Y-Leser.</p>
 
-
-<div class="col-2" style="grid-template-columns: 1fr 1fr">
+<div class="col-2" style="grid-template-columns: 1fr 1fr 1fr; margin-top:2em;">
 
 	<figure class="mb">
 		<h3 class="text-center">Anteil an aktiven Kunden nach 30 Tagen</h3>
@@ -308,6 +418,23 @@
 			'metric' => [$charts->cut($lr['order']['quoteActiveAfter90'],1),
 			 			 $charts->cut($moz['order']['quoteActiveAfter90'],1),
 			  	 		 $charts->cut($swp['order']['quoteActiveAfter90'],1)],
+			'dimension' => $charts->cut($swp['order']['dimensions'],1),
+			'color' => ['#df886d', '#0967a8', '#e50046'],
+			'height' => 350,
+			'legend' => 'top',
+			'percent' => true,
+			'area' => false,
+			'name' => ['LR', 'MOZ', 'SWP'],
+			'template' => 'charts/default_line_chart',
+		]);?>
+	</figure>
+
+	<figure class="mb">
+		<h3 class="text-center">Anteil an aktiven Kunden nach 6 Monaten</h3>
+		<?=$charts->create([
+			'metric' => [$charts->cut($lr['order']['quoteActiveAfter6M'],1),
+			 			 $charts->cut($moz['order']['quoteActiveAfter6M'],1),
+			  	 		 $charts->cut($swp['order']['quoteActiveAfter6M'],1)],
 			'dimension' => $charts->cut($swp['order']['dimensions'],1),
 			'color' => ['#df886d', '#0967a8', '#e50046'],
 			'height' => 350,
@@ -363,25 +490,24 @@
 	</figure>
 
 
+
 	<figure class="mb">
-		<h3 class="text-center">Anteile am Bestelleingang</h3>
+		<h3 class="text-center">Summe aktiver Kunden nach 6 Monaten</h3>
 		<?=$charts->create([
-			'metric' => [$lr['order']['orders'], $moz['order']['orders'], $swp['order']['orders']],
-			'dimension' => $lr['order']['dimensions'],
+			'metric' => [$charts->cut($lr['order']['activeAfter6M'],6),
+			 			 $charts->cut($moz['order']['activeAfter6M'],6),
+			  	 		 $charts->cut($swp['order']['activeAfter6M'],6)],
+			'dimension' => $charts->cut($swp['order']['dimensions'],6),
 			'color' => ['#df886d', '#0967a8', '#e50046'],
 			'height' => 350,
 			'legend' => 'top',
+			'percent' => false,
 			'showValues' => false,
-			'stacked' => true,
-			'stackedTo100' => true,
 			'area' => false,
 			'name' => ['LR', 'MOZ', 'SWP'],
 			'template' => 'charts/default_bar_chart',
 		]);?>
 	</figure>
-
-
-
 
 </div>
 
@@ -409,6 +535,8 @@
 			<th style="text-align:right">Aktiv-Quote nach 30</th>
 			<th style="text-align:right">Aktiv nach 90</th>
 			<th style="text-align:right">Aktiv-Quote nach 90</th>
+			<th style="text-align:right">Aktiv nach 6M</th>
+			<th style="text-align:right">Aktiv-Quote nach 6M</th>
 
 		</thead>
 		<tbody>
@@ -427,6 +555,8 @@
 			<td><?=$set['quoteActiveAfter30'] ?? 0?>&thinsp;%</td>
 			<td><?=$set['activeAfter90'] ?? 0?></td>
 			<td><?=$set['quoteActiveAfter90'] ?? 0?>&thinsp;%</td>
+			<td><?=$set['activeAfter6M'] ?? 0?></td>
+			<td><?=$set['quoteActiveAfter6M'] ?? 0?>&thinsp;%</td>
 		</tr>
 	<?php endforeach; ?>
 		</tbody>

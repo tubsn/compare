@@ -117,7 +117,7 @@ class Orders extends Controller {
 		$viewData['monthlyActiveTimespan'] = $this->Charts->convert($this->Orders->customers_timespan('month'));
 
 		$yearlyCustomers = $this->Orders->customers_timespan('year',false);
-		$viewData['activeAfterOneYear'] = $yearlyCustomers[1]['orders'];
+		$viewData['activeAfterOneYear'] = $yearlyCustomers[1]['orders'] ?? 0;
 		$viewData['yearlyActiveTimespan'] = $this->Charts->convert_as_integer($yearlyCustomers);
 
 		//dd($viewData['yearlyActiveTimespan']);
