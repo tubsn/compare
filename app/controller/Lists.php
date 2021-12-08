@@ -40,7 +40,7 @@ class Lists extends Controller {
 		if (is_array($viewData['articles'])) {$count = count($viewData['articles']);}
 		$this->view->title = 'Artikel ohne Themenzuweisung: ' . $count;
 		$this->view->info = 'Liste aller nicht zugeordneten Artikel für diesen Zeitraum <b>(um alle zu listen oben rechts "alle Daten" einstellen)</b> | <a href="/admin/topics">Artikel automatisch zuordnen (Beta)</a>';
-		$this->view->referer('/unset');
+		$this->view->referer('/unclassified/types');
 		$this->view->render('pages/list', $viewData);
 	}
 
@@ -50,7 +50,7 @@ class Lists extends Controller {
 		if (is_array($viewData['articles'])) {$count = count($viewData['articles']);}
 		$this->view->title = 'Artikel ohne Audience: ' . $count;
 		$this->view->info = 'Liste aller Artikel ohne Audience für diesen Zeitraum <b>(um alle zu listen oben rechts "alle Daten" einstellen)</b>';
-		$this->view->referer('/unset');
+		$this->view->referer('/unclassified/audiences');
 		$this->view->render('pages/list', $viewData);
 	}
 

@@ -117,39 +117,6 @@ class Exports extends Controller {
 		$this->view->render('export/utm-campaigns');
 	}
 
-	public function ga_campaigns_shop($days = 30) {
-		$this->view('DefaultLayout');
-		$data = $this->Analytics->utm_campaigns_shop($days);
-
-		// Save into Campaigns DB
-		/*
-		foreach ($data as $order) {
-			$campaign['order_id'] = $order['Transactionid'];
-			$campaign['ga_date'] =  date('Y-m-d', strtotime($order['Date']));
-			$campaign['utm_source'] =  $order['Source'];
-			$campaign['utm_medium'] =  $order['Medium'];
-			$campaign['utm_campaign'] =  $order['Campaign'];
-			$this->Campaigns->create_or_update($campaign);
-		}*/
-
-		$data = array_map(function ($set) {
-			if (isset($set['Transactionid'])) {
-				$set['Transactionid'] = '<a href="/orders/'.$set['Transactionid'].'">'.$set['Transactionid'].'</a>';
-				unset($set['Transactions']);
-			} return $set; }, $data);
-
-		$grouped = $this->Analytics->utm_campaigns($days, true);
-
-		$this->view->clicks = $this->Analytics->shop_campaign('3Monate-fuer3', $days);
-		$this->view->clicksgrouped = $this->Analytics->shop_campaign('3Monate-fuer3', $days, true);
-
-		$this->view->data = $data;
-		$this->view->days = $days;
-		$this->view->grouped = $grouped;
-		$this->view->info = 'UTM Kampagnen der letzten ' . $days . ' Tage (ohne Sampling)';
-		$this->view->render('export/utm-campaigns');
-	}
-
 
 
 	public function ressort_stats() {

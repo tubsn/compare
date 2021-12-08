@@ -79,6 +79,18 @@ $routes->get('/stats/compared', 'LongtermAnalysis@overview');
 // Portal Compare
 $routes->get('/portals', 'LongtermAnalysis@all_portals');
 
+
+// campaigns
+$routes->get('/export/campaigns', 'Exports@campaigns');
+$routes->get('/export/campaigns/{days:\d+}', 'Exports@ga_campaigns');
+
+$routes->get('/export/campaigns/shop', 'Campaigns@fb_accelerator');
+$routes->get('/export/campaigns/shop/30', 'Campaigns@fb_accelerator');
+
+$routes->get('/campaigns/fbaccelerator', 'Campaigns@fb_accelerator');
+$routes->get('/campaigns/filter/{filter}', 'Campaigns@all');
+$routes->get('/campaigns', 'Campaigns@all');
+
 // Apis
 $routes->get('/churncalc[/{product}]', 'LongtermAnalysis@churnAPI');
 $routes->get('/api/orders', 'LongtermAnalysis@provide_portal_orders');
@@ -113,9 +125,6 @@ $routes->get('/export/conversions', 'Exports@conversions');
 $routes->get('/export/json', 'Exports@full_json');
 $routes->get('/export/ressorts', 'Exports@ressort_stats');
 $routes->get('/export/value', 'Exports@value_articles');
-$routes->get('/export/campaigns', 'Exports@campaigns');
-$routes->get('/export/campaigns/{days:\d+}', 'Exports@ga_campaigns');
-$routes->get('/export/campaigns/shop/{days:\d+}', 'Exports@ga_campaigns_shop');
 $routes->get('/export/linkpulse/current', 'Exports@linkpulse_current');
 $routes->get('/export/linkpulse/halftime', 'Exports@linkpulse_halftime');
 

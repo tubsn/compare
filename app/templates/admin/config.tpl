@@ -15,7 +15,7 @@
 	<p>Übersicht zu laufenden UTM Kampagnen und Newsletter Previews
 		<div style="display:flex; gap:5px; align-items: start; margin-bottom:.5em;">
 			<a class="button noline" href="/export/campaigns/30">UTM Kampagnen Übersicht</a>
-			<a class="button noline" href="/export/campaigns/shop/30">Shop - UTM Kampagnen Übersicht</a>
+			<a class="button noline" href="/campaigns/fbaccelerator">Shop - Accelerator</a>
 			<a class="button noline" href="/newsletter/chefredaktion">Chefredaktion Newsletter</a>
 		</div>
 		<div style="display:flex; gap:5px; align-items: start;">

@@ -22,6 +22,10 @@ class Charts
 		return $this->engine->array_to_chartdata($array, $metricAsInteger);
 	}
 
+	public function implode($array) {
+		return $this->engine->implode($array);
+	}
+
 	public function convert_as_integer($array) {
 		return $this->engine->array_to_chartdata($array, true);
 	}
