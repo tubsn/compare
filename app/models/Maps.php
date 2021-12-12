@@ -17,10 +17,54 @@ class Maps extends Model
 
 
 
+	public function csv_import($PLZtoThree = false) {
+
+		$file = ROOT . 'import/plz.csv';
+		$lines = file($file, FILE_IGNORE_NEW_LINES);
+		$orders = array_count_values($lines);
+
+		$file = ROOT . 'import/kuendiger.csv';
+		$lines = file($file, FILE_IGNORE_NEW_LINES);
+		$cancellations = array_count_values($lines);
+
+		$orders = $this->filter_invalid_plz($orders);
+		$cancellations = $this->filter_invalid_plz($cancellations);
+
+		if ($PLZtoThree) {
+			$orders = $this->shorten_and_group_PLZ_keys($orders);
+			$cancellations = $this->shorten_and_group_PLZ_keys($cancellations);
+		}
+
+		$min = 0;
+
+		$multiplier = .9;
+		$maxCancellations = max($cancellations) * $multiplier;
+		$maxOrders = max($orders) * $multiplier;
+		$maxQuote = 100;
+
+		$orderColors = ['c4d7f2', '4b83d4', '0646a4'];
+		$cancellationColors = ['d57272', 'ba3838', '6d2121'];
+
+		$areaData = [];
+		foreach ($orders as $plz => $amountOfOrders) {
+			$areaData[$plz]['orders'] = $amountOfOrders;
+			$areaData[$plz]['orderColor'] = '#' . $this->percentage_color($areaData[$plz]['orders'], $min, $maxOrders, $orderColors);
+			$areaData[$plz]['cancellations'] = $cancellations[$plz] ?? 0;
+			$areaData[$plz]['cancellationColor'] = '#' . $this->percentage_color($areaData[$plz]['cancellations'], $min, $maxCancellations, $cancellationColors);
+			$areaData[$plz]['cancellationQuote'] = round($areaData[$plz]['cancellations'] / $areaData[$plz]['orders']*100);
+			$areaData[$plz]['cancellationQuoteColor'] = '#' . $this->percentage_color($areaData[$plz]['cancellationQuote'], $min, $maxQuote, $cancellationColors);
+		}
+
+		return $areaData;
+
+	}
+
+
 
 	public function colored_geo_orders($PLZtoThree = false) {
 
 		$orders = $this->Orders->group_by('customer_postcode');
+
 		$cancellations = $this->Orders->group_by('customer_postcode', 'conversions.cancelled = 1');
 
 		$orders = $this->filter_invalid_plz($orders);
@@ -43,7 +87,6 @@ class Maps extends Model
 
 		$areaData = [];
 		foreach ($orders as $plz => $amountOfOrders) {
-
 			$areaData[$plz]['orders'] = $amountOfOrders;
 			$areaData[$plz]['orderColor'] = '#' . $this->percentage_color($areaData[$plz]['orders'], $min, $maxOrders, $orderColors);
 			$areaData[$plz]['cancellations'] = $cancellations[$plz] ?? 0;

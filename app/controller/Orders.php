@@ -168,4 +168,36 @@ class Orders extends Controller {
 	public function map_germany_cancelled() {$this->map_germany(true);}
 
 
+
+	public function map_print_local($cancelled = false) {
+
+		$this->view->title = 'LR Printabos nach Postleitzahl (54336 Abonennten)';
+
+		if ($cancelled) {
+			$this->view->showCancelled = true;
+			$this->view->title = 'Kündiger letzte 3 Monate nach Postleitzahl';
+		}
+
+		$this->view->PLZs = $this->Maps->csv_import();
+		$this->view->render('orders/map-print-local');
+	}
+
+	public function map_print_germany($cancelled = false) {
+
+		$this->view->title = 'LR Printabos nach Postleitzahl (54336 Abonennten)';
+
+		if ($cancelled) {
+			$this->view->showCancelled = true;
+			$this->view->title = 'Kündiger letzte 3 Monate nach Postleitzahl';
+		}
+
+		$this->view->PLZs = $this->Maps->csv_import();
+		$this->view->render('orders/map-print-ger');
+	}
+
+	public function map_print_local_cancelled() {$this->map_print_local(true);}
+	public function map_print_germany_cancelled() {$this->map_print_germany(true);}
+
+
+
 }

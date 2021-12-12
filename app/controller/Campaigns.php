@@ -10,7 +10,7 @@ class Campaigns extends Controller {
 	public function __construct() {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 		$this->view('DefaultLayout');
-		$this->models('AnalyticsShop,Charts');
+		$this->models('AnalyticsShop,Charts,Orders');
 	}
 
 
@@ -29,7 +29,13 @@ class Campaigns extends Controller {
 
 	public function fb_accelerator() {
 
-		$campaignData = $this->AnalyticsShop->shop_pageviews_filterred_by_utm_campaign('3Monate-fuer3');
+		$campaignName = '3Monate-fuer3';
+
+		if (PORTAL == 'MOZ') {
+			$campaignName = '3Monate-kostenlos';
+		}
+
+		$campaignData = $this->AnalyticsShop->shop_pageviews_filterred_by_utm_campaign($campaignName);
 		$clickData = $this->AnalyticsShop->shop_events_filterred_by_label('3 Monate für 3 Euro');
 
 		$conversions = $this->AnalyticsShop->utm_campaigns_shop();
@@ -44,6 +50,10 @@ class Campaigns extends Controller {
 		$this->view->conversions = $conversions;
 		$this->view->conversionsGrouped = $grouped;
 
+		$this->view->orders = $this->Orders->list("order_date >= '2021-12-01' AND order_origin = 'Aboshop' AND (order_source like '%100556%' OR order_source like '%101782%')");
+
+		$this->view->cancelled = $this->Orders->list("order_date >= '2021-12-01' AND order_origin = 'Aboshop' AND conversions.cancelled = 1 AND (order_source like '%100556%' OR order_source like '%101782%')");
+
 		$this->view->charts = $this->Charts;
 		$this->view->clickData = $clickData;
 		$this->view->campaignData = $campaignData;
@@ -51,7 +61,7 @@ class Campaigns extends Controller {
 		$this->view->title = 'UTM - Auswertung zur Facebook Accelerator Kampagne';
 		$this->view->info = '<p>Klickevents auf Bestellbutton gefiltert nach eventLabel: <b>3 Monate für 3 Euro</b><br>
 		Landingpageklicks gefiltert nach Campaign: <b>3Monate-fuer3</b><br/>
-		Transaktionen werden noch nicht getrackt!</p>';
+		Transaktionen werden noch nicht per UTM getrackt!</p>';
 		$this->view->render('campaigns/facebook');
 
 

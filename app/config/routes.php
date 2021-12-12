@@ -8,6 +8,10 @@ $routes->get('/', 'Stats@dashboard');
 $routes->get('/cards', 'Lists@cards');
 $routes->get('/emo', 'Stats@test');
 $routes->get('/freecharts', 'Stats@freecharts');
+$routes->get('/print/local', 'Orders@map_print_local');
+$routes->get('/print/germany', 'Orders@map_print_germany');
+$routes->get('/print/local/cancelled', 'Orders@map_print_local_cancelled');
+$routes->get('/print/germany/cancelled', 'Orders@map_print_germany_cancelled');
 
 
 // Article Lists
