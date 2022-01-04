@@ -6,7 +6,7 @@
 <tr>
 	<td class="center"><b>Conversions: <span class="conversions"><?=$stats['conversions']?></span></b></td>
 	<td class="center"><b>Pageviews: <span class="pageviews"><?=number_format($stats['pageviews'],0,'.','.')?></span></b></td>
-	<td class="center"><b>Subscribers: <span class="subscribers"><?=number_format($stats['subscribers'],0,'.','.')?></span></b></td>
+	<td class="center"><b>Subscriberviews: <span class="subscribers"><?=number_format($stats['subscribers'],0,'.','.')?></span></b></td>
 	<td class="center"><b>⌀-Mediatime: <span class="mediatime"><?=round($stats['avgmediatime'])?></span></b></td>
 	<td class="right">Wochen-Ergebnis (letzte 7 Tage)</td>
 </tr>

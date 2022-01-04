@@ -38,7 +38,7 @@ class Newsletter extends Controller {
 		$infoMail = new Email();
 		$infoMail->subject = 'Sport-Artikel Rückblick - ' . PORTAL;
 		$infoMail->to = [
-			'jan.lehmann@lr-online.de', 'frank.noack@lr-online.de', 'josephine.japke@lr-online.de', 
+			'jan.lehmann@lr-online.de', 'frank.noack@lr-online.de', 'josephine.japke@lr-online.de',
 			'cvoigt@moz.de', 'matthias.haack@ruppiner-anzeiger.de', 'uwuttke@moz.de', 'kbeiszer@moz.de', 'hroessler@moz.de', 'skretschmer@moz.de'
 		];
 
@@ -79,9 +79,9 @@ class Newsletter extends Controller {
 		$this->Orders->to = $yesterday;
 		$viewData['stats']['conversions'] = $this->Orders->count();
 
-		$this->Articles->from = $yesterday;
-		$this->Articles->to = $yesterday;
-		$viewData['stats']['subscribers'] = $this->Articles->sum('subscribers');
+		//$this->Articles->from = $yesterday;
+		//$this->Articles->to = $yesterday;
+		//$viewData['stats']['subscribers'] = $this->Articles->sum('subscribers');
 
 		$viewData['stats']['date'] = $yesterday;
 		$viewData['stats']['weekday'] = date('w', strtotime('yesterday'));
@@ -123,9 +123,9 @@ class Newsletter extends Controller {
 		$this->Orders->to = $end;
 		$viewData['stats']['conversions'] = $this->Orders->count();
 
-		$this->Articles->from = $start;
-		$this->Articles->to = $end;
-		$viewData['stats']['subscribers'] = $this->Articles->sum('subscribers');
+		//$this->Articles->from = $start;
+		//$this->Articles->to = $end;
+		//$viewData['stats']['subscribers'] = $this->Articles->sum('subscribers');
 
 		$viewData['stats']['date'] = $yesterday;
 		$viewData['stats']['weekday'] = date('w', strtotime('yesterday'));

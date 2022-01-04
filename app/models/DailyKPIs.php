@@ -32,7 +32,7 @@ class DailyKPIs extends Model
 		$to = strip_tags($this->to);
 
 		$SQLstatement = $this->db->connection->prepare(
-			"SELECT sum(pageviews) as pageviews, sum(mediatime) as mediatime, avg(avgmediatime) as avgmediatime
+			"SELECT sum(pageviews) as pageviews, sum(subscribers) as subscribers, sum(mediatime) as mediatime, avg(avgmediatime) as avgmediatime
 			 FROM $tablename
 			 WHERE DATE(`date`) BETWEEN :startDate AND :endDate"
 		);
