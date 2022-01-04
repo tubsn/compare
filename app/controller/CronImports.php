@@ -55,7 +55,7 @@ class CronImports extends Controller {
 
 			$updatedArticles++;
 		}
-		
+
 		echo $updatedArticles . ' Articles - Weekly Stats updatet | ' . date('H:i:s') . "\r\n";
 
 	}
@@ -99,6 +99,11 @@ class CronImports extends Controller {
 
 	public function import_global_kpis() {
 		$this->DailyKPIs->import(3);
+
+		$from = date('Y-m-d', strtotime('yesterday -3days'));
+		$to = date('Y-m-d', strtotime('yesterday'));
+		$this->DailyKPIs->import_subscribers($from, $to);
+
 		echo 'Global KPIs importiert | ' . date('H:i:s') . "\r\n";
 	}
 

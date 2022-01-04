@@ -99,7 +99,12 @@ class DailyKPIs extends Model
 		$lp = new Linkpulse();
 		$dates = $lp->subscribers_grouped_by_date($from, $to);
 
+		if (!is_array($dates)) {
+			throw new \Exception("Import Failed", 404);
+		}
+
 		foreach ($dates as $date => $subscribers) {
+			if (empty($date)) {continue;}
 			$set['date'] = $date;
 			$set['subscribers'] = $subscribers;
 			$this->create_or_update($set);

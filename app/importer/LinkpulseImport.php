@@ -105,6 +105,8 @@ class LinkpulseImport
 		$rawAPIData = $this->curl($fullQuery);
 		$stats = $this->adapter->convert($rawAPIData);
 
+		if (empty($stats)) {return null;}
+
 		return array_sum_grouped_by('subscribers', 'date', $stats);
 
 	}
