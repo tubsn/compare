@@ -54,7 +54,7 @@ class LinkpulseAdapter
 
 		// Selected Dates are saved as ID
 		$output['date'] = $data['id'] ?? null;
-		if (!is_null($output['date'])) {$output['date'] = formatDate($output['date'],'Y-m-d');}
+		if (!is_null($output['date']) && is_numeric($output['date'])) {$output['date'] = formatDate($output['date'],'Y-m-d');}
 
 		$data = $data['attributes']; // Stats are nested in Attributes
 
