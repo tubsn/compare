@@ -139,7 +139,7 @@ class Longterm extends Model
 
 		if (date('j') <= 15) {
 			$to = date('Y-m-d', strtotime('last day of last month'));
-		} else {$to = null;}
+		} else {$to = date('Y-m-d', strtotime('today'));}
 
 		$periods = $this->monthly_date_range($start, $to);
 

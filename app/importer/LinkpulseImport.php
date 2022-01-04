@@ -16,19 +16,6 @@ class LinkpulseImport
 		$this->adapter = new LinkpulseAdapter();
 	}
 
-	public function client($client) {
-
-		/*
-		switch ($client) {
-			case 'LR': $this->apiKey = LINKPULSE_APIKEY_LR; $this->apiSecret = LINKPULSE_SECRET_LR; $this->client = 'LR'; break;
-			case 'MOZ': $this->apiKey = LINKPULSE_APIKEY_MOZ; $this->apiSecret = LINKPULSE_SECRET_MOZ; $this->client = 'MOZ'; break;
-			case 'SWP': $this->apiKey = LINKPULSE_APIKEY_SWP; $this->apiSecret = LINKPULSE_SECRET_SWP; $this->client = 'SWP'; break;
-			default: $this->apiKey = LINKPULSE_APIKEY_LR; $this->apiSecret = LINKPULSE_SECRET_LR; break;
-		}
-		*/
-
-	}
-
 	public function live() {
 
 		$cacheExpireMinutes = 3;
@@ -101,6 +88,24 @@ class LinkpulseImport
 		$subscribers = $stats[0]['subscribers'];
 
 		return $subscribers;
+
+	}
+
+	public function subscribers_grouped_by_date($from, $to) {
+
+		$from = formatDate($from,'Ymd');
+		$to = formatDate($to,'Ymd');
+
+		$timeframe = '?filter[from]=' . $from . '&filter[to]=' . $to . 'T23%3A59%3A59'; // 23:59
+		$fields = '&field[subscribers]=sum';
+		$suffix = '&aggregate=day&sort=-day&page[limit]=1000';
+
+		$fullQuery = $timeframe . $fields . $suffix;
+
+		$rawAPIData = $this->curl($fullQuery);
+		$stats = $this->adapter->convert($rawAPIData);
+
+		return array_sum_grouped_by('subscribers', 'date', $stats);
 
 	}
 

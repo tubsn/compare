@@ -16,7 +16,11 @@ class LinkpulseAdapter
 		if (!isset($data['data'])) {
 			return null;
 		}
-		
+
+		if (isset($data['status'])) {
+			throw new \Exception($data['status'], 404);
+		}
+
 		$analyticData = $data['data']; // Api returns Nested data set
 		$analyticData = array_map([$this, 'map_analytics'], $analyticData);
 
@@ -47,6 +51,10 @@ class LinkpulseAdapter
 	public function map_analytics($data) {
 
 		if (!is_array($data)) {return null;}
+
+		// Selected Dates are saved as ID
+		$output['date'] = $data['id'] ?? null;
+		if (!is_null($output['date'])) {$output['date'] = formatDate($output['date'],'Y-m-d');}
 
 		$data = $data['attributes']; // Stats are nested in Attributes
 

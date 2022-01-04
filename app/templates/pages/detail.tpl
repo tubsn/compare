@@ -143,7 +143,7 @@
 	<?php else: ?>
 
 	<h3>Detailinformationen:</h3>
-	<p>Hinweis: Für diesen Artikel sind Momenten keine Google Analytics- oder Kündigungsdaten verfügbar. Am Erscheinungstag selbst sehen Sie stattdessen nahezu <a target="_blank" href="https://app5-eu.linkpulse.com/lp/login?redirect=%2Flp%2Fdashboard%3Fid%3D5c5451741f053112bf6fc45d">Echtzeitdaten</a> über Linkpulse.</p>
+	<p>Hinweis: Für diesen Artikel sind Momentan keine Google Analytics- oder Kündigungsdaten verfügbar. Am Erscheinungstag selbst sehen Sie stattdessen nahezu <a target="_blank" href="https://app5-eu.linkpulse.com/lp/login?redirect=%2Flp%2Fdashboard%3Fid%3D5c5451741f053112bf6fc45d">Echtzeitdaten</a> über Linkpulse.</p>
 	<small class="mt text-right block">Letztes Update: <?=formatDate($article['refresh'], 'd.m.Y H:i')?> Uhr (<a class="" href="<?=$article['id']?>/refresh">jetzt aktualisieren</a>)</small>
 
 	<?php endif; ?>

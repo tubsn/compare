@@ -4,7 +4,7 @@
 </aside>
 <?php endif; ?>
 
-<footer></footer>
+<!--<footer class="snowbg"></footer>-->
 
 <script src="https://cdn.usefathom.com/script.js" data-site="KIETJXYG" defer></script>
 

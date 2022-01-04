@@ -22,6 +22,7 @@
 			<a class="button noline" href="/newsletter/sport">Sport Newsletter</a>
 			<a class="button noline" href="/newsletter/nachdrehalert">Nachdreh-Alert</a>
 			<a class="button noline" href="/newsletter/nachdrehalert-score">Nachdreh-Alert Weekly</a>
+			<a class="button noline" href="https://abo.lr-digital.de/auswertung">Newsletter Auswertung</a>
 		</div>
 	</p>
 <hr />

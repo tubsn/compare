@@ -1,7 +1,7 @@
 <main>
 
 <h1 class="text-center">Portalvergleich LR, MOZ und SWP</h1>
-<p class="nt text-center">Hinweis: Für Einige Kennzahlen stehen alle Zeiträume zur Verfügung und sind daher abgeschnitten.</p>
+<p class="nt text-center">Hinweis: Für Einige Kennzahlen stehen nicht alle Zeiträume zur Verfügung und sind daher abgeschnitten.</p>
 
 
 <div class="col-2" style="grid-template-columns: 1fr 1fr 1fr; margin-top:2em;">

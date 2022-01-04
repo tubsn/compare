@@ -180,14 +180,20 @@ class Artikel {
 				let portal = e.currentTarget.value;
 				let subdomain = 'reports';
 
+				let from = portalSelector.getAttribute('data-from');
+				let to = portalSelector.getAttribute('data-to');
+
 				if (portal == 'MOZ') {subdomain = 'reports-moz';}
 				if (portal == 'SWP') {subdomain = 'reports-swp';}
 				if (portal == 'LR') {subdomain = 'reports';}
 
 				let oldPath = window.location.href;
 				let newPath = oldPath.replace(/^[^.]*/, subdomain)
+				let page = new URL(oldPath);
 
-				window.location = 'https://' + newPath;
+				//window.location = 'https://' + newPath;
+				window.location = `https://${subdomain}.lr-digital.de/switch-portal?page=${page.pathname}&from=${from}&to=${to}`;
+				
 			});
 		}
 

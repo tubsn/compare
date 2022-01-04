@@ -19,6 +19,10 @@ class Linkpulse
 		return $this->api->subscribers($id, $pubDate);
 	}
 
+	public function subscribers_grouped_by_date($from, $to) {
+		return $this->api->subscribers_grouped_by_date($from, $to);
+	}
+
 	public function today($client = null) {
 
 		if ($client) {

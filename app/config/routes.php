@@ -147,6 +147,7 @@ $routes->post('/admin', 'Admin@save_config');
 $routes->get('/admin/import', 'Import@feeds');
 $routes->get('/admin/discover', 'Admin@discover_upload');
 $routes->post('/admin/discover', 'Admin@discover_upload');
+$routes->get('/admin/subscribers', 'Import@import_subscribers');
 $routes->get('/admin/orders', 'Import@order_import_form');
 $routes->get('/admin/topics', 'Warmup@topic_clusters');
 $routes->get('/admin/warmup', 'Warmup@daterange');

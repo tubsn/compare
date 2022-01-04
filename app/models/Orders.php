@@ -285,6 +285,7 @@ class Orders extends Model
 
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to, ':days' => $days]);
 		$output = $SQLstatement->fetchall(\PDO::FETCH_UNIQUE);
+
 		return $output;
 
 	}

@@ -31,3 +31,4 @@ class DefaultLayout extends htmlView {
 	];
 
 }
+

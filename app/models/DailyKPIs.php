@@ -94,6 +94,19 @@ class DailyKPIs extends Model
 
 	}
 
+	public function import_subscribers($from, $to) {
+
+		$lp = new Linkpulse();
+		$dates = $lp->subscribers_grouped_by_date($from, $to);
+
+		foreach ($dates as $date => $subscribers) {
+			$set['date'] = $date;
+			$set['subscribers'] = $subscribers;
+			$this->create_or_update($set);
+		}
+
+	}
+
 	private function ga_adapter($in) {
 		$out['date'] = date('Y-m-d', strtotime($in['Date']));
 		$out['pageviews'] = $in['Pageviews'] ?? 0;

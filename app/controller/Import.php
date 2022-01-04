@@ -76,6 +76,12 @@ class Import extends Controller {
 		$this->DailyKPIs->import(3);
 	}
 
+	public function import_subscribers() {
+		$from = date('Y-m-d', strtotime('yesterday -3days'));
+		$to = date('Y-m-d', strtotime('yesterday'));
+		$this->DailyKPIs->import_subscribers($from, $to);
+	}
+
 	public function import_utm_campaigns($days = 5) {
 
 		$data = $this->Analytics->utm_campaigns($days);

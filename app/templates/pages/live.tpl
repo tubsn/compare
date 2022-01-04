@@ -9,7 +9,18 @@ let from = document.querySelector('input[name="from"]');
 from.value = null;
 let to = document.querySelector('input[name="to"]');
 to.value = null;
+
+function refresh() {    
+    setTimeout(function () {
+        location.reload()
+    }, 300000);
+}
+refresh();
+
 </script>
+
+
+
 
 <h1>Live-Reporting: <b class="greenbg"><?=date('d.m.Y')?></b> &ensp;
 Conversions: <b class="conversions"><?=count($orders)?></b>	&ensp;
