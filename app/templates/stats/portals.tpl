@@ -4,6 +4,47 @@
 <p class="nt text-center">Hinweis: Für Einige Kennzahlen stehen nicht alle Zeiträume zur Verfügung und sind daher abgeschnitten.</p>
 
 
+<div class="col-2" style="grid-template-columns: 1fr 1fr; margin-top:2em;">
+
+	<figure class="mb">
+		<h3 class="text-center">Subscriber Entwicklung (Linkpulse)</h3>
+		<?=$charts->create([
+			'metric' => [$charts->cut_left($lr['kpi']['subscribers'],1),
+			 			 $charts->cut_left($moz['kpi']['subscribers'],1),
+			  	 		 $charts->cut_left($swp['kpi']['subscribers'],1)],
+			'dimension' => $charts->cut_left($swp['kpi']['dimensions'],1),
+			'color' => ['#df886d', '#0967a8', '#e50046'],
+			'height' => 350,
+			'legend' => 'top',
+			'area' => false,
+			'showValues' => false,
+			'name' => ['LR', 'MOZ', 'SWP'],
+			'template' => 'charts/default_line_chart',
+		]);?>
+	</figure>
+
+	<figure class="mb">
+		<h3 class="text-center">Anteil Subscribers an Pageviews (Linkpulse/GA)</h3>
+		<?=$charts->create([
+			'metric' => [$charts->cut_left($lr['kpi']['quoteSubscribers'],1),
+			 			 $charts->cut_left($moz['kpi']['quoteSubscribers'],1),
+			  	 		 $charts->cut_left($swp['kpi']['quoteSubscribers'],1)],
+			'dimension' => $charts->cut_left($swp['kpi']['dimensions'],1),
+			'color' => ['#df886d', '#0967a8', '#e50046'],
+			'height' => 350,
+			'legend' => 'top',
+			'percent' => true,
+			'area' => false,
+			'showValues' => false,
+			'name' => ['LR', 'MOZ', 'SWP'],
+			'template' => 'charts/default_line_chart',
+		]);?>
+	</figure>
+
+</div>
+
+
+
 <div class="col-2" style="grid-template-columns: 1fr 1fr 1fr; margin-top:2em;">
 
 	<figure class="mb">
@@ -95,9 +136,14 @@
 </div>
 
 
+<hr>
+
+<h1 class="text-center">Statistiken zur Inhaltsproduktion</h1>
+<p class="nt text-center"> </p>
 
 
-<div class="col-2" style="grid-template-columns: 1fr 1fr 1fr">
+
+<div class="col-2" style="grid-template-columns: 1fr 1fr 1fr; margin-top:2em;">
 
 	<figure class="mb">
 		<h3 class="text-center">Verhältnis von Bestellungen zu produzierten Artikeln</h3>

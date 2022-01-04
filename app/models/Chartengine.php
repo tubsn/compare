@@ -130,6 +130,8 @@ class Chartengine
 				$data[$this->kpi] = round($data[$this->kpi]);
 			}
 
+			if (empty($data[$this->kpi])) {$data[$this->kpi] = 0;}
+
 			$metric .= $data[$this->kpi] . ',';
 			$dimension .= "'" . ucfirst($data[$this->groupby]) . "'" . ',';
 
@@ -235,6 +237,7 @@ class Chartengine
 
 		switch ($this->source) {
 			case 'Orders': $datasource = new Orders(); break;
+			case 'DailyKPIs': $datasource = new DailyKPIs(); break;
 			default: $datasource = new Articles(); break;
 		}
 

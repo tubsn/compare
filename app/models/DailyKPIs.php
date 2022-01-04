@@ -77,6 +77,34 @@ class DailyKPIs extends Model
 	}
 
 
+	public function kpi_grouped_by($kpi, $groupby = "DATE_FORMAT(date,'%Y-%m')", $operation = 'sum') {
+
+		$tablename = $this->db->table;
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		if ($operation) {
+			// sum, count or average
+			$kpi = $operation . '(' . $kpi . ') as ' . $kpi;
+		}
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT $groupby, $kpi
+			 FROM $tablename
+			 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
+			 GROUP BY $groupby
+			 ORDER BY $groupby ASC"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall();
+
+		return $output;
+
+	}
+
+
+
 	public function import($daysAgo = 5) {
 
 		$ga = new Analytics();

@@ -64,7 +64,7 @@ class Charts
 	}
 
 	/*
-	********  Start of Predifined Charts ********
+	********  Start of Predefined Charts ********
 	*/
 
 	public function cancellations_by_retention_days($height = 400) {
@@ -196,6 +196,21 @@ class Charts
 		$chart->template = 'charts/default_line_chart';
 		if ($this->timeframe() > 31) {$chart->groupby = "DATE_FORMAT(pubdate,'%Y-%u')"; $chart->suffix = ' KW';}
 		if ($this->timeframe() > 91) {$chart->groupby = "DATE_FORMAT(pubdate,'%Y-%m')"; $chart->suffix = null;}
+		return $chart->init();
+
+	}
+
+	public function subscribers_by_date_wholepage() {
+
+		$chart = new Chartengine();
+		$chart->kpi = 'subscribers';
+		$chart->source = 'DailyKPIs';
+		$chart->groupby = 'DATE(date)';
+		$chart->name = 'Subscribers';
+		$chart->color = '#314e6f';
+		$chart->template = 'charts/default_line_chart';
+		if ($this->timeframe() > 31) {$chart->groupby = "DATE_FORMAT(date,'%Y-%u')"; $chart->suffix = ' KW';}
+		if ($this->timeframe() > 91) {$chart->groupby = "DATE_FORMAT(date,'%Y-%m')"; $chart->suffix = null;}
 		return $chart->init();
 
 	}

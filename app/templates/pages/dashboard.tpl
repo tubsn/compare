@@ -41,7 +41,7 @@ Produzierte Artikel: <b><?=$articles?></b>
 
 	<figure class="mb">
 		<h3 class="text-center">Subscriber im Zeitverlauf</h3>
-		<?=$charts->get('subscribers_by_date');?>
+		<?=$charts->get('subscribers_by_date_wholepage');?>
 	</figure>
 
 </div>
