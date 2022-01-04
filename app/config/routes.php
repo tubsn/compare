@@ -126,6 +126,7 @@ $routes->get('/retresco/{id:\d+}', 'Articles@retresco');
 // Exports
 $routes->get('/export/articles', 'Exports@articles');
 $routes->get('/export/conversions', 'Exports@conversions');
+$routes->get('/export/kpis', 'Exports@KPIs');
 $routes->get('/export/json', 'Exports@full_json');
 $routes->get('/export/ressorts', 'Exports@ressort_stats');
 $routes->get('/export/value', 'Exports@value_articles');

@@ -3,7 +3,7 @@
 
 <div class="settings-layout">
 
-<section>
+<section class="mb">
 
 	<h3>Nutzerverwaltung</h3>
 	<p>Neue Nutzer angelegen oder verwalten.<br /><br />
@@ -51,7 +51,8 @@ Hier können Artikel, Conversions und Kampagnendaten inklusive Klick- und Kündi
 <div style="display:flex; gap:5px; align-items: start;">
 	<a class="button noline" href="/export/articles">Artikeldaten</a>
 	<a class="button" href="/export/conversions">Conversiondaten</a>
-	<a class="button" href="/export/campaigns">UTM-Kampagnendaten</a>
+	<a class="button" href="/export/kpis">Portaldaten</a>
+	<a class="button" href="/export/campaigns">UTM-Kampagnen</a>
 </div>
 </p>
 

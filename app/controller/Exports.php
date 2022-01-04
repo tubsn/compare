@@ -10,7 +10,7 @@ class Exports extends Controller {
 	public function __construct() {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 		$this->view('CSV');
-		$this->models('Articles,Analytics,Conversions,Campaigns,ArticleKPIs,Plenigo,Orders,Linkpulse');
+		$this->models('Articles,Analytics,Conversions,Campaigns,ArticleKPIs,DailyKPIs,Plenigo,Orders,Linkpulse');
 	}
 
 	public function articles() {
@@ -36,6 +36,24 @@ class Exports extends Controller {
 
 		$this->view->title = PORTAL . '-Conversions-'.date("dmY").'.csv';
 		$this->view->export($viewData['conversions']);
+
+	}
+
+	public function KPIs() {
+
+		$sessionFrom = Session::get('from') ?? '0000-00-00';
+		$sessionTo = Session::get('to') ?? '2099-01-01';
+
+		Session::set('from','0000-00-00');
+		Session::set('to', '2099-01-01');
+
+		$kpis = $this->DailyKPIs->list();
+
+		Session::set('from', $sessionFrom);
+		Session::set('to', $sessionTo);
+
+		$this->view->title = PORTAL . '-KPIs-'.date("dmY").'.csv';
+		$this->view->export($kpis);
 
 	}
 

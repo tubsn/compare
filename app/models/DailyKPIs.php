@@ -44,6 +44,23 @@ class DailyKPIs extends Model
 
 	}
 
+	public function list() {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+		$tablename = $this->db->table;
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT * FROM $tablename
+			WHERE DATE(`date`) BETWEEN :startDate AND :endDate
+			ORDER BY date DESC"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchAll();
+		return $output;
+	}
+
 	public function sum($field) {
 
 		$from = strip_tags($this->from);
