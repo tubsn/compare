@@ -139,6 +139,25 @@ class Charts
 	}
 
 
+	public function longterm_product_orders($product) {
+
+		$chart = new Chartengine();
+		$orders = new Orders();
+		$jahresbos = $orders->product_development($product);
+		$jahresbos = $this->convert($jahresbos);
+
+		$chart->metric = $jahresbos[$product];
+		$chart->dimension = $jahresbos['dimensions'];
+		$chart->name = 'Bestellungen';
+		$chart->height = 300;
+		$chart->color = '#df886d';
+		$chart->area = true;
+		$chart->template = 'charts/default_line_chart';
+		return $chart->init();
+
+	}
+
+
 	public function pageviewsByRessort() {
 
 		$chart = new Chartengine();

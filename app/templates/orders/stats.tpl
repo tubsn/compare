@@ -34,11 +34,19 @@ Es kommt daher zu Abweichungen im Vergleich zur Statistik-Seite (dort wird nach 
 
 </div>
 
-<div class="col-2" style="grid-template-columns: 1fr 2fr;">
+
+
+<div class="col-2" style="grid-template-columns: 1fr 1fr 2fr;">
 
 	<figure>
 		<h3 class="text-center">Bestellentwicklung seit April</h3>
 		<?=$charts->get('longterm_orders');?>
+	</figure>
+
+
+	<figure>
+		<h3 class="text-center">Entwicklung Jahresabos</h3>
+		<?=$charts->get('longterm_product_orders', '12m');?>
 	</figure>
 
 	<figure>

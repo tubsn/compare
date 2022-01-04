@@ -328,6 +328,28 @@ class Orders extends Model
 
 	}
 
+	public function product_development($productName = '12m') {
+
+		$longterm = new Longterm();
+		$orders = new Orders();
+		$periods = $longterm->monthly_date_range('2021-04-01', date('Y-m-d', strtotime('last day of previous month')));
+
+		$productName = strip_tags($productName);
+
+		$output = [];
+		foreach ($periods as $period) {
+			$orders->from = $period['from'];
+			$orders->to = $period['to'];
+			$amount = $orders->count("`subscription_internal_title` LIKE '%$productName%'");
+
+			if ($amount == 0) {continue;}
+			$dimension = $period['month']->format('Y-m');
+			$output[$dimension][$productName] = $amount;
+		}
+
+		return $output;
+
+	}
 
 	public function cancelled_by_retention_days($filter = null) {
 
