@@ -105,6 +105,7 @@ switch (PORTAL) {
 		    'https://www.moz.de/lokales/brandenburg-havel/?_XML=RSS',
 		    'https://www.moz.de/lokales/eberswalde/?_XML=RSS',
 		    'https://www.moz.de/lokales/eisenhuettenstadt/?_XML=RSS',
+		    'https://www.moz.de/lokales/erkner/?_XML=RSS',
 		    'https://www.moz.de/lokales/falkensee/?_XML=RSS',
 		    'https://www.moz.de/lokales/frankfurt-oder/?_XML=RSS',
 		    'https://www.moz.de/lokales/fuerstenwalde/?_XML=RSS',

@@ -54,10 +54,12 @@ class LongtermAnalysis extends Controller {
 
 
 	public function provide_portal_orders() {
+		header('Access-Control-Allow-Origin: *');
 		$this->view->json($this->Longterm->orders());
 	}
 
 	public function provide_portal_kpis() {
+		header('Access-Control-Allow-Origin: *');
 		$this->view->json($this->Longterm->kpis());
 	}
 

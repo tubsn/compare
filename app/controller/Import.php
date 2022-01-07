@@ -48,7 +48,6 @@ class Import extends Controller {
 		}
 
 		$this->import_global_kpis();
-		$this->import_subscribers();
 		$this->import_utm_campaigns();
 		$this->ArticleMeta->import_drive_data();
 

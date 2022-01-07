@@ -161,7 +161,7 @@ class Articles extends Controller {
 		if ($pubDate == date('Y-m-d')) {
 			$stats = $this->Linkpulse->stats_today($id);
 			$stats['refresh'] = date('Y-m-d H:i:s');
-				$this->Articles->update($stats,$id);
+			$this->Articles->update($stats,$id);
 			return;
 		}
 
