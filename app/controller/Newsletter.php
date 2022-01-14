@@ -21,7 +21,7 @@ class Newsletter extends Controller {
 
 		$viewData['pageviews'] = $this->Articles->top_pageviews_days_ago(1);
 		$viewData['conversions'] = $this->Orders->latest_grouped();
-		$viewData['conversionCount'] =$this->Orders->count();
+		$viewData['conversionCount'] = $this->Orders->count();
 
 		$this->view->render('newsletter/chefredaktion/top-articles', $viewData);
 

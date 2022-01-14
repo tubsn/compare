@@ -25,6 +25,11 @@ class Plenigo
 	}
 
 
+	public function customer($id) {
+		return $this->api->customer($id);
+	}
+
+
 	public function customer_additional_data($id) {
 		$id = strip_tags($id);
 		return $this->api->customer_additional_data($id);

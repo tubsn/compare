@@ -18,6 +18,9 @@ class Readers extends Controller {
 
 	public function detail($id) {
 
+		//$data = $this->Plenigo->customer($id);
+		//dd($data);
+
 		$viewData['user'] = $this->Readers->get_from_api($id);
 		$viewData['user']['additionalData'] = $this->Plenigo->customer_additional_data($id);
 

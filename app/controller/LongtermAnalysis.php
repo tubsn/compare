@@ -63,6 +63,32 @@ class LongtermAnalysis extends Controller {
 		$this->view->json($this->Longterm->kpis());
 	}
 
+	public function provide_combined_kpis() {
+
+		$out['kpis'] = $this->Longterm->portal_KPIs();
+		$out['orders'] = $this->Longterm->portal_orders();
+		$out['quotes'] = $this->Longterm->combine_portal_data($out['orders'], $out['kpis']);
+
+
+		header('Access-Control-Allow-Origin: *');
+		$this->view->json($out);
+
+		/*
+		header('Access-Control-Allow-Origin: *');
+
+		$data = [];
+		$orderData = $this->Longterm->portal_orders();
+		$kpiData = $this->Longterm->portal_KPIs();
+		$combinedData = $this->Longterm->combine_portal_data($orderData, $kpiData);
+
+		$data['lr'] = $orderData['lr'];
+
+		$this->view->json($orderData);
+
+		*/
+
+	}
+
 	public function overview() {
 
 		$this->view->charts = $this->Charts;

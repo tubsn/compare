@@ -38,6 +38,36 @@ class LinkpulseImport
 
 	}
 
+	public function live_subs() {
+
+		$cacheExpireMinutes = 3;
+		$cache = new RequestCache('lp-live-subs' . $this->client, $cacheExpireMinutes * 60);
+		$cachedData = $cache->get();
+		if ($cachedData) {return $cachedData;}
+
+		$apiQuery = '?filter%5Brange%5D=today&field%5Bsubscribers%5D=sum&aggregate=minute&page%5Boffset%5D=0&page%5Blimit%5D=2000&sort=minute';
+
+		$rawJson = $this->curl($apiQuery);
+
+		$data = json_decode($rawJson, true);
+		$data = $data['data'];
+
+		$cache->save($data);
+
+		return $data;
+
+	}
+
+
+	public function active_users() {
+
+		$apiQuery = '?filter%5Brange%5D=1min&field%5Bactiveusers%5D=avg&aggregate=total&page%5Boffset%5D=0&page%5Blimit%5D=100&sort=-pageviews';
+		$rawJson = $this->curl($apiQuery);
+		$data = json_decode($rawJson, true);
+		$users = $data['data'][0]['attributes']['activeusers'] ?? 0;
+		return $users;
+
+	}
 
 
 	public function article_today($id) {

@@ -41,6 +41,36 @@ class Livedata extends Controller {
 
 	}
 
+	public function api_orders_today() {
+
+		$from = date('Y-m-d', strtotime('today'));
+		$to = date('Y-m-d', strtotime('today'));
+		$orders = $this->Plenigo->orders($from, $to, $maxOrders=100, $includeAppOrders = 0);
+		$orders = array_reverse($orders);
+
+		header('Access-Control-Allow-Origin: *');
+		$this->view->json($orders);
+
+	}
+
+	public function api_stats_today($resolution = 3) {
+		$stats['users'] = $this->Linkpulse->today(null, $resolution);
+		$stats['subs'] = $this->Linkpulse->today_subs(null, $resolution);
+		header('Access-Control-Allow-Origin: *');
+		$this->view->json($stats);
+	}
+
+	public function api_articles_today() {
+		$articles = $this->Linkpulse->articles_today();
+		header('Access-Control-Allow-Origin: *');
+		$this->view->json($articles);
+	}
+
+	public function api_active_users() {
+		$output['users'] = $this->Linkpulse->active_users();
+		header('Access-Control-Allow-Origin: *');
+		$this->view->json($output);
+	}
 
 	public function order($id) {
 

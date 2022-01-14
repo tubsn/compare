@@ -93,6 +93,24 @@ class Exports extends Controller {
 
 	}
 
+	public function yesterday_stats() {
+
+		$from = date('Y-m-d', strtotime('yesterday'));
+		$to = date('Y-m-d', strtotime('yesterday'));
+
+		$this->DailyKPIs->from = $from;
+		$this->DailyKPIs->to = $to;
+
+		$this->Orders->from = $from;
+		$this->Orders->to = $to;
+
+		$stats = $this->DailyKPIs->stats();
+		$stats['orders'] = $this->Orders->count();
+
+		header('Access-Control-Allow-Origin: *');
+		$this->view->json($stats);
+
+	}
 
 	public function daily_stats() {
 		$viewData['articles'] = $this->ArticleKPIs->with_article_data();

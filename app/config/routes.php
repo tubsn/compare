@@ -40,6 +40,12 @@ $routes->get('/subscribers', 'Lists@subscribers');
 $routes->get('/filter', 'Lists@filter');
 $routes->post('/filter', 'Lists@filter');
 
+// ePaper
+$routes->get('/epaper', 'Epaper@index');
+$routes->get('/epaper/ressort/{ressort}', 'Epaper@ressort');
+$routes->get('/epaper/ressorts', 'Epaper@ressort_list');
+$routes->get('/epaper/artikel/{id:\d+}', 'Epaper@detail');
+$routes->get('/epaper/import', 'Epaper@import');
 
 // Valueables
 $routes->get('/valueable', 'Stats@value_articles');
@@ -99,6 +105,13 @@ $routes->get('/campaigns', 'Campaigns@all');
 $routes->get('/churncalc[/{product}]', 'LongtermAnalysis@churnAPI');
 $routes->get('/api/orders', 'LongtermAnalysis@provide_portal_orders');
 $routes->get('/api/kpis', 'LongtermAnalysis@provide_portal_kpis');
+$routes->get('/api/portals', 'LongtermAnalysis@provide_combined_kpis');
+$routes->get('/api/yesterday', 'Exports@yesterday_stats');
+$routes->get('/api/orders-today', 'Livedata@api_orders_today');
+$routes->get('/api/articles-today', 'Livedata@api_articles_today');
+$routes->get('/api/stats-today[/{resolution:\d+}]', 'Livedata@api_stats_today');
+$routes->get('/api/active-users', 'Livedata@api_active_users');
+$routes->get('/api/live', 'Livedata@api_live');
 
 // Readers
 $routes->get('/readers/{id:[\d]{12}?}', 'Readers@detail');

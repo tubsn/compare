@@ -23,16 +23,36 @@ class Linkpulse
 		return $this->api->subscribers_grouped_by_date($from, $to);
 	}
 
-	public function today($client = null) {
+	public function today($client = null, $resolution = 3) {
 
 		if ($client) {
 			$this->api->client($client);
 		}
 
+		$resolution = intval($resolution);
+
 		$liveData = $this->api->live();
-		$liveData = $this->convert_to_chart_data($liveData);
+		$liveData = $this->convert_to_chart_data($liveData, 'pageviews', $resolution);
 
 		return $liveData;
+	}
+
+	public function today_subs($client = null, $resolution = 3) {
+
+		if ($client) {
+			$this->api->client($client);
+		}
+
+		$resolution = intval($resolution);
+
+		$liveData = $this->api->live_subs();
+		$liveData = $this->convert_to_chart_data($liveData, 'subscribers', $resolution);
+
+		return $liveData;
+	}
+
+	public function active_users() {
+		return $this->api->active_users();
 	}
 
 	public function articles_today() {
@@ -255,21 +275,23 @@ class Linkpulse
 
 	}
 
-	private function convert_to_chart_data($data) {
+	private function convert_to_chart_data($data, $kpiName = 'pageviews', $resolution = 3) {
 
-		$pageviews = null;
+		$kpi = null;
 		$values = null;
 		$time = null;
 		$counter = 0;
 
 		foreach ($data as $moment) {
 
-			$pageviews += $moment['attributes']['pageviews'];
+			$kpi += $moment['attributes'][$kpiName];
 
 			$counter++;
-			if ($counter % 3 != 0) {continue;}
+			if ($resolution != 0) {
+				if ($counter % $resolution != 0) {continue;}
+			}
 
-			$values .= $moment['attributes']['pageviews'] . ',';
+			$values .= $moment['attributes'][$kpiName] . ',';
 			$timestring = date('H:i', strtotime($moment['id']));
 			$time .= "'" . $timestring."'" . ',';
 
@@ -278,7 +300,7 @@ class Linkpulse
 		return [
 			'values' => $values,
 			'timestamps' => $time,
-			'pageviews' => $pageviews,
+			$kpiName => $kpi,
 		];
 
 	}
