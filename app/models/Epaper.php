@@ -356,7 +356,7 @@ class Epaper extends Model
 	public function import_event_clicks_to_db() {
 
 		$db = new DailyKPIs();
-		$eventData = $this->clicks_on_epaper_btn();
+		$eventData = $this->gather_clicks_on_epaper_btn();
 
 		$failedDates = [];
 		foreach ($eventData as $date => $clicks) {
@@ -467,7 +467,7 @@ class Epaper extends Model
 
 	}
 
-	public function clicks_on_epaper_btn() {
+	public function gather_clicks_on_epaper_btn() {
 
 		$from = strip_tags($this->from);
 		$to = strip_tags($this->to);
@@ -495,6 +495,16 @@ class Epaper extends Model
 
 		$cache->save($gaData);
 		return $gaData;
+
+	}
+
+	public function clicks_on_epaper_btn() {
+
+		$dailyKPIs = new DailyKPIs();
+		$clickData = $dailyKPIs->kpi_grouped_by('epaper_naviclicks','date');
+		$clickData = array_column($clickData, 'epaper_naviclicks', 'date');
+
+		return $clickData;
 
 	}
 

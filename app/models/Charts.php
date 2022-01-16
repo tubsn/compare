@@ -182,8 +182,8 @@ class Charts
 		$epaper = new Epaper();
 
 		switch (true) {
-			case $this->timeframe() > 31: $dateStats = $epaper->week_stats($ressort); break;
 			case $this->timeframe() > 91: $dateStats = $epaper->month_stats($ressort); break;
+			case $this->timeframe() > 31: $dateStats = $epaper->week_stats($ressort); break;
 			default: $dateStats = $epaper->date_stats($ressort); break;
 		}
 
