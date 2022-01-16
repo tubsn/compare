@@ -13,9 +13,6 @@
 <b>K-Quote</b> = Kündigerquote (bezogen auf letzte Aktualisierung)
 </div>
 
-
-<p>Das compare. Team wünscht euch <a class="noline" href="#">Frohe Weihnachten!</a></p>
-
-<!--<p>compare. running on <a class="noline" target="_blank" href="https://github.com/tubsn/flundr"><b>flundr</b></a></p>-->
+<p>compare. running on <a class="noline" target="_blank" href="https://github.com/tubsn/flundr"><b>flundr</b></a></p>
 
 </footer>

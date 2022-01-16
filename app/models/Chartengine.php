@@ -27,6 +27,7 @@ class Chartengine
 	public $prefix;
 	public $suffix;
 	public $legend;
+	public $tickamount;
 
 	public $metric;
 	public $dimension;
@@ -74,6 +75,7 @@ class Chartengine
 			'seconds' => $this->seconds,
 			'xfont' => $this->xfont,
 			'legend' => $this->legend,
+			'tickamount' => $this->tickamount,
 			'prefix' => $this->prefix,
 			'suffix' => $this->suffix,
 			'showValues' => $this->showValues,

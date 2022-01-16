@@ -73,7 +73,7 @@ let ChartOptions<?=$id?> = {
 		categories: [<?=$dimension?>],
 		crosshairs: {show: true},
 		tooltip: {enabled: false},
-
+		<?php if (isset($tickamount)): ?>tickAmount: <?=$tickamount?>,<?php endif; ?>
 		labels: {
 			style: {
 				<?php if (isset($xfont)): ?>
@@ -97,6 +97,11 @@ let ChartOptions<?=$id?> = {
 		},
 
 
+	},
+
+	yaxis: {
+		tickAmount: 4,
+		labels: {rotate: 0},
 	},
 
 	grid: {row: {colors: ['#e5e5e5', 'transparent'], opacity: 0.2}},

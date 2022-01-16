@@ -26,7 +26,7 @@ let ChartOptions<?=$id?> = {
 		animations: {enabled: false},
 		<?php else: ?>
 		animations: {enabled: true},
-		<?php endif; ?>		
+		<?php endif; ?>
 		<?php if (isset($stacked) && $stacked == true): ?>
 		stacked: true,
 		<?php if (isset($stackedTo100) && $stackedTo100 == true): ?>
@@ -118,6 +118,7 @@ let ChartOptions<?=$id?> = {
 	grid: {row: {colors: ['#e5e5e5', 'transparent'], opacity: 0.2}},
 	xaxis: {
 		categories: [<?=$dimension?>],
+		<?php if (isset($tickamount)): ?>tickAmount: <?=$tickamount?>,<?php endif; ?>
 		labels: {
 			style: {
 				<?php if (isset($xfont)): ?>
@@ -139,7 +140,13 @@ let ChartOptions<?=$id?> = {
 			},
 			<?php endif; ?>
 		},
+	},
+
+	yaxis: {
+		tickAmount: 4,
+		labels: {rotate: 0},
 	}
+
 };
 
 let Chart<?=$id?> = new ApexCharts(document.querySelector("#Chart-<?=$id?>"), ChartOptions<?=$id?>);

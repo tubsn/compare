@@ -41,9 +41,9 @@ $routes->get('/filter', 'Lists@filter');
 $routes->post('/filter', 'Lists@filter');
 
 // ePaper
-$routes->get('/epaper', 'Epaper@index');
+$routes->get('/epaper', 'Epaper@list');
 $routes->get('/epaper/ressort/{ressort}', 'Epaper@ressort');
-$routes->get('/epaper/ressorts', 'Epaper@ressort_list');
+$routes->get('/epaper/stats', 'Epaper@stats');
 $routes->get('/epaper/artikel/{id:\d+}', 'Epaper@detail');
 $routes->get('/epaper/import', 'Epaper@import');
 

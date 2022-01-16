@@ -157,6 +157,52 @@ class Charts
 
 	}
 
+	public function epaper_stats_by_ressort($ressort = null) {
+
+		$chart = new Chartengine();
+		$epaper = new Epaper();
+		$ressortStats = $epaper->ressort_stats($ressort);
+		$ressortStats = $this->convert($ressortStats);
+
+		$chart->metric = $ressortStats['pageviews'];
+		$chart->dimension = $ressortStats['dimensions'];
+		$chart->name = 'Pageviews';
+		$chart->height = 300;
+		$chart->color = '#6088b4';
+		$chart->area = true;
+		//$chart->tickamount = 6;
+		$chart->template = 'charts/default_bar_chart';
+		return $chart->init();
+
+	}
+
+	public function epaper_stats_by_date($ressort = null) {
+
+		$chart = new Chartengine();
+		$epaper = new Epaper();
+
+		switch (true) {
+			case $this->timeframe() > 31: $dateStats = $epaper->week_stats($ressort); break;
+			case $this->timeframe() > 91: $dateStats = $epaper->month_stats($ressort); break;
+			default: $dateStats = $epaper->date_stats($ressort); break;
+		}
+
+		$dateStats = $this->convert($dateStats);
+
+		$chart->metric = $dateStats['pageviews'];
+		$chart->dimension = $dateStats['dimensions'];
+		$chart->name = 'Pageviews';
+		$chart->height = 300;
+		$chart->color = '#6088b4';
+		$chart->area = true;
+		//if ($this->timeframe() > 31) {$chart->tickamount = 12;}
+		//if ($this->timeframe() > 91) {$chart->tickamount = 18;}
+		$chart->template = 'charts/default_line_chart';
+		return $chart->init();
+
+	}
+
+
 
 	public function pageviewsByRessort() {
 

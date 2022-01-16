@@ -43,6 +43,14 @@
 			</ul>
 		</li>
 
+		<li><a href="/epaper/stats" aria-haspopup="true">ePaper</a>
+			<ul class="dropdown" aria-label="submenu">
+				<li><a href="/epaper/stats">Web - ePaper Statistiken</a></li>
+				<li><a href="/epaper">Web - ePaper Artikel</a></li>
+			</ul>
+		</li>
+
+
 		<li><a href="/stats/ressort" aria-haspopup="true">Inhalts-Statistiken</a>
 			<ul class="dropdown" aria-label="submenu">
 				<li><a href="/stats/ressort">nach Ressort</a></li>
@@ -72,14 +80,6 @@
 
 		<li><a href="/portals" aria-haspopup="true">Portalvergleich</a></li>
 
-		<?php if (auth_rights('type, audience')): ?>
-		<li><a href="/unclassified/types">Artikel zuordnen</a>
-			<ul class="dropdown" aria-label="submenu">
-				<li><a href="/unclassified/types">Unbestimmte Themen</a></li>
-				<li><a href="/unclassified/audiences">Unbestimmte Audiences</a></li>
-			</ul>
-		</li>
-		<?php endif; ?>
 
 	</ul>
 
@@ -95,6 +95,7 @@
 			<ul class="dropdown rightmenu" aria-label="submenu">
 				<li><a href="/admin/users">Nutzerverwaltung</a></li>
 				<li><a href="/admin/cluster">Cluster-Manager</a></li>
+				<li><a href="/unclassified/types">Unbestimmte Themen</a></li>
 				<li><a href="/admin/discover">Discover-Import</a></li>
 				<li><a href="/admin/orders">Conversion-Import</a></li>
 			</ul>
