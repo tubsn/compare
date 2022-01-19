@@ -19,12 +19,14 @@
 
 
 <p class="light-box" style="margin-bottom:2em;">
-Gesamtsessions: <b class="conversions"><?=gnum($sessions)?></b>
+Sessions: <b class="conversions deepblue"><?=gnum($sessions)?></b>
+&emsp; davon Indexseiten: <b class="deepblue"><?=gnum($sessions-$sessionsArticle)?></b>
+&emsp; davon Artikel: <b class="deepblue"><?=gnum($sessionsArticle)?></b>
+&emsp; pot. Anteil Downloader: <b class="redish"><?=percentage($sessions-$sessionsArticle, $sessions)?>&thinsp;%</b>
 &emsp; Pageviews: <b class="blue"><?=gnum($pageviews)?></b>
-&emsp; davon Indexseiten: <b class="blue"><?=gnum($pageviews-$pageviewsArticle)?></b>
 &emsp; davon Artikel: <b class="blue"><?=gnum($pageviewsArticle)?></b>
-&emsp; pot. Download Anteil: <b class="redish"><?=percentage($pageviews-$pageviewsArticle, $pageviews)?>&thinsp;%</b>
 </p>
+
 
 <?php if ($info): ?>
 <p><?=$info?></p>
@@ -54,7 +56,7 @@ Gesamtsessions: <b class="conversions"><?=gnum($sessions)?></b>
 
 	<td class="text-center"><a href="/epaper/artikel/<?=$article['id']?>"><?=$article['id']?></a></td>
 
-	<td class="text-left"><a target="_blank" href="https://epaper.lr-online.de<?=$article['url']?>"><?=$article['title']?></a></td>
+	<td class="text-left"><a target="_blank" href="<?=PORTAL_EPAPER_URL?><?=$article['url']?>"><?=$article['title']?></a></td>
 	<td>
 		<?php if (is_array($article['ressort'])): ?>
 

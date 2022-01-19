@@ -7,7 +7,7 @@ use app\importer\ArticleImport;
 class CronImports extends Controller {
 
 	public function __construct() {
-		$this->models('Analytics,Linkpulse,Articles,ArticleMeta,Conversions,ArticleKPIs,Orders,DailyKPIs,Campaigns');
+		$this->models('Analytics,Linkpulse,Articles,ArticleMeta,Conversions,ArticleKPIs,Orders,DailyKPIs,Campaigns,Epaper');
 	}
 
 
@@ -93,6 +93,19 @@ class CronImports extends Controller {
 		$this->ArticleMeta->import_drive_data(); // Emotions and Stuff from DPA Drive
 
 		echo 'Article Feed Import abgeschlossen | ' . date('H:i:s') . "\r\n";
+
+	}
+
+
+	public function epaper_import() {
+
+		$this->Epaper->from = date('Y-m-d', strtotime('yesterday -3days'));
+		$this->Epaper->to = date('Y-m-d', strtotime('yesterday'));
+
+		$this->Epaper->import_ressort_stats_to_db();
+		$this->Epaper->import_event_clicks_to_db();
+
+		echo 'ePaper Daten importiert | ' . date('H:i:s') . "\r\n";
 
 	}
 

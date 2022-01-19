@@ -5,6 +5,7 @@ switch (PORTAL) {
 	case 'LR':
 
 		define('PORTAL_URL', 'https://www.lr-online.de');
+		define('PORTAL_EPAPER_URL', 'https://epaper.lr-online.de');
 		define('PORTAL_NAME', 'LR');
 
 		define('RESSORT_MAPPING', [
@@ -54,6 +55,7 @@ switch (PORTAL) {
 	case 'MOZ':
 
 		define('PORTAL_URL', 'https://www.moz.de');
+		define('PORTAL_EPAPER_URL', 'https://epaper.moz.de');
 		define('PORTAL_NAME', 'MOZ');
 
 		define('RESSORT_MAPPING', [
@@ -123,6 +125,7 @@ switch (PORTAL) {
 	case 'SWP':
 
 		define('PORTAL_URL', 'https://www.swp.de');
+		define('PORTAL_EPAPER_URL', 'https://epaper.swp.de');		
 		define('PORTAL_NAME', 'SWP');
 
 		define('IMPORT_FEEDS', [

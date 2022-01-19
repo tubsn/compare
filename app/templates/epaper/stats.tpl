@@ -11,28 +11,27 @@
 <?php endif; ?>
 
 
-
 <p class="light-box" style="margin-bottom:2em;">
-Gesamtsessions: <b class="conversions"><?=gnum($sessions)?></b>
+Sessions: <b class="conversions deepblue"><?=gnum($sessions)?></b>
+&emsp; davon Indexseiten: <b class="deepblue"><?=gnum($sessions-$sessionsArticle)?></b>
+&emsp; davon Artikel: <b class="deepblue"><?=gnum($sessionsArticle)?></b>
+&emsp; pot. Downloader: <b class="redish"><?=percentage($sessions-$sessionsArticle, $sessions)?>&thinsp;%</b>*
 &emsp; Pageviews: <b class="blue"><?=gnum($pageviews)?></b>
-&emsp; davon Indexseiten: <b class="blue"><?=gnum($pageviews-$pageviewsArticle)?></b>
 &emsp; davon Artikel: <b class="blue"><?=gnum($pageviewsArticle)?></b>
-&emsp; pot. Downloader Anteil: <b class="redish"><?=percentage($pageviews-$pageviewsArticle, $pageviews)?>&thinsp;%</b>
 &emsp; Klicks vom Hauptportal (Navi): <b class="orange"><?=gnum($epaperBtnClicks)?></b>
 </p>
-
 
 
 
 <div style="display:grid; grid-template-columns: 1fr 1fr; grid-gap:2vw;">
 
 	<figure class="">
-		<h3 class="text-center">Ressortvergleich</h3>
+		<h3 class="text-center">Ausgaben-Verteilung</h3>
 		<?=$charts->get('epaper_stats_by_ressort');?>
 	</figure>
 
 	<figure class="">
-		<h3 class="text-center">Pageviews Entwicklung</h3>
+		<h3 class="text-center">Pageviews-Entwicklung</h3>
 		<?=$charts->get('epaper_stats_by_date');?>
 	</figure>
 
@@ -46,7 +45,8 @@ Gesamtsessions: <b class="conversions"><?=gnum($sessions)?></b>
 			<th>Pageviews</th>
 			<th>Pageviews Artikel</th>
 			<th>Sessions</th>
-			<!--<th>Mediatime</th>-->
+			<th>Sessions Artikel</th>
+			<th>Pot. Downloader*</th>
 			<th>⌀-Mediatime</th>
 		</tr>
 	</thead>
@@ -57,6 +57,8 @@ Gesamtsessions: <b class="conversions"><?=gnum($sessions)?></b>
 			<td><?=gnum($stats['pageviews'])?></td>
 			<td><?=gnum($stats['pageviews_article'])?></td>
 			<td><?=gnum($stats['sessions'])?></td>
+			<td><?=gnum($stats['sessions_article'])?></td>
+			<td><?=percentage($stats['sessions']-$stats['sessions_article'], $stats['sessions'])?>&thinsp;%</td>
 			<!--<td><?=gnum($stats['mediatime'])?></td>-->
 			<td><?=gnum($stats['avgmediatime'],2)?>&thinsp;s</td>
 		</tr>
@@ -64,5 +66,6 @@ Gesamtsessions: <b class="conversions"><?=gnum($sessions)?></b>
 	</tbody>
 </table>
 
+<small><b>*Potentielle Downloader:</b> Sessions, die nur Indexseiten und keinen einzigen Artikel aufgerufen haben.</small>
 
 </main>

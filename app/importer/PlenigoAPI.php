@@ -31,14 +31,17 @@ class PlenigoAPI
 
 		$apiQuery = '/orders/?startTime=' . $start . 'T00:00:00Z&endTime=' . $end . 'T23:59:59Z&size=' . $items;
 
+		/*
 		$cacheExpireMinutes = 1;
 		$cache = new RequestCache($apiQuery . $this->client, $cacheExpireMinutes * 60);
 		$cachedData = $cache->get();
 		if ($cachedData) {return $cachedData;}
+		*/
 
 		$data = $this->curl($apiQuery);
 
-		$cache->save($data['items']);
+		//$cache->save($data['items']);
+		
 		return $data['items'];
 
 	}

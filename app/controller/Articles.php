@@ -160,6 +160,11 @@ class Articles extends Controller {
 		// show Realtime Linkpulse Data for Todays articles
 		if ($pubDate == date('Y-m-d')) {
 			$stats = $this->Linkpulse->stats_today($id);
+
+			if (isset($stats['date'])) {
+				unset($stats['date']);
+			}
+
 			$stats['refresh'] = date('Y-m-d H:i:s');
 			$this->Articles->update($stats,$id);
 			return;

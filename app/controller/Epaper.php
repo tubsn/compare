@@ -18,7 +18,9 @@ class Epaper extends Controller {
 	public function list() {
 
 		$this->view->dailyStats = $this->Epaper->ressort_stats();
+		
 		$this->view->sessions = array_sum(array_column($this->view->dailyStats, 'sessions'));
+		$this->view->sessionsArticle = array_sum(array_column($this->view->dailyStats, 'sessions_article'));
 		$this->view->pageviews = array_sum(array_column($this->view->dailyStats, 'pageviews'));
 		$this->view->pageviewsArticle = array_sum(array_column($this->view->dailyStats, 'pageviews_article'));
 
@@ -36,7 +38,9 @@ class Epaper extends Controller {
 	public function ressort($ressort) {
 
 		$this->view->dailyStats = $this->Epaper->ressort_stats($ressort);
+
 		$this->view->sessions = array_sum(array_column($this->view->dailyStats, 'sessions'));
+		$this->view->sessionsArticle = array_sum(array_column($this->view->dailyStats, 'sessions_article'));
 		$this->view->pageviews = array_sum(array_column($this->view->dailyStats, 'pageviews'));
 		$this->view->pageviewsArticle = array_sum(array_column($this->view->dailyStats, 'pageviews_article'));
 
@@ -55,6 +59,7 @@ class Epaper extends Controller {
 		$this->view->dailyStats = $this->Epaper->ressort_stats();
 
 		$this->view->sessions = array_sum(array_column($this->view->dailyStats, 'sessions'));
+		$this->view->sessionsArticle = array_sum(array_column($this->view->dailyStats, 'sessions_article'));
 		$this->view->pageviews = array_sum(array_column($this->view->dailyStats, 'pageviews'));
 		$this->view->pageviewsArticle = array_sum(array_column($this->view->dailyStats, 'pageviews_article'));
 
@@ -82,8 +87,7 @@ class Epaper extends Controller {
 		$this->Epaper->to = date('Y-m-d', strtotime('yesterday'));
 
 		//$this->Epaper->from = '2020-01-01';
-		//$this->Epaper->to = '2020-06-30';
-		//$this->Epaper->to = '2020-12-31';
+		//$this->Epaper->to = '2022-01-16';
 
 		$this->Epaper->import_ressort_stats_to_db();
 		$this->Epaper->import_event_clicks_to_db();

@@ -71,6 +71,31 @@ class Epaper extends Model
 			];
 		}
 
+		if (PORTAL == 'SWP') {
+			$this->ga->profileViewID = '121139429';
+			$this->ressorts = [
+				'/ulm/' => 'Ulm',
+				'/neu-ulm/' => 'Neu Ulm',
+				'/ehingen-und-umgebung/' => 'Ehingen',
+				'/laichinger-alb-mit-alb-donau-kreis/' => 'Alb-Donau-Kreis',
+				'/illertal-bote-mit-kreis-neu-ulm/' => 'Iller- und Rothtal',
+				'/illertal-bote-mit-alb-donau-kreis/' => 'Iller- und Weihungstal',
+				'/blaumaennle/' => 'Blaubeuren',
+				'/langenau-aktuell/' => 'Langenau',
+				'/goeppingen/' => 'Göppingen',
+				'/eislingen/' => 'Eislingen',
+				'/geislingen/' => 'Geislingen',
+				'/muensingen/' => 'Münsingen',
+				'/hechingen/' => 'Hechingen',
+				'/metzingen/' => 'Metzingen',
+				'/reutlingen/' => 'Reutlingen',
+				'/schwaebisch-hall/' => 'Schwaebisch Hall',
+				'/crailsheim/' => 'Crailsheim',
+				'/gaildorf/' => 'Gaildorf',
+			];
+		}
+
+
 		$this->from = date('Y-m-d', strtotime('yesterday -6days'));
 		$this->to = date('Y-m-d', strtotime('yesterday'));
 
@@ -177,7 +202,7 @@ class Epaper extends Model
 		$this->ga->dimensions = 'ga:pagePathLevel4, ga:pagePathLevel3, ga:pagePathLevel2, ga:pagePath';
 		$this->ga->sort = '-ga:pageViews';
 		$this->ga->filters = 'ga:pagePath=@.html';
-		$this->ga->maxResults = '5000';
+		$this->ga->maxResults = '10000';
 
 		$cache = new RequestCache('epaper-article-' . $from . $to . PORTAL, 10*60);
 		$cachedData = $cache->get();
@@ -479,6 +504,9 @@ class Epaper extends Model
 		$ga->dimensions = 'ga:date';
 		$ga->sort = 'ga:date';
 		$ga->filters = 'ga:eventLabel==ePaper;ga:eventAction==click';
+		if (PORTAL == 'SWP') {
+			$ga->filters = 'ga:eventLabel==eZeitung;ga:eventAction==click';
+		}
 		$ga->maxResults = '1000';
 
 		$cache = new RequestCache('epaper-btn-clicks-' . $from . $to . PORTAL, 60*60);
