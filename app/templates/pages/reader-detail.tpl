@@ -1,7 +1,5 @@
 <main class="">
 
-
-
 <article>
 
 	<h1>Nutzer: <?=$user['user_id']?></h1>
@@ -11,7 +9,8 @@
 	First-Seen: <?=formatDate($user['first_seen'],'Y-m-d h:i')?><br />
 	Last-Seen: <?=formatDate($user['last_seen'],'Y-m-d h:i')?><br />
 	Mediatime letzte Woche: <?=$user['media_time_last_week']?><br />
-	Mediatime Gesamt: <?=$user['media_time_total']?><br /><br />
+	Mediatime Gesamt: <?=$user['media_time_total']?><br />
+	Conversion Wahrscheinlichkeit: <?=round($user['scores']['conversion_propensity_score'],2)?><br /><br />
 
 	<p>- Platzhalter für Liste laufender Abos -</p>
 	<p><?=dump($user['additionalData'])?></p>

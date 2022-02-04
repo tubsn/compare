@@ -6,6 +6,7 @@ $routes->get('/', 'Stats@dashboard');
 
 // Teststuff
 $routes->get('/cards', 'Lists@cards');
+$routes->get('/kilkaya', 'Livedata@kilkaya');
 $routes->get('/emo', 'Stats@test');
 $routes->get('/freecharts', 'Stats@freecharts');
 $routes->get('/print/local', 'Orders@map_print_local');
@@ -88,6 +89,7 @@ $routes->get('/stats/compared', 'LongtermAnalysis@overview');
 
 // Portal Compare
 $routes->get('/portals', 'LongtermAnalysis@all_portals');
+$routes->get('/portals/lr', 'LongtermAnalysis@portal_lr');
 
 
 // campaigns

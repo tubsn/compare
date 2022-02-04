@@ -14,8 +14,16 @@ class Livedata extends Controller {
 	public function __construct() {
 
 		$this->view('DefaultLayout');
-		$this->models('Plenigo,Linkpulse');
+		$this->models('Plenigo,Linkpulse,Kilkaya');
 	}
+
+
+	public function kilkaya() {
+
+		dd($this->Kilkaya->test());
+
+	}
+
 
 	public function index() {
 		$this->view->redirect('/orders/today');

@@ -13,7 +13,7 @@ class LongtermAnalysis extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Charts,Longterm,Orders');
+		$this->models('Charts,Longterm,Orders,SalesKPIs');
 	}
 
 
@@ -51,6 +51,30 @@ class LongtermAnalysis extends Controller {
 	}
 
 
+	public function portal_lr() {
+
+		$orderData = $this->Longterm->portal_orders();
+		$kpiData = $this->Longterm->portal_KPIs();
+		$combinedData = $this->Longterm->combine_portal_data($orderData, $kpiData);
+		$salesData = $this->SalesKPIs->list();
+
+		$lr['order'] = $this->Charts->convert($orderData['LR']);
+		$lr['kpi'] = $this->Charts->convert($kpiData['LR']);
+		$lr['quotes'] = $this->Charts->convert($combinedData['LR']);
+		$lr['sales'] = $this->Charts->convert($salesData);
+
+		$this->view->orderData = $orderData;
+		$this->view->kpiData = $kpiData;
+		$this->view->salesData = $salesData;
+		$this->view->lr = $lr;
+
+		$this->view->charts = $this->Charts;
+
+		$this->view->title = 'Compare -> Compare² -> Compare³ - Portal-Vergleich';
+		$this->view->templates['footer'] = null;
+		$this->view->render('stats/portals_lr');
+
+	}
 
 
 	public function provide_portal_orders() {
@@ -69,23 +93,8 @@ class LongtermAnalysis extends Controller {
 		$out['orders'] = $this->Longterm->portal_orders();
 		$out['quotes'] = $this->Longterm->combine_portal_data($out['orders'], $out['kpis']);
 
-
 		header('Access-Control-Allow-Origin: *');
 		$this->view->json($out);
-
-		/*
-		header('Access-Control-Allow-Origin: *');
-
-		$data = [];
-		$orderData = $this->Longterm->portal_orders();
-		$kpiData = $this->Longterm->portal_KPIs();
-		$combinedData = $this->Longterm->combine_portal_data($orderData, $kpiData);
-
-		$data['lr'] = $orderData['lr'];
-
-		$this->view->json($orderData);
-
-		*/
 
 	}
 

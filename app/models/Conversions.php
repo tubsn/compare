@@ -183,6 +183,7 @@ class Conversions extends Model
 			 Articles.ressort as article_ressort,
 			 Articles.type as article_type,
 			 Articles.tag as article_tag,
+			 Articles.audience as article_audience,
 			 Articles.author as article_author
 
 			 FROM `conversions`
