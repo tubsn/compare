@@ -403,7 +403,6 @@
 			'height' => 350,
 			'legend' => 'top',
 			'area' => true,
-			'percent' => true,
 			'showValues' => false,
 			'name' => 'Quote',
 			'template' => 'charts/default_line_chart',
