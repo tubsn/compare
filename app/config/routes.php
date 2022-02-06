@@ -85,12 +85,12 @@ $routes->get('/stats/tag', 'Stats@tags');
 $routes->get('/stats/audience', 'Stats@audiences');
 $routes->get('/stats/audience-by-ressort', 'Stats@audience_by_ressorts');
 $routes->get('/stats/artikel', 'Stats@artikel');
-$routes->get('/stats/compared', 'LongtermAnalysis@overview');
 
 // Portal Compare
 $routes->get('/portals', 'LongtermAnalysis@all_portals');
-$routes->get('/portals/lr', 'LongtermAnalysis@portal_lr');
 
+// Longterm Analysis
+$routes->get('/longterm', 'LongtermAnalysis@overview');
 
 // campaigns
 $routes->get('/export/campaigns', 'Exports@campaigns');

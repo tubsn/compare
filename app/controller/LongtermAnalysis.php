@@ -17,6 +17,66 @@ class LongtermAnalysis extends Controller {
 	}
 
 
+
+	public function overview() {
+
+		$lastYear = date('Y-m-d', strtotime('first day of this month -2 year -1 month'));
+		$firstDate = '2021-04';
+
+		$kpiData = $this->Longterm->kpis($lastYear);
+
+		$kpiHistory = $this->Longterm->compare_fields_with_past($kpiData, ['pageviews','subscribers','avgmediatime']);
+		$kpiData = $this->Longterm->remove_before($kpiData, '2020-11');
+
+		$orderData = $this->Longterm->orders($lastYear);
+		$orderHistory = $this->Longterm->compare_fields_with_past($orderData, ['orders']);
+		$orderData = $this->Longterm->remove_before($orderData, $firstDate);
+
+		$salesData = $this->SalesKPIs->list();
+
+		//dd($kpiData);
+
+		$this->view->orders = $this->Charts->convert($orderData);
+		$this->view->kpis = $this->Charts->convert($kpiData);
+		$this->view->sales = $this->Charts->convert($salesData);
+
+		//$salesData = array_reverse($salesData);
+		//$kpiHistory = array_reverse($kpiHistory);
+
+		$this->view->orderHistory = $orderHistory;
+		$this->view->kpiHistory = $kpiHistory;
+		$this->view->salesData = $salesData;
+
+		$this->view->charts = $this->Charts;
+		$this->view->difference = array($this, 'view_calc_difference');
+
+		$this->view->title = 'Langzeit Analysen';
+		$this->view->templates['footer'] = null;
+		$this->view->render('stats/longterm');
+
+	}
+
+	public function view_calc_difference($current, $historic) {
+
+		$class = '';
+		$percent = percentage($current, $historic,1);
+		if ($percent != 0) {
+			$class = 'negative';
+			$percent = $percent - 100;
+			$percent .= '&thinsp;%';
+
+			if (strpos($percent, '-') !== 0) {
+				$percent = '+' . $percent;
+				$class = 'positive';
+			}
+
+		}
+
+		return '<span style="font-family:var(--font-highlight)" class="' . $class . '">' . $percent . '</span>';
+
+	}
+
+
 	public function all_portals() {
 
 		$orderData = $this->Longterm->portal_orders();
@@ -51,32 +111,6 @@ class LongtermAnalysis extends Controller {
 	}
 
 
-	public function portal_lr() {
-
-		$orderData = $this->Longterm->portal_orders();
-		$kpiData = $this->Longterm->portal_KPIs();
-		$combinedData = $this->Longterm->combine_portal_data($orderData, $kpiData);
-		$salesData = $this->SalesKPIs->list();
-
-		$lr['order'] = $this->Charts->convert($orderData['LR']);
-		$lr['kpi'] = $this->Charts->convert($kpiData['LR']);
-		$lr['quotes'] = $this->Charts->convert($combinedData['LR']);
-		$lr['sales'] = $this->Charts->convert($salesData);
-
-		$this->view->orderData = $orderData;
-		$this->view->kpiData = $kpiData;
-		$this->view->salesData = $salesData;
-		$this->view->lr = $lr;
-
-		$this->view->charts = $this->Charts;
-
-		$this->view->title = 'Compare -> Compare² -> Compare³ - Portal-Vergleich';
-		$this->view->templates['footer'] = null;
-		$this->view->render('stats/portals_lr');
-
-	}
-
-
 	public function provide_portal_orders() {
 		header('Access-Control-Allow-Origin: *');
 		$this->view->json($this->Longterm->orders());
@@ -98,15 +132,6 @@ class LongtermAnalysis extends Controller {
 
 	}
 
-	public function overview() {
-
-		$this->view->charts = $this->Charts;
-		$this->view->longterm = $this->Longterm->chartdata('orders');
-
-		$this->view->title = 'Langzeit Analysen';
-		$this->view->render('stats/longterm');
-
-	}
 
 
 	public function started_payment() {

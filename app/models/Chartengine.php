@@ -95,7 +95,9 @@ class Chartengine
 
 		foreach ($data as $set) {
 			foreach ($set as $key => $value) {
-				array_push($output[$key], $value);
+				if (isset($output[$key])) {
+					array_push($output[$key], $value);
+				}
 			}
 		}
 

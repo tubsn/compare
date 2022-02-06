@@ -30,7 +30,9 @@ class SalesKPIs extends Model
 		$tablename = $this->db->table;
 
 		$SQLstatement = $this->db->connection->prepare(
-			"SELECT *, IFNULL(paying,0)+IFNULL(trial3for3,0)+IFNULL(trial1month,0)+IFNULL(yearly,0) as active FROM $tablename
+			"SELECT DATE_FORMAT(date,'%Y-%m') as date,
+			 paying, trial1month, trial3for3, reduced, yearly, orders, cancelled, (0-'cancelled') as negativcancelled,
+			 IFNULL(paying,0)+IFNULL(trial3for3,0)+IFNULL(trial1month,0)+IFNULL(yearly,0) as active FROM $tablename
 			ORDER BY date ASC"
 		);
 

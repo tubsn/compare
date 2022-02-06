@@ -100,6 +100,7 @@ animation: menu-scroll-in 0.1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;}
 .artikel-tags {min-height:180px; background-color:#f7dec3; margin-bottom:1em; padding:0.5em;}
 
 table.fancy.red th {background-color:#b46060;}
+table.fancy.neutral th {background-color:#404040;}
 table.fancy.red th:hover {background-color:#aa4747;}
 table.fancy tr th:hover {background-color:#486f99}
 
@@ -185,6 +186,9 @@ th.text-left {text-align:left !important;}
 .nachdreh-yellow {background-color: #f0e296;}
 
 
+.positive, .negative {background-color: var(--light-blue); display:inline; padding:0em .3em; border-radius:.2em;}
+.positive {background-color: #d9eabc;}
+.negative {background-color: #ffcfcf;}
 
 .type-link, .type-link-light, .audience-link {background-color: #ececec; display:inline-block; padding:0.0em .3em; border-radius:.2em; font-size:0.8em;
 position: relative; bottom:-3px;}

@@ -17,12 +17,6 @@ class Longterm extends Model
 	protected $db;
 
 	function __construct() {
-		/*
-		$this->db = new SQLdb(DB_SETTINGS);
-		$this->db->table = 'longterm_kpis';
-		$this->db->orderby = 'date';
-		$this->db->order = 'DESC';
-		*/
 
 		$this->Portals = new PortalImport();
 		$this->Orders = new Orders();
@@ -30,7 +24,6 @@ class Longterm extends Model
 		$this->Articles = new Articles();
 
 	}
-
 
 	public function portal_KPIs() {
 
@@ -80,6 +73,10 @@ class Longterm extends Model
 
 	public function kpis($start = null) {
 
+		$cache = new RequestCache('kpidata' . $start . PORTAL, 30*60);
+		$cachedData = $cache->get();
+		if ($cachedData) {return $cachedData;}
+
 		if (is_null($start)) {$start = '2020-10-01';}
 
 		if (date('j') <= 15) {
@@ -128,13 +125,15 @@ class Longterm extends Model
 
 		}
 
+		$cache->save($output);
+
 		return $output;
 
 	}
 
 	public function orders($start = null) {
 
-		$cache = new RequestCache('cancellcationdata' . $start . PORTAL, 30*60);
+		$cache = new RequestCache('orderdata' . $start . PORTAL, 30*60);
 		$cachedData = $cache->get();
 		if ($cachedData) {return $cachedData;}
 
@@ -209,14 +208,16 @@ class Longterm extends Model
 			$output[$month]['quoteActiveAfter6M'] = percentage($data['active'], $output[$month]['orders']);
 		}
 
+		// Probezeitraum 3für3 LR
 		if (PORTAL == 'LR') {
 			foreach ($output as $month => $data) {
 				$monthAsNumber = date('m', strtotime($month));
-				if ($monthAsNumber >=8) {
-					$output[$month]['churnProbe'] = $data['churn90'];
-					$output[$month]['quoteChurnProbe'] = $data['quoteChurn90'];
-					$output[$month]['activeAfterProbe'] = $data['activeAfter90'];
-					$output[$month]['quoteActiveAfterProbe'] = $data['quoteActiveAfter90'];
+				$year = date('Y', strtotime($month));
+				if ($year >= 2022 || ($year == 2021 && $monthAsNumber >=8) ) {
+					$output[$month]['churnProbe'] = $data['churn90'] ?? null;
+					$output[$month]['quoteChurnProbe'] = $data['quoteChurn90'] ?? null;
+					$output[$month]['activeAfterProbe'] = $data['activeAfter90'] ?? null;
+					$output[$month]['quoteActiveAfterProbe'] = $data['quoteActiveAfter90'] ?? null;
 				}
 			}
 		}
@@ -238,9 +239,9 @@ class Longterm extends Model
 	}
 
 	public function combine($orderData, $kpiData) {
+
 		$combined = [];
 		foreach ($orderData as $month => $dataset) {
-
 			$traffic = $kpiData[$month]['pageviews'];
 			$articles = $kpiData[$month]['articles'];
 			$plus = $kpiData[$month]['plusarticles'];
@@ -258,6 +259,11 @@ class Longterm extends Model
 			$combined[$month]['trafficActiveQuote'] = percentage($active, $traffic,4);
 		}
 		return $combined;
+	}
+
+	public function remove_before($data, $month) {
+		$start = array_search($month, array_keys($data));
+		return array_slice($data, $start);
 	}
 
 
@@ -291,5 +297,49 @@ class Longterm extends Model
 
 	}
 
+	public function compare_with_past($data) {
+
+		foreach ($data as $month => $content) {
+			$prevMonth = $this->shift_date($month);
+
+			if (isset($data[$prevMonth])) {
+				$data[$month]['past'] = $data[$prevMonth];
+			}
+
+		}
+		return $data;
+	}
+
+	public function compare_fields_with_past($data, $fields = ['pageviews'], $removeOverhead = true) {
+
+		$remove = [];
+
+		foreach ($data as $month => $content) {
+			$prevMonth = $this->shift_date($month);
+
+			if (!isset($data[$prevMonth])) {
+				array_push($remove, $month);
+				continue;
+			}
+
+			foreach ($fields as $field) {
+				$data[$month][$field . '_past'] = $data[$prevMonth][$field];
+			}
+
+		}
+
+		if ($removeOverhead) {
+			$data = array_diff_key($data, array_flip($remove));
+		}
+
+		return $data;
+
+	}
+
+
+	public function shift_date($date, $amount = '-1year', $format = 'Y-m') {
+		$amount = ' ' . $amount;
+		return date($format, strtotime($date . $amount));
+	}
 
 }
