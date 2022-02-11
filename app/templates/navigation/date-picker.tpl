@@ -9,7 +9,7 @@
 			<option<?php if (PORTAL == 'SWP'): ?> selected<?php endif ?>>SWP</option>
 		</select>
 
-		<form action="/settimeframe" method="post">
+		<form action="/settimeframe" method="post" class="calendar-timeframe">
 			<select name="timeframe" class="js-timeframe">
 				<?php if (session('timeframe') == 'Zeitraum'): ?>
 				<option>gewählter Zeitraum</option>
@@ -27,9 +27,9 @@
 		</form>
 		&thinsp;
 		</div>
-		
+
 		<form method="post" action="/settimeframe">
-			<fieldset>
+			<fieldset class="calendar-datepicker">
 				<input type="date" name="from" value="<?=session('from')?>"> -
 				<input type="date" name="to" value="<?=session('to')?>">
 			</fieldset>

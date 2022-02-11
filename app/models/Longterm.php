@@ -75,7 +75,7 @@ class Longterm extends Model
 
 		$cache = new RequestCache('kpidata' . $start . PORTAL, 30*60);
 		$cachedData = $cache->get();
-		if ($cachedData) {return $cachedData;}
+		//if ($cachedData) {return $cachedData;}
 
 		if (is_null($start)) {$start = '2020-10-01';}
 
@@ -95,7 +95,8 @@ class Longterm extends Model
 			$this->Articles->from = $period['from'];
 			$this->Articles->to = $period['to'];
 
-			$pageviews = $this->KPIs->sum('pageviews');
+			$pageviews = $this->KPIs->sum('pageviews') ?? 0;
+			$sessions = $this->KPIs->sum('sessions') ?? 0;
 			$subscribers = $this->KPIs->sum('subscribers') ?? 0;
 			$articles = $this->Articles->count();
 			$plus = $this->Articles->count_with_filter('plus = 1');
@@ -107,6 +108,7 @@ class Longterm extends Model
 
 			$avgmediatime = $this->KPIs->avg('avgmediatime');
 
+			$output[$dimension]['sessions'] = $sessions;
 			$output[$dimension]['pageviews'] = $pageviews;
 			$output[$dimension]['pageviewsmio'] = round($pageviews/1000000,2);
 			$output[$dimension]['subscribers'] = $subscribers;

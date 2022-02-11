@@ -32,6 +32,7 @@ class SalesKPIs extends Model
 		$SQLstatement = $this->db->connection->prepare(
 			"SELECT DATE_FORMAT(date,'%Y-%m') as date,
 			 paying, trial1month, trial3for3, reduced, yearly, orders, cancelled, (0-'cancelled') as negativcancelled,
+			 app_user_android, app_user_ios, (app_user_android + app_user_ios) as app_user,
 			 IFNULL(paying,0)+IFNULL(trial3for3,0)+IFNULL(trial1month,0)+IFNULL(yearly,0) as active FROM $tablename
 			ORDER BY date ASC"
 		);
@@ -41,55 +42,6 @@ class SalesKPIs extends Model
 		return $output;
 
 	}
-
-
-
-	public function list2() {
-
-		$from = strip_tags($this->from);
-		$to = strip_tags($this->to);
-		$tablename = $this->db->table;
-
-		$SQLstatement = $this->db->connection->prepare(
-			"SELECT * FROM $tablename
-			WHERE DATE(`date`) BETWEEN :startDate AND :endDate
-			ORDER BY date DESC"
-		);
-
-		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
-		$output = $SQLstatement->fetchAll();
-		return $output;
-	}
-
-
-
-	public function kpi_grouped_by($kpi, $groupby = "DATE_FORMAT(date,'%Y-%m')", $operation = 'sum') {
-
-		$tablename = $this->db->table;
-		$from = strip_tags($this->from);
-		$to = strip_tags($this->to);
-
-		if ($operation) {
-			// sum, count or average
-			$kpi = $operation . '(' . $kpi . ') as ' . $kpi;
-		}
-
-		$SQLstatement = $this->db->connection->prepare(
-			"SELECT $groupby, $kpi
-			 FROM $tablename
-			 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
-			 GROUP BY $groupby
-			 ORDER BY $groupby ASC"
-		);
-
-		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
-		$output = $SQLstatement->fetchall();
-
-		return $output;
-
-	}
-
-
 
 
 }

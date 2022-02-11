@@ -25,7 +25,7 @@ class LongtermAnalysis extends Controller {
 
 		$kpiData = $this->Longterm->kpis($lastYear);
 
-		$kpiHistory = $this->Longterm->compare_fields_with_past($kpiData, ['pageviews','subscribers','avgmediatime']);
+		$kpiHistory = $this->Longterm->compare_fields_with_past($kpiData, ['pageviews','sessions','subscribers','avgmediatime']);
 		$kpiData = $this->Longterm->remove_before($kpiData, '2020-11');
 
 		$orderData = $this->Longterm->orders($lastYear);
@@ -34,7 +34,7 @@ class LongtermAnalysis extends Controller {
 
 		$salesData = $this->SalesKPIs->list();
 
-		//dd($kpiData);
+		//dd($kpiData); 
 
 		$this->view->orders = $this->Charts->convert($orderData);
 		$this->view->kpis = $this->Charts->convert($kpiData);
@@ -62,7 +62,7 @@ class LongtermAnalysis extends Controller {
 		$percent = percentage($current, $historic,1);
 		if ($percent != 0) {
 			$class = 'negative';
-			$percent = $percent - 100;
+			$percent = round($percent - 100,1);
 			$percent .= '&thinsp;%';
 
 			if (strpos($percent, '-') !== 0) {

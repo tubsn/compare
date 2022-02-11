@@ -7,7 +7,7 @@
 <div class="col-2" style="grid-template-columns: 1fr 1fr; margin-top:2em;">
 
 	<figure class="mb">
-		<h3 class="text-center">Subscriber Entwicklung (Linkpulse)</h3>
+		<h3 class="text-center">Subscriberviews Entwicklung</h3>
 		<?=$charts->create([
 			'metric' => [$charts->cut_left($lr['kpi']['subscribers'],1),
 			 			 $charts->cut_left($moz['kpi']['subscribers'],1),
@@ -24,7 +24,7 @@
 	</figure>
 
 	<figure class="mb">
-		<h3 class="text-center">Anteil Subscribers an Pageviews (Linkpulse/GA)</h3>
+		<h3 class="text-center">Anteil Subscriberviews an Pageviews</h3>
 		<?=$charts->create([
 			'metric' => [$charts->cut_left($lr['kpi']['quoteSubscribers'],1),
 			 			 $charts->cut_left($moz['kpi']['quoteSubscribers'],1),
