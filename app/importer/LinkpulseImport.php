@@ -133,6 +133,7 @@ class LinkpulseImport
 		$fullQuery = $timeframe . $fields . $suffix;
 
 		$rawAPIData = $this->curl($fullQuery);
+
 		$stats = $this->adapter->convert($rawAPIData);
 
 		if (empty($stats)) {return null;}

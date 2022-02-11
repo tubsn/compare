@@ -11,7 +11,7 @@ class Warmup extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Analytics,Linkpulse,Articles,ArticleMeta,Conversions,ArticleKPIs,Orders');
+		$this->models('Analytics,Linkpulse,Kilkaya,Articles,ArticleMeta,Conversions,ArticleKPIs,Orders');
 	}
 
 	public function daterange() {
@@ -34,7 +34,7 @@ class Warmup extends Controller {
 			$pubDate = formatDate($article['pubdate'],'Y-m-d');
 			$gaData = $this->Analytics->by_article_id($id, $pubDate);
 
-			$gaData['totals']['subscribers'] = $this->Linkpulse->subscribers($id, $pubDate);
+			$gaData['totals']['subscribers'] = $this->Kilkaya->subscribers($id, $pubDate);
 			$gaData['totals']['buyintent'] = $this->Analytics->buy_intention_by_article_id($id, $pubDate);
 
 			// Dont Upgrade Conversions in a Specific Time Period after the Plenigo V3 Update...
@@ -147,7 +147,7 @@ class Warmup extends Controller {
 		foreach ($articles as $article) {
 			$id = $article['id'];
 			$pubDate = formatDate($article['pubdate'],'Y-m-d');
-			$data['subscribers'] = $this->Linkpulse->subscribers($id, $pubDate);
+			$data['subscribers'] = $this->Kilkaya->subscribers($id, $pubDate);
 			$this->Articles->update($data, $id);
 		}
 

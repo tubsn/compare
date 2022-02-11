@@ -16,7 +16,7 @@ class Kilkaya
 		dd($this->today());
 
 		$api = new KilkayaAPI();
-		dd($api->from('2022-01-03'));
+		dd($api->from('2022-02-06'));
 
 
 	}
@@ -69,8 +69,7 @@ class Kilkaya
 		  "skip": 5
 	  	}';
 
-		$api->run_direct($query);
-
+		$api->run_query($query);
 		return $api->response;
 
 	}
@@ -85,25 +84,38 @@ class Kilkaya
 		$api->filters = [ ['operator' => 'like', 'field' => 'url', 'value' => '*' . $id . '*'] ];
 
 		$api->run_query();
-
-		return $api->response;
+		return $api->response['subscribers'] ?? null;
 	}
 
+	public function subscribers_grouped_by_date($from, $to) {
+
+		$api = new KilkayaAPI();
+		$api->forceResponseWithIndex = true;
+		$api->from = $from;
+		$api->to = $to;
+		$api->columns = ['_day','subscriber'];
+
+		$api->run_query();
+
+		return array_column($api->response, 'subscribers', 'day');
+
+	}
 
 	public function article_today($id) {
 
 		$api = new KilkayaAPI();
-		$api->from = '2022-01-19';
-		$api->to = '2022-01-19';
+		$api->from = date('Y-m-d', strtotime('today'));
+		$api->to = date('Y-m-d', strtotime('today'));
 		$api->columns = ['pageview', 'subscriber', 'conversion'];
 		$api->filters = [ ['operator' => 'like', 'field' => 'url', 'value' => '*' . $id . '*'] ];
 
 		$api->run_query();
-
 		return $api->response;
 	}
 
-
+	public function stats_today($id) {
+		return $this->article_today($id);
+	}
 
 
 }

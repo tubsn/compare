@@ -16,9 +16,10 @@ class LongtermAnalysis extends Controller {
 		$this->models('Charts,Longterm,Orders,SalesKPIs');
 	}
 
-
-
 	public function overview() {
+
+		$from = date('Y-m-d', strtotime('yesterday -3days'));
+		$to = date('Y-m-d', strtotime('yesterday'));
 
 		$lastYear = date('Y-m-d', strtotime('first day of this month -2 year -1 month'));
 		$firstDate = '2021-04';
@@ -34,14 +35,9 @@ class LongtermAnalysis extends Controller {
 
 		$salesData = $this->SalesKPIs->list();
 
-		//dd($kpiData); 
-
 		$this->view->orders = $this->Charts->convert($orderData);
 		$this->view->kpis = $this->Charts->convert($kpiData);
 		$this->view->sales = $this->Charts->convert($salesData);
-
-		//$salesData = array_reverse($salesData);
-		//$kpiHistory = array_reverse($kpiHistory);
 
 		$this->view->orderHistory = $orderHistory;
 		$this->view->kpiHistory = $kpiHistory;

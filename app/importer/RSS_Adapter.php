@@ -69,7 +69,7 @@ class RSS_Adapter
 
 		$article['description'] = $item->description->__toString();
 		$article['author'] = $item->author->__toString();
-		$article['plus'] = $item->freemium->__toString() == 'free' ? false : true; // Converts Freemiuminfo to boolean
+		$article['plus'] = $item->freemium->__toString() == 'free' ? 0 : 1; // Converts Freemiuminfo to boolean
 		$article['pubdate'] = date('Y-m-d H:i:s', strtotime($item->pubDate));
 		$article['image'] = $this->get_image($item->enclosure['url']);
 		$article['link'] = $url;

@@ -5,6 +5,7 @@ $routes->get('/', 'Stats@dashboard');
 
 
 // Teststuff
+$routes->get('/subs', 'Import@import_subscribers');
 $routes->get('/cards', 'Lists@cards');
 $routes->get('/kilkaya', 'Livedata@kilkaya');
 $routes->get('/emo', 'Stats@test');

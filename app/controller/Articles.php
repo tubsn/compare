@@ -13,7 +13,7 @@ class Articles extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 		$this->view('DefaultLayout');
 		$this->view->navigation = 'navigation/article-menu';
-		$this->models('Articles,Analytics,ArticleKPIs,Conversions,Linkpulse,Plenigo,ArticleMeta');
+		$this->models('Articles,Analytics,ArticleKPIs,Conversions,Linkpulse,Kilkaya,Plenigo,ArticleMeta');
 	}
 
 
@@ -44,10 +44,10 @@ class Articles extends Controller {
 
 		//dump($ressortStats);
 
-		if ($ressortStats['pageviews'] > 0) {$ressortPageviewsAverage = $ressortStats['pageviews'] / $ressortStats['artikel'];}
+		if ($ressortStats['pageviews'] ?? 0 > 0) {$ressortPageviewsAverage = $ressortStats['pageviews'] / $ressortStats['artikel'];}
 		else {$ressortPageviewsAverage = 1;}
 
-		if ($ressortStats['subscribers'] > 0) {$ressortSubsAverage = $ressortStats['subscribers'] / $ressortStats['artikel'];}
+		if ($ressortStats['subscribers'] ?? 0 > 0) {$ressortSubsAverage = $ressortStats['subscribers'] / $ressortStats['artikel'];}
 		else {$ressortSubsAverage = 1;}
 
 		$pageViewsToRessort = ($viewData['article']['pageviews'] / $ressortPageviewsAverage * 100);
@@ -157,9 +157,9 @@ class Articles extends Controller {
 		// Don't refresh Stuff older then a Year
 		if ($this->days_since($pubDate) > MAX_IMPORT_RANGE) {return;}
 
-		// show Realtime Linkpulse Data for Todays articles
+		// show Realtime Linkpulse/Kilkaya Data for Todays articles
 		if ($pubDate == date('Y-m-d')) {
-			$stats = $this->Linkpulse->stats_today($id);
+			$stats = $this->Kilkaya->stats_today($id);
 
 			if (isset($stats['date'])) {
 				unset($stats['date']);
@@ -180,7 +180,7 @@ class Articles extends Controller {
 		$lifeTimeTotals['buyintent'] = $this->Analytics->buy_intention_by_article_id($id, $pubDate);
 
 		// Subscribed Readers
-		$subscribers = $this->Linkpulse->subscribers($id, $pubDate);
+		$subscribers = $this->Kilkaya->subscribers($id, $pubDate);
 		$lifeTimeTotals['subscribers'] = $subscribers;
 
 		$this->Articles->add_stats($lifeTimeTotals,$id);

@@ -141,8 +141,8 @@ class DailyKPIs extends Model
 
 	public function import_subscribers($from, $to) {
 
-		$lp = new Linkpulse();
-		$dates = $lp->subscribers_grouped_by_date($from, $to);
+		$kilkaya = new Kilkaya();
+		$dates = $kilkaya->subscribers_grouped_by_date($from, $to);
 
 		if (!is_array($dates)) {
 			throw new \Exception("Import Failed", 404);

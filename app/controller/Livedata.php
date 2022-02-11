@@ -14,16 +14,19 @@ class Livedata extends Controller {
 	public function __construct() {
 
 		$this->view('DefaultLayout');
-		$this->models('Plenigo,Linkpulse,Kilkaya');
+		$this->models('Plenigo,Linkpulse,Kilkaya,DailyKPIs');
 	}
 
 
 	public function kilkaya() {
 
-		dd($this->Kilkaya->test());
+		//dd($this->Kilkaya->subscribers_grouped_by_date('2022-02-01', '2022-02-07'));
+
+		dd($this->Kilkaya->today());
+		//$kk = $this->Kilkaya->stats_today('62500309');
+
 
 	}
-
 
 	public function index() {
 		$this->view->redirect('/orders/today');

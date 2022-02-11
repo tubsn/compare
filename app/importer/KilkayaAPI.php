@@ -2,16 +2,19 @@
 
 namespace app\importer;
 use \flundr\cache\RequestCache;
+use flundr\utility\Log;
+
 
 class KilkayaAPI
 {
 
 	const API_BASE_URL = 'https://dataapi.kilkaya.com/api/';
 	private $bearerToken = KILKAYA_APIKEY;
-	private $jsonQuery;
 	private $queryRuns = 0;
 	private $maxQueryRuns = 15;
 
+	public $query = null;
+	public $forceResponseWithIndex = false;
 	public $response;
 	public $responseRaw;
 	public $responseMessage;
@@ -38,21 +41,17 @@ class KilkayaAPI
 		'inscreencnt' => 'mediatime',
 		'viewtimeavgmed' => 'avgmediatime',
 		'_minute' => 'minute',
+		'_day' => 'day',
 	];
 
 	public function __construct() {}
 
-	public function run_query() {
-		$this->build_query();
-		$this->call_query_endpoint($this->options);
+	public function run_query($query = null) {
+		$this->handle_query_options($query);
+		$this->call_query_endpoint($this->query);
 		return $this->response;
 	}
 
-	public function run_direct($query) {
-		$this->options = $query;
-		$this->call_query_endpoint($this->options);
-		return $this->response;
-	}
 
 
 	public function cache() {
@@ -64,23 +63,31 @@ class KilkayaAPI
 
 	}
 
-	public function from($time) {
+	private function handle_query_options($string) {
 
-		return date('c', strtotime($time));
+		if (is_null($string)) {
+			if (is_null($this->query)) {
+				$this->build_query();
+			}
+			return true;
+		}
 
-		//dd(strtotime($time));
+		json_decode($string);
+		if (json_last_error() === JSON_ERROR_NONE) {
+			$this->query = $string;
+			return true;
+		}
 
-		return date('Y-m-d', strtotime($time));
+		throw new \Exception("KilkayaAPI: Invalid Request Query ", 400);
 
 	}
-
 
 	private function build_query() {
 
 		$options = [
 
-			'datefrom' => $this->from . 'T00:00:00+00:00',
-			'dateto' => $this->to . 'T23:59:59+00:00',
+			'datefrom' => $this->from . 'T00:00:00',
+			'dateto' => $this->to . 'T23:59:59',
 
 			'schemaname' => $this->schema,
 			'columns' => $this->columns,
@@ -88,13 +95,13 @@ class KilkayaAPI
 
 			'resultsortby' => [$this->columns[0]],
 			'resultsortorder' => ['desc'],
-			'limit' => 100,
+			'limit' => $this->limit,
 
 		];
 
 		$options = json_encode($options);
 
-		$this->options = $options;
+		$this->query = $options;
 		return $options;
 
 	}
@@ -109,8 +116,10 @@ class KilkayaAPI
 		$out = [];
 		foreach ($attributes as $key => $value) {
 			if ($key == '_id') {continue;}
+			if ($key == '_day') {$value = substr($value,0,10);} // Removes unneccessary minutes and seconds
 			$out[$this->map_kpi($key)] = $value;
 		}
+
 		return $out;
 
 	}
@@ -136,15 +145,21 @@ class KilkayaAPI
 		$this->handle_queued_query();
 
 		if (isset($curlData['data'])) {
-			$this->response = array_map([$this, 'transform_response_element'], $curlData['data']);
+			$response = array_map([$this, 'transform_response_element'], $curlData['data']);
 		}
+
+		if (!$this->forceResponseWithIndex && is_array($response) && count($response) == 1) {
+			$this->response = $response[0];	return;
+		}
+
+		$this->response = $response;
 
 	}
 
 	public function handle_errors() {
 
 		if ($this->responseMessage) {
-			echo 'Kilkaya-API: ' . $this->responseMessage . '<br>';
+			Log::error('KilkayaAPI: ' . $this->responseMessage);
 			//dump($this->responseRaw);
 		}
 
@@ -155,11 +170,14 @@ class KilkayaAPI
 		if (!isset($this->responseMeta['delayed'])) {return;}
 		if ($this->responseMeta['delayed'] == 1) {
 
-			if ($this->queryRuns > $this->maxQueryRuns) {echo '<br>Maximum query repetitions reached'; return;}
-			$timeout = $this->responseMeta['timeout'] * 1000 + 5000;
-			echo '<br>Query No. ' . $this->queryRuns . ' - Sleeping for ' . $timeout / 1000 . ' milliseconds';
+			if ($this->queryRuns > $this->maxQueryRuns) {
+				throw new \Exception("Maximum query repetitions reached", 429);
+			}
+
+			$timeout = 1000 * 200;
+			//echo '<br>Query No. ' . $this->queryRuns . ' - Sleeping for ' . $timeout / 1000 . ' milliseconds';
 			usleep($timeout);
-			$this->call_query_endpoint($this->options);
+			$this->call_query_endpoint($this->query);
 
 		}
 	}
