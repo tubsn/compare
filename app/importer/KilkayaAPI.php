@@ -20,8 +20,10 @@ class KilkayaAPI
 	public $responseMessage;
 	public $responseMeta;
 
-	public $from;
-	public $to;
+	public $from = null;
+	public $to = null;
+	public $exactFrom = null;
+	public $exactTo = null;
 	public $schema = 'pageview';
 	public $columns = [];
 	public $filters = [];
@@ -39,12 +41,17 @@ class KilkayaAPI
 		'title' => 'title',
 		'url' => 'url',
 		'inscreencnt' => 'mediatime',
+		'viewTime' => 'mediatime',
 		'viewtimeavgmed' => 'avgmediatime',
+		'viewTimeMedian' => 'avgmediatime',
 		'_minute' => 'minute',
 		'_day' => 'day',
 	];
 
-	public function __construct() {}
+	public function __construct() {
+		$this->from = date('Y-m-d');
+		$this->to = date('Y-m-d');
+	}
 
 	public function run_query($query = null) {
 		$this->handle_query_options($query);
@@ -93,11 +100,15 @@ class KilkayaAPI
 			'columns' => $this->columns,
 			'filters' => $this->filters,
 
-			'resultsortby' => [$this->columns[0]],
-			'resultsortorder' => ['desc'],
+			'sortby' => [$this->columns[0]],
+			'sortorder' => ['desc'],
+
 			'limit' => $this->limit,
 
 		];
+
+		if (!is_null($this->exactFrom)) {$options['datefrom'] = $this->exactFrom;}
+		if (!is_null($this->exactTo)) {$options['dateto'] = $this->exactTo;}
 
 		$options = json_encode($options);
 
@@ -132,6 +143,16 @@ class KilkayaAPI
 		$this->queryRuns++;
 		$curlData = $this->curl('query', $options);
 		$this->handle_response($curlData);
+	}
+
+	public function call_image_endpoint($imageURLs) {
+
+		$options['urls'] = $imageURLs;
+		$options = json_encode($options);
+		$curlData = $this->curl('images', $options);
+
+		return $curlData;
+
 	}
 
 
@@ -182,7 +203,7 @@ class KilkayaAPI
 		}
 	}
 
-	private function extract_id($url) {
+	public function extract_id($url) {
 		// Regex search for the ID = -8Digits.html
 		$searchPattern = "/-(\d{8}).html/";
 		preg_match($searchPattern, $url, $matches);

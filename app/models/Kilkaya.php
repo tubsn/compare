@@ -11,18 +11,8 @@ class Kilkaya
 
 	}
 
+
 	public function test() {
-
-		dd($this->today());
-
-		$api = new KilkayaAPI();
-		dd($api->from('2022-02-06'));
-
-
-	}
-
-
-	public function test1111() {
 
 		$api = new KilkayaAPI();
 
@@ -37,6 +27,25 @@ class Kilkaya
 		return $api->response;
 	}
 
+
+	public function active_users() {
+
+		$api = new KilkayaAPI();
+
+		$to = date(DATE_ATOM);
+		$to = substr($to,0,-6);
+
+		$from = date(DATE_ATOM, strtotime('-1minute'));
+		$from = substr($from,0,-6);
+
+		$api->exactFrom = $from;
+		$api->exactTo = $to;
+		$api->columns = ['pageview'];
+
+		$api->run_query();
+		return $api->response['pageviews'];
+
+	}
 
 
 	public function today() {
@@ -117,5 +126,31 @@ class Kilkaya
 		return $this->article_today($id);
 	}
 
+
+	public function articles_today() {
+
+		$api = new KilkayaAPI();
+		$api->columns = ['pageview', 'subscriber', 'conversion', 'title', 'section', 'publishtime', 'viewTime', 'viewTimeMedian', 'url'];
+		$api->filters = [ ['operator' => 'like', 'field' => 'pagetype', 'value' => 'article'] ];
+		$api->limit = 10;
+		$api->run_query();
+
+		$articles = $api->response;
+
+		$urls = array_column($articles, 'url');
+		$images = $api->call_image_endpoint($urls);
+		$images = array_column($images, 'image', 'url');
+
+
+		foreach ($articles as $key => $article) {
+			$articles[$key]['image'] = $images[$article['url']] ?? '';
+			//$articles[$key]['image'] = 'https://dataapi.kilkaya.com/api/image/,?url=' . $article['url'];			
+			$articles[$key]['id'] = $api->extract_id($article['url']);
+			$articles[$key]['avgmediatime'] = round($article['avgmediatime'],2);
+		}
+
+		return $articles;
+
+	}
 
 }

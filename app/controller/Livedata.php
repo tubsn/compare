@@ -22,7 +22,10 @@ class Livedata extends Controller {
 
 		//dd($this->Kilkaya->subscribers_grouped_by_date('2022-02-01', '2022-02-07'));
 
-		dd($this->Kilkaya->today());
+		dd($this->Linkpulse->articles_today());
+
+
+		//dd($this->Kilkaya->today());
 		//$kk = $this->Kilkaya->stats_today('62500309');
 
 
@@ -72,13 +75,14 @@ class Livedata extends Controller {
 	}
 
 	public function api_articles_today() {
-		$articles = $this->Linkpulse->articles_today();
+		$articles = $this->Kilkaya->articles_today();
+		//$articles = $this->Linkpulse->articles_today();
 		header('Access-Control-Allow-Origin: *');
 		$this->view->json($articles);
 	}
 
 	public function api_active_users() {
-		$output['users'] = $this->Linkpulse->active_users();
+		$output['users'] = $this->Kilkaya->active_users();
 		header('Access-Control-Allow-Origin: *');
 		$this->view->json($output);
 	}
