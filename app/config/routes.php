@@ -3,18 +3,11 @@
 //Homepage
 $routes->get('/', 'Stats@dashboard');
 
-
 // Teststuff
 $routes->get('/subs', 'Import@import_subscribers');
 $routes->get('/cards', 'Lists@cards');
-$routes->get('/kilkaya', 'Livedata@kilkaya');
 $routes->get('/emo', 'Stats@test');
 $routes->get('/freecharts', 'Stats@freecharts');
-$routes->get('/print/local', 'Orders@map_print_local');
-$routes->get('/print/germany', 'Orders@map_print_germany');
-$routes->get('/print/local/cancelled', 'Orders@map_print_local_cancelled');
-$routes->get('/print/germany/cancelled', 'Orders@map_print_germany_cancelled');
-
 
 // Article Lists
 $routes->get('/unclassified/types', 'Lists@unset_only');
@@ -52,6 +45,12 @@ $routes->get('/epaper/import', 'Epaper@import');
 // Valueables
 $routes->get('/valueable', 'Stats@value_articles');
 $routes->get('/valueable/{type}', 'Lists@valueables');
+
+// Print Map
+$routes->get('/print/local', 'Orders@map_print_local');
+$routes->get('/print/germany', 'Orders@map_print_germany');
+$routes->get('/print/local/cancelled', 'Orders@map_print_local_cancelled');
+$routes->get('/print/germany/cancelled', 'Orders@map_print_germany_cancelled');
 
 // Orders
 $routes->get('/orders', 'Orders@stats');

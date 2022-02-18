@@ -17,24 +17,9 @@ class Livedata extends Controller {
 		$this->models('Plenigo,Linkpulse,Kilkaya,DailyKPIs');
 	}
 
-
-	public function kilkaya() {
-
-		//dd($this->Kilkaya->subscribers_grouped_by_date('2022-02-01', '2022-02-07'));
-
-		dd($this->Linkpulse->articles_today());
-
-
-		//dd($this->Kilkaya->today());
-		//$kk = $this->Kilkaya->stats_today('62500309');
-
-
-	}
-
 	public function index() {
 		$this->view->redirect('/orders/today');
 	}
-
 
 	public function live_dashboard() {
 
@@ -76,7 +61,6 @@ class Livedata extends Controller {
 
 	public function api_articles_today() {
 		$articles = $this->Kilkaya->articles_today();
-		//$articles = $this->Linkpulse->articles_today();
 		header('Access-Control-Allow-Origin: *');
 		$this->view->json($articles);
 	}

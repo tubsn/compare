@@ -159,12 +159,12 @@ class Kilkaya
 		$articles = $api->response;
 
 		$urls = array_column($articles, 'url');
+
 		$images = $api->call_image_endpoint($urls);
 		$images = array_column($images, 'image', 'url');
 
-
 		foreach ($articles as $key => $article) {
-			$articles[$key]['image'] = $images[$article['url']] ?? '';
+			$articles[$key]['image'] = $images[$article['url']] ?? '/styles/img/flundr/no-thumb.svg';
 			//$articles[$key]['image'] = 'https://dataapi.kilkaya.com/api/image/,?url=' . $article['url'];
 			$articles[$key]['id'] = $api->extract_id($article['url']);
 			$articles[$key]['avgmediatime'] = round($article['avgmediatime'],2);

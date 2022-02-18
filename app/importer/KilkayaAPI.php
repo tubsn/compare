@@ -154,13 +154,13 @@ class KilkayaAPI
 	public function call_image_endpoint($imageURLs) {
 
 		$options['urls'] = $imageURLs;
-		$options = json_encode($options);
-		$curlData = $this->curl('images', $options);
+		$options = json_encode($imageURLs);
 
+		$curlData = $this->curl('images', $options);
+		if (empty($curlData)) {return [];}
 		return $curlData;
 
 	}
-
 
 	private function handle_response($curlData) {
 
@@ -172,6 +172,11 @@ class KilkayaAPI
 		$this->handle_errors();
 		$this->handle_messages();
 		$this->handle_queued_query();
+
+		if (!isset($curlData['data'])) {
+			throw new \Exception("No Responst Data", 1);
+
+		}
 
 		if (isset($curlData['data'])) {
 			$response = array_map([$this, 'transform_response_element'], $curlData['data']);
