@@ -88,8 +88,6 @@
 
 </div>
 
-
-
 <figure style="margin-bottom:4em">
 
 	<table class="fancy neutral wide">
@@ -126,6 +124,15 @@
 			<th style="text-align:right">Aktive Kunden</th>
 			<?php foreach ($salesData as $month => $set): ?>
 			<td class="text-right"><b><?=gnum($set['active'])?></b></td>
+			<?php endforeach; ?>
+		</tr>
+
+		<?php $plenigoOrders = array_slice($orderHistory,3);?>
+
+		<tr>
+			<th style="text-align:right">Bestellungen</th>
+			<?php foreach ($salesData as $month => $set): ?>			
+			<td class="text-right"><?=$plenigoOrders[$month]['orders'] ?? '-'?></td>
 			<?php endforeach; ?>
 		</tr>
 

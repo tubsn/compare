@@ -480,15 +480,7 @@ class Orders extends Model
 
 		$detailedOrders = [];
 		foreach ($orderList as $order) {
-
-			$cache = new RequestCache($order['order_id'], 5 * 60);
-			$details = $cache->get();
-
-			if (!$details) {
-				$details = $plenigo->order_with_details($order['order_id']);
-			}
-
-			$cache->save($details);
+			$details = $plenigo->order_with_details($order['order_id']);
 			array_push($detailedOrders, $details);
 		}
 

@@ -133,11 +133,6 @@ class Articles extends Controller {
 		dd($output);
 	}
 
-	public function favilink() {
-		$this->view->navigation = null;
-		$this->view->render('pages/favilink');
-	}
-
 
 	public function refresh($id) {
 		$pubDate = $this->Articles->get($id,['pubdate'])['pubdate'];

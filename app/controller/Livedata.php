@@ -43,12 +43,12 @@ class Livedata extends Controller {
 		$orders = $this->Plenigo->orders($this->start, $this->end, $maxOrders=100, $includeAppOrders = 0);
 		$viewData['orders'] = array_reverse($orders);
 
-		$linkpulseLiveData = $this->Linkpulse->today();
-		$viewData['chart']['data'] = $linkpulseLiveData['values'];
-		$viewData['chart']['time'] = $linkpulseLiveData['timestamps'];
-		$viewData['pageviews'] = $linkpulseLiveData['pageviews'];
+		$liveData = $this->Kilkaya->today();
+		$viewData['chart']['data'] = $liveData['values'];
+		$viewData['chart']['time'] = $liveData['timestamps'];
+		$viewData['pageviews'] = $liveData['pageviews'];
 
-		$viewData['articles'] = $this->Linkpulse->articles_today();
+		$viewData['articles'] = $this->Kilkaya->articles_today();
 
 		$this->view->title = 'Livedashboard von Heute';
 		$this->view->render('pages/live', $viewData);
@@ -68,8 +68,8 @@ class Livedata extends Controller {
 	}
 
 	public function api_stats_today($resolution = 3) {
-		$stats['users'] = $this->Linkpulse->today(null, $resolution);
-		$stats['subs'] = $this->Linkpulse->today_subs(null, $resolution);
+		$stats['users'] = $this->Kilkaya->today('pageview', $resolution);
+		$stats['subs'] = $this->Kilkaya->today('subscriber', $resolution);
 		header('Access-Control-Allow-Origin: *');
 		$this->view->json($stats);
 	}

@@ -27,6 +27,8 @@ class KilkayaAPI
 	public $schema = 'pageview';
 	public $columns = [];
 	public $filters = [];
+	public $sortBy = null;
+	public $order = 'desc';
 	public $limit = 100;
 
 	private $KPImap = [
@@ -91,6 +93,10 @@ class KilkayaAPI
 
 	private function build_query() {
 
+		$sortBy = $this->sortBy ?? $this->columns[0];
+		$order = $this->order;
+		$order = strtolower($order);
+
 		$options = [
 
 			'datefrom' => $this->from . 'T00:00:00',
@@ -100,8 +106,8 @@ class KilkayaAPI
 			'columns' => $this->columns,
 			'filters' => $this->filters,
 
-			'sortby' => [$this->columns[0]],
-			'sortorder' => ['desc'],
+			'sortby' => [$sortBy],
+			'sortorder' => [$order],
 
 			'limit' => $this->limit,
 
@@ -160,9 +166,11 @@ class KilkayaAPI
 
 		$this->responseRaw = $curlData;
 		$this->responseMessage = $curlData['message'] ?? null;
+		$this->responseErrors = $curlData['errors'] ?? null;
 		$this->responseMeta = $curlData['meta'] ?? null;
 
 		$this->handle_errors();
+		$this->handle_messages();
 		$this->handle_queued_query();
 
 		if (isset($curlData['data'])) {
@@ -179,9 +187,16 @@ class KilkayaAPI
 
 	public function handle_errors() {
 
+		if ($this->responseErrors) {
+			dd($this->responseRaw);
+		}
+
+	}
+
+	public function handle_messages() {
+
 		if ($this->responseMessage) {
 			Log::error('KilkayaAPI: ' . $this->responseMessage);
-			//dump($this->responseRaw);
 		}
 
 	}

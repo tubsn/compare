@@ -7,10 +7,7 @@ use \flundr\cache\RequestCache;
 class Kilkaya
 {
 
-	function __construct() {
-
-	}
-
+	// Remember that the KilkayaAPI Class is automatically casting KPI Names!
 
 	public function test() {
 
@@ -40,48 +37,72 @@ class Kilkaya
 
 		$api->exactFrom = $from;
 		$api->exactTo = $to;
-		$api->columns = ['pageview'];
+		//$api->columns = ['pageview'];
+		$api->columns = ['autouniqueusers', 'domain'];
 
 		$api->run_query();
-		return $api->response['pageviews'];
+
+		$data = array_column($api->response, 'autouniqueusers', 'domain');
+
+		switch (PORTAL) {
+			case 'LR': $domain = 'lr-online.de';break;
+			case 'SWP': $domain = 'swp.de';break;
+			case 'MOZ': $domain = 'moz.de';break;
+			default: $domain = 'lr-online.de';break;
+		}
+
+		return $data[$domain];
 
 	}
 
 
-	public function today() {
+	public function today($kpiName = 'pageview', $resolution = 3) {
 
 		$api = new KilkayaAPI();
 
-		$query = '{
-		  "datefrom": "2022-01-19T00:00:00",
-		  "dateto": "2022-01-19T23:59:00",
-		  "columns": [
-		    "pageview",
-		    "_minute"
-		  ],
-		  "filters": [],
-		  "sortby": [
-		    "_minute"
-		  ],
-		  "sortorder": [
-		    "asc"
-		  ],
-		  "resultsortby": [
-		    "_minute"
-		  ],
-		  "resultsortorder": [
-		    "asc"
-		  ],
-		  "scoreweights": [],
-		  "schemaname": "pageview",
-		  "limit": 10000,
-		  "skip": 5
-	  	}';
+		$today = date('Y-m-d');
 
-		$api->run_query($query);
-		return $api->response;
+		$api->from = $today;
+		$api->to = $today;
+		$api->columns = [$kpiName, '_minute'];
+		$api->sortBy = '_minute';
+		$api->order = 'asc';
+		$api->limit = 10000;
+
+		$api->run_query();
+		return $this->today_as_chart_data($api->response, $kpiName . 's' , $resolution);
 
 	}
+
+	private function today_as_chart_data($data, $kpiName = 'pageviews', $resolution = 3) {
+
+		$values = null;
+		$time = null;
+		$counter = 0;
+
+		$kpi = array_sum(array_column($data, $kpiName));
+
+		foreach ($data as $moment) {
+
+			$counter++;
+			if ($resolution != 0) {
+				if ($counter % $resolution != 0) {continue;}
+			}
+
+			$values .= $moment[$kpiName] . ',';
+			$timestring = date('H:i', strtotime($moment['minute']));
+			$time .= "'" . $timestring."'" . ',';
+
+		}
+
+		return [
+			'values' => $values,
+			'timestamps' => $time,
+			$kpiName => $kpi,
+		];
+
+	}
+
 
 
 	public function subscribers($id, $pubDate) {
@@ -144,7 +165,7 @@ class Kilkaya
 
 		foreach ($articles as $key => $article) {
 			$articles[$key]['image'] = $images[$article['url']] ?? '';
-			//$articles[$key]['image'] = 'https://dataapi.kilkaya.com/api/image/,?url=' . $article['url'];			
+			//$articles[$key]['image'] = 'https://dataapi.kilkaya.com/api/image/,?url=' . $article['url'];
 			$articles[$key]['id'] = $api->extract_id($article['url']);
 			$articles[$key]['avgmediatime'] = round($article['avgmediatime'],2);
 		}

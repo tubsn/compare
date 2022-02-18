@@ -8,6 +8,7 @@
 	<ul>
 		<li class="compare-logo-li"><a href="/"><span class="compare-logo"></span></a>
 			<ul class="dropdown" aria-label="submenu">
+				<li><a href="/faq">Compare F.A.Q</a></li>
 				<li><a href="/favoriten">Favicon einrichten</a></li>
 			</ul>
 		</li>
