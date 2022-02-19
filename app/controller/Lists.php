@@ -401,7 +401,7 @@ class Lists extends Controller {
 			default: $this->view->info = 'Es werden maximal 2000 Artikel angezeigt'; break;
 		}
 
-		$this->view->title = ucfirst($type) . ' - Artikel: ' . count($viewData['articles']);
+		$this->view->title = ucfirst($type) . ' - Artikel: ' . count($viewData['articles'] ?? []);
 		$this->view->render('pages/list', $viewData);
 	}
 
