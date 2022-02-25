@@ -120,6 +120,7 @@ class Plenigo
 		$new['subscription_product_id'] = $org['items'][0]['productId'];
 		$new['subscription_price'] = $org['items'][0]['price'];
 
+		$new['subscription_status'] = $org['status'];
 		$new['subscription_start_date'] = null;
 		$new['subscription_cancellation_date'] = null;
 		$new['subscription_end_date'] = null;
@@ -201,7 +202,9 @@ class Plenigo
 		$shopUrls = ['abo.lr-online.de', 'abo.moz.de', 'abo.swp.de'];
 		if (in_array($host, $shopUrls)) {return 'Aboshop';}
 
+		if (strTolower($paths[2] ?? null) == 'kuendigung') {return 'Umwandlung';}
 		if (strTolower($paths[0] ?? null) == 'plus') {return 'Plusseite';}
+
 
 		$pageUrls = ['www.lr-online.de', 'www.moz.de', 'www.swp.de'];
 		if (in_array($host, $pageUrls)) {return 'Artikel';}

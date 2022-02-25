@@ -155,7 +155,6 @@ class KilkayaAPI
 
 		$options['urls'] = $imageURLs;
 		$options = json_encode($imageURLs);
-
 		$curlData = $this->curl('images', $options);
 		if (empty($curlData)) {return [];}
 		return $curlData;
