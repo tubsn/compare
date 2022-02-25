@@ -189,7 +189,7 @@ class Articles extends Controller {
 		$this->Conversions->refresh();
 	}
 
-	private function quick_import($articleID) {
+	public function quick_import($articleID) {
 		$import = new ArticleImport();
 		$newArticle = $import->detail_rss($articleID);
 

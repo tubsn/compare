@@ -173,7 +173,7 @@ class KilkayaAPI
 		$this->handle_queued_query();
 
 		if (!isset($curlData['data'])) {
-			throw new \Exception("No Responst Data", 1);
+			throw new \Exception("No Response Data", 404);
 
 		}
 

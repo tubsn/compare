@@ -111,6 +111,7 @@ $routes->get('/api/portals', 'LongtermAnalysis@provide_combined_kpis');
 $routes->get('/api/yesterday', 'Exports@yesterday_stats');
 $routes->get('/api/orders-today', 'Livedata@api_orders_today');
 $routes->get('/api/articles-today', 'Livedata@api_articles_today');
+$routes->get('/api/article/{id}', 'Livedata@api_article');
 $routes->get('/api/stats-today[/{resolution:\d+}]', 'Livedata@api_stats_today');
 $routes->get('/api/active-users', 'Livedata@api_active_users');
 $routes->get('/api/live', 'Livedata@api_live');

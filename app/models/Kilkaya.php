@@ -143,6 +143,19 @@ class Kilkaya
 		return $api->response;
 	}
 
+	public function article($id, $pubdate) {
+
+		$api = new KilkayaAPI();
+		$api->from = date('Y-m-d', strtotime($pubdate));
+		$api->to = date('Y-m-d');
+		$api->columns = ['pageview', 'subscriber', 'conversion'];
+		$api->filters = [ ['operator' => 'like', 'field' => 'url', 'value' => '*' . $id . '*'] ];
+
+		$api->run_query();
+		return $api->response;
+	}
+
+
 	public function stats_today($id) {
 		return $this->article_today($id);
 	}

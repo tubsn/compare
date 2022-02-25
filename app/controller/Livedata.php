@@ -3,6 +3,7 @@
 namespace app\controller;
 use flundr\mvc\Controller;
 use flundr\utility\Session;
+use app\importer\ArticleImport;
 
 class Livedata extends Controller {
 
@@ -14,7 +15,7 @@ class Livedata extends Controller {
 	public function __construct() {
 
 		$this->view('DefaultLayout');
-		$this->models('Plenigo,Linkpulse,Kilkaya,DailyKPIs');
+		$this->models('Articles,Plenigo,Linkpulse,Kilkaya,DailyKPIs');
 	}
 
 	public function index() {
@@ -39,6 +40,23 @@ class Livedata extends Controller {
 		$this->view->render('pages/live', $viewData);
 
 	}
+
+	public function api_article($id) {
+
+		$article = $this->Articles->get($id);
+
+		if (empty($article)) {
+			$import = new ArticleImport();
+			$article = $import->detail_rss($id);
+		}
+
+		$pubdate = $article['pubdate'] ?? date('Y-m-d', strtotime('-7days'));
+		$stats = $this->Kilkaya->article($id, $pubdate);
+
+		$this->view->json(array_merge($stats, $article));
+
+	}
+
 
 	public function api_orders_today() {
 
