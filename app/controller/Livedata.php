@@ -4,6 +4,7 @@ namespace app\controller;
 use flundr\mvc\Controller;
 use flundr\utility\Session;
 use app\importer\ArticleImport;
+use app\importer\PortalImport;
 
 class Livedata extends Controller {
 
@@ -53,7 +54,15 @@ class Livedata extends Controller {
 		$pubdate = $article['pubdate'] ?? date('Y-m-d', strtotime('-7days'));
 		$stats = $this->Kilkaya->article($id, $pubdate);
 
-		$this->view->json(array_merge($stats, $article));
+		$this->view->json(array_merge($article, $stats));
+
+	}
+
+	public function article_compare($swpID, $mozID, $lrID) {
+
+		$import = new PortalImport();
+		$this->view->articles = $import->articles($swpID, $mozID, $lrID);
+		$this->view->render('pages/article-compare');
 
 	}
 

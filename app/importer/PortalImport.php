@@ -31,6 +31,16 @@ class PortalImport
 
 	}
 
+	public function articles($swp = null, $moz = null, $lr = null) {
+
+		$swp = $this->curl('https://reports-swp.lr-digital.de/api/article/' . $swp);
+		$moz = $this->curl('https://reports-moz.lr-digital.de/api/article/' . $moz);
+		$lr = $this->curl('https://reports.lr-digital.de/api/article/' . $lr);
+
+		return ['SWP' => $swp, 'MOZ' => $moz, 'LR' => $lr];
+
+	}
+
 
 	private function curl($url) {
 

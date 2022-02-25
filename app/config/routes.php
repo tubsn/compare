@@ -129,6 +129,7 @@ $routes->get('/artikel/{id:\d+}/medium', 'Articles@medium');
 $routes->get('/artikel/{id:\d+}/refresh', 'Articles@refresh');
 $routes->get('/artikel/{id:\d+}/delete', 'Articles@delete');
 $routes->post('/artikel/{id:\d+}', 'Articles@set_type');
+$routes->get('/artikel/compare/{swpID:\d+}/{mozID:\d+}/{lrID:\d+}', 'Livedata@article_compare');
 
 // Pages
 $routes->get('/search', 'Search@show');
