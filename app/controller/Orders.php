@@ -27,6 +27,7 @@ class Orders extends Controller {
 		$viewData['plusOnly'] = count($this->Orders->filter_plus_only($viewData['orders']));
 		$viewData['aboshopOnly'] = count($this->Orders->filter_aboshop($viewData['orders']));
 		$viewData['externalOnly'] = count($this->Orders->filter_external($viewData['orders']));
+		$viewData['umwandlungOnly'] = count($this->Orders->filter_umwandlung($viewData['orders']));
 		$viewData['averageRetention'] = $this->Orders->average($this->Orders->filter_cancelled($viewData['orders']),'retention');
 
 		$this->view->title = 'Bestellübersicht';
@@ -69,6 +70,7 @@ class Orders extends Controller {
 		$viewData['plusOnly'] = count($this->Orders->filter_plus_only($viewData['orders']));
 		$viewData['aboshopOnly'] = count($this->Orders->filter_aboshop($viewData['orders']));
 		$viewData['externalOnly'] = count($this->Orders->filter_external($viewData['orders']));
+		$viewData['umwandlungOnly'] = count($this->Orders->filter_umwandlung($viewData['orders']));		
 		$viewData['averageRetention'] = $this->Orders->average($this->Orders->filter_cancelled($viewData['orders']),'retention');
 
 		$viewData['type'] = $this->Orders->group_by_combined('article_type');
@@ -104,6 +106,19 @@ class Orders extends Controller {
 		$viewData['numberOfOrders'] = count($viewData['orders'] ?? []);
 		$viewData['numberOfCancelled'] = count($this->Orders->filter_cancelled($viewData['orders']));
 		$viewData['firstDayChurners'] = $this->Orders->group_by('article_ressort', 'retention = 0');
+		
+		$reasonData = $this->Orders->group_by('cancellation_reason');
+		if (!empty($reasonData)) {
+			$reasons = [];
+			foreach ($reasonData as $key => $value) {
+				if (empty($key)) {continue;}
+				$reasons[CANCELLATION_REASON[$key]] = $value;
+			}
+			$reasonChart = $this->Charts->convert($reasons);
+			$reasonChart['metrics'] = implode(',' ,$reasons);
+			$viewData['reasons_chart'] = $reasonChart;
+		}
+		else {$viewData['reasons_chart'] = null;}
 
 		if ($viewData['orders']) {
 			$viewData['cancelQuote'] = round(($viewData['numberOfCancelled'] / $viewData['numberOfOrders']) * 100, 1);

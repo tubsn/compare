@@ -62,6 +62,28 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 		]);?>
 	</figure>
 
+
+	<?php if ($reasons_chart): ?>
+	<figure class="">
+		<h3 class="text-center">Kündigungsgründe</h3>
+		<?=$charts->create([
+			'metric' => $reasons_chart['metrics'] ,
+			'dimension' => $reasons_chart['dimensions'],
+			'color' => '#f77474',
+			'height' => 350,
+			'legend' => 'bottom',
+			'name' => 'Kündiger',
+			'template' => 'charts/default_donut_chart',
+		]);?>
+	</figure>
+	<?php else: ?>
+	<figure style="width:100%; text-align:center">
+		<h3 class="text-center">Kündigungsgründe</h3>
+		<p class="nt orangebg"> Keine Daten Verfügbar</p>
+	</figure>
+	<?php endif ?>
+
+	<!--
 	<figure class="">
 		<h3 class="text-center">Anteile Kündiger-Cluster</h3>
 		<p class="nt text-center">Eingeteilt nach Kündigerzeiträumen</p>
@@ -75,6 +97,8 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 			'template' => 'charts/default_donut_chart',
 		]);?>
 	</figure>
+
+	-->
 
 </div>
 
@@ -220,22 +244,22 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 
 <div class="col-2" style="grid-template-columns: 1fr 1fr ; align-items: center; justify-items: center; margin-top: 2em; margin-bottom:0em;">
 
-	<figure>
+	<figure style="width:100%;">
 		<h3 class="text-center">nach Ressort</h3>
 		<?=$charts->get('first_day_churns_by' , 'article_ressort');?>
 	</figure>
 
-	<figure>
+	<figure style="width:100%;">
 		<h3 class="text-center">nach #-Tag</h3>
 		<?=$charts->get('first_day_churns_by' , 'article_tag');?>
 	</figure>
 
-	<figure>
+	<figure style="width:100%;">
 		<h3 class="text-center">nach Themencluster</h3>
 		<?=$charts->get('first_day_churns_by' , 'article_type');?>
 	</figure>
 
-	<figure>
+	<figure style="width:100%;">
 		<h3 class="text-center">nach Audience</h3>
 		<?=$charts->get('first_day_churns_by' , 'article_audience');?>
 	</figure>

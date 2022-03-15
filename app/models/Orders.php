@@ -454,6 +454,13 @@ class Orders extends Model
 		});
 	}
 
+	public function filter_umwandlung($orders) {
+		if (empty($orders)) {return [];}
+		return array_filter($orders, function($order) {
+			if ($order['order_origin'] == 'Umwandlung') {return $order;}
+		});
+	}
+
 
 	public function sum_up($array, $key) {
 		if (empty($array)) {return 0;}

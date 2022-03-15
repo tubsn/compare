@@ -186,3 +186,14 @@ define('TIMEFRAMES', [
 	'letzte 3 Monate',
 	'alle Daten',
 ]);
+
+define('CANCELLATION_REASON', [
+	0 => null,
+	1 => 'zu teuer',
+	2 => 'keine interessanten Inhalte',
+	3 => 'technisches Problem',
+	4 => 'keine Angabe',
+	5 => 'besseres Angebot gefunden',
+	6 => 'fehlende Funktion',
+	7 => 'Kündigung mit Widerrufsrecht',
+]);

@@ -10,7 +10,8 @@
 <b>Mediatime</b> = Artikel Lesedauer in Sekunden (Summe aller Nutzer) |
 <b>⌀-Mediatime (MT)</b> = Durchschnittliche Lesedauer des Artikels |
 <b>Kündiger</b> = gekündigte Bestellungen |
-<b>K-Quote</b> = Kündigerquote (bezogen auf letzte Aktualisierung)
+<b>K-Quote</b> = Kündigerquote (bezogen auf letzte Aktualisierung) |
+<b>K-Umwandlung</b> = Aboumwandlung während Kündigungsprozess
 </div>
 
 <p>compare. running on <a class="noline" target="_blank" href="https://github.com/tubsn/flundr"><b>flundr</b></a></p>

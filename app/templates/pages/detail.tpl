@@ -156,13 +156,32 @@
 
 <hr >
 
-<h1>Detailanalyse der Conversions</h1>
+<h1>Detailanalyse Conversions und Kündiger</h1>
 
 <section class="conversion-tables-layout">
 
+<div>
+<?php if (count($cancellation_reasons) > 0): ?>
+<table class="fancy wide js-sortable">
+	<thead><tr>
+		<th>Kündigungsgründe</th>
+		<th>Anzahl</th>
+	</tr></thead>
+	<tbody>
+<?php foreach ($cancellation_reasons as $reason => $count): ?>
+
+	<tr>
+		<td><?=CANCELLATION_REASON[$reason] ?? 'nichts gewählt'?></td>
+		<td><div class="cancelled"><?=$count?></div></td>
+	</tr>
+<?php endforeach; ?>
+	</tbody>
+</table>
+<?php endif ?>
+
 
 <?php if (count($sources) > 0): ?>
-<table class="fancy js-sortable">
+<table class="fancy wide js-sortable">
 	<thead><tr>
 		<th>Quelle / Referrer</th>
 		<th>Käufe</th>
@@ -181,9 +200,11 @@
 	</tbody>
 </table>
 <?php endif ?>
+</div>
+
 
 <?php if (count($cities) > 0): ?>
-<table class="fancy js-sortable">
+<table class="fancy wide js-sortable">
 	<thead><tr>
 		<th>Städte</th>
 		<th>Käufe</th>
@@ -289,6 +310,16 @@
 			<?php if ($conversion['cancelled']): ?>
 			<?=formatDate($conversion['subscription_cancellation_date'], 'd.m.Y H:i')?> Uhr
 			<br/>(Haltedauer: <?=$conversion['retention'];?> Tage)
+			<?php else: ?>
+			-
+			<?php endif; ?>
+		</td>
+	</tr>
+	<tr>
+		<td>Kündigungsgrund:</td>
+		<td>
+			<?php if (!empty($conversion['cancellation_reason'])): ?>
+			<?=CANCELLATION_REASON[$conversion['cancellation_reason']]?>
 			<?php else: ?>
 			-
 			<?php endif; ?>

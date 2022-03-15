@@ -2,7 +2,7 @@
 
 
 <?php if (PORTAL == 'MOZ' || PORTAL == 'SWP'): ?>
-	<div class="box mbig" style="margin-bottom:3em; background-color:#953737; color:white;"><b>Achtung Seite in Arbeit!!!</b></div>
+	<div class="box mbig" style="margin-bottom:3em; background-color:#953737; color:white;"><b>Achtung Aboentwicklung für SWP und MOZ unvollständig!</b></div>
 <?php endif ?>
 
 
@@ -14,7 +14,7 @@
 
 <h1 class="text-center"><?=PORTAL?>+ Aboentwicklung </h1>
 
-<?php if (PORTAL == 'LR'): ?>
+
 <figure class="mb">
 	<h3 class="text-center">aktive Abonnenten</h3>
 	<?=$charts->create([
@@ -147,7 +147,6 @@
 
 </figure>
 
-<?php endif ?>
 
 <div class="col-2" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr">
 
