@@ -29,6 +29,7 @@
 				<li><a href="/mediatime">Mediatime</a></li>
 				<li><a href="/conversions">Conversions</a></li>
 				<li><a href="/score">Artikel-Score</a></li>
+				<li><a href="/teasers">Teaster-Statistiken</a></li>
 				<li><a href="/top5">Top5</a></li>
 				<li><a href="/filter">Eigene Filter</a></li>
 			</ul>

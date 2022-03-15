@@ -8,6 +8,8 @@ $routes->get('/subs', 'Import@import_subscribers');
 $routes->get('/cards', 'Lists@cards');
 $routes->get('/emo', 'Stats@test');
 $routes->get('/freecharts', 'Stats@freecharts');
+$routes->get('/teasers[/{date}]', 'Teaser@index');
+
 
 // Article Lists
 $routes->get('/unclassified/types', 'Lists@unset_only');
@@ -115,6 +117,7 @@ $routes->get('/api/article/{id}', 'Livedata@api_article');
 $routes->get('/api/stats-today[/{resolution:\d+}]', 'Livedata@api_stats_today');
 $routes->get('/api/active-users', 'Livedata@api_active_users');
 $routes->get('/api/live', 'Livedata@api_live');
+$routes->get('/api/teaser/{date}/{hour}', 'Teaser@api_positions');
 
 // Readers
 $routes->get('/readers/{id:[\d]{12}?}', 'Readers@detail');
