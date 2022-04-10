@@ -89,14 +89,18 @@ class Chartengine
 	public function array_to_chartdata($data, $asInteger = false) {
 
 		$output['dimensions'] = array_keys($data);
-		$kpis = array_keys(array_values($data)[0]);
 
-		foreach ($kpis as $key) {$output[$key] = [];}
+		// For Multidimensional Chart Arrays e.g. [2022-01-01][data][values]
+		$values = array_values($data);
+		if (isset($values[0]) && is_array($values[0])) {
+			$kpis = array_keys(array_values($data)[0]);
+			foreach ($kpis as $key) {$output[$key] = [];}
 
-		foreach ($data as $set) {
-			foreach ($set as $key => $value) {
-				if (isset($output[$key])) {
-					array_push($output[$key], $value);
+			foreach ($data as $set) {
+				foreach ($set as $key => $value) {
+					if (isset($output[$key])) {
+						array_push($output[$key], $value);
+					}
 				}
 			}
 		}

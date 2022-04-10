@@ -52,7 +52,7 @@ Gesamtbestellungen: <b class="conversions"><?=$numberOfOrders?></b>
 	<?php if (!empty($order['article_id'])): ?>
 	<td><a href="/artikel/<?=$order['article_id']?>"><?=$order['order_origin']?></a></td>
 	<?php else: ?>
-	<td><?=$order['order_origin'] ?? 'Unbekannt'?></td>		
+	<td><?=$order['order_origin'] ?? 'Unbekannt'?></td>
 	<?php endif ?>
 	<td><?=ucfirst($order['article_ressort'] ?? '-')?></td>
 	<td class="narrow"><?=$order['order_title']?></td>
@@ -71,7 +71,7 @@ Gesamtbestellungen: <b class="conversions"><?=$numberOfOrders?></b>
 	</td>
 
 	<td class="text-right" data-sortdate="<?=$order['retention']?>"><?=(is_null($order['retention'])) ? '-' : $order['retention'] . ' Tage' ?></td>
-	
+
 
 </tr>
 <?php endforeach; ?>
@@ -83,4 +83,3 @@ Gesamtbestellungen: <b class="conversions"><?=$numberOfOrders?></b>
 <?php endif; ?>
 
 </main>
-
