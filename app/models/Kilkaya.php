@@ -37,6 +37,27 @@ class Kilkaya
 
 		$api->exactFrom = $from;
 		$api->exactTo = $to;
+		$api->columns = ['pageview'];
+
+		$api->run_query();
+
+		return $api->response['pageviews'];
+
+	}
+
+	/*
+	public function active_users() {
+
+		$api = new KilkayaAPI();
+
+		$to = date(DATE_ATOM);
+		$to = substr($to,0,-6);
+
+		$from = date(DATE_ATOM, strtotime('-1minute'));
+		$from = substr($from,0,-6);
+
+		$api->exactFrom = $from;
+		$api->exactTo = $to;
 		//$api->columns = ['pageview'];
 		$api->columns = ['autouniqueusers', 'domain'];
 
@@ -54,6 +75,7 @@ class Kilkaya
 		return $data[$domain];
 
 	}
+	*/
 
 
 	public function today($kpiName = 'pageview', $resolution = 3) {

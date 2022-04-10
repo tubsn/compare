@@ -19,6 +19,11 @@ Einmal pro Nacht werden aus der Datenbank unseres SSO-Systems (Plenigo) die get�
 
 <hr>
 
+<h2>Warum unterscheiden sich Klickzahlen und Subscriberviews in anderen Dashboard Systemen?</h2>
+<p>Da Compare hauptsächlich dazu dient Artikel bzw. Gruppierungen von Artikeln (Ressorts, Audiences) miteinander zu vergleichen, werden in den meisten Compare Statistiken nur die Daten von den Artikeln selbst angezeigt. Externe Dashboards können die Gesamtstatistik also die Kombination von Artikeln und Überschsichtsseiten (Indexseiten) darstellen.</p> 
+
+<hr>
+
 <h2>Wie werden Subscriberviews gemesssen?</h2>
 <p>Ein Subscriberview entsteht immer dann, wenn ein Nutzer im eingeloggten zustand, einen Seitenaufruf erzeugt. Dabei ist es egal ob dieser Aufrufe auf einem Artikel oder auf einer Übersichtsseite erzeugt wird. Die Subscriberviews eines Artikels weisen somit die Ansichten eines Textes hinter der Paywall aus.</p>
 

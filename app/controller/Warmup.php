@@ -11,7 +11,7 @@ class Warmup extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Analytics,Linkpulse,Kilkaya,Articles,ArticleMeta,Conversions,ArticleKPIs,Orders');
+		$this->models('Analytics,Linkpulse,Kilkaya,Articles,ArticleMeta,Conversions,ArticleKPIs,Orders,Readers');
 	}
 
 	public function daterange() {
@@ -129,6 +129,33 @@ class Warmup extends Controller {
 
 	}
 
+
+	public function buy_intentions() {
+
+		if (isset($_GET['from']) && isset($_GET['from'])) {
+			$from = $_GET['from'];
+			$to = $_GET['to'];
+		}
+		else {
+			$from = date('Y-m-d', strtotime('today -3 days'));
+			$to = date('Y-m-d', strtotime('today -1 day'));
+		}
+
+		$articles = $this->Articles->by_date_range($from, $to);
+
+		foreach ($articles as $article) {
+			$id = $article['id'];
+			$pubDate = formatDate($article['pubdate'],'Y-m-d');
+			$data['buyintent'] = $this->Analytics->buy_intention_by_article_id($id, $pubDate);			
+			$this->Articles->update($data, $id);
+		}
+
+		echo 'wenn dieser Text erscheint hats geklappt...<br/>';
+		echo 'Processing-Time: <b>'.round((microtime(true)-APP_START)*1000,2) . '</b>ms';
+
+
+	}
+
 	public function subscribers() {
 
 		if (isset($_GET['from']) && isset($_GET['from'])) {
@@ -150,6 +177,17 @@ class Warmup extends Controller {
 			$data['subscribers'] = $this->Kilkaya->subscribers($id, $pubDate);
 			$this->Articles->update($data, $id);
 		}
+
+		echo 'wenn dieser Text erscheint hats geklappt...<br/>';
+		echo 'Processing-Time: <b>'.round((microtime(true)-APP_START)*1000,2) . '</b>ms';
+
+	}
+
+	public function readers() {
+
+		$this->Readers->import_readers();
+		$this->Readers->add_segment_to_latest_orders();
+		$this->Readers->add_segement_to_latest_cancellations();
 
 		echo 'wenn dieser Text erscheint hats geklappt...<br/>';
 		echo 'Processing-Time: <b>'.round((microtime(true)-APP_START)*1000,2) . '</b>ms';

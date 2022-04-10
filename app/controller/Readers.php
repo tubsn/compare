@@ -4,6 +4,7 @@ namespace app\controller;
 use flundr\mvc\Controller;
 use app\importer\AnalyticsReaderAdapter;
 use flundr\auth\Auth;
+use \flundr\cache\RequestCache;
 
 class Readers extends Controller {
 
@@ -13,6 +14,67 @@ class Readers extends Controller {
 
 		$this->view('DefaultLayout');
 		$this->models('Articles,Readers,Orders,Plenigo');
+	}
+
+
+	public function engagement_alert() {
+
+		$this->Readers->add_segment_to_latest_orders();
+		$this->Readers->add_segement_to_latest_cancellations();
+
+		//echo 'tbd';
+	
+	}
+
+
+
+	public function session_list() {
+
+		$users = $this->users_with_most_sessions();
+
+		$this->view->csv($users);
+
+	}
+
+
+	public function users_with_most_sessions() {
+
+		$cache = new RequestCache('mostsessions' . PORTAL, 60*60);
+		
+		$cachedData = $cache->get();
+		if ($cachedData) {
+			return $cachedData;
+		}
+
+		$users = $this->import_session_csv();
+
+		foreach (array_keys($users) as $id) {
+			$sessions = $users[$id];
+			$users[$id] = $this->Plenigo->customer($id);
+			$users[$id]['sessions'] = $sessions;
+		}
+		$cache->save($users);
+		return $users;
+
+	}
+
+	public function import_session_csv() {
+
+		$path = ROOT . 'import/sessionuser.csv';
+
+		if (!file_exists($path)) {
+			throw new \Exception($path . ' Not found', 500);
+		}
+
+		$data = file($path);
+
+		$out = [];
+		foreach ($data as $entry) {
+			$out[str_getcsv($entry,";")[0]] = str_getcsv($entry,";")[1];
+		}
+
+		return $out;
+
 	}
 
 
@@ -27,7 +89,6 @@ class Readers extends Controller {
 		$this->view->render('pages/reader-detail',$viewData);
 
 	}
-
 
 	public function list($segment = null) {
 

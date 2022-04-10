@@ -7,7 +7,7 @@ use app\importer\ArticleImport;
 class CronImports extends Controller {
 
 	public function __construct() {
-		$this->models('Analytics,Linkpulse,Kilkaya,Articles,ArticleMeta,Conversions,ArticleKPIs,Orders,DailyKPIs,Campaigns,Epaper');
+		$this->models('Analytics,Linkpulse,Kilkaya,Articles,ArticleMeta,Conversions,Readers,ArticleKPIs,Orders,DailyKPIs,Campaigns,Epaper');
 	}
 
 
@@ -155,6 +155,7 @@ class CronImports extends Controller {
 		}
 
 		$this->enrich_conversions_with_ga();
+		$this->enrich_conversions_with_drive_segments();
 
 	}
 
@@ -175,5 +176,14 @@ class CronImports extends Controller {
 
 	}
 
+	public function enrich_conversions_with_drive_segments() {
+
+		$this->Readers->import_readers();
+		$this->Readers->add_segment_to_latest_orders();
+		$this->Readers->add_segement_to_latest_cancellations();
+
+		echo 'Drive Segmente importiert | ' . date('H:i:s') . "\r\n";
+
+	}
 
 }

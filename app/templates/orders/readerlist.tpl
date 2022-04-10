@@ -44,6 +44,7 @@ Gesamt Käufe: <b class="conversions"><?=count($completeOrders)?> </b>
 	<th>Ressort</th>
 	<th>Produkt</th>
 	<th>UserSegment</th>
+	<th>SegDate</th>
 	<th>Preis</th>
 	<th>Bezahlmethode</th>
 	<th>Gekündigt</th>
@@ -62,6 +63,7 @@ Gesamt Käufe: <b class="conversions"><?=count($completeOrders)?> </b>
 	<td><?=ucfirst($order['article_ressort'])?></td>
 	<td class="narrow"><?=$order['order_title']?></td>
 	<td class="narrow"><?=$order['user_segment']?></td>
+	<td class="narrow"><?=$order['date']?></td>
 	<td><?=$order['order_price']?>&thinsp;€</td>
 	<td><?=$order['order_payment_method']?></td>
 	<td><?=$order['cancelled'] ? '<span class="cancelled">gekündigt</span>' : '' ?></td>

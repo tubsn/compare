@@ -202,6 +202,7 @@ class Articles extends Controller {
 			throw new \Exception('Artikel zu alt zum Importieren', 404);
 		}
 
+
 		$articles = [$newArticle]; // this has to be an Array of articles
 		return $this->Articles->add_to_database($articles);
 	}

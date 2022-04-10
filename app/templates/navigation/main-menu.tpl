@@ -29,7 +29,7 @@
 				<li><a href="/mediatime">Mediatime</a></li>
 				<li><a href="/conversions">Conversions</a></li>
 				<li><a href="/score">Artikel-Score</a></li>
-				<li><a href="/teasers">Teaster-Statistiken</a></li>
+				<li><a href="/teasers">Teaser-Statistiken (LR)</a></li>
 				<li><a href="/top5">Top5</a></li>
 				<li><a href="/filter">Eigene Filter</a></li>
 			</ul>
@@ -70,13 +70,15 @@
 
 		<li><a href="/orders" aria-haspopup="true">Bestell- und Kündigerdaten</a>
 			<ul class="dropdown" aria-label="submenu">
-				<li><a href="/orders/list">Bestelldaten als Tabelle</a></li>
+				<li><a href="/orders">Eingehende Bestellungen</a></li>
+				<li><a href="/orders/list-cancellactions">Eingehende Kündigungen</a></li>
+				<li><a href="/orders/clustered">Bestellungen Geclustert</a></li>				
 				<li><a href="/orders/map/local">Bestelldaten als Karte</a></li>
-				<!--<li><a href="/readers/list">Bestellungen mit Usergroup (Beta)</a></li>-->
-				<li><a href="/orders/cancellations">Kundenverhalten</a></li>
-				<!--<li><a href="/stats/compared">Kündigerverhalten (Longterm)</a></li>-->
+				<li><a href="/orders/behavior">Kundenverhalten</a></li>
 				<li><a href="/orders/campaigns">UTM-Kampagnen</a></li>
 				<li><a href="/orders/today">Echtzeit Bestelleingang</a></li>
+				<!--<li><a href="/readers/list">Bestellungen mit Usergroup (Beta)</a></li>-->
+				<!--<li><a href="/stats/compared">Kündigerverhalten (Longterm)</a></li>-->
 			</ul>
 		</li>
 
@@ -86,6 +88,16 @@
 				<li><a href="/portals">Portalvergleich</a></li>
 			</ul>
 		</li>
+
+
+		<li><a href="https://app.kilkaya.com" target="_blank" aria-haspopup="true">Kilkaya (Echtzeit)</a>
+			<ul class="dropdown" aria-label="submenu">
+				<li><a href="https://app.kilkaya.com" target="_blank" >Kilkaya - Livedashboards</a></li>
+				<li><a href="/orders/today">Plenigo Live-Bestelleingang</a></li>
+				<li><a href="/tv" target="_blank">TV Dashboard</a></li>
+			</ul>
+		</li>
+
 
 
 	</ul>

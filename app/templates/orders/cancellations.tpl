@@ -10,8 +10,6 @@
 Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum erfolgt sind</b>, und später zu einer Kündigung geführt haben. <br/>Es wird NICHT nach dem Kündigungszeitpunkt selektiert. Einige Diagramme wie die Kündigerquotenentwicklung stellen immer den Gesamtzeitraum dar.
 </p>
 
-
-
 <div class="meta-info-box">
 
 	<ul>
@@ -26,6 +24,51 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 	</ul>
 
 </div>
+
+
+<div class="col-2" style="grid-template-columns: 1fr 1fr; margin-top: 2em; margin-bottom:0em;">
+
+
+		<figure class="mb">
+			<h3 class="text-center">Bestelleingang</h3>
+			<?=$charts->create([
+				'metric' => $longterm['orders'],
+				'dimension' => $longterm['dimensions'],
+				'color' => '#314e6f',
+				'height' => 280,
+				'area' => true,
+				'name' => 'Zuwachs an aktiven Kunden',
+				'template' => 'charts/default_line_chart',
+			]);?>
+		</figure>
+
+
+
+
+
+
+		<figure class="mb">
+			<h3 class="text-center">Plusseiten Bestellquote</h3>
+			<p class="nt text-center">Kunden die über die Plusseite gekauft haben</p>
+			<?=$charts->create([
+				'metric' => $longterm['quotePlusPage'],
+				'dimension' => $longterm['dimensions'],
+				'color' => '#314e6f',
+				'height' => 250,
+				'area' => true,
+				'percent' => true,
+				'name' => 'Anteil von Käufen über die Plusseite',
+				'template' => 'charts/default_line_chart',
+			]);?>
+		</figure>
+
+</div>
+
+
+
+
+
+
 
 
 <div class="col-2" style="grid-template-columns: 1fr 1.5fr 1fr; margin-top: 2em; margin-bottom:0em;">
@@ -65,7 +108,7 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 
 	<?php if ($reasons_chart): ?>
 	<figure class="">
-		<h3 class="text-center">Kündigungsgründe</h3>
+		<h3 class="text-center">Kündigungsgründe: <?=$reasons?></h3>
 		<?=$charts->create([
 			'metric' => $reasons_chart['metrics'] ,
 			'dimension' => $reasons_chart['dimensions'],
@@ -82,23 +125,6 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 		<p class="nt orangebg"> Keine Daten Verfügbar</p>
 	</figure>
 	<?php endif ?>
-
-	<!--
-	<figure class="">
-		<h3 class="text-center">Anteile Kündiger-Cluster</h3>
-		<p class="nt text-center">Eingeteilt nach Kündigerzeiträumen</p>
-		<?=$charts->create([
-			'metric' => $churnSameDay . ',' . $churn30 . ',' . $churn90 . ',' . $churnAfter90 ,
-			'dimension' => "'am 1 Tag gekündigt','innerhalb 30 Tagen',' innerhalb 90 Tagen', 'nach 90 Tagen'",
-			'color' => '#f77474',
-			'height' => 300,
-			'legend' => 'right',
-			'name' => 'Kündiger',
-			'template' => 'charts/default_donut_chart',
-		]);?>
-	</figure>
-
-	-->
 
 </div>
 

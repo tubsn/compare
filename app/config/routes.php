@@ -9,7 +9,7 @@ $routes->get('/cards', 'Lists@cards');
 $routes->get('/emo', 'Stats@test');
 $routes->get('/freecharts', 'Stats@freecharts');
 $routes->get('/teasers[/{date}]', 'Teaser@index');
-
+$routes->get('/test/{id:\d+}', 'Test@index');
 
 // Article Lists
 $routes->get('/unclassified/types', 'Lists@unset_only');
@@ -55,8 +55,11 @@ $routes->get('/print/local/cancelled', 'Orders@map_print_local_cancelled');
 $routes->get('/print/germany/cancelled', 'Orders@map_print_germany_cancelled');
 
 // Orders
-$routes->get('/orders', 'Orders@stats');
-$routes->get('/orders/list', 'Orders@list');
+$routes->get('/orders', 'Orders@list');
+$routes->get('/orders/list-cancellactions', 'Orders@list_cancellations');
+$routes->get('/orders/last-cancellactions', 'Orders@list_cancellations');    // Delete this later!
+$routes->get('/orders/behavior', 'Orders@customer_behavior');
+$routes->get('/orders/clustered', 'Orders@clustered');
 $routes->get('/orders/map/local', 'Orders@map_local');
 $routes->get('/orders/map/germany', 'Orders@map_germany');
 $routes->get('/orders/map/local/cancelled', 'Orders@map_local_cancelled');
@@ -67,7 +70,7 @@ $routes->get('/orders/import/{date:[\d]{4}-[\d]{2}-[\d]{2}?}', 'Import@order_imp
 $routes->get('/orders/live', 'Livedata@index');
 $routes->get('/orders/yesterday', 'Livedata@orders_yesterday');
 $routes->get('/orders/today', 'Livedata@orders_today');
-$routes->get('/orders/cancellations', 'Orders@cancellations');
+
 $routes->get('/orders/payguys', 'LongtermAnalysis@started_payment');
 
 $routes->get('/orders/{id:\d+}', 'Livedata@order');
@@ -122,6 +125,9 @@ $routes->get('/api/teaser/{date}/{hour}', 'Teaser@api_positions');
 // Readers
 $routes->get('/readers/{id:[\d]{12}?}', 'Readers@detail');
 $routes->get('/readers/list[/{segment}]', 'Readers@list');
+$routes->get('/readers/sessionlist', 'Readers@session_list');
+$routes->get('/readers/engagement', 'Readers@engagement_alert');
+
 $routes->get('/readers/import', 'Import@import_readers');
 
 // Article Details
@@ -158,6 +164,7 @@ $routes->get('/export/linkpulse/halftime', 'Exports@linkpulse_halftime');
 $routes->get('/newsletter/chefredaktion', 'Newsletter@chefredaktion');
 $routes->get('/newsletter/sport', 'Newsletter@sport_newsletter');
 $routes->get('/newsletter/nachdrehalert', 'Newsletter@nachdreh_alert');
+$routes->get('/newsletter/nachdrehalert/{region}', 'Newsletter@nachdreh_alert_filtered');
 $routes->get('/newsletter/nachdrehalert-score', 'Newsletter@nachdreh_alert_score');
 
 // Incentives
@@ -175,6 +182,8 @@ $routes->get('/admin/topics', 'Warmup@topic_clusters');
 $routes->get('/admin/warmup', 'Warmup@daterange');
 $routes->get('/admin/warmup_conversions[/{daysago}]', 'Warmup@conversions');
 $routes->get('/admin/warmup/subscribers', 'Warmup@subscribers');
+$routes->get('/admin/warmup/readers', 'Warmup@readers');
+$routes->get('/admin/warmup/buyintentions', 'Warmup@buy_intentions');
 $routes->get('/admin/warmup/sources[/{daysago}]', 'Warmup@enrich_conversions_with_ga');
 $routes->get('/admin/warmup/buyintents[/{daysago}]', 'Warmup@enrich_article_with_buy_intents');
 $routes->get('/admin/warmup/{weeksago}', 'Warmup@weeks_ago');

@@ -42,6 +42,7 @@ class Campaigns extends Model
 		 	 campaigns.utm_source,
 			 campaigns.utm_medium,
 			 campaigns.utm_campaign,
+			 campaigns.utm_term,
 			 conversions.article_id as article_id,
 			 conversions.article_ressort as article_ressort,
 			 conversions.order_price as order_price,

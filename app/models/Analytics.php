@@ -47,7 +47,7 @@ class Analytics
 		$this->ga->to = $to;
 		$this->ga->dimensions = 'ga:eventLabel';
 		$this->ga->sort = 'ga:eventLabel';
-		$this->ga->filters = 'ga:pagePath=@' . $articleID . ';ga:eventLabel=@register;ga:eventCategory==artikel';
+		$this->ga->filters = 'ga:pagePath=@' . $articleID . ';ga:eventLabel=@subscription btn;ga:eventCategory==article';
 		$this->ga->maxResults = '365';
 
 		$this->ga->fetch();
@@ -156,7 +156,7 @@ class Analytics
 		$this->ga->sort = '-ga:transactions';
 		}
 		else {
-		$this->ga->dimensions = 'ga:date,ga:source,ga:medium,ga:campaign,ga:transactionId';
+		$this->ga->dimensions = 'ga:date,ga:source,ga:medium,ga:campaign,ga:keyword,ga:transactionId';
 		$this->ga->sort = '-ga:date';
 		}
 

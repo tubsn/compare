@@ -63,7 +63,7 @@ Vue.createApp({
 
 <h1 class="text-center">Teaser Performance für {{ date }}</h1>
 
-<div class="text-center" style="margin-bottom:4em"><b>Hinweis:</b> Aktuell stehen nur Daten vom 16 - 21.02.2022 zur Verfügung. <br>Es werden nur Artikel angezeigt, wenn dieser mindestens 120 mal eingeblendet wurde. <br>Links befinden sich die <b>Klickdaten in dieser Stunde</b> - Rechts die Gesamtklicks des Artikels.</div>
+<div class="text-center" style="margin-bottom:4em"><b>Hinweis:</b> Aktuell stehen nur LR-Daten vom 16.02 - 28.03.2022 zur Verfügung. <br>Es werden nur Artikel angezeigt, wenn dieser mindestens 120 mal eingeblendet wurde. <br>Links befinden sich die <b>Klickdaten in dieser Stunde</b> - Rechts die Gesamtklicks des Artikels.</div>
 
 
 <h1 class="text-center" v-if="!positions">Sorry für diesen Zeitraum stehen keine Daten zur Verfügung</h1>

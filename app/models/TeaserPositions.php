@@ -2,6 +2,7 @@
 
 namespace app\models;
 use \flundr\mvc\Model;
+use \flundr\cache\RequestCache;
 use \app\models\Orders;
 use \app\models\Articles;
 
@@ -18,11 +19,14 @@ class TeaserPositions
 
 	public function get($date = 'today', $hour = 0) {
 
+		//$date = date('j.n.y', strtotime($date));
 		$date = date('d.m.Y', strtotime($date));
 		$hour = intval($hour);
 
 		$this->apply_filter('day_partition', $date, 1);
 		$this->apply_filter('hour', $hour);
+
+		if (empty($this->data)) {return [];}
 
 		$max = max(array_column($this->data,'article_position')); // Max Positions
 
@@ -41,8 +45,8 @@ class TeaserPositions
 		$positions = array_values($this->filter('article_position', $pos));
 
 		// Sort by a Value
-		//$exposures = array_column($positions, 'total_exposures');
-		//array_multisort($exposures, SORT_DESC, $positions);
+		$exposures = array_column($positions, 'total_exposures');
+		array_multisort($exposures, SORT_DESC, $positions);
 
 		return array_map([$this, 'combine_teaser_with_article'], $positions);
 	}
@@ -76,6 +80,14 @@ class TeaserPositions
 
 	public function import_csv() {
 
+		$cache = new RequestCache('driveklicks' . PORTAL, 60*60);
+		
+		$cachedData = $cache->get();
+		if ($cachedData) {
+			$this->data = $cachedData;
+			return;
+		}
+
 		$path = ROOT . 'import/drive_clickrates.csv';
 
 		if (!file_exists($path)) {
@@ -83,13 +95,17 @@ class TeaserPositions
 		}
 
 		$data = file($path, FILE_IGNORE_NEW_LINES);
-		$header = str_getcsv(array_shift($data));
-		$csv = array_map('str_getcsv', $data);
+		$header = str_getcsv(array_shift($data),';');
+		//$csv = array_map('str_getcsv', $data);
+		$csv = array_map(function($set){
+			return str_getcsv($set,";");
+		},$data);
 
 		foreach ($csv as $key => $row) {
 		    $csv[$key] = array_combine($header, $row);
 		}
 
+		$cache->save($csv);
 		$this->data = $csv;
 
 	}
@@ -98,7 +114,8 @@ class TeaserPositions
 
 		if ($onlyDays) {
 			$set = array_filter($this->data, function($data) use ($index, $value){
-				return substr($data[$index],0,10) == $value;
+				$date = explode(' ', $data[$index])[0];
+				return $date == $value;
 			});
 		}
 

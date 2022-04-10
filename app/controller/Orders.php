@@ -29,9 +29,31 @@ class Orders extends Controller {
 		$viewData['externalOnly'] = count($this->Orders->filter_external($viewData['orders']));
 		$viewData['umwandlungOnly'] = count($this->Orders->filter_umwandlung($viewData['orders']));
 		$viewData['averageRetention'] = $this->Orders->average($this->Orders->filter_cancelled($viewData['orders']),'retention');
+		$viewData['mediatimeMax'] = max(array_column($viewData['orders'], 'customer_cancel_mediatime'));
 
-		$this->view->title = 'Bestellübersicht';
+		$this->view->title = 'Bestelldaten - Eingang';
 		$this->view->render('orders/list', $viewData);
+
+	}
+
+	public function list_cancellations() {
+
+		Session::set('referer', '/orders/list-cancellactions');
+
+		$viewData['cancellations'] = $this->Orders->cancellations_plain();
+		$viewData['championOnly'] = count($this->Orders->filter_cancel_segment($viewData['cancellations'],'champion'));
+		$viewData['loyalOnly'] = count($this->Orders->filter_cancel_segment($viewData['cancellations'],'loyal'));
+		
+		$viewData['averageRetention'] = $this->Orders->average($this->Orders->filter_cancelled($viewData['cancellations']),'retention');
+
+		$mtMAX = max(array_column($viewData['cancellations'], 'customer_cancel_mediatime'));
+		$mtSUM = array_sum(array_column($viewData['cancellations'], 'customer_cancel_mediatime'));
+		$mtAVG = $mtSUM / count($viewData['cancellations']);
+
+		$viewData['mediatimeMax'] = 5000;
+
+		$this->view->title = 'Kündigungsdaten - Eingang';
+		$this->view->render('orders/cancellations-list', $viewData);
 
 	}
 
@@ -49,7 +71,7 @@ class Orders extends Controller {
 
 	}
 
-	public function stats() {
+	public function clustered() {
 
 		Session::set('referer', '/orders');
 
@@ -95,9 +117,9 @@ class Orders extends Controller {
 	}
 
 
-	public function cancellations() {
+	public function customer_behavior() {
 
-		Session::set('referer', '/orders/cancellations');
+		Session::set('referer', '/orders/behavior');
 
 		$this->view->title = 'Kundenverhalten und Kündigerentwicklung';
 		$this->view->info = null;
@@ -117,8 +139,12 @@ class Orders extends Controller {
 			$reasonChart = $this->Charts->convert($reasons);
 			$reasonChart['metrics'] = implode(',' ,$reasons);
 			$viewData['reasons_chart'] = $reasonChart;
+			$viewData['reasons'] = array_sum($reasonData) - $reasonData[0];
 		}
-		else {$viewData['reasons_chart'] = null;}
+		else {
+			$viewData['reasons_chart'] = null;
+			$viewData['reasons'] = 0;
+		}
 
 		if ($viewData['orders']) {
 			$viewData['cancelQuote'] = round(($viewData['numberOfCancelled'] / $viewData['numberOfOrders']) * 100, 1);
@@ -153,6 +179,8 @@ class Orders extends Controller {
 
 	public function map_local($cancelled = false) {
 
+		Session::set('referer', '/orders/map/local');
+
 		$datasets = count($this->Orders->group_by('customer_postcode') ?? 0);
 		$this->view->title = 'Verteilung von Käufen nach Postleitzahl - Datensätze: ' . $datasets;
 
@@ -166,6 +194,8 @@ class Orders extends Controller {
 	}
 
 	public function map_germany($cancelled = false) {
+
+		Session::set('referer', '/orders/map/germany');
 
 		$datasets = count($this->Orders->group_by('customer_postcode') ?? 0);
 		$this->view->title = 'Verteilung von Käufen nach Postleitzahl - Datensätze: ' . $datasets;
@@ -186,6 +216,8 @@ class Orders extends Controller {
 
 	public function map_print_local($cancelled = false) {
 
+		Session::set('referer', '/print/local');
+
 		$this->view->title = 'LR Printabos nach Postleitzahl (54336 Abonennten)';
 
 		if ($cancelled) {
@@ -198,6 +230,8 @@ class Orders extends Controller {
 	}
 
 	public function map_print_germany($cancelled = false) {
+
+		Session::set('referer', '/print/germany');
 
 		$this->view->title = 'LR Printabos nach Postleitzahl (54336 Abonennten)';
 

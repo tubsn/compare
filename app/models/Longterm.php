@@ -98,13 +98,15 @@ class Longterm extends Model
 			$pageviews = $this->KPIs->sum('pageviews') ?? 0;
 			$sessions = $this->KPIs->sum('sessions') ?? 0;
 			$subscribers = $this->KPIs->sum('subscribers') ?? 0;
+			
 			$articles = $this->Articles->count();
+			$buyintents = $this->Articles->sum('buyintent');
 			$plus = $this->Articles->count_with_filter('plus = 1');
 
 			$scoreArticles = count($this->Articles->score_articles() ?? []);
 
 			$spielmacher = $this->Articles->count_with_filter('conversions>0 AND subscribers>=100');
-			$geister = $this->Articles->count_with_filter('(conversions IS NULL OR conversions=0) AND subscribers <= 100');
+			$geister = $this->Articles->count_with_filter('(conversions IS NULL OR conversions=0) AND subscribers < 100');
 
 			$avgmediatime = $this->KPIs->avg('avgmediatime');
 
@@ -113,6 +115,7 @@ class Longterm extends Model
 			$output[$dimension]['pageviewsmio'] = round($pageviews/1000000,2);
 			$output[$dimension]['subscribers'] = $subscribers;
 			$output[$dimension]['avgmediatime'] = round($avgmediatime,2);
+			$output[$dimension]['buyintents'] = $buyintents;
 			$output[$dimension]['articles'] = $articles;
 			$output[$dimension]['plusarticles'] = $plus;
 			$output[$dimension]['spielmacher'] = $spielmacher;
@@ -156,28 +159,31 @@ class Longterm extends Model
 			$this->Orders->to = $period['to'];
 
 			$orders = $this->Orders->count();
+			$plusPageOrders = $this->Orders->count_pluspage();
 			$cancelled = $this->Orders->count_cancelled();
 
 			$churnSameDay = $this->Orders->sum_up($this->Orders->cancelled_by_retention_days('retention = 0'),'cancelled_orders');
 			$churn30 = $this->Orders->sum_up($this->Orders->cancelled_by_retention_days('retention < 31'),'cancelled_orders');
 			$churn90 = $this->Orders->sum_up($this->Orders->cancelled_by_retention_days('retention < 90'),'cancelled_orders');
-			$churnAfter90 = $this->Orders->sum_up($this->Orders->cancelled_by_retention_days('retention > 90'),'cancelled_orders');
+			$churn6M = $this->Orders->sum_up($this->Orders->cancelled_by_retention_days('retention < 180'),'cancelled_orders');
 
 			$output[$dimension]['orders'] = $orders;
+			$output[$dimension]['plusPageOrders'] = $plusPageOrders;
 			$output[$dimension]['cancelled'] = $cancelled;
 			$output[$dimension]['cancelledNegative'] = $cancelled * -1;
 			$output[$dimension]['active'] = $orders - $cancelled;
 			$output[$dimension]['churnSameDay'] = $churnSameDay;
 			$output[$dimension]['churn30'] = $churn30;
 			$output[$dimension]['churn90'] = $churn90;
-			$output[$dimension]['churnAfter90'] = $churnAfter90;
+			$output[$dimension]['churn6M'] = $churn6M;
 			$output[$dimension]['churnProbe'] = $churn30;
 
 			$output[$dimension]['quote'] = percentage($cancelled, $orders);
+			$output[$dimension]['quotePlusPage'] = percentage($plusPageOrders, $orders);
 			$output[$dimension]['quoteChurnSameDay'] = percentage($churnSameDay, $orders);
 			$output[$dimension]['quoteChurn30'] = percentage($churn30, $orders);
 			$output[$dimension]['quoteChurn90'] = percentage($churn90, $orders);
-			$output[$dimension]['quoteChurnAfter90'] = percentage($churnAfter90, $orders);
+			$output[$dimension]['quoteChurn6M'] = percentage($churn6M, $orders);
 			$output[$dimension]['quoteChurnProbe'] = percentage($churn30, $orders);
 
 			$output[$dimension]['activeAfterProbe'] = null;

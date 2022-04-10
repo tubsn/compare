@@ -598,21 +598,23 @@ class Articles extends Model
 	}
 
 
-	public function score_articles($minScore = 100) {
+	public function score_articles($minScore = 100, $filter = null) {
 
 		$minScore = intval($minScore);
+		if (!is_null($filter)) {$filter = "AND ($filter)";}
 
 		$SQLstatement = $this->db->connection->prepare(
 			"SELECT *,
 			 round(sum(
-			 	(conversions * 20) + (pageviews / 1000 * 5) +
-			 	((avgmediatime / 10) * 2) + (subscribers / 100 * 3)
+			 	(IFNULL(conversions, 0) * 20) + (IFNULL(pageviews, 0) / 1000 * 5) +
+			 	((IFNULL(avgmediatime, 0) / 10) * 2) + (IFNULL(subscribers, 0) / 100 * 3)
 			 ),1) as score
 			 FROM `articles`
 			 WHERE (DATE(`pubdate`) BETWEEN :startDate AND :endDate)
 			 AND pageviews >= 100
+			 $filter
 			 GROUP BY id
-			 HAVING score > $minScore
+			 HAVING score >= $minScore
 			 ORDER BY score DESC, pageviews DESC
 			 LIMIT 0, 1000"
 		);
@@ -632,9 +634,9 @@ class Articles extends Model
 			"SELECT ressort,
 			ressort,
 			 COUNT( if(conversions>0 AND subscribers>=100, 1, NULL) ) as spielmacher,
-			 COUNT( if(conversions>0 AND subscribers<=100, 1, NULL) ) as stuermer,
+			 COUNT( if(conversions>0 AND subscribers<100, 1, NULL) ) as stuermer,
 			 COUNT( if((conversions IS NULL OR conversions=0) AND subscribers>=100, 1, NULL) ) as abwehr,
-			 COUNT( if((conversions IS NULL OR conversions=0) AND subscribers<=100, 1, NULL) ) as geister,
+			 COUNT( if((conversions IS NULL OR conversions=0) AND subscribers<100, 1, NULL) ) as geister,
 			 COUNT(id) as artikel
 
 			 FROM `articles`
@@ -655,8 +657,8 @@ class Articles extends Model
 
 	public function valueables_by_group($group) {
 
-		$filter = 'AND (conversions IS NULL OR conversions=0) AND subscribers<=100';
-		if ($group == 'stuermer') {$filter = 'AND conversions>0 AND subscribers<=100';}
+		$filter = 'AND (conversions IS NULL OR conversions=0) AND subscribers<100';
+		if ($group == 'stuermer') {$filter = 'AND conversions>0 AND subscribers<100';}
 		if ($group == 'abwehr') {$filter = 'AND (conversions IS NULL OR conversions=0) AND subscribers>=100';}
 		if ($group == 'spielmacher') {$filter = 'AND conversions>0 AND subscribers>=100';}
 
@@ -668,6 +670,7 @@ class Articles extends Model
 			"SELECT *
 			 FROM `articles`
 			 WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			 AND ressort != '' AND ressort != 'bilder' AND ressort != 'ratgeber'
 			 $filter
 			 ORDER BY pubdate DESC
 			 LIMIT 0, $limit"

@@ -20,8 +20,8 @@ table td.narrow {max-width:100%;}
 
 
 <div style="display:flex; align-items:start; gap:2em;">
-	<?=dump_table($conversions);?>
-	<?=dump_table($conversionsGrouped);?>
+	<?=dump_table($data);?>
+	<?=dump_table($grouped);?>
 </div>
 
 

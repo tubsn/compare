@@ -379,6 +379,7 @@
 
 </div>
 
+
 <div class="col-2" style="grid-template-columns: 1fr 1fr 1fr">
 
 	<figure class="mb">
@@ -433,6 +434,64 @@
 
 </div>
 
+
+
+<div class="col-2" style="grid-template-columns: 1fr 1fr 1fr; margin-top:0em;">
+
+
+	<figure class="mb">
+		<h3 class="text-center">Kündigerquoten nach 6 Monaten</h3>
+		<?=$charts->create([
+			'metric' => [$charts->cut($lr['order']['quoteChurn6M'],6),
+			 			 $charts->cut($moz['order']['quoteChurn6M'],6),
+			  	 		 $charts->cut($swp['order']['quoteChurn6M'],6)],
+			'dimension' => $charts->cut($swp['order']['dimensions'],6),
+			'color' => ['#df886d', '#0967a8', '#e50046'],
+			'height' => 350,
+			'legend' => 'top',
+			'percent' => true,
+			'area' => false,
+			'name' => ['LR', 'MOZ', 'SWP'],
+			'template' => 'charts/default_line_chart',
+		]);?>
+	</figure>
+
+
+	<figure class="mb">
+		<h3 class="text-center">Anteil von Käufen über Plusseite</h3>
+		<?=$charts->create([
+			'metric' => [$charts->cut($lr['order']['quotePlusPage'],0),
+			 			 $charts->cut($moz['order']['quotePlusPage'],0),
+			  	 		 $charts->cut($swp['order']['quotePlusPage'],0)],
+			'dimension' => $charts->cut($swp['order']['dimensions'],0),
+			'color' => ['#df886d', '#0967a8', '#e50046'],
+			'height' => 350,
+			'legend' => 'top',
+			'percent' => true,
+			'area' => false,
+			'name' => ['LR', 'MOZ', 'SWP'],
+			'template' => 'charts/default_line_chart',
+		]);?>
+	</figure>
+
+	<figure class="mb">
+		<h3 class="text-center">Käufe über Plusseite</h3>
+		<?=$charts->create([
+			'metric' => [$charts->cut($lr['order']['plusPageOrders'],0),
+			 			 $charts->cut($moz['order']['plusPageOrders'],0),
+			  	 		 $charts->cut($swp['order']['plusPageOrders'],0)],
+			'dimension' => $charts->cut($swp['order']['dimensions'],0),
+			'color' => ['#df886d', '#0967a8', '#e50046'],
+			'height' => 350,
+			'legend' => 'top',
+			'percent' => false,
+			'showValues' => false,
+			'name' => ['LR', 'MOZ', 'SWP'],
+			'template' => 'charts/default_bar_chart',
+		]);?>
+	</figure>
+
+</div>
 
 <hr>
 <h1 class="text-center">Aktive / Ungekündigte Kunden</h1>
@@ -613,7 +672,5 @@
 </div>
 
 </details>
-
-
 
 </main>

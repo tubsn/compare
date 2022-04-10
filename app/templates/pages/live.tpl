@@ -30,7 +30,7 @@ Pageviews: <b class="pageviews"><?=number_format($pageviews,0,',','.')?></b>
 <?php include tpl('charts/livechart');?>
 
 <?php if ($articles): ?>
-<h3>Meist geklickte Artikel (Daten aus Linkpulse):</h3>
+<h3>Meist geklickte Artikel (Daten aus Kilkaya):</h3>
 
 <table class="fancy js-sortable wide mbig">
 <thead>

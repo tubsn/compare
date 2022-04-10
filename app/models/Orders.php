@@ -86,6 +86,24 @@ class Orders extends Model
 
 	}
 
+	public function cancellations_plain() {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT *
+			 FROM `conversions`
+			 WHERE DATE(`subscription_cancellation_date`) BETWEEN :startDate AND :endDate
+			 ORDER BY subscription_cancellation_date DESC"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall();
+		return $output;
+
+	}
+
 
 	public function kpi_grouped_by($kpi, $groupby = 'ressort', $operation = 'sum', $filter = null) {
 
@@ -183,6 +201,10 @@ class Orders extends Model
 
 	public function count_cancelled() {
 		return $this->count('cancelled = 1');
+	}
+
+	public function count_pluspage() {
+		return $this->count("order_origin = 'Plusseite'");
 	}
 
 	public function list_distinct($column) {
@@ -351,6 +373,23 @@ class Orders extends Model
 
 	}
 
+
+	public function cancelled_days_ago($days = 3) {
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT *
+			 FROM `conversions`
+			 WHERE DATE(`subscription_cancellation_date`) >= DATE_SUB(CURRENT_DATE, INTERVAL :days DAY)
+			 "
+		);
+
+		$SQLstatement->execute([':days' => $days]);
+		$output = $SQLstatement->fetchall();
+
+		return $output;		
+
+	}
+
 	public function cancelled_by_retention_days($filter = null) {
 
 		$from = strip_tags($this->from);
@@ -430,7 +469,27 @@ class Orders extends Model
 		return array_filter($orders, function($order) {
 			if ($order['cancelled']) {return $order;}
 		});
+	}
 
+	public function filter_buy_segment($orders, $segment = '') {
+		if (empty($orders)) {return [];}
+		return array_filter($orders, function($order) use ($segment) {
+			if ($order['customer_order_segment'] == $segment) {return $order;}
+		});
+	}
+
+	public function filter_cancel_segment($orders, $segment = '') {
+		if (empty($orders)) {return [];}
+		return array_filter($orders, function($order) use ($segment) {
+			if ($order['customer_cancel_segment'] == $segment) {return $order;}
+		});
+	}
+
+	public function filter_cancel_reason($orders, $reason = '') {
+		if (empty($orders)) {return [];}
+		return array_filter($orders, function($order) use ($reason) {
+			if ($order['customer_order_segment'] == $reason) {return $order;}
+		});
 	}
 
 	public function filter_plus_only($orders) {

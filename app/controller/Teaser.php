@@ -31,7 +31,7 @@ class Teaser extends Controller {
 	public function api_positions($date, $hour) {
 
 		$sets = $this->TeaserPositions->get($date, $hour);
-
+	
 		//dd($sets);
 
 		$this->view->json($sets);

@@ -79,10 +79,6 @@ class Newsletter extends Controller {
 		$this->Orders->to = $yesterday;
 		$viewData['stats']['conversions'] = $this->Orders->count();
 
-		//$this->Articles->from = $yesterday;
-		//$this->Articles->to = $yesterday;
-		//$viewData['stats']['subscribers'] = $this->Articles->sum('subscribers');
-
 		$viewData['stats']['date'] = $yesterday;
 		$viewData['stats']['weekday'] = date('w', strtotime('yesterday'));
 
@@ -98,6 +94,44 @@ class Newsletter extends Controller {
 		$this->view->render('newsletter/nachdreh-alert', $viewData);
 
 	}
+
+	public function nachdreh_alert_filtered($region = null, $send = false) {
+
+		$regioDB = [
+			'spreewald' => ['limit' => 30, 'filter' => "ressort = 'luckau' || ressort = 'luebben' || ressort = 'luebbenau'"],
+		];
+
+		if (!isset($regioDB[$region])) {
+			throw new \Exception("Unbekannte Ressort Region", 404);
+			
+		}
+
+		$this->Articles->from = date('Y-m-d', strtotime('-3days'));
+		$this->Articles->to = date('Y-m-d', strtotime('-1days'));
+		$viewData['articles'] = $this->Articles->score_articles($regioDB[$region]['limit'], $regioDB[$region]['filter']);
+
+		if (empty($viewData['articles'])) {
+			throw new \Exception("Keine Artikel in diesem Zeitraum gefunden");
+		}
+
+		$yesterday = date('Y-m-d', strtotime('yesterday'));
+		$viewData['stats']['date'] = $yesterday;
+		$viewData['stats']['weekday'] = date('w', strtotime('yesterday'));
+		$viewData['stats']['region'] = ucfirst($region);
+
+		$infoMail = new Email();
+		$infoMail->subject = ucfirst($region) . ' - Nachdreh-Alert am ' . TAGESNAMEN[date('w', strtotime('today'))];
+		$infoMail->to = ['harriet.stuermer@lr-online.de'];
+		$infoMail->cc = ['sebastian.butt@lr-online.de'];
+
+		if ($send) {
+			$infoMail->send('newsletter/nachdreh-alert-filtered', $viewData);
+		}
+
+		$this->view->render('newsletter/nachdreh-alert-filtered', $viewData);
+
+	}
+
 
 
 	public function nachdreh_alert_score($send = false) {
@@ -173,6 +207,17 @@ class Newsletter extends Controller {
 		} catch (\Exception $e) {
 			echo '<b>Nachdreh-Alert gescheitert:</b> ' . $e->getMessage();
 		}
+
+		try {
+			if (PORTAL == 'LR') {
+				$this->nachdreh_alert_filtered('spreewald', true);
+				echo 'Spreewald Newsletter erfolgreich versand';
+			}
+		} catch (\Exception $e) {
+			echo '<b>Spreewald Newsletter gescheitert:</b> ' . $e->getMessage();
+		}
+
+		echo '<br>';
 
 		echo '<h3>Versand abgeschlossen</h3>';
 

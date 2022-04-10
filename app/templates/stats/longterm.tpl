@@ -88,9 +88,12 @@
 
 </div>
 
-<figure style="margin-bottom:4em">
 
-	<table class="fancy neutral wide">
+<?php $salesData = array_reverse($salesData);?>
+
+<figure style="margin-bottom:4em; overflow-y: hidden;">
+
+	<table class="fancy neutral wide" style="max-width:100%; overflow-y: scroll;">
 
 		<tr>
 			<th style="text-align:right">Monat</th>
@@ -277,6 +280,8 @@
 
 
 	<h3 class="text-center">Pageviews</h3>
+
+	<?php $kpiHistory = array_reverse($kpiHistory);?>
 
 	<table class="fancy neutral wide" style="margin-bottom:3em">
 
@@ -515,7 +520,21 @@
 
 </div>
 
-
 <p class="text-center" style="margin-top:-1em; margin-bottom:4em;">App Nutzer sind <b>aktive User in dem Zeitraum</b> (nicht die Anzahl der App installationen).</p>
+
+<figure class="mb">
+	<h3 class="text-center">Kaufreiz zu Bestellung</h3>
+	<?=$charts->create([
+		'metric' => [$charts->cut_left($kpis['buyintents'],5), $orders['orders']],
+		'dimension' => $orders['dimensions'],
+		'color' => ['#e29881','#82b292'],
+		'height' => 450,
+		'legend' => 'top',
+		'area' => true,
+		'name' => ['Klicks auf Bestellknopf','Bestellungen'],
+		'template' => 'charts/default_line_chart',
+	]);?>
+</figure>
+
 
 </main>

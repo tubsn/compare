@@ -90,6 +90,15 @@ Hier können Artikel, Conversions und Kampagnendaten inklusive Klick- und Kündi
 
 <hr>
 
+	<h3>Drive Usersegmente Importieren</h3>
+	<p>Hier werden aus den Drive Tabellen alle Usersegmente von Käufern und Kündigern der letzten 3 Tage importiert.</p>
+
+	<a class="button noline" href="/admin/warmup/readers">Drive Segmente importieren</a>
+	</p>
+
+
+<hr>
+
 	<h3>Linkpulse - Subscriber Daten</h3>
 	<p>Subscriberdaten werden täglich um 3 Uhr morgens für alle Artikel der letzten 3 Tage, aktualisiert.</p>
 
@@ -103,6 +112,23 @@ Hier können Artikel, Conversions und Kampagnendaten inklusive Klick- und Kündi
 		</label>
 	</fieldset>
 	<button class="mb" type="submit">Subscriber-Daten aktualisieren</button>
+	</form>
+
+<hr>
+
+	<h3>Analytics - Kaufreiz Daten (Paywallklicks)</h3>
+	<p>Kaufreiz werden täglich um 3 Uhr morgens für alle Artikel der letzten 3 Tage, aktualisiert.</p>
+
+	<form method="get" action="/admin/warmup/buyintentions">
+		<fieldset class="col-2">
+		<label>von:
+			<input type="date" name="from">
+		</label>
+		<label>bis:
+			<input type="date" name="to">
+		</label>
+	</fieldset>
+	<button class="mb" type="submit">Kaufreiz-Daten aktualisieren</button>
 	</form>
 
 
