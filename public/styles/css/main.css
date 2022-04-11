@@ -22,6 +22,8 @@ main {width:90%; margin:0 auto;}
 body {font-size:1.3em;}
 }
 
+form {margin-bottom:0em;}
+
 .snowbg {background-image: url('/styles/img/snowy_bg.png'); background-size: 100%;background-position: bottom; background-repeat: no-repeat; width: 99%; height: 300px; margin-bottom: 0; margin-top: -257px; position: relative; z-index: 10; pointer-events: none;}
 
 h3 + h1 {margin-top:-.5em;}
@@ -137,6 +139,8 @@ th.text-left {text-align:left !important;}
 
 .select-audiences select {font-size:0.8em; max-width:80px;}
 
+.maxwidth {max-width:100%;}
+
 .condensed {font-family: 'fira sans condensed'}
 .nowrap {white-space: nowrap;}
 .nt {margin-top:-1em;}
@@ -210,6 +214,8 @@ a.type-link, a.type-link-light, a.audience-link {text-decoration: none; color: v
 .detail-layout {display:grid; grid-template-columns: 1fr 1fr 1fr; grid-gap:0em;}
 .settings-layout {display:grid; grid-template-columns: .3fr .3fr .3fr; grid-gap:2em; justify-content: space-between; }
 .stats-layout {display:grid; grid-template-columns: 1fr; grid-gap:0em; align-items:start;}
+.reader-layout {display:grid; grid-template-columns: 1fr 3fr max-content; grid-gap:2em; align-items:start;}
+
 
 .conversion-tables-layout {display:grid; grid-template-columns: 1fr 1fr 1fr; grid-gap:2em; align-items: start}
 
@@ -286,6 +292,19 @@ background-repeat: no-repeat; transition: opacity 0.4s
 .searchbox button:focus, .searchbox button:hover {background-color:transparent !important}
 .searchbox:focus-within button {opacity:1; transition: opacity 0.1s}
 
+
+ul.order-list {margin:0; padding:0;}
+ul.order-list li {list-style-type: none; margin:0; box-sizing: border-box; margin-bottom:0.5em;}
+ul.order-list li {display:grid; grid-template-columns: 2fr 1fr;}
+ul.order-list li {padding:.2em .5em; background-color: var(--light-gray); border-radius:0.3em;}
+ul.order-list li:last-of-type {margin:0;}
+
+.current-subscription {padding:.2em .5em; background-color:var(--light-orange); display:inline-block; border-radius:0.3em;}
+.current-subscription.cancelled {background-color:var(--red); font-style:italic;}
+
+.reader-id {padding:.1em .4em; background-color:var(--light-gray); display:inline-block; border-radius:0.3em;}
+.reader-id {text-decoration:none;}
+.reader-id:hover {color:black; background-color:var(--light-blue)}
 
 .lifetime-stats-table {margin:0 auto; margin-bottom:1em;}
 .lifetime-stats-table tr td {border:0; padding:0; }

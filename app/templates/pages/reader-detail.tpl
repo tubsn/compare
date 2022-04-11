@@ -1,65 +1,174 @@
-<main class="">
+<main class="reader-detail">
+<div class="reader-layout mb">
 
-<article>
+<section>
 
-	<h1>Nutzer: <?=$user['user_id']?></h1>
-	<h3>Engagement-Segment: <?=$user['segment']?></h3>
+	<h1>Nutzer: <a class="reader-id" target="_blank" title="In Plenigo öffnen" href="https://backend.plenigo.com/<?=PLENIGO_COMPANY_ID?>/customers/<?=$reader['user_id']?>/show"><?=$reader['user_id']?></a></h1>
+	<h3>Portal: <?=$reader['portal']?? $reader['error']?></h3>
 
-	Portal: <?=$user['portal']?><br />
-	First-Seen: <?=formatDate($user['first_seen'],'Y-m-d h:i')?><br />
-	Last-Seen: <?=formatDate($user['last_seen'],'Y-m-d h:i')?><br />
-	Mediatime letzte Woche: <?=$user['media_time_last_week']?><br />
-	Mediatime Gesamt: <?=$user['media_time_total']?><br />
-	Conversion Wahrscheinlichkeit: <?=round($user['scores']['conversion_propensity_score'],2)?><br /><br />
+	<p>
+		Conversion Wahrscheinlichkeit: <?=round($reader['conversion_score'],2) * 100?>&thinsp;%
+		<div style="margin-bottom:1em; grid-template-columns: 1fr 1fr; grid-gap:0.5em;">
+			<div class="indicator plusleser" style="margin-top:-15px;">
+				<div style="width:<?=round($reader['conversion_score'],2) * 100?>%;"></div>
+			</div>
+		</div>
+	</p>
 
-	<p>- Platzhalter für Liste laufender Abos -</p>
-	<p><?=dump($user['additionalData'])?></p>
+	<p>
 
-	<hr/>
 
-	<h3>Gelesene Artikel:</h3>
-	<?php if ($user['lastArticles']): ?>
-	<table class="fancy wide js-sortable condensed">
-		<thead>
-			<tr>
-				<th>Dachzeile</th>
-				<th></th>
-				<th>Thumb</th>
-				<th>Title</th>
-				<th>Inhaltstyp</th>
-				<th>Ressort</th>
-				<th>Klicks</th>
-				<th>⌀-MT</th>
-				<th>Conv</th>
-				<th>Kündiger</th>
-				<th>Pubdate</th>
-			</tr>
-		</thead>
-		<tbody>
-		<?php foreach ($user['lastArticles'] as $article): ?>
-		<tr>
-			<td class="narrower text-right"><?=$article['kicker'] ?? '-'?></td>
-			<td><?php if (isset($article['plus']) && $article['plus']): ?><div class="bluebg">+</div><?php endif; ?></td>
+		<?php if ($subscription): ?>
+		Herkunft: <b><?=$subscription['customer_city']?>
+		<?php if ($subscription['ga_city']): ?> | <?=$subscription['ga_city']?><?php endif; ?></b><br>
+		<?php endif; ?>
 
-<td><img style="width:70px; height:40px; object-fit: cover;" src="<?=$article['image'] ?? '/styles/img/flundr/no-thumb.svg' ?>"></td>
+		<?php if ($mostRead): ?>
+		Lieblingsressort: <a href="/ressort/<?=key($mostRead)?>"><?=ucfirst(key($mostRead))?></a><br />
+		<?php endif; ?>
 
-			<td><a href="/artikel/<?=$article['id']?>"><?=$article['title']?></a></td>
-			<td><?=$article['type'] ?? '-'?></td>
-			<td><?=ucwords($article['ressort'] ?? '-')?></td>
-			<td class="text-right"><div<?php if (isset($article['pageviews']) && $article['pageviews']> 2500): ?> class="pageviews"<?php endif; ?>><?=number_format($article['pageviews'] ?? 0,0,'.','.')?></div></td>
-	<td><span class="<?php if ($article['avgmediatime'] > 150): ?>greenbg<?php endif; ?>"><?=number_format($article['avgmediatime'],0,'.','.') ?? 0?></span></td>
+		<?php if ($audience): ?>
+		Lieblingsaudience: <a href="/audience/<?=key($audience)?>"><?=ucfirst(key($audience))?></a><br />
+		<?php endif; ?>
 
-			<td class="text-right"><div<?php if (isset($article['conversions']) && $article['conversions'] > 0): ?> class="conversions"<?php endif; ?>><?=number_format($article['conversions'] ?? 0,0,'.','.')?></div></td>
-	<td class="narrower"><div<?php if ($article['cancelled'] > 0): ?> class="cancelled"<?php endif; ?>><?=$article['cancelled'] ?? '-'?></div></td>
+		<?php if ($cluster): ?>
+		Lieblingsthema: <a href="/type/<?=key($cluster)?>"><?=ucfirst(key($cluster))?></a><br />
+		<?php endif; ?>
 
-			<td><?=formatDate($article['pubdate'],'d.m.Y')?></td>
-		</tr>
-		<?php endforeach; ?>
-	</table>
+
+	</p>
+
+	<p>
+		Tracking seit: <b><?=formatDate($reader['first_seen'],'d.m.Y')?></b>
+	</p>
+
+</section>
+
+
+<section style="justify-self:center">
+
+	<?php if ($subscription): ?>
+	<h3>Aktuell laufendes Abo:</h3>
+
+	<div class="current-subscription" style="min-width:500px">
+		<b><?=$subscription['subscription_title']?> - <?=gnum($subscription['subscription_price'],2)?>€</b>
+
+		<br />
+		vom <b><?=formatDate($subscription['subscription_start_date'],'d.m.Y')?></b>
+		<?php if ($subscription['subscription_end_date']): ?>
+		bis <b><?=formatDate($subscription['subscription_end_date'],'d.m.Y')?></b>
+		<?php endif; ?>
+
+		<br />
+
+		(Subscription-ID: <a class="noline" target="_blank" title="In Plenigo öffnen" href="https://backend.plenigo.com/<?=PLENIGO_COMPANY_ID?>/subscriptions/chain/<?=$subscription['subscription_id']?>/show"><?=$subscription['subscription_id']?></a>)
+
+	</div>
+
+	<?php if ($subscription['cancelled']): ?>
+	<div class="current-subscription cancelled">bereits gekündigt<br />
+		<b>Grund: <?=CANCELLATION_REASON[$subscription['cancellation_reason'] ?? 0]?></b>
+	</div>
+	<?php endif; ?>
+
+
 	<?php else: ?>
-	Keine Lesedaten Vorhanden	
-	<?php endif ?>
+	<h3>Zur Zeit kein aktives Abo</h3>
+	<?php endif; ?>
 
-</article>
+	<details class="mt">
+	<summary>Bestell-Historie: <b class=""><?=$orderCount?></b></summary>
+
+
+	<ul class="order-list">
+	<?php foreach ($orders as $order): ?>
+		<li>
+			<div>
+			Order-ID: <b><a class="noline" target="_blank" title="In Plenigo öffnen" href="https://backend.plenigo.com/<?=PLENIGO_COMPANY_ID?>/orders/	<?=$order['order_id']?>/show"><?=$order['order_id']?></a></b><br />
+			<?=$order['order_title']?> - <?=gnum($order['order_price'],2)?>&thinsp;€
+
+			<?php if ($order['retention']): ?>
+			<br>Haltedauer: <b><?=$order['retention']?> Tage</b>
+			<?php endif; ?>
+
+			</div>
+
+			<div style="align-self:center; justify-self:end; text-align:right;">
+			von <b><?=formatDate($order['order_date'],'d.m.Y')?></b><br>
+			<?php if ($order['subscription_end_date']): ?>
+			bis <b><?=formatDate($order['subscription_end_date'],'d.m.Y')?></b>
+			<?php endif; ?>
+			</div>
+		</li>
+	<?php endforeach; ?>
+	</ul>
+
+	</details>
+
+			<?php if ($orderSources): ?>
+			Kauf Ressorts:
+			<?php foreach ($orderSources as $ressort => $amount): ?>
+				<?=ucfirst($ressort)?> (<?=$amount?>)
+			<?php endforeach; ?>
+			<br>
+			<?php endif; ?>
+
+</section>
+
+
+<section>
+
+	<h3>Drive-User-Segment: <div class="pageviews"><?=ucfirst($reader['segment'])?></div></h3>
+
+
+
+	<div class="col-2" style="grid-template-columns: min-content 1fr; grid-gap:1em;">
+
+		<figure style="background:#ddd; padding:2em; width:100px;">
+			<img src="/styles/img/flundr/icon-login.svg" style="width:100%;"/>
+		</figure>
+
+		<article>
+			<?php if ($reader['last_seen']): ?>
+			<p>
+				Zuletzt gesehen: <b><?=formatDate($reader['last_seen'],'d.m.Y')?></b>
+				(<?=substr(TAGESNAMEN[formatDate($reader['last_seen'],'w')],0,2)?>)
+				<br />Uhrzeit: <?=formatDate($reader['last_seen'],'h:i')?>&thinsp;Uhr
+			</p>
+			<?php endif; ?>
+			<p>
+				Nutzungsdauer	letzte Woche: <br/>
+				<b class="greenbg">Ø-<?=gnum($reader['media_time_last_week']/60/7)?> Minuten</b> pro Tag
+
+			</p>
+			<p>
+
+				Gesamt Mediatime:<br/><b>
+				<?=gmdate("H", $reader['media_time_total']);?>h
+				<?=gmdate("i", $reader['media_time_total']);?>m
+				<?=gmdate("s", $reader['media_time_total']);?>s
+			</b>
+			</p>
+
+
+
+		</article>
+
+	</div>
+
+</section>
+
+</div>
+
+<?php include tpl('pages/reader-article-list');?>
+
+<!--
+<hr/>
+<details><summary>Drive-Rohdaten anzeigen</summary>
+	<div class="maxwidth">
+		<?=dump($reader)?>
+	</div>
+</details>
+-->
 
 </main>

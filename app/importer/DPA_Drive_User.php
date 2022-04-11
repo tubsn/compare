@@ -18,10 +18,17 @@ class DPA_Drive_User
 
 	public function get($id) {
 
+		$cache = new RequestCache('reader-' . $id , 60 * 60);
+		$user = $cache->get();
+
+		if ($user) {return $user;}
+
 		$user = $this->curl('/user?id='.$id);
 		if (isset($user['detail'])) {
 			throw new \Exception("User Not Found");
 		}
+
+		$cache->save($user);
 		return $user;
 	}
 
@@ -29,6 +36,7 @@ class DPA_Drive_User
 	private function generate_bearer_token() {
 
 		$cache = new RequestCache('userbearertoken', 3 * 60 * 60);
+		$cache->cacheDirectory = ROOT . 'cache' . DIRECTORY_SEPARATOR . 'tokens';
 		$token = $cache->get();
 
 		if ($token) {

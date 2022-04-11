@@ -126,6 +126,7 @@ $routes->get('/api/teaser/{date}/{hour}', 'Teaser@api_positions');
 $routes->get('/readers/{id:[\d]{12}?}', 'Readers@detail');
 $routes->get('/readers/list[/{segment}]', 'Readers@list');
 $routes->get('/readers/sessionlist', 'Readers@session_list');
+$routes->get('/readers/multiple-orders', 'Readers@with_multiple_orders');
 $routes->get('/readers/engagement', 'Readers@engagement_alert');
 
 $routes->get('/readers/import', 'Import@import_readers');

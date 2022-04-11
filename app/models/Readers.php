@@ -87,9 +87,24 @@ class Readers extends Model
 
 	}
 
+	public function favorites($data, $key = 'article_ressort') {
+		if (is_null($data)) {return null;}
+
+		$sources = [];
+		foreach ($data as $set) {
+			if (isset($set[$key]) && !empty($set[$key])) {
+				array_push($sources, $set[$key]);
+			}
+		}
+		$favorites = array_count_values($sources);
+		arsort($favorites);
+		return $favorites;
+	}
+
+
 	private function collect_cancellation_segment_data($customerID) {
 		return $this->collect_segment_data($customerID,true);
-	}	
+	}
 
 	private function userdata_is_usefull($user, $orderDate) {
 		if (empty($user)) {return false;}
@@ -108,12 +123,28 @@ class Readers extends Model
 
 
 	public function get_from_api($id) {
-		$user = $this->api->get($id);
+
+		try {$user = $this->api->get($id);}
+		catch (\Exception $e) {
+			$user['user_id'] = $id;
+			$user['portal'] = null;
+			$user['first_seen'] = null;
+			$user['last_seen'] = null;
+			$user['lastArticles'] = null;
+			$user['segment'] = 'Unbekannt';
+			$user['media_time_last_week'] = 0;
+			$user['media_time_total'] = 0;
+			$user['conversion_score'] = 0;
+			$user['error'] = '(Drive-API: ' . $e->getMessage() . ')';
+			return $user;
+		}
+
 		$user['lastArticles'] = $this->read_articles($user['articles_read_last_week']);
 		$user['segment'] = $user['classifications']['engagement_segment'] ?? null;
 		$user['media_time_last_week'] = $user['engagement']['media_time_last_week'] ?? null;
 		$user['media_time_total'] = $user['engagement']['media_time_total'] ?? null;
- 		
+		$user['conversion_score'] = $user['scores']['conversion_propensity_score'] ?? null;
+
 		return $user;
 	}
 
@@ -128,7 +159,7 @@ class Readers extends Model
 		$user['date'] = date('Y-m-d', strtotime($data['last_seen']));
 
 		return $user;
-		
+
 	}
 
 	private function read_articles($IDs) {
@@ -144,7 +175,7 @@ class Readers extends Model
 
 		if (!$users) {
 			$users = $this->drive_user_list();
-			$cache->save($users);			
+			$cache->save($users);
 		}
 
 		foreach ($users as $user) {
@@ -159,7 +190,7 @@ class Readers extends Model
 		$bigQueryApi = new BigQuery;
 		$publisher = PORTAL;
 
-		$query = 
+		$query =
 			"SELECT date, RIGHT(inferred_user_id,12) as user_id, days_active_per_week as days_active, time_engaged_per_week as engagement_time, user_engagement_segment as user_segment
 			FROM `artikel-reports-tool.DPA_Drive.dpa_drive_users`
 			WHERE publisher = '$publisher'

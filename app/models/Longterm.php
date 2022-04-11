@@ -98,7 +98,7 @@ class Longterm extends Model
 			$pageviews = $this->KPIs->sum('pageviews') ?? 0;
 			$sessions = $this->KPIs->sum('sessions') ?? 0;
 			$subscribers = $this->KPIs->sum('subscribers') ?? 0;
-			
+
 			$articles = $this->Articles->count();
 			$buyintents = $this->Articles->sum('buyintent');
 			$plus = $this->Articles->count_with_filter('plus = 1');

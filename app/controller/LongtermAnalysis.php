@@ -76,6 +76,7 @@ class LongtermAnalysis extends Controller {
 	public function all_portals() {
 
 		$orderData = $this->Longterm->portal_orders();
+
 		$kpiData = $this->Longterm->portal_KPIs();
 		$combinedData = $this->Longterm->combine_portal_data($orderData, $kpiData);
 

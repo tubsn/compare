@@ -72,7 +72,7 @@
 			<ul class="dropdown" aria-label="submenu">
 				<li><a href="/orders">Eingehende Bestellungen</a></li>
 				<li><a href="/orders/list-cancellactions">Eingehende Kündigungen</a></li>
-				<li><a href="/orders/clustered">Bestellungen Geclustert</a></li>				
+				<li><a href="/orders/clustered">Bestellungen nach Cluster</a></li>				
 				<li><a href="/orders/map/local">Bestelldaten als Karte</a></li>
 				<li><a href="/orders/behavior">Kundenverhalten</a></li>
 				<li><a href="/orders/campaigns">UTM-Kampagnen</a></li>

@@ -20,8 +20,14 @@ class Orders extends Controller {
 	public function list() {
 
 		Session::set('referer', '/orders/list');
+		$this->view->title = 'Bestelldaten - Eingang';
 
 		$viewData['orders'] = $this->Orders->list_plain();
+
+		if (empty($viewData['orders'])) {
+			$this->view->render('orders/list-no-data');	die;
+		}
+
 		$viewData['numberOfOrders'] = count($viewData['orders'] ?? []);
 		$viewData['numberOfCancelled'] = count($this->Orders->filter_cancelled($viewData['orders']));
 		$viewData['plusOnly'] = count($this->Orders->filter_plus_only($viewData['orders']));
@@ -31,7 +37,6 @@ class Orders extends Controller {
 		$viewData['averageRetention'] = $this->Orders->average($this->Orders->filter_cancelled($viewData['orders']),'retention');
 		$viewData['mediatimeMax'] = max(array_column($viewData['orders'], 'customer_cancel_mediatime'));
 
-		$this->view->title = 'Bestelldaten - Eingang';
 		$this->view->render('orders/list', $viewData);
 
 	}
@@ -39,8 +44,14 @@ class Orders extends Controller {
 	public function list_cancellations() {
 
 		Session::set('referer', '/orders/list-cancellactions');
+		$this->view->title = 'Kündigungsdaten - Eingang';
 
 		$viewData['cancellations'] = $this->Orders->cancellations_plain();
+
+		if (empty($viewData['cancellations'])) {
+			$this->view->render('orders/list-no-data'); die;
+		}
+
 		$viewData['championOnly'] = count($this->Orders->filter_cancel_segment($viewData['cancellations'],'champion'));
 		$viewData['loyalOnly'] = count($this->Orders->filter_cancel_segment($viewData['cancellations'],'loyal'));
 
@@ -52,7 +63,6 @@ class Orders extends Controller {
 
 		$viewData['mediatimeMax'] = 5000;
 
-		$this->view->title = 'Kündigungsdaten - Eingang';
 		$this->view->render('orders/cancellations-list', $viewData);
 
 	}

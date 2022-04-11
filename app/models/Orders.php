@@ -104,6 +104,32 @@ class Orders extends Model
 
 	}
 
+	public function by_customer($customerID) {
+		$customerID = strip_tags($customerID);
+		return $this->list("customer_id = $customerID");
+	}
+
+	public function customers_with_multiple_orders() {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT *, count(order_id) as orders
+			 FROM `conversions`
+			 WHERE DATE(`order_date`) BETWEEN :startDate AND :endDate
+			 GROUP BY customer_id
+			 HAVING orders > 1
+			 ORDER BY orders DESC"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall();
+
+		return $output;
+
+	}
+
 
 	public function kpi_grouped_by($kpi, $groupby = 'ressort', $operation = 'sum', $filter = null) {
 
@@ -386,7 +412,7 @@ class Orders extends Model
 		$SQLstatement->execute([':days' => $days]);
 		$output = $SQLstatement->fetchall();
 
-		return $output;		
+		return $output;
 
 	}
 
