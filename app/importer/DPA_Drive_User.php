@@ -21,6 +21,7 @@ class DPA_Drive_User
 		$cache = new RequestCache('reader-' . $id , 60 * 60);
 
 		$user = $cache->get();
+
 		if ($user) {return $user;}
 
 		$user = $this->curl('/user?id='.$id);

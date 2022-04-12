@@ -24,6 +24,10 @@ class Search extends Controller {
 			throw new \Exception("Bitte Suchbegriff eingeben", 400);
 		}
 
+		if (preg_match("/^[0-9]{7}$/", $query)) {
+			$this->view->redirect('/orders/' . $query);
+		}
+
 		if (preg_match("/^[0-9]{8}$/", $query)) {
 			$this->view->redirect('/artikel/' . $query);
 		}
