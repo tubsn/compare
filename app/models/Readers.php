@@ -32,7 +32,7 @@ class Readers extends Model
 			if (is_null($userData)) {continue;}
 
 			$favoriteData = $this->collect_reader_favorites($userData, 'order');
-			$this->create_or_update($favoriteData);
+			if (!empty($favoriteData)) {$this->create_or_update($favoriteData);}
 
 			$orderData = $this->order_table_field_mapping($userData);
 			$orders->update($orderData, $order['order_id']);
@@ -55,7 +55,7 @@ class Readers extends Model
 			if (is_null($userData)) {continue;}
 
 			$favoriteData = $this->collect_reader_favorites($userData, 'cancel');
-			$this->create_or_update($favoriteData);
+			if (!empty($favoriteData)) {$this->create_or_update($favoriteData);}
 
 			$cancellationData = $this->cancellation_table_field_mapping($userData);
 			$orders->update($cancellationData, $order['order_id']);
@@ -111,7 +111,7 @@ class Readers extends Model
 
 	private function collect_reader_favorites($data, $prefix = '') {
 
-		if (empty($data['articles_read'])) {return;}
+		if (empty($data['articles_read'])) {return [];}
 
 		$user['user_id'] = $data['user_id'];
 		$articleData = $this->read_articles($data['articles_read']);
