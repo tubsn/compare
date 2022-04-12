@@ -53,8 +53,8 @@ class Readers extends Controller {
 		$orders = array_reverse($orders);
 		$this->view->orderSources = $this->Readers->favorites($orders, 'article_ressort');
 		$this->view->mostRead = $this->Readers->favorites($this->view->reader['articles_read'], 'ressort');
-		$this->view->audience = $this->Readers->favorites($orders, 'article_audience');
-		$this->view->cluster = $this->Readers->favorites($orders, 'article_type');
+		$this->view->audience = $this->Readers->favorites($this->view->reader['articles_read'], 'audience');
+		$this->view->cluster = $this->Readers->favorites($this->view->reader['articles_read'], 'type');
 
 		$this->view->orders = $orders;
 		$this->view->orderCount = count($orders) ?? 0;
