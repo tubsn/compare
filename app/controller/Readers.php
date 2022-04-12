@@ -18,21 +18,26 @@ class Readers extends Controller {
 
 
 	public function with_multiple_orders() {
-		$this->Orders->from = '2000-01-01';
+		$this->Orders->from = '2021-04-01';
 		$this->Orders->to = '3000-01-01';
-		$orders = $this->Orders->customers_with_multiple_orders();
-		dump($orders);
+		$customers = $this->Orders->customers_with_multiple_orders();
+
+		//dd($customers);
+
+
+		$this->view->customers = $customers;
+
+		$this->view->render('orders/multiple-orders');
 
 	}
 
 	public function engagement_alert() {
 
-		$this->Readers->update_latest_orders();
-		$this->Readers->update_latest_cancellations();
+		//$this->Readers->update_latest_orders();
+		//$this->Readers->update_latest_cancellations();
 		echo 'tbd';
 
 	}
-
 
 
 	public function overview() {

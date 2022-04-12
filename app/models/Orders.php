@@ -115,7 +115,7 @@ class Orders extends Model
 		$to = strip_tags($this->to);
 
 		$SQLstatement = $this->db->connection->prepare(
-			"SELECT *, count(order_id) as orders
+			"SELECT customer_id, count(order_id) as orders
 			 FROM `conversions`
 			 WHERE DATE(`order_date`) BETWEEN :startDate AND :endDate
 			 GROUP BY customer_id
@@ -124,11 +124,36 @@ class Orders extends Model
 		);
 
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
-		$output = $SQLstatement->fetchall();
+		$customers = $SQLstatement->fetchall(\PDO::FETCH_COLUMN|\PDO::FETCH_UNIQUE);
+
+		$orders = $this->orders_of_customer_list(array_keys($customers));
+
+		$output = [];
+		foreach ($orders as $order) {
+			$output[$order['customer_id']][$order['order_id']] = $order;
+		}
 
 		return $output;
 
 	}
+
+	public function orders_of_customer_list(array $ids) {
+
+		$table = $this->db->table;
+		$listOfIds = implode(',', $ids);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT *
+			 FROM `$table`
+			 WHERE `customer_id` IN ($listOfIds)
+			 ORDER BY FIELD(`customer_id`, $listOfIds)
+			 "
+		);
+		$SQLstatement->execute();
+		return $SQLstatement->fetchall();
+
+	}
+
 
 
 	public function kpi_grouped_by($kpi, $groupby = 'ressort', $operation = 'sum', $filter = null) {
@@ -158,8 +183,6 @@ class Orders extends Model
 		return $output;
 
 	}
-
-
 
 
 	public function latest_grouped($limit = 5) {

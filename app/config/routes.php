@@ -56,8 +56,7 @@ $routes->get('/print/germany/cancelled', 'Orders@map_print_germany_cancelled');
 
 // Orders
 $routes->get('/orders', 'Orders@list');
-$routes->get('/orders/list-cancellactions', 'Orders@list_cancellations');
-$routes->get('/orders/last-cancellactions', 'Orders@list_cancellations');    // Delete this later!
+$routes->get('/orders/list-cancellations', 'Orders@list_cancellations');
 $routes->get('/orders/behavior', 'Orders@customer_behavior');
 $routes->get('/orders/clustered', 'Orders@clustered');
 $routes->get('/orders/map/local', 'Orders@map_local');
@@ -73,8 +72,8 @@ $routes->get('/orders/today', 'Livedata@orders_today');
 
 $routes->get('/orders/payguys', 'LongtermAnalysis@started_payment');
 
-$routes->get('/orders/{id:\d+}', 'Livedata@order');
-$routes->get('/orders/{date}', 'Livedata@orders_date');
+$routes->get('/orders/{id:\d{7}}', 'Livedata@order');
+$routes->get('/orders/{date:[\d]{4}-[\d]{2}-[\d]{2}?}', 'Livedata@orders_date');
 $routes->get('/orders/customer/{id:\d+}', 'Livedata@customer');
 $routes->get('/orders/subscription/{id:\d+}', 'Livedata@subscription');
 
