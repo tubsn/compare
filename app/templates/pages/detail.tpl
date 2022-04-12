@@ -294,7 +294,7 @@
 
 	<tr>
 		<td>PlenigoID:</td>
-		<td><a target="_blank" href="https://backend.plenigo.com/<?=PLENIGO_COMPANY_ID?>/customers/<?=$conversion['customer_id'];?>/show"><?=$conversion['customer_id'];?></a></td>
+		<td><a href="/readers/<?=$conversion['customer_id'];?>"><?=$conversion['customer_id'];?></a></td>
 	</tr>
 	<tr>
 		<td>OrderID:</td>

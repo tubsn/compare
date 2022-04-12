@@ -19,14 +19,14 @@ class DPA_Drive_User
 	public function get($id) {
 
 		$cache = new RequestCache('reader-' . $id , 60 * 60);
-		$user = $cache->get();
 
+		$user = $cache->get();
 		if ($user) {return $user;}
 
 		$user = $this->curl('/user?id='.$id);
-		if (isset($user['detail'])) {
-			throw new \Exception("User Not Found");
-		}
+
+		if (empty($user)) {throw new \Exception("Unknown Error");}
+		if (isset($user['detail'])) {throw new \Exception("User Not Found");} // Detail contains Error Message
 
 		$cache->save($user);
 		return $user;

@@ -302,6 +302,8 @@ ul.order-list li:last-of-type {margin:0;}
 .current-subscription {padding:.2em .5em; background-color:var(--light-orange); display:inline-block; border-radius:0.3em;}
 .current-subscription.cancelled {background-color:var(--red); font-style:italic;}
 
+.subscription-ressorts {padding:.15em .3em; background-color:var(--light-gray); display:inline-block; border-radius:0.3em;}
+
 .reader-id {padding:.1em .4em; background-color:var(--light-gray); display:inline-block; border-radius:0.3em;}
 .reader-id {text-decoration:none;}
 .reader-id:hover {color:black; background-color:var(--light-blue)}

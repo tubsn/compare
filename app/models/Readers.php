@@ -19,7 +19,7 @@ class Readers extends Model
 		$this->db->orderby = 'date';
 	}
 
-	public function add_segment_to_latest_orders() {
+	public function update_latest_orders() {
 
 		$orders = new Orders();
 		$orders->from = date('Y-m-d', strtotime('today -4 days'));
@@ -28,9 +28,15 @@ class Readers extends Model
 
 		$updated = 0;
 		foreach ($orderList as $order) {
-			$userData = $this->collect_segment_data($order);
+			$userData = $this->collect_user_data($order, 'order_date');
 			if (is_null($userData)) {continue;}
-			$orders->update($userData, $order['order_id']);
+
+			$favoriteData = $this->collect_reader_favorites($userData, 'order');
+			$this->create_or_update($favoriteData);
+
+			$orderData = $this->order_table_field_mapping($userData);
+			$orders->update($orderData, $order['order_id']);
+
 			$updated++;
 		}
 
@@ -38,16 +44,22 @@ class Readers extends Model
 
 	}
 
-	public function add_segement_to_latest_cancellations() {
+	public function update_latest_cancellations() {
 
 		$orders = new Orders();
 		$orderList = $orders->cancelled_days_ago(4);
 
 		$updated = 0;
 		foreach ($orderList as $order) {
-			$userData = $this->collect_cancellation_segment_data($order);
+			$userData = $this->collect_user_data($order, 'subscription_cancellation_date');
 			if (is_null($userData)) {continue;}
-			$orders->update($userData, $order['order_id']);
+
+			$favoriteData = $this->collect_reader_favorites($userData, 'cancel');
+			$this->create_or_update($favoriteData);
+
+			$cancellationData = $this->cancellation_table_field_mapping($userData);
+			$orders->update($cancellationData, $order['order_id']);
+
 			$updated++;
 		}
 
@@ -55,35 +67,71 @@ class Readers extends Model
 
 	}
 
-	private function collect_segment_data($order, $cancellations = false) {
+	private function order_table_field_mapping($user) {
+		$data['customer_order_segment'] = $user['user_segment'];
+		$data['customer_order_mediatime'] = round($user['media_time_last_week'],2);
+		return $data;
+	}
+
+	private function cancellation_table_field_mapping($user) {
+		$data['customer_cancel_segment'] = $user['user_segment'];
+		$data['customer_cancel_mediatime'] = round($user['media_time_last_week'],2);
+		return $data;
+	}
+
+	private function collect_user_data($order, $activityDateField = 'order_date') {
 
 		$customerID = $order['customer_id'];
-		$user = $this->get($customerID);
+		//$user = $this->get_drive_api_segment_data($customerID);
+
+		try {$data = $this->api->get($customerID);}
+		catch (\Exception $e) {return null;}
 
 		// Look at Orderdate or Cancellationdate for usefullness of Segments
-		$activityDate = $order['order_date'];
-		if ($cancellations) {$activityDate = $order['subscription_cancellation_date'];}
+		if (!$this->userdata_is_usefull($data, $order[$activityDateField])) {return null;}
 
-		// Check if BigQueryDB User is too old use DPA User API
-		if (!$this->userdata_is_usefull($user, $activityDate)) {
-			$user = $this->get_drive_api_segment_data($customerID);
-		}
-
-		// If DPA User is also to old don't do anything at all
-		if (!$this->userdata_is_usefull($user, $activityDate)) {return null;}
-
+		$user['user_id'] = $customerID;
+		$user['articles_read'] = $data['articles_read_last_week'];
+		$user['user_segment'] = $data['classifications']['engagement_segment'];
 		if ($user['user_segment'] == 'unknown') {$user['user_segment'] = null;}
+		$user['conversion_score'] = $data['scores']['conversion_propensity_score'] ?? null;
+		$user['media_time_last_week'] = $data['engagement']['media_time_last_week'] ?? null;
+		$user['media_time_total'] = $data['engagement']['media_time_total'] ?? null;
+		$user['date'] = date('Y-m-d', strtotime($data['last_seen']));
 
-		if ($cancellations) {
-			$data['customer_cancel_segment'] = $user['user_segment'];
-			$data['customer_cancel_mediatime'] = round($user['engagement_time'],2);
-		}
-		else {
-			$data['customer_order_segment'] = $user['user_segment'];
-			$data['customer_order_mediatime'] = round($user['engagement_time'],2);
-		}
+		return $user;
 
-		return $data;
+	}
+
+	private function userdata_is_usefull($user, $orderDate) {
+		if (empty($user)) {return false;}
+		if ($this->number_of_days($user['last_seen'], $orderDate) > 6) {return false;}
+		return true;
+	}
+
+	private function collect_reader_favorites($data, $prefix = '') {
+
+		if (empty($data['articles_read'])) {return;}
+
+		$user['user_id'] = $data['user_id'];
+		$articleData = $this->read_articles($data['articles_read']);
+
+		if (!empty($prefix)) {$prefix = $prefix . '_';}
+		$user[$prefix . 'articles_read'] = json_encode($data['articles_read']);
+		$user[$prefix . 'fav_ressort'] = key($this->favorites($articleData, 'ressort'));
+		$user[$prefix . 'fav_audience'] = key($this->favorites($articleData, 'audience'));
+		$user[$prefix . 'fav_thema'] = key($this->favorites($articleData, 'type'));
+
+		return $user;
+
+	}
+
+	public function filter_active($orders) {
+
+		$subscription = array_filter($orders, function($order) {
+			if ($order['subscription_status'] == 'ACTIVE') {return $order;}
+		});
+		return $subscription[0] ?? null;
 
 	}
 
@@ -102,16 +150,6 @@ class Readers extends Model
 	}
 
 
-	private function collect_cancellation_segment_data($customerID) {
-		return $this->collect_segment_data($customerID,true);
-	}
-
-	private function userdata_is_usefull($user, $orderDate) {
-		if (empty($user)) {return false;}
-		if ($this->number_of_days($user['date'], $orderDate) > 6) {return false;}
-		return true;
-	}
-
 	private function number_of_days($firstDate, $secondDate) {
 
 		$firstDate  = new \DateTime($firstDate);
@@ -122,7 +160,7 @@ class Readers extends Model
 	}
 
 
-	public function get_from_api($id) {
+	public function live_from_api($id) {
 
 		try {$user = $this->api->get($id);}
 		catch (\Exception $e) {
@@ -130,8 +168,8 @@ class Readers extends Model
 			$user['portal'] = null;
 			$user['first_seen'] = null;
 			$user['last_seen'] = null;
-			$user['lastArticles'] = null;
-			$user['segment'] = 'Unbekannt';
+			$user['articles_read'] = null;
+			$user['user_segment'] = 'unbekannt';
 			$user['media_time_last_week'] = 0;
 			$user['media_time_total'] = 0;
 			$user['conversion_score'] = 0;
@@ -139,27 +177,13 @@ class Readers extends Model
 			return $user;
 		}
 
-		$user['lastArticles'] = $this->read_articles($user['articles_read_last_week']);
-		$user['segment'] = $user['classifications']['engagement_segment'] ?? null;
+		$user['articles_read'] = $this->read_articles($user['articles_read_last_week']);
+		$user['user_segment'] = $user['classifications']['engagement_segment'] ?? null;
 		$user['media_time_last_week'] = $user['engagement']['media_time_last_week'] ?? null;
 		$user['media_time_total'] = $user['engagement']['media_time_total'] ?? null;
 		$user['conversion_score'] = $user['scores']['conversion_propensity_score'] ?? null;
 
 		return $user;
-	}
-
-	public function get_drive_api_segment_data($id) {
-
-		try {$data = $this->api->get($id);}
-		catch (\Exception $e) {return null;}
-
-		$user['user_segment'] = $data['classifications']['engagement_segment'];
-		$user['engagement_time'] = $data['engagement']['media_time_last_week'];
-		$user['days_active'] = null;
-		$user['date'] = date('Y-m-d', strtotime($data['last_seen']));
-
-		return $user;
-
 	}
 
 	private function read_articles($IDs) {
@@ -191,7 +215,7 @@ class Readers extends Model
 		$publisher = PORTAL;
 
 		$query =
-			"SELECT date, RIGHT(inferred_user_id,12) as user_id, days_active_per_week as days_active, time_engaged_per_week as engagement_time, user_engagement_segment as user_segment
+			"SELECT date, RIGHT(inferred_user_id,12) as user_id, days_active_per_week as days_active, time_engaged_per_week as media_time_last_week, user_engagement_segment as user_segment
 			FROM `artikel-reports-tool.DPA_Drive.dpa_drive_users`
 			WHERE publisher = '$publisher'
 			AND user_type = 'premium'

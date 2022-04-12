@@ -1,4 +1,4 @@
-	<?php if ($reader['lastArticles']): ?>
+	<?php if ($reader['articles_read']): ?>
 
 	<hr/>
 
@@ -20,7 +20,7 @@
 			</tr>
 		</thead>
 		<tbody>
-		<?php foreach ($reader['lastArticles'] as $article): ?>
+		<?php foreach ($reader['articles_read'] as $article): ?>
 		<tr>
 			<td class="narrower text-right"><?=$article['kicker'] ?? '-'?></td>
 			<td><?php if (isset($article['plus']) && $article['plus']): ?><div class="bluebg">+</div><?php endif; ?></td>

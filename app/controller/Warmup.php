@@ -146,7 +146,7 @@ class Warmup extends Controller {
 		foreach ($articles as $article) {
 			$id = $article['id'];
 			$pubDate = formatDate($article['pubdate'],'Y-m-d');
-			$data['buyintent'] = $this->Analytics->buy_intention_by_article_id($id, $pubDate);			
+			$data['buyintent'] = $this->Analytics->buy_intention_by_article_id($id, $pubDate);
 			$this->Articles->update($data, $id);
 		}
 
@@ -186,8 +186,8 @@ class Warmup extends Controller {
 	public function readers() {
 
 		$this->Readers->import_readers();
-		$this->Readers->add_segment_to_latest_orders();
-		$this->Readers->add_segement_to_latest_cancellations();
+		$this->Readers->update_latest_orders();
+		$this->Readers->update_latest_cancellations();
 
 		echo 'wenn dieser Text erscheint hats geklappt...<br/>';
 		echo 'Processing-Time: <b>'.round((microtime(true)-APP_START)*1000,2) . '</b>ms';

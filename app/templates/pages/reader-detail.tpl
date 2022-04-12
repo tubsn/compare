@@ -16,11 +16,14 @@
 	</p>
 
 	<p>
-
-
 		<?php if ($subscription): ?>
-		Herkunft: <b><?=$subscription['customer_city']?>
-		<?php if ($subscription['ga_city']): ?> | <?=$subscription['ga_city']?><?php endif; ?></b><br>
+		<?php if ($subscription['customer_city']): ?>
+		Location: <b><?=$subscription['customer_city'] ?? $subscription['ga_city']?></b><br>
+		<?php endif; ?>
+
+		<?php if (!$subscription['customer_city'] && $subscription['ga_city']): ?>
+		Location: <b><?=$subscription['ga_city']?></b> (laut IP)<br>
+		<?php endif; ?>
 		<?php endif; ?>
 
 		<?php if ($mostRead): ?>
@@ -34,13 +37,11 @@
 		<?php if ($cluster): ?>
 		Lieblingsthema: <a href="/type/<?=key($cluster)?>"><?=ucfirst(key($cluster))?></a><br />
 		<?php endif; ?>
-
-
 	</p>
 
-	<p>
-		Tracking seit: <b><?=formatDate($reader['first_seen'],'d.m.Y')?></b>
-	</p>
+	<?php if ($reader['first_seen']): ?>
+	<p>Tracking seit: <b><?=formatDate($reader['first_seen'],'d.m.Y')?></b></p>
+	<?php endif; ?>
 
 </section>
 
@@ -77,7 +78,17 @@
 	<?php endif; ?>
 
 	<details class="mt">
-	<summary>Bestell-Historie: <b class=""><?=$orderCount?></b></summary>
+	<summary>Bestell-Historie - <b class=""><?=$orderCount?></b> Käufe <small>(Klicken zum aufklappen)</small>:
+
+		<p style="margin-left:.8em;">
+		<?php if ($orderSources): ?>
+		<?php foreach ($orderSources as $ressort => $amount): ?>
+			<small class="subscription-ressorts" href="/ressort/<?=$ressort?>"><?=ucfirst($ressort)?> (<?=$amount?>)</small>
+		<?php endforeach; ?>
+		<?php endif; ?>
+		</p>
+	</summary>
+
 
 
 	<ul class="order-list">
@@ -105,22 +116,12 @@
 
 	</details>
 
-			<?php if ($orderSources): ?>
-			Kauf Ressorts:
-			<?php foreach ($orderSources as $ressort => $amount): ?>
-				<?=ucfirst($ressort)?> (<?=$amount?>)
-			<?php endforeach; ?>
-			<br>
-			<?php endif; ?>
-
 </section>
 
 
 <section>
 
-	<h3>Drive-User-Segment: <div class="pageviews"><?=ucfirst($reader['segment'])?></div></h3>
-
-
+	<h3>Drive-User-Segment: <div class="pageviews"><?=ucfirst($reader['user_segment'])?></div></h3>
 
 	<div class="col-2" style="grid-template-columns: min-content 1fr; grid-gap:1em;">
 
@@ -137,20 +138,16 @@
 			</p>
 			<?php endif; ?>
 			<p>
-				Nutzungsdauer	letzte Woche: <br/>
+				Nutzungsdauer letzte Woche: <br/>
 				<b class="greenbg">Ø-<?=gnum($reader['media_time_last_week']/60/7)?> Minuten</b> pro Tag
-
 			</p>
 			<p>
-
 				Gesamt Mediatime:<br/><b>
 				<?=gmdate("H", $reader['media_time_total']);?>h
 				<?=gmdate("i", $reader['media_time_total']);?>m
 				<?=gmdate("s", $reader['media_time_total']);?>s
 			</b>
 			</p>
-
-
 
 		</article>
 
@@ -161,14 +158,5 @@
 </div>
 
 <?php include tpl('pages/reader-article-list');?>
-
-<!--
-<hr/>
-<details><summary>Drive-Rohdaten anzeigen</summary>
-	<div class="maxwidth">
-		<?=dump($reader)?>
-	</div>
-</details>
--->
 
 </main>

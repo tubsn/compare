@@ -155,7 +155,7 @@ class CronImports extends Controller {
 		}
 
 		$this->enrich_conversions_with_ga();
-		$this->enrich_conversions_with_drive_segments();
+		$this->enrich_conversions_with_drive_data();
 
 	}
 
@@ -176,13 +176,13 @@ class CronImports extends Controller {
 
 	}
 
-	public function enrich_conversions_with_drive_segments() {
+	public function enrich_conversions_with_drive_data() {
 
 		$this->Readers->import_readers();
-		$this->Readers->add_segment_to_latest_orders();
-		$this->Readers->add_segement_to_latest_cancellations();
+		$this->Readers->update_latest_orders();
+		$this->Readers->update_latest_cancellations();
 
-		echo 'Drive Segmente importiert | ' . date('H:i:s') . "\r\n";
+		echo 'Drive Userdaten importiert | ' . date('H:i:s') . "\r\n";
 
 	}
 

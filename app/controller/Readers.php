@@ -27,8 +27,8 @@ class Readers extends Controller {
 
 	public function engagement_alert() {
 
-		//$this->Readers->add_segment_to_latest_orders();
-		//$this->Readers->add_segement_to_latest_cancellations();
+		$this->Readers->update_latest_orders();
+		$this->Readers->update_latest_cancellations();
 		echo 'tbd';
 
 	}
@@ -45,22 +45,17 @@ class Readers extends Controller {
 		$this->Orders->from = '2000-01-01';
 		$this->Orders->to = '3000-01-01';
 
-		$this->view->reader = $this->Readers->get_from_api($id);
+		$this->view->reader = $this->Readers->live_from_api($id);
 
 		$orders = $this->Orders->by_customer($id);
-		$subscription = array_filter($orders, function($order) {
-			if ($order['subscription_status'] == 'ACTIVE') {return $order;}
-		});
-		$subscription = $subscription[0] ?? null;
+		$this->view->subscription = $this->Readers->filter_active($orders);
 
 		$orders = array_reverse($orders);
-
 		$this->view->orderSources = $this->Readers->favorites($orders, 'article_ressort');
-		$this->view->mostRead = $this->Readers->favorites($this->view->reader['lastArticles'], 'ressort');
+		$this->view->mostRead = $this->Readers->favorites($this->view->reader['articles_read'], 'ressort');
 		$this->view->audience = $this->Readers->favorites($orders, 'article_audience');
 		$this->view->cluster = $this->Readers->favorites($orders, 'article_type');
 
-		$this->view->subscription = $subscription;
 		$this->view->orders = $orders;
 		$this->view->orderCount = count($orders) ?? 0;
 

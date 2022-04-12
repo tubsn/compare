@@ -28,11 +28,16 @@ class Search extends Controller {
 			$this->view->redirect('/artikel/' . $query);
 		}
 
+		if (preg_match("/^[0-9]{12}$/", $query)) {
+			$this->view->redirect('/readers/' . $query);
+		}
+
+
 		$articles = $this->Articles->search($query, ['id','title','kicker','description']);
 		$viewData['articles'] = $articles;
 		$viewData['query'] = $query;
 		$viewData['pageviews'] = $this->Articles->sum_up($articles,'pageviews');
-		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');		
+		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
 		$viewData['conversions'] = $this->Articles->sum_up($articles,'conversions');
 		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
 		$viewData['numberOfArticles'] = 0;
