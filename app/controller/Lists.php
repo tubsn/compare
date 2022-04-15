@@ -70,6 +70,9 @@ class Lists extends Controller {
 		$viewData['numberOfArticles'] = $count;
 
 		$this->view->title = 'Anzahl von Artikeln mit Conversions: ' . $count;
+		if ($count>=1000) {
+			$this->view->title = 'Anzahl von Artikeln mit Conversions: >' . $count;
+		}
 		$this->view->info = '<b>Hinweis:</b> Auf dieser Seite wird nach dem Publikationsdatum des Artikels gefiltert! Die <b>Gesamtzahl der Conversions</b> ergibt sich aus der <b>Summe, der in den Artikeln erreichten Conversions</b>, die an diesen Tagen Produziert wurden. <br/><b>Achtung:</b> Im Diagramm werden taggenau <b>alle Conversions in diesem Zeitraum</b> gezeigt (auch Plusseite).';
 		$this->view->referer('/conversions');
 		$this->view->render('pages/list', $viewData);

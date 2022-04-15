@@ -135,13 +135,18 @@ class Readers extends Model
 
 	}
 
-	public function favorites($data, $key = 'article_ressort') {
+	public function favorites($data, $key = 'article_ressort', $backupKey = null) {
 		if (is_null($data)) {return null;}
 
 		$sources = [];
 		foreach ($data as $set) {
 			if (isset($set[$key]) && !empty($set[$key])) {
 				array_push($sources, $set[$key]);
+				continue;
+			}
+
+			if (isset($set[$backupKey]) && !empty($set[$backupKey])) {
+				array_push($sources, $set[$backupKey]);
 			}
 		}
 		$favorites = array_count_values($sources);

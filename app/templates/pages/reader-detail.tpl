@@ -52,17 +52,22 @@
 	<h3>Aktuell laufendes Abo:</h3>
 
 	<div class="current-subscription" style="min-width:500px">
+
+		<div style="float:right; text-align:right;">
+		vom <b><?=formatDate($subscription['subscription_start_date'],'d.m.Y')?></b>
+		<?php if ($subscription['subscription_end_date']): ?>
+			<br>
+		bis <b><?=formatDate($subscription['subscription_end_date'],'d.m.Y')?></b>
+		<?php endif; ?>
+		</div>
+
 		<b><?=$subscription['subscription_title']?> - <?=gnum($subscription['subscription_price'],2)?>€</b>
 
 		<br />
-		vom <b><?=formatDate($subscription['subscription_start_date'],'d.m.Y')?></b>
-		<?php if ($subscription['subscription_end_date']): ?>
-		bis <b><?=formatDate($subscription['subscription_end_date'],'d.m.Y')?></b>
-		<?php endif; ?>
 
-		<br />
+		Quelle: <b><?=ucfirst($subscription['article_ressort'] ?? $subscription['order_origin'])?></b>
 
-		(Subscription-ID: <a class="noline" target="_blank" title="In Plenigo öffnen" href="https://backend.plenigo.com/<?=PLENIGO_COMPANY_ID?>/subscriptions/chain/<?=$subscription['subscription_id']?>/show"><?=$subscription['subscription_id']?></a>)
+		(ID: <a class="noline" target="_blank" title="In Plenigo öffnen" href="https://backend.plenigo.com/<?=PLENIGO_COMPANY_ID?>/subscriptions/chain/<?=$subscription['subscription_id']?>/show"><?=$subscription['subscription_id']?></a>)
 
 	</div>
 
@@ -91,12 +96,14 @@
 
 
 
-	<ul class="order-list">
+	<ul class="order-list" style="margin-bottom:0.5em;">
 	<?php foreach ($orders as $order): ?>
 		<li>
 			<div>
-			Order-ID: <b><a class="noline" target="_blank" title="In Plenigo öffnen" href="https://backend.plenigo.com/<?=PLENIGO_COMPANY_ID?>/orders/	<?=$order['order_id']?>/show"><?=$order['order_id']?></a></b><br />
-			<?=$order['order_title']?> - <?=gnum($order['order_price'],2)?>&thinsp;€
+			<?=$order['order_title']?> - <?=gnum($order['order_price'],2)?>&thinsp;€<br />
+			Quelle: <b><?=ucfirst($order['article_ressort'] ?? $order['order_origin'])?></b> (ID: <b><a class="noline" target="_blank" title="In Plenigo öffnen" href="https://backend.plenigo.com/<?=PLENIGO_COMPANY_ID?>/orders/<?=$order['order_id']?>/show"><?=$order['order_id']?></a></b>)
+
+
 
 			<?php if ($order['retention']): ?>
 			<br>Haltedauer: <b><?=$order['retention']?> Tage</b>
@@ -113,6 +120,11 @@
 		</li>
 	<?php endforeach; ?>
 	</ul>
+
+	<?php if ($orders && count($orders)>1): ?>
+	Gesamthaltedauer bisheriger Abos: <b><?=array_sum(array_column($orders,'retention'))?> Tage</b><br/>
+	(Kauf bis Kündigungseingang - Lesedauer ist ggf. größer)
+	<?php endif ?>
 
 	</details>
 

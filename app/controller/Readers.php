@@ -56,7 +56,7 @@ class Readers extends Controller {
 		$this->view->subscription = $this->Readers->filter_active($orders);
 
 		$orders = array_reverse($orders);
-		$this->view->orderSources = $this->Readers->favorites($orders, 'article_ressort');
+		$this->view->orderSources = $this->Readers->favorites($orders, 'article_ressort', 'order_origin');
 		$this->view->mostRead = $this->Readers->favorites($this->view->reader['articles_read'], 'ressort');
 		$this->view->audience = $this->Readers->favorites($this->view->reader['articles_read'], 'audience');
 		$this->view->cluster = $this->Readers->favorites($this->view->reader['articles_read'], 'type');

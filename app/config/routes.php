@@ -145,6 +145,7 @@ $routes->get('/search', 'Search@show');
 $routes->get('/favoriten', 'StaticPages@favilink');
 $routes->get('/favicon', 'StaticPages@favilink');
 $routes->get('/faq', 'StaticPages@faq');
+$routes->get('/changelog', 'StaticPages@changelog');
 $routes->post('/settimeframe', 'Articles@set_timeframe');
 $routes->get('/switch-portal', 'Articles@switch_portal');
 $routes->get('/live', 'Livedata@live_dashboard');
