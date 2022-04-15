@@ -13,7 +13,7 @@ class ChurnExplorer extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->view->templates['footer'] = null;		
+		$this->view->templates['footer'] = null;
 		$this->models('Charts,Orders');
 	}
 
@@ -21,7 +21,7 @@ class ChurnExplorer extends Controller {
 
 		//dd($this->Orders->cancelled_by_retention_days());
 
-		$this->view->title = 'Ultimate Churn-Rate Explorer';
+		$this->view->title = 'The Ultimate Churn-Rate Explorer phew phew!';
 		$this->view->segments = $this->Orders->order_segments();
 		$this->view->products = $this->Orders->product_titles();
 		$this->view->ressorts = $this->Orders->order_ressorts();

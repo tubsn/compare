@@ -106,7 +106,7 @@ $routes->get('/campaigns/filter/{filter}', 'Campaigns@all');
 $routes->get('/campaigns', 'Campaigns@all');
 
 // Churn explorer
-$routes->get('/explorer[/{product}]', 'ChurnExplorer@index');
+$routes->get('/orders/explorer', 'ChurnExplorer@index');
 $routes->get('/api/explorer', 'ChurnExplorer@api');
 
 // Apis

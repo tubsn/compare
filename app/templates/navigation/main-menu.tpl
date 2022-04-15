@@ -72,6 +72,7 @@
 				<li><a href="/orders/list-cancellations">Eingehende Kündigungen</a></li>
 				<li><a href="/orders/clustered">Bestellungen nach Cluster</a></li>
 				<li><a href="/orders/map/local">Bestelldaten als Karte</a></li>
+				<li><a href="/orders/explorer">Churn-Explorer!!!</a></li>
 				<li><a href="/orders/behavior">Kundenverhalten</a></li>
 				<li><a href="/orders/campaigns">UTM-Kampagnen</a></li>
 				<li><a href="/orders/today">Echtzeit Bestelleingang</a></li>

@@ -49,14 +49,14 @@ let ChartOptionsExplorer = {
 			},
 
 			formatter: function (value) {
-				return value + ' Tagen';
+				return 'Tag ' + value ;
 			},
 			rotate: 0
 		},
 	},
 
 	yaxis: {
-		tickAmount: 4,
+		tickAmount: 6,
 		labels: {rotate: 0},
 	}
 

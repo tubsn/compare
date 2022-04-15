@@ -34,11 +34,11 @@
 			</figure>
 
 			<figure>
-			Drive-Segment:
-			<select v-model="segment" @change="calculateChurn">
+			Abo-Herkunft:
+			<select v-model="origin" @change="calculateChurn">
 				<option value="">kein Filter</option>
-				<?php foreach ($segments as $segmentName): ?>
-				<option value="<?=$segmentName?>"><?=$segmentName?></option>
+				<?php foreach ($origins as $originName): ?>
+				<option value="<?=$originName?>"><?=$originName?></option>
 				<?php endforeach; ?>
 			</select>
 			</figure>
@@ -55,11 +55,11 @@
 			</figure>
 
 			<figure>
-			Abo-Quelle:
-			<select v-model="origin" @change="calculateChurn">
+			Drive-Segment:
+			<select v-model="segment" @change="calculateChurn">
 				<option value="">kein Filter</option>
-				<?php foreach ($origins as $originName): ?>
-				<option value="<?=$originName?>"><?=$originName?></option>
+				<?php foreach ($segments as $segmentName): ?>
+				<option value="<?=$segmentName?>"><?=$segmentName?></option>
 				<?php endforeach; ?>
 			</select>
 			</figure>
