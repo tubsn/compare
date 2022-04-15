@@ -4,9 +4,7 @@
 $routes->get('/', 'Stats@dashboard');
 
 // Teststuff
-$routes->get('/subs', 'Import@import_subscribers');
 $routes->get('/cards', 'Lists@cards');
-$routes->get('/emo', 'Stats@test');
 $routes->get('/freecharts', 'Stats@freecharts');
 $routes->get('/teasers[/{date}]', 'Teaser@index');
 $routes->get('/test/{id:\d+}', 'Test@index');
@@ -48,7 +46,7 @@ $routes->get('/epaper/import', 'Epaper@import');
 $routes->get('/valueable', 'Stats@value_articles');
 $routes->get('/valueable/{type}', 'Lists@valueables');
 
-// Print Map
+// Print Maps
 $routes->get('/print/local', 'Orders@map_print_local');
 $routes->get('/print/germany', 'Orders@map_print_germany');
 $routes->get('/print/local/cancelled', 'Orders@map_print_local_cancelled');
@@ -107,8 +105,11 @@ $routes->get('/campaigns/fbaccelerator', 'Campaigns@fb_accelerator');
 $routes->get('/campaigns/filter/{filter}', 'Campaigns@all');
 $routes->get('/campaigns', 'Campaigns@all');
 
+// Churn explorer
+$routes->get('/explorer[/{product}]', 'ChurnExplorer@index');
+$routes->get('/api/explorer', 'ChurnExplorer@api');
+
 // Apis
-$routes->get('/churncalc[/{product}]', 'LongtermAnalysis@churnAPI');
 $routes->get('/api/orders', 'LongtermAnalysis@provide_portal_orders');
 $routes->get('/api/kpis', 'LongtermAnalysis@provide_portal_kpis');
 $routes->get('/api/portals', 'LongtermAnalysis@provide_combined_kpis');

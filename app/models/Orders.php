@@ -278,6 +278,18 @@ class Orders extends Model
 		return $this->list_distinct('subscription_internal_title');
 	}
 
+	public function order_segments() {
+		return $this->list_distinct('customer_order_segment');
+	}
+
+	public function order_ressorts() {
+		return $this->list_distinct('article_ressort');
+	}
+
+	public function order_origins() {
+		return $this->list_distinct('order_origin');
+	}
+
 	public function without_ga_sources($dayCount = 5) {
 		$SQLstatement = $this->db->connection->prepare(
 			"SELECT order_id FROM `conversions` WHERE ga_source IS NULL
