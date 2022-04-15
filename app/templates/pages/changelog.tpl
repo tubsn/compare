@@ -4,6 +4,13 @@
 
 <hr>
 
+<h2>15.04.2022 - Churn Explorer hinzugefügt</h2>
+
+<ul>
+	<li>Neues Tool zur detaillierten Auswertung von Churnrates</li>
+	<li>ausführliche Filterfunktionen mit grafischer Nutzer-Oberfläche</li>
+</ul>
+
 <h2>12.04.2022 - User Explorer Update</h2>
 
 <ul>
@@ -237,7 +244,7 @@
 	<li>Berechnete KPIs z.B. Durchschnittlichs Pageviews pro Ressort, oder Conversionrates möglich</li>
 	<li>Suchfunktion für Artikel und Themen</li>
 	<li>Admin Menu für nachträgliche Importe</li>
-	<li>Anbindung von Plenigo, Linkpulse und Retresco</li>	
+	<li>Anbindung von Plenigo, Linkpulse und Retresco</li>
 </ul>
 
 <h2>10.09.2020 - Compare geht Live!</h2>
