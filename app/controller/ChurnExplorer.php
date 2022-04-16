@@ -80,6 +80,7 @@ class ChurnExplorer extends Controller {
 		}
 
 		$orders = $this->Orders->count($this->build($orderFilters));
+
 		$cancelled = $this->Orders->cancelled_by_retention_days($this->build($cancelFilters));
 
 		$data['orders'] = $orders;
@@ -101,11 +102,20 @@ class ChurnExplorer extends Controller {
 	}
 
 	private function sanitize_get_parameters() {
-
 		$params = array_map('strip_tags', $_GET);
+		$params = array_map('htmlentities', $_GET);
 		$valid = array_flip(['from', 'to', 'product', 'segment', 'ressort', 'origin', 'days']);
-		return array_intersect_key($params,$valid);
+		$params = array_intersect_key($params,$valid);
 
+		foreach ($params as $key => $value) {
+			if ($key=='days') {$value = intval($value);}
+			$value = str_replace('--','', $value);
+			$value = str_replace('#','', $value);
+			$value = str_replace(';','', $value);
+			$params[$key] = $value;
+		}
+
+		return $params;
 	}
 
 
