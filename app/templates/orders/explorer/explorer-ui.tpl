@@ -122,9 +122,14 @@
 .churn-number {font-size:5em; line-height:100%; font-family:var(--font-highlight); font-weight:bold; color:var(--darkest-red); margin-top:.3em;}
 
 .chart-layout {display:grid; grid-template-columns: 1fr 1.5fr; grid-gap:1em;}
+@media only screen and (max-width: 1400px) {.chart-layout {display:block;}}
+
+
 #Chart-Explorer {position:relative; top:-.7em;}
 
 #explorer-app {display:grid; grid-template-columns: 1.5fr 1fr; grid-gap:1em;}
+@media only screen and (max-width: 768px) {#explorer-app {display:block;}}
+
 .explorer-ui, .explorer-results {width:100%; border:1px solid #c4c4c4; padding:1em 1.5em; box-sizing: border-box;}
 
 .explorer-ui figure {margin-bottom:0em;}
