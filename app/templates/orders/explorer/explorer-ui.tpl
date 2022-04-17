@@ -49,7 +49,7 @@
 				<option value="">kein Filter</option>
 				<?php foreach ($ressorts as $ressortName): ?>
 				<?php if (empty($ressortName)): ?><?php continue;?><?php endif; ?>
-				<option value="<?=$ressortName?>"><?=ucfirst($ressortName)?></option>
+				<option value="<?=urlencode($ressortName)?>"><?=ucfirst($ressortName)?></option>
 				<?php endforeach; ?>
 			</select>
 			</figure>
@@ -60,7 +60,7 @@
 				<option value="">kein Filter</option>
 				<?php foreach ($types as $typeName): ?>
 				<?php if (empty($typeName)): ?><?php continue;?><?php endif; ?>
-				<option value="<?=$typeName?>"><?=$typeName?></option>
+				<option value="<?=urlencode($typeName)?>"><?=$typeName?></option>
 				<?php endforeach; ?>
 			</select>
 			</figure>
@@ -71,7 +71,7 @@
 				<option value="">kein Filter</option>
 				<?php foreach ($audiences as $audienceName): ?>
 				<?php if (empty($audienceName)): ?><?php continue;?><?php endif; ?>
-				<option value="<?=$audienceName?>"><?=$audienceName?></option>
+				<option value="<?=urlencode($audienceName)?>"><?=$audienceName?></option>
 				<?php endforeach; ?>
 			</select>
 			</figure>

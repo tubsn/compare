@@ -117,7 +117,7 @@ class ChurnExplorer extends Controller {
 
 	private function sanitize_get_parameters() {
 		$params = array_map('strip_tags', $_GET);
-		$params = array_map('htmlentities', $_GET);
+		//$params = array_map('htmlentities', $_GET); // Error With some Cats :/
 		$valid = array_flip(['from', 'to', 'product', 'segment', 'ressort', 'type', 'audience', 'origin', 'days']);
 		$params = array_intersect_key($params,$valid);
 
