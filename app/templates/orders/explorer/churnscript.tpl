@@ -11,6 +11,8 @@ Vue.createApp({
 			product: '',
 			segment: '',
 			ressort: '',
+			type: '',
+			audience: '',
 			origin: '',
 			days: 1000,
 			orders: 0,
@@ -43,7 +45,7 @@ Vue.createApp({
 
 	methods: {
 		calculateChurn() {
-			fetch(`/api/explorer?from=${this.from}&to=${this.to}&product=${this.product}&segment=${this.segment}&origin=${this.origin}&ressort=${this.ressort}&days=${this.days}`)
+			fetch(`/api/explorer?from=${this.from}&to=${this.to}&product=${this.product}&segment=${this.segment}&origin=${this.origin}&ressort=${this.ressort}&type=${this.type}&audience=${this.audience}&days=${this.days}`)
 			.then(response => response.json())
 			.then(data => {
 				this.orders = data.orders;

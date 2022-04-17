@@ -55,6 +55,28 @@
 			</figure>
 
 			<figure>
+			Themengebiet:
+			<select v-model="type" @change="calculateChurn">
+				<option value="">kein Filter</option>
+				<?php foreach ($types as $typeName): ?>
+				<?php if (empty($typeName)): ?><?php continue;?><?php endif; ?>
+				<option value="<?=$typeName?>"><?=$typeName?></option>
+				<?php endforeach; ?>
+			</select>
+			</figure>
+
+			<figure>
+			Audience:
+			<select v-model="audience" @change="calculateChurn">
+				<option value="">kein Filter</option>
+				<?php foreach ($audiences as $audienceName): ?>
+				<?php if (empty($audienceName)): ?><?php continue;?><?php endif; ?>
+				<option value="<?=$audienceName?>"><?=$audienceName?></option>
+				<?php endforeach; ?>
+			</select>
+			</figure>
+
+			<figure>
 			Drive-Segment:
 			<select v-model="segment" @change="calculateChurn">
 				<option value="">kein Filter</option>
@@ -116,10 +138,12 @@
 
 <style>
 
+.explorer-ui select:focus {background:#e6f2ff;}
+
 .calendar-timeframe, .calendar-datepicker {display:none !important;}
 
 .churnrate {margin:0 auto; text-align:center; margin-bottom:.5em;}
-.churn-number {font-size:5em; line-height:100%; font-family:var(--font-highlight); font-weight:bold; color:var(--darkest-red); margin-top:.3em;}
+.churn-number {font-size:5em; line-height:100%; font-family:var(--font-highlight); font-weight:bold; color:var(--darkest-red); margin-top:.6em;}
 
 .chart-layout {display:grid; grid-template-columns: 1fr 1.5fr; grid-gap:1em;}
 @media only screen and (max-width: 1400px) {.chart-layout {display:block;}}

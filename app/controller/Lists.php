@@ -420,7 +420,7 @@ class Lists extends Controller {
 
 	}
 
-
+	/*
 	public function filter() {
 
 		Session::set('referer', '/filter');
@@ -447,6 +447,11 @@ class Lists extends Controller {
 
 		foreach ($kpis as $kpi => $value) {
 			if (empty($value)) {continue;}
+
+			$value = str_replace('--','', $value);
+			$value = str_replace('#','', $value);
+			$value = str_replace(';','', $value);
+
 			$filter .= ' AND ' . $kpi . ' ' . $value;
 		}
 
@@ -464,11 +469,11 @@ class Lists extends Controller {
 
 		$viewData['articles'] = $output ;
 		$this->view->title = 'Gefilterte Artikel: ' . count($output);
-		//$this->view->info = 'blub';
 		$this->view->navigation = 'navigation/kpi-selector';
 		$this->view->render('pages/list', $viewData);
 
 	}
+	*/
 
 
 	private function decode_url($urlString) {

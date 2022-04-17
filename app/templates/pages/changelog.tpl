@@ -1,5 +1,17 @@
 <main class="content-page">
 
+<h1>Geplante Features / Entwicklungsideen</h1>
+
+<ul>
+	<li>Überarbeitung - Compare Startseite: Darstellung der letzten Tags & Bestperformer Artikel des Monats</li>
+	<li>Integration Reha Dashboards (MOZ,LR)</li>
+	<li>Übersicht Hall of Fame Artikel</li>
+	<li>Archiv Artikel die vor einem Monat oder Jahr gut performt haben darstellen</li>
+	<li>Alert Mails - z.B. Kündiger mit Technischem Problem </li>
+	<li>Eingehende Kündiger als Grafik</li>
+</ul>
+
+
 <h1>Changelog</h1>
 
 <hr>

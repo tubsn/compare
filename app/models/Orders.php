@@ -20,8 +20,8 @@ class Orders extends Model
 		$this->db->primaryIndex = 'order_id';
 		$this->db->orderby = 'order_id';
 
-		$this->from = date('Y-m-d', strtotime('yesterday -6days'));
-		$this->to = date('Y-m-d', strtotime('yesterday'));
+		$this->from = date('Y-m-d', strtotime(DEFAULT_FROM));
+		$this->to = date('Y-m-d', strtotime(DEFAULT_TO));
 
 		if (Session::get('from')) {$this->from = Session::get('from');}
 		if (Session::get('to')) {$this->to = Session::get('to');}
@@ -248,6 +248,30 @@ class Orders extends Model
 
 	}
 
+	public function count_with_article_join($filter = null) {
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		if (!is_null($filter)) {
+			$filter = strip_tags($filter);
+			$filter = 'AND ' . $filter;
+		}
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT count(*) as orders
+			 FROM `conversions`
+			 LEFT JOIN articles ON articles.id = conversions.article_id
+			 WHERE DATE(`order_date`) BETWEEN :startDate AND :endDate
+			 $filter"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetch();
+		return $output['orders'];
+
+	}
+
+
 	public function count_cancelled() {
 		return $this->count('cancelled = 1');
 	}
@@ -457,6 +481,33 @@ class Orders extends Model
 		$to = strip_tags($this->to);
 		if (!is_null($filter)) {$filter = 'AND ' . strip_tags($filter);}
 
+		$SQLstatement = $this->db->connection->prepare(
+
+			"SELECT
+			 conversions.retention as days,
+			 count(conversions.order_id) as cancelled_orders
+
+			 FROM conversions
+			 WHERE DATE(conversions.order_date) BETWEEN :startDate AND :endDate
+			 AND conversions.cancelled != 0
+			 $filter
+
+			 GROUP BY conversions.retention
+			 ORDER BY CAST(days AS UNSIGNED) ASC"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$orders = $SQLstatement->fetchall(\PDO::FETCH_UNIQUE);
+		return $orders;
+
+	}
+
+	public function cancelled_by_retention_days_with_article_join($filter = null) {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+		if (!is_null($filter)) {$filter = 'AND ' . strip_tags($filter);}
+
 		// Join Articles deactivated until needed
 		$SQLstatement = $this->db->connection->prepare(
 
@@ -465,19 +516,11 @@ class Orders extends Model
 			 count(conversions.order_id) as cancelled_orders
 
 			 FROM conversions
-			 #LEFT JOIN articles ON articles.id = conversions.article_id
+			 LEFT JOIN articles ON articles.id = conversions.article_id
 			 WHERE DATE(conversions.order_date) BETWEEN :startDate AND :endDate
 			 AND conversions.cancelled != 0
 			 $filter
-			 /*
-			 #AND ifnull(conversions.article_ressort, articles.ressort) = 'cottbus'
-			 articles.type as type,
-			 articles.type as tag,
-			 articles.audience as audience,
-			 ifnull(conversions.article_ressort, articles.ressort) as ressort,
-			 articles.author as author,
-			 articles.cancelled as cancelled
-			 */
+
 			 GROUP BY conversions.retention
 			 ORDER BY CAST(days AS UNSIGNED) ASC"
 		);

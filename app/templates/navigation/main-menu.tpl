@@ -30,9 +30,8 @@
 				<li><a href="/mediatime">Mediatime</a></li>
 				<li><a href="/conversions">Conversions</a></li>
 				<li><a href="/score">Artikel-Score</a></li>
-				<li><a href="/teasers">Teaser-Statistiken (LR)</a></li>
 				<li><a href="/top5">Top5</a></li>
-				<li><a href="/filter">Eigene Filter</a></li>
+				<!--<li><a href="/filter">Eigene Filter</a></li>-->
 			</ul>
 		</li>
 
@@ -71,20 +70,20 @@
 				<li><a href="/orders">Eingehende Bestellungen</a></li>
 				<li><a href="/orders/list-cancellations">Eingehende Kündigungen</a></li>
 				<li><a href="/orders/clustered">Bestellungen nach Cluster</a></li>
-				<li><a href="/orders/map/local">Bestelldaten als Karte</a></li>
-				<li><a href="/orders/explorer">Churn-Explorer!!!</a></li>
+				<li class="hightlight"><a href="/orders/explorer">Churn-Explorer (NEU)</a></li>
 				<li><a href="/orders/behavior">Kundenverhalten</a></li>
 				<li><a href="/orders/campaigns">UTM-Kampagnen</a></li>
 				<li><a href="/orders/today">Echtzeit Bestelleingang</a></li>
 				<!--<li><a href="/readers/multiple-orders">Mehrfach - Bestellungen</a></li>-->
 				<!--<li><a href="/readers/list">Bestellungen mit Usergroup (Beta)</a></li>-->
-				<!--<li><a href="/stats/compared">Kündigerverhalten (Longterm)</a></li>-->
 			</ul>
 		</li>
 
 		<li><a href="/portals" aria-haspopup="true">Portaldaten</a>
 			<ul class="dropdown" aria-label="submenu">
 				<li><a href="/longterm">Abo- / KPI-Entwicklung</a></li>
+				<li><a href="/teasers">Teaser-Statistiken (LR)</a></li>
+				<li><a href="/orders/map/local">Abo-Karte</a></li>
 				<li><a href="/portals">Portalvergleich</a></li>
 			</ul>
 		</li>

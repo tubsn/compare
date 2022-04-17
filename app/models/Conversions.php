@@ -26,8 +26,8 @@ class Conversions extends Model
 		$this->analytics = new Analytics();
 		$this->plenigo = new Plenigo();
 
-		$this->from = date('Y-m-d', strtotime('yesterday -6days'));
-		$this->to = date('Y-m-d', strtotime('yesterday'));
+		$this->from = date('Y-m-d', strtotime(DEFAULT_FROM));
+		$this->to = date('Y-m-d', strtotime(DEFAULT_TO));
 	}
 
 

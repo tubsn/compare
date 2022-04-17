@@ -25,6 +25,8 @@ class ChurnExplorer extends Controller {
 		$this->view->segments = $this->Orders->order_segments();
 		$this->view->products = $this->Orders->product_titles();
 		$this->view->ressorts = $this->Orders->order_ressorts();
+		$this->view->types = ARTICLE_TYPES;
+		$this->view->audiences = ARTICLE_AUDIENCES;
 		$this->view->origins = $this->Orders->order_origins();
 		$this->view->render('orders/explorer/explorer-ui');
 	}
@@ -50,6 +52,8 @@ class ChurnExplorer extends Controller {
 		$retention = $options['days'] ?? null;
 		$segment = $options['segment'] ?? null;
 		$ressort = $options['ressort'] ?? null;
+		$type = $options['type'] ?? null;
+		$audience = $options['audience'] ?? null;
 		$origin = $options['origin'] ?? null;
 
 		$orderFilters = [];
@@ -70,6 +74,16 @@ class ChurnExplorer extends Controller {
 			array_push($cancelFilters, "article_ressort = '$ressort'");
 		}
 
+		if (!empty($type)) {
+			array_push($orderFilters, "type = '$type'");
+			array_push($cancelFilters, "type = '$type'");
+		}
+
+		if (!empty($audience)) {
+			array_push($orderFilters, "audience = '$audience'");
+			array_push($cancelFilters, "audience = '$audience'");
+		}
+
 		if (!empty($origin)) {
 			array_push($orderFilters, "order_origin = '$origin'");
 			array_push($cancelFilters, "order_origin = '$origin'");
@@ -79,9 +93,9 @@ class ChurnExplorer extends Controller {
 			array_push($cancelFilters, "conversions.retention < $retention");
 		}
 
-		$orders = $this->Orders->count($this->build($orderFilters));
+		$orders = $this->Orders->count_with_article_join($this->build($orderFilters));
 
-		$cancelled = $this->Orders->cancelled_by_retention_days($this->build($cancelFilters));
+		$cancelled = $this->Orders->cancelled_by_retention_days_with_article_join($this->build($cancelFilters));
 
 		$data['orders'] = $orders;
 		$data['cancelled'] = $this->sum($cancelled);
@@ -104,7 +118,7 @@ class ChurnExplorer extends Controller {
 	private function sanitize_get_parameters() {
 		$params = array_map('strip_tags', $_GET);
 		$params = array_map('htmlentities', $_GET);
-		$valid = array_flip(['from', 'to', 'product', 'segment', 'ressort', 'origin', 'days']);
+		$valid = array_flip(['from', 'to', 'product', 'segment', 'ressort', 'type', 'audience', 'origin', 'days']);
 		$params = array_intersect_key($params,$valid);
 
 		foreach ($params as $key => $value) {

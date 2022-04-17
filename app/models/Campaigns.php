@@ -19,8 +19,8 @@ class Campaigns extends Model
 		$this->db->primaryIndex = 'order_id';
 		$this->db->orderby = 'order_id';
 
-		$this->from = date('Y-m-d', strtotime('yesterday -6days'));
-		$this->to = date('Y-m-d', strtotime('yesterday'));
+		$this->from = date('Y-m-d', strtotime(DEFAULT_FROM));
+		$this->to = date('Y-m-d', strtotime(DEFAULT_TO));
 
 		if (Session::get('from')) {$this->from = Session::get('from');}
 		if (Session::get('to')) {$this->to = Session::get('to');}
@@ -35,7 +35,7 @@ class Campaigns extends Model
 
 		$SQLstatement = $this->db->connection->prepare(
 
-			"SELECT 
+			"SELECT
 			 campaigns.order_id,
 			 conversions.customer_id as customer_id,
 			 conversions.order_date as order_date,

@@ -8,6 +8,9 @@ $routes->get('/cards', 'Lists@cards');
 $routes->get('/freecharts', 'Stats@freecharts');
 $routes->get('/teasers[/{date}]', 'Teaser@index');
 $routes->get('/test/{id:\d+}', 'Test@index');
+$routes->get('/filter', 'Lists@filter');
+$routes->post('/filter', 'Lists@filter');
+
 
 // Article Lists
 $routes->get('/unclassified/types', 'Lists@unset_only');
@@ -32,8 +35,6 @@ $routes->get('/conversions', 'Lists@conversions');
 $routes->get('/pageviews', 'Lists@pageviews');
 $routes->get('/mediatime', 'Lists@mediatime');
 $routes->get('/subscribers', 'Lists@subscribers');
-$routes->get('/filter', 'Lists@filter');
-$routes->post('/filter', 'Lists@filter');
 
 // ePaper
 $routes->get('/epaper', 'Epaper@list');

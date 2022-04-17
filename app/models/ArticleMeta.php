@@ -23,8 +23,8 @@ class ArticleMeta extends Model
 		$this->db->orderby = 'article_id';
 		$this->db->order = 'DESC';
 
-		$this->from = date('Y-m-d', strtotime('yesterday -6days'));
-		$this->to = date('Y-m-d', strtotime('yesterday'));
+		$this->from = date('Y-m-d', strtotime(DEFAULT_FROM));
+		$this->to = date('Y-m-d', strtotime(DEFAULT_TO));
 	}
 
 

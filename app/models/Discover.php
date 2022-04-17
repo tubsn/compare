@@ -19,8 +19,8 @@ class Discover extends Model
 		$this->db->table = 'article_meta';
 		$this->db->primaryIndex = 'article_id';
 
-		$this->from = date('Y-m-d', strtotime('yesterday -6days'));
-		$this->to = date('Y-m-d', strtotime('yesterday'));
+		$this->from = date('Y-m-d', strtotime(DEFAULT_FROM));
+		$this->to = date('Y-m-d', strtotime(DEFAULT_TO));
 
 		if (Session::get('from')) {$this->from = Session::get('from');}
 		if (Session::get('to')) {$this->to = Session::get('to');}

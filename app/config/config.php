@@ -128,7 +128,7 @@ switch (PORTAL) {
 
 		define('PORTAL_URL', 'https://www.swp.de');
 		define('PORTAL_URL_SHORT', 'www.swp.de');
-		define('PORTAL_EPAPER_URL', 'https://epaper.swp.de');		
+		define('PORTAL_EPAPER_URL', 'https://epaper.swp.de');
 		define('PORTAL_NAME', 'SWP');
 
 		define('IMPORT_FEEDS', [
@@ -186,6 +186,9 @@ define('TIMEFRAMES', [
 	'letzte 3 Monate',
 	'alle Daten',
 ]);
+
+define('DEFAULT_FROM', 'yesterday -29 days');
+define('DEFAULT_TO', 'yesterday');
 
 define('CANCELLATION_REASON', [
 	0 => null,
