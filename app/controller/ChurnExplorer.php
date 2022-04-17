@@ -14,7 +14,7 @@ class ChurnExplorer extends Controller {
 
 		$this->view('DefaultLayout');
 		$this->view->templates['footer'] = null;
-		$this->models('Charts,Orders');
+		$this->models('Charts,Orders,Articles');
 	}
 
 	public function index() {
@@ -25,8 +25,8 @@ class ChurnExplorer extends Controller {
 		$this->view->segments = $this->Orders->order_segments();
 		$this->view->products = $this->Orders->product_titles();
 		$this->view->ressorts = $this->Orders->order_ressorts();
-		$this->view->types = ARTICLE_TYPES;
-		$this->view->audiences = ARTICLE_AUDIENCES;
+		$this->view->types = $this->Articles->list_distinct('Type');
+		$this->view->audiences = $this->Articles->list_distinct('Audience');
 		$this->view->origins = $this->Orders->order_origins();
 		$this->view->render('orders/explorer/explorer-ui');
 	}
