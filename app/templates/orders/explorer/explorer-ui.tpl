@@ -6,6 +6,13 @@
 <h1><?=$page['title']?></h1>
 <?php endif; ?>
 
+<p style="margin-bottom:2em">
+	<b>Hinweise:</b>
+	Die vorliegenden Daten enthalten alle Käufe seit dem 23.&thinsp;März 2021 (Einführung Plenigo V3).
+	Der Kündigungsstatus für Daten älter als einen Monat ist nicht zu 100% genau. Alle Daten werden aber mindestens einmal am Ende des Monats aktualisiert.
+	Die Filterung nach <b>Drive-Segmenten</b> stellt jeweils den Stand des Nutzers <b>zum Zeitpunkt des Kaufs</b> dar. Ressort, Audience und Themengebiet beziehen sich jeweils auf den Artikel, auf dem der Nutzer den Kauf getätigt hat.
+</p>
+
 <div class="chart-layout">
 
 <div id="explorer-app">
@@ -94,7 +101,7 @@
 			<button @click="setDays(1)">1 Tag</button>
 			<button @click="setDays(31)">31 Tagen</button>
 			<button @click="setDays(91)">3 Monaten</button>
-			<button @click="setDays(365)">1Jahr</button>
+			<button @click="setDays(365)">1 Jahr</button>
 			<button @click="setDays(1000)">Max</button>
 		</div>
 
@@ -126,15 +133,16 @@
 
 	</div>
 
-	<div>
-
-
-	</div>
-
 </div>
 
-<?php include tpl('charts/churn-explorer');?>
+<?php include tpl('orders/explorer/explorer-chart');?>
 </div>
+
+<!--
+<div class="light-box">
+Help
+</div>
+-->
 
 <style>
 
@@ -151,7 +159,7 @@
 
 #Chart-Explorer {position:relative; top:-.7em;}
 
-#explorer-app {display:grid; grid-template-columns: 1.5fr 1fr; grid-gap:1em;}
+#explorer-app {display:grid; grid-template-columns: 1.5fr 1fr; grid-gap:1em; margin-bottom:4em;}
 @media only screen and (max-width: 768px) {#explorer-app {display:block;}}
 
 .explorer-ui, .explorer-results {width:100%; border:1px solid #c4c4c4; padding:1em 1.5em; box-sizing: border-box;}
