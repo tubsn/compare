@@ -96,6 +96,13 @@ Hier können Artikel, Conversions und Kampagnendaten inklusive Klick- und Kündi
 	<a class="button noline" href="/admin/warmup/readers">Drive Segmente importieren</a>
 	</p>
 
+<hr>
+
+	<h3>Referer Mapping</h3>
+	<p>Alle Conversions werden anhand einer Mapping Tabelle zu einem passenden Referer Typen zugeordnet.</p>
+
+	<a class="button noline" href="/admin/warmup/assign-sources">Conversion Referals mappen</a>
+	</p>
 
 <hr>
 
