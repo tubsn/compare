@@ -11,8 +11,13 @@ class Warmup extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Analytics,Linkpulse,Kilkaya,Articles,ArticleMeta,Conversions,ArticleKPIs,Orders,Readers');
+		$this->models('Analytics,Linkpulse,Kilkaya,Articles,ArticleMeta,Conversions,ArticleKPIs,Orders,Readers,Campaigns');
 	}
+
+	public function assign_sources() {
+		dd($this->Orders->assign_sources());
+	}
+
 
 	public function daterange() {
 

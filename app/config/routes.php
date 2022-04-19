@@ -11,7 +11,6 @@ $routes->get('/test/{id:\d+}', 'Test@index');
 $routes->get('/filter', 'Lists@filter');
 $routes->post('/filter', 'Lists@filter');
 
-
 // Article Lists
 $routes->get('/unclassified/types', 'Lists@unset_only');
 $routes->get('/unclassified/audiences', 'Lists@unset_audience_only');
@@ -186,6 +185,7 @@ $routes->get('/admin/warmup', 'Warmup@daterange');
 $routes->get('/admin/warmup_conversions[/{daysago}]', 'Warmup@conversions');
 $routes->get('/admin/warmup/subscribers', 'Warmup@subscribers');
 $routes->get('/admin/warmup/readers', 'Warmup@readers');
+$routes->get('/admin/warmup/assign-sources', 'Warmup@assign_sources');
 $routes->get('/admin/warmup/buyintentions', 'Warmup@buy_intentions');
 $routes->get('/admin/warmup/sources[/{daysago}]', 'Warmup@enrich_conversions_with_ga');
 $routes->get('/admin/warmup/buyintents[/{daysago}]', 'Warmup@enrich_article_with_buy_intents');

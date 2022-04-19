@@ -5,6 +5,7 @@ use flundr\mvc\Controller;
 use flundr\utility\Session;
 use flundr\auth\Auth;
 use flundr\cache\RequestCache;
+use \app\models\helpers\MappingTool;
 
 class ChurnExplorer extends Controller {
 
@@ -14,7 +15,7 @@ class ChurnExplorer extends Controller {
 
 		$this->view('DefaultLayout');
 		$this->view->templates['footer'] = null;
-		$this->models('Charts,Orders,Articles');
+		$this->models('Charts,Orders,Campaigns,Articles');
 	}
 
 	public function index() {
@@ -30,9 +31,18 @@ class ChurnExplorer extends Controller {
 		$this->view->segments = $this->Orders->order_segments();
 		$this->view->products = $this->Orders->product_titles();
 		$this->view->ressorts = $this->Orders->order_ressorts();
+		$this->view->groupedSources = $this->Orders->order_referer_source_grouped();
+		$this->view->sources = $this->Orders->order_referer_source();
 		$this->view->types = $this->Articles->list_distinct('Type');
 		$this->view->audiences = $this->Articles->list_distinct('Audience');
 		$this->view->origins = $this->Orders->order_origins();
+
+		$mapper = new MappingTool();
+
+		$gaSources = $this->Orders->list_distinct('ga_source');
+		$UTMmediums = $this->Campaigns->list_distinct('utm_medium');
+		$this->view->mapping = $mapper->referer_overview(array_merge($UTMmediums,$gaSources));
+
 		$this->view->render('orders/explorer/explorer-ui');
 	}
 
@@ -60,6 +70,8 @@ class ChurnExplorer extends Controller {
 		$type = $options['type'] ?? null;
 		$audience = $options['audience'] ?? null;
 		$origin = $options['origin'] ?? null;
+		$sourceGrouped = $options['source_grp'] ?? null;
+		$source = $options['source'] ?? null;
 
 		$orderFilters = [];
 		$cancelFilters = [];
@@ -94,6 +106,16 @@ class ChurnExplorer extends Controller {
 			array_push($cancelFilters, "order_origin = '$origin'");
 		}
 
+		if (!empty($sourceGrouped)) {
+			array_push($orderFilters, "referer_source_grouped = '$sourceGrouped'");
+			array_push($cancelFilters, "referer_source_grouped = '$sourceGrouped'");
+		}
+
+		if (!empty($source)) {
+			array_push($orderFilters, "referer_source = '$source'");
+			array_push($cancelFilters, "referer_source = '$source'");
+		}
+
 		if ($retention) {
 			array_push($cancelFilters, "conversions.retention < $retention");
 		}
@@ -123,7 +145,7 @@ class ChurnExplorer extends Controller {
 	private function sanitize_get_parameters() {
 		$params = array_map('strip_tags', $_GET);
 		//$params = array_map('htmlentities', $_GET); // Error With some Cats :/
-		$valid = array_flip(['from', 'to', 'product', 'segment', 'ressort', 'type', 'audience', 'origin', 'days']);
+		$valid = array_flip(['from', 'to', 'product', 'segment', 'ressort', 'type', 'audience', 'origin', 'source_grp', 'source', 'days']);
 		$params = array_intersect_key($params,$valid);
 
 		foreach ($params as $key => $value) {

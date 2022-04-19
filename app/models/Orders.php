@@ -6,6 +6,8 @@ use \flundr\database\SQLdb;
 use \flundr\utility\Session;
 use \flundr\cache\RequestCache;
 use \app\models\Charts;
+use \app\models\Campaigns;
+use \app\models\helpers\MappingTool;
 
 class Orders extends Model
 {
@@ -225,6 +227,73 @@ class Orders extends Model
 
 	}
 
+	public function list_sources_with_utm() {
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT
+			conversions.order_id,
+			conversions.order_origin,
+			conversions.ga_source,
+			campaigns.utm_source,
+			campaigns.utm_medium
+
+			 FROM `conversions`
+			 LEFT JOIN campaigns ON campaigns.order_id = conversions.order_id
+			 "
+		);
+		$SQLstatement->execute();
+		return $SQLstatement->fetchall();
+	}
+
+	public function assign_sources() {
+
+		$mapper = new MappingTool();
+
+		$this->from = '2000-01-01';
+		$this->to = date('Y-m-d');
+
+		$campaigns = $this->get_campaign_mediums();
+		$orders = $this->get_order_referals();
+
+		//Orders to Referer
+		foreach ($orders as $orderID => $input) {
+			$referer = $mapper->referer($input);
+			$this->update($referer, $orderID);
+		}
+
+		//UTM Campaigns to Referer
+		foreach ($campaigns as $orderID => $input) {
+			$referer = $mapper->referer($input);
+			$this->update($referer, $orderID);
+		}
+
+	}
+
+	public function get_campaign_mediums() {
+		$campaignDB = new Campaigns();
+		$campaignDB->from = $this->from;
+		$campaignDB->to = $this->to;
+		return $campaignDB->medium_by_id();
+	}
+
+	public function get_order_referals() {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT order_id, ga_source FROM `conversions`
+			 WHERE DATE(`order_date`) BETWEEN :startDate AND :endDate
+			 AND ga_source is not NULL
+			 ORDER BY `order_date` DESC"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$orders = $SQLstatement->fetchall(\PDO::FETCH_COLUMN|\PDO::FETCH_UNIQUE);
+		return $orders;
+
+	}
+
 
 	public function count($filter = null) {
 		$from = strip_tags($this->from);
@@ -271,7 +340,6 @@ class Orders extends Model
 
 	}
 
-
 	public function count_cancelled() {
 		return $this->count('cancelled = 1');
 	}
@@ -312,6 +380,14 @@ class Orders extends Model
 
 	public function order_origins() {
 		return $this->list_distinct('order_origin');
+	}
+
+	public function order_referer_source() {
+		return $this->list_distinct('referer_source');
+	}
+
+	public function order_referer_source_grouped() {
+		return $this->list_distinct('referer_source_grouped');
 	}
 
 	public function without_ga_sources($dayCount = 5) {

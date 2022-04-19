@@ -41,11 +41,32 @@
 			</figure>
 
 			<figure>
-			Abo-Herkunft:
+			Ursprung:
 			<select v-model="origin" @change="calculateChurn">
 				<option value="">kein Filter</option>
 				<?php foreach ($origins as $originName): ?>
 				<option value="<?=$originName?>"><?=$originName?></option>
+				<?php endforeach; ?>
+			</select>
+			</figure>
+
+			<figure>
+			Referer:
+			<select v-model="source" @change="calculateChurn">
+				<option value="">kein Filter</option>
+				<?php foreach ($sources as $sourceName): ?>
+				<?php if (empty($sourceName)): ?><?php continue;?><?php endif; ?>
+				<option value="<?=$sourceName?>"><?=$sourceName?></option>
+				<?php endforeach; ?>
+			</select>
+			</figure>
+
+			<figure>
+			Referer gruppiert:
+			<select v-model="source_grp" @change="calculateChurn">
+				<option value="">kein Filter</option>
+				<?php foreach ($groupedSources as $groupedSourceName): ?>
+				<option value="<?=$groupedSourceName?>"><?=$groupedSourceName?></option>
 				<?php endforeach; ?>
 			</select>
 			</figure>
@@ -138,11 +159,28 @@
 <?php include tpl('orders/explorer/explorer-chart');?>
 </div>
 
-<!--
-<div class="light-box">
-Help
-</div>
--->
+<details style="margin-bottom:2em;">
+	<summary>Quellen für Referer Gruppierung anzeigen</summary>
+<table class="fancy wide align-top">
+	<tr>
+	<?php foreach ($mapping as $medium => $sources): ?>
+		<th><?=$medium?></th>
+	<?php endforeach; ?>
+	</tr>
+	<tr>
+	<?php foreach ($mapping as $medium => $sources): ?>
+		<td>
+			<?php foreach ($sources as $source): ?>
+				<?=$source?><br />
+			<?php endforeach; ?>
+		</td>
+
+	<?php endforeach; ?>
+</tr>
+
+</table>
+</details>
+
 
 <style>
 
@@ -156,10 +194,11 @@ Help
 .chart-layout {display:grid; grid-template-columns: 1fr 1.5fr; grid-gap:1em;}
 @media only screen and (max-width: 1400px) {.chart-layout {display:block;}}
 
+.align-top td {vertical-align:top; }
 
 #Chart-Explorer {position:relative; top:-.7em;}
 
-#explorer-app {display:grid; grid-template-columns: 1.5fr 1fr; grid-gap:1em; margin-bottom:4em;}
+#explorer-app {display:grid; grid-template-columns: 1.5fr 1fr; grid-gap:1em; margin-bottom:1em;}
 @media only screen and (max-width: 768px) {#explorer-app {display:block;}}
 
 .explorer-ui, .explorer-results {width:100%; border:1px solid #c4c4c4; padding:1em 1.5em; box-sizing: border-box;}

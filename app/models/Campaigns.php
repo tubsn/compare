@@ -67,6 +67,55 @@ class Campaigns extends Model
 
 	}
 
+	public function list_plain() {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT * FROM campaigns
+			 WHERE DATE(ga_date) BETWEEN :startDate AND :endDate
+			 ORDER BY ga_date DESC"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$orders = $SQLstatement->fetchall();
+		return $orders;
+
+	}
+
+	public function medium_by_id() {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT order_id, utm_medium FROM campaigns
+			 WHERE DATE(ga_date) BETWEEN :startDate AND :endDate
+			 ORDER BY ga_date DESC"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$orders = $SQLstatement->fetchall(\PDO::FETCH_COLUMN|\PDO::FETCH_UNIQUE);
+		return $orders;
+
+	}
+
+	public function list_distinct($column) {
+
+		$column = strip_tags($column);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT DISTINCT $column FROM `campaigns`
+			 WHERE $column is not null
+			 ORDER BY $column ASC"
+		);
+		$SQLstatement->execute();
+		return $SQLstatement->fetchall(\PDO::FETCH_COLUMN);
+
+	}
+
+
 	public function filter_cancelled($campaigns) {
 		if (empty($campaigns)) {return [];}
 		return array_filter($campaigns, function($campaigns) {
