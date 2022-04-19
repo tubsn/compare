@@ -21,6 +21,11 @@ class ChurnExplorer extends Controller {
 
 		//dd($this->Orders->cancelled_by_retention_days());
 
+		$this->Orders->from = '2000-01-01';
+		$this->Orders->to = date('Y-m-d');
+		$this->Articles->from = '2000-01-01';
+		$this->Articles->to = date('Y-m-d');
+
 		$this->view->title = 'The Ultimate Churn-Rate Explorer phew phew!';
 		$this->view->segments = $this->Orders->order_segments();
 		$this->view->products = $this->Orders->product_titles();
@@ -37,7 +42,7 @@ class ChurnExplorer extends Controller {
 		$options = $this->sanitize_get_parameters();
 
 		if (empty($options['to'])) {$options['to'] = date('Y-m-d');}
-		if (empty($options['from'])) {$options['from'] = date('Y-m-d', strtotime('2000-01-01'));}
+		if (empty($options['from'])) {$options['from'] = '2000-01-01';}
 
 		if ($options['to'] < $options['from']) {
 			$tmp = $options['to'];
