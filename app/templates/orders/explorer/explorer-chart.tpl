@@ -11,7 +11,7 @@ let ChartOptionsExplorer = {
 	chart: {
 		type: 'bar',
 		toolbar: {show:false},
-		height: 580,
+		height: 650,
 		//width: 500,
 		animations: {enabled: true},
 		stacked: false,

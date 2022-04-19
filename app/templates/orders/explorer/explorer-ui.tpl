@@ -189,7 +189,7 @@
 .calendar-timeframe, .calendar-datepicker {display:none !important;}
 
 .churnrate {margin:0 auto; text-align:center; margin-bottom:.5em;}
-.churn-number {font-size:5em; line-height:100%; font-family:var(--font-highlight); font-weight:bold; color:var(--darkest-red); margin-top:.6em;}
+.churn-number {font-size:5em; line-height:100%; font-family:var(--font-highlight); font-weight:bold; color:var(--darkest-red); margin-top:1em;}
 
 .chart-layout {display:grid; grid-template-columns: 1fr 1.5fr; grid-gap:1em;}
 @media only screen and (max-width: 1400px) {.chart-layout {display:block;}}
