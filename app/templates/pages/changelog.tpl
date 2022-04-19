@@ -16,6 +16,13 @@
 
 <hr>
 
+<h2>19.04.2022 - Mappingtabelle für Referer bei Conversions</h2>
+
+<ul>
+	<li>Es ist jetzt möglich im Churn-Explorer Refererseiten gruppiert nach Direct, Push, Email, Referral, Search und Social zu Filtern</li>
+	<li>Die Gruppierung steht potentiell auch in allen anderen Boards zur Verfügung. Feldnamen: "referer_source" und "referer_source_grouped"</li>
+</ul>
+
 <h2>15.04.2022 - Churn Explorer hinzugefügt</h2>
 
 <ul>
