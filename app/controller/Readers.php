@@ -31,14 +31,6 @@ class Readers extends Controller {
 
 	}
 
-	public function engagement_alert() {
-
-		//$this->Readers->update_latest_orders();
-		//$this->Readers->update_latest_cancellations();
-		echo 'tbd';
-
-	}
-
 
 	public function overview() {
 		$this->view->render('pages/reader-list');

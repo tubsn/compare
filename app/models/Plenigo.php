@@ -11,7 +11,6 @@ class Plenigo
 
 	function __construct() {
 		$this->api = new PlenigoAPI();
-		$this->api->client(Session::get('client') ?? 'LR');
 	}
 
 	public function orders($start, $end, $items, $showAll = false) {
@@ -23,7 +22,6 @@ class Plenigo
 		$orders = array_map([$this, 'map_order'], $orders);
 		return $orders;
 	}
-
 
 	public function customer($id) {
 		return $this->api->customer($id);
@@ -138,12 +136,12 @@ class Plenigo
 		}
 
 		$new['cancelled'] = 0;
-		$new['cancellation_reason'] = null;		
+		$new['cancellation_reason'] = null;
 		$new['retention'] = null;
 
 		if ($new['subscription_cancellation_date']) {
 			$new['cancelled'] = 1;
-			$new['cancellation_reason'] = $org['cancellationReasonUniqueId'] ?? null;			
+			$new['cancellation_reason'] = $org['cancellationReasonUniqueId'] ?? null;
 
 			$start = new \DateTime(formatDate($org['orderDate'], 'Y-m-d'));
 			$end = new \DateTime(formatDate($org['cancellationDate'], 'Y-m-d'));

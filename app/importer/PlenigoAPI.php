@@ -14,19 +14,6 @@ class PlenigoAPI
 	public function __construct() {
 	}
 
-	public function client($client) {
-
-		/*
-		switch ($client) {
-			case 'LR': $this->plenigoToken = PLENIGO_TOKEN_LR; $this->client = 'LR'; break;
-			case 'MOZ': $this->plenigoToken = PLENIGO_TOKEN_MOZ; $this->client = 'MOZ'; break;
-			case 'SWP': $this->plenigoToken = PLENIGO_TOKEN_SWP; $this->client = 'SWP'; break;
-			default: $this->plenigoToken = PLENIGO_TOKEN_LR; $this->client = 'LR'; break;
-		}
-		*/
-
-	}
-
 	public function orders($start, $end, $items = 100) {
 
 		$apiQuery = '/orders/?startTime=' . $start . 'T00:00:00Z&endTime=' . $end . 'T23:59:59Z&size=' . $items;
@@ -41,7 +28,7 @@ class PlenigoAPI
 		$data = $this->curl($apiQuery);
 
 		//$cache->save($data['items']);
-		
+
 		return $data['items'];
 
 	}
@@ -49,13 +36,6 @@ class PlenigoAPI
 	public function order($id) {
 		$data = $this->curl('/orders/' . $id);
 		$additionalData = $this->curl('/orders/' . $id . '/additionalData');
-
-		/*
-		//$data = $this->curl('https://api.plenigo.com/api/v3.0/orders/?size=10');
-		$data = $this->curl('https://api.plenigo.com/api/v3.0/orders/?startTime=2021-02-23T00:00:00Z&endTime=2021-03-24T00:00:00Z&size=10');
-		dd(json_decode($data,1));
-		*/
-
 		$data = array_merge($data, $additionalData);
 		return $data;
 

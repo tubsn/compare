@@ -7,7 +7,7 @@ $routes->get('/', 'Stats@dashboard');
 $routes->get('/cards', 'Lists@cards');
 $routes->get('/freecharts', 'Stats@freecharts');
 $routes->get('/teasers[/{date}]', 'Teaser@index');
-$routes->get('/test/{id:\d+}', 'Test@index');
+$routes->get('/test', 'Readers@test');
 $routes->get('/filter', 'Lists@filter');
 $routes->post('/filter', 'Lists@filter');
 
