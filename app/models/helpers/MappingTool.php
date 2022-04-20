@@ -40,6 +40,10 @@ class MappingTool
 	private function map($input, $table) {
 
 		$input = strTolower($input);
+
+		// Filtering all the AMP Variants
+		if(strpos($input, 'ampproject') !== false) {return 'AMP';}
+
 		foreach ($table as $category => $sources) {
 			if (in_array($input, $sources)) {return $category;}
 		}
@@ -86,7 +90,7 @@ class MappingTool
 			'nachrichtenseiten',
 			'discover',
 			'newsfeeds',
-			'sportseiten',
+			'vereine',
 			'wikis',
 			'google news',
 		];
@@ -104,6 +108,7 @@ class MappingTool
 			'facebook.com',
 			'facebook',
 			'm.facebook.com',
+			'de-de.facebook.com',
 			'lm.facebook.com',
 			'l.facebook.com',
 			'social media',
@@ -132,6 +137,10 @@ class MappingTool
 			'm.bild.de',
 			'rbb24.de',
 			'lausitzer-woche.de',
+			'tagblatt.de',
+			'schwaebischhall-online.de',
+			't-online.de',
+			'web.de',
 			'spreewald-nachrichten.de',
 		];
 
@@ -140,8 +149,11 @@ class MappingTool
 			'startpage.com',
 			'cdn-af.feednews.com',
 			'app.talkwalker.com',
+			'app.meltwater.com',
 			'm.newslocker.com',
 			'dailyadvent.com',
+			'break.ma',
+			'news.upday.com',
 			'newsbreakapp.com',
 			'swipe',
 			'quickaccess.internet.apps.samsung.com',
@@ -153,21 +165,26 @@ class MappingTool
 			'twitter.com',
 		];
 
-		$sources['Sportseiten'] = [
+		$sources['Vereine'] = [
 			'loewenfrankfurt-playground.de',
 			'lokfalkenberg.de',
 			'es-weisswasser.de',
 			'transfermarkt.de',
+			'ssg-strausberg.de',
 			'forum.es-weisswasser.de',
 			'fupa.net',
 			'reitturniere.de',
+			'victoria-templin.com',
+			'ff-schildow.de',
 		];
 
 		$sources['Social-Other'] = [
 			'linkedin.com',
 			'transition.meltwater.com',
 			'stepstone.de',
+			'monitoring.echobot.de',
 			'app.asana.com',
+			'dlvr.it',
 		];
 
 		$sources['Wikis'] = [
@@ -190,6 +207,11 @@ class MappingTool
 		$sources['Direct'] = [
 			'(direct)',
 			'(none)',
+			'live.maerkischepresse.net',
+			'umfragetool',
+			'reg_Button',
+			'swp.de',
+			'mozde',
 		];
 
 		$sources['Intern-Werbung'] = [
@@ -201,8 +223,17 @@ class MappingTool
 			'edgead',
 			'edge',
 			'edge ad',
+			'edge_ad',
+			'edge-ad',
+			'plus-werbebalken',
+			'angebote_mozplus',
 			'start-banner',
 			'dossierbox',
+			'anzeigeplus',
+			'teaser_box',
+			'swpstart',
+			'vertriebsbox1_hp',
+			'artikelboxmauerbau',
 		];
 
 		$sources['Outbrain'] = [
@@ -216,6 +247,7 @@ class MappingTool
 
 		$sources['Aboshop'] = [
 			'abo.lr-digital.de',
+			'aboshop',
 		];
 
 		$sources['Plenigo'] = [
@@ -234,10 +266,13 @@ class MappingTool
 			'yahoo',
 			'de.search.yahoo.com',
 			'qwant.com',
+			'fireball.de',
 			'suche.aol.de',
 			'suche.t-online.de',
+			'search.becovi.com',
 			'flipboard.com',
 			'namenfinden.de',
+			'cse.start.fyi',
 		];
 
 		$sources['Newsletter'] = [
@@ -248,15 +283,24 @@ class MappingTool
 			'm-email.t-online.de',
 			'mobilemailer-bs.web.de',
 			'webmail.freenet.de',
+			'eclipso.de',
+			'login.ok.de',
 			'mail.google.com',
+			'spikenow.com',
+			'email04.active24.com',
+			'mail.picabyte.de',
 			'vodafonemail.de',
+			'webto.salesforce.com',
+			'webmail.uni-hannover.de',
 			'mobilemailer-bap.web.de',
 			'mobilemailer-bap.gmx.net',
 			'mobilemailer-bs.gmx.net',
+			'mobilemailer-bs.web.de',
 			'my.mail.de',
 			'deref-1und1.de',
 			'byom.de',
 			'newsletter',
+			'10minutemail.net',
 		];
 
 		return $sources;

@@ -15,7 +15,9 @@ class Warmup extends Controller {
 	}
 
 	public function assign_sources() {
-		dd($this->Orders->assign_sources());
+		$this->Orders->assign_sources();
+		echo 'wenn dieser Text erscheint hats geklappt...<br/>';
+		echo 'Processing-Time: <b>'.round((microtime(true)-APP_START)*1000,2) . '</b>ms';
 	}
 
 
