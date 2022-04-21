@@ -96,5 +96,58 @@ class Import extends Controller {
 
 	}
 
+	public function import_segments() {
+
+		$path = ROOT . 'import/user-groups.csv';
+
+		if (!file_exists($path)) {
+			throw new \Exception($path . ' Not found', 500);
+		}
+
+		$data = file($path, FILE_IGNORE_NEW_LINES);
+		$header = str_getcsv(array_shift($data),',');
+		//$csv = array_map('str_getcsv', $data);
+		$csv = array_map(function($set){
+			return str_getcsv($set,",");
+		},$data);
+
+		foreach ($csv as $key => $row) {
+			$csv[$key] = array_combine($header, $row);
+		}
+
+		$index = 'publisher';
+		$value = PORTAL_NAME;
+
+		$csv = array_filter($csv, function($data) use ($index, $value){
+			return $data[$index] == $value;
+		});
+
+		$startSegment = array_column($csv, 'user_engagement_segment_subscription_start', 'order_id');
+		$cancelSegment = array_column($csv, 'user_engagement_segment_subscription_cancellation', 'order_id');
+		$testingGroup = array_column($csv, 'mode_experiment_group', 'order_id');
+
+		foreach ($testingGroup as $id => $value) {
+			if (empty($value)) {continue;}
+			$this->Orders->update(['customer_testgroup' => $value], $id);
+		}
+
+		foreach ($cancelSegment as $id => $value) {
+			if (empty($value) || $value == 'unknown') {
+				$this->Orders->update(['customer_cancel_segment' => null], $id);
+				continue;
+			}
+			$this->Orders->update(['customer_cancel_segment' => $value], $id);
+		}
+
+		foreach ($startSegment as $id => $value) {
+			if (empty($value) || $value == 'unknown') {
+				$this->Orders->update(['customer_cancel_segment' => null], $id);
+				continue;
+			}
+			$this->Orders->update(['customer_order_segment' => $value], $id);
+		}
+
+	}
+
 
 }

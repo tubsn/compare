@@ -114,6 +114,16 @@
 			</select>
 			</figure>
 
+			<figure>
+			Experimentgroup:
+			<select v-model="testgroup" @change="calculateChurn">
+				<option value="">kein Filter</option>
+				<?php foreach ($testgroups as $testgroupName): ?>
+				<option value="<?=$testgroupName?>"><?=$testgroupName?></option>
+				<?php endforeach; ?>
+			</select>
+			</figure>
+
 		</div>
 
 		<figure>
@@ -147,6 +157,10 @@
 			<tr>
 				<td>Kündigungen:</td>
 				<td class="text-right">{{ cancelled }}</td>
+			</tr>
+			<tr title="unter allen Kündigern">
+				<td>Ø-Haltedauer:</td>
+				<td class="text-right">{{ retention }} T</td>
 			</tr>
 		</table>
 

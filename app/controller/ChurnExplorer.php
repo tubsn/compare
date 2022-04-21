@@ -36,6 +36,7 @@ class ChurnExplorer extends Controller {
 		$this->view->types = $this->Articles->list_distinct('Type');
 		$this->view->audiences = $this->Articles->list_distinct('Audience');
 		$this->view->origins = $this->Orders->order_origins();
+		$this->view->testgroups = ['A','B'];
 
 		$mapper = new MappingTool();
 
@@ -72,6 +73,7 @@ class ChurnExplorer extends Controller {
 		$origin = $options['origin'] ?? null;
 		$sourceGrouped = $options['source_grp'] ?? null;
 		$source = $options['source'] ?? null;
+		$testgroup = $options['testgroup'] ?? null;
 
 		$orderFilters = [];
 		$cancelFilters = [];
@@ -116,16 +118,26 @@ class ChurnExplorer extends Controller {
 			array_push($cancelFilters, "referer_source = '$source'");
 		}
 
+		if (!empty($testgroup)) {
+			array_push($orderFilters, "customer_testgroup = '$testgroup'");
+			array_push($cancelFilters, "customer_testgroup = '$testgroup'");
+		}
+
 		if ($retention) {
 			array_push($cancelFilters, "conversions.retention < $retention");
 		}
 
 		$orders = $this->Orders->count_with_article_join($this->build($orderFilters));
-
 		$cancelled = $this->Orders->cancelled_by_retention_days_with_article_join($this->build($cancelFilters));
 
 		$data['orders'] = $orders;
 		$data['cancelled'] = $this->sum($cancelled);
+		$data['retentiondays'] = array_sum(array_keys($cancelled));
+		$data['retention'] = 0;
+		if ($data['cancelled'] > 0) {
+			$data['retention'] = round($data['retentiondays'] / $data['cancelled'],2);
+		}
+
 		$data['chart'] = $this->Charts->convert_as_integer($cancelled);
 
 		$this->view->json($data);
@@ -145,7 +157,7 @@ class ChurnExplorer extends Controller {
 	private function sanitize_get_parameters() {
 		$params = array_map('strip_tags', $_GET);
 		//$params = array_map('htmlentities', $_GET); // Error With some Cats :/
-		$valid = array_flip(['from', 'to', 'product', 'segment', 'ressort', 'type', 'audience', 'origin', 'source_grp', 'source', 'days']);
+		$valid = array_flip(['from', 'to', 'product', 'segment', 'testgroup', 'ressort', 'type', 'audience', 'origin', 'source_grp', 'source', 'days']);
 		$params = array_intersect_key($params,$valid);
 
 		foreach ($params as $key => $value) {

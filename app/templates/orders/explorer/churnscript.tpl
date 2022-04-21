@@ -10,6 +10,7 @@ Vue.createApp({
 			to: '',
 			product: '',
 			segment: '',
+			testgroup: '',
 			ressort: '',
 			type: '',
 			audience: '',
@@ -19,6 +20,7 @@ Vue.createApp({
 			days: 1000,
 			orders: 0,
 			cancelled: 0,
+			retention: 0,
 		}
 	},
 
@@ -38,6 +40,7 @@ Vue.createApp({
 		.then(data => {
 			this.orders = data.orders;
 			this.cancelled = data.cancelled;
+			this.retention = data.retention;
 
 			let chart = this.convert_chartdata(data.chart.cancelled_orders, data.chart.dimensions);
 			ChartExplorer.updateSeries(chart);
@@ -47,11 +50,12 @@ Vue.createApp({
 
 	methods: {
 		calculateChurn() {
-			fetch(`/api/explorer?from=${this.from}&to=${this.to}&product=${this.product}&segment=${this.segment}&origin=${this.origin}&source_grp=${this.source_grp}&source=${this.source}&ressort=${this.ressort}&type=${this.type}&audience=${this.audience}&days=${this.days}`)
+			fetch(`/api/explorer?from=${this.from}&to=${this.to}&product=${this.product}&segment=${this.segment}&testgroup=${this.testgroup}&origin=${this.origin}&source_grp=${this.source_grp}&source=${this.source}&ressort=${this.ressort}&type=${this.type}&audience=${this.audience}&days=${this.days}`)
 			.then(response => response.json())
 			.then(data => {
 				this.orders = data.orders;
 				this.cancelled = data.cancelled;
+				this.retention = data.retention;				
 
 
 				//console.log(ChartExplorer);
