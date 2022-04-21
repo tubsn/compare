@@ -14,6 +14,8 @@ class PlenigoAPI
 	public function __construct() {
 	}
 
+	public function client() {}
+
 	public function orders($start, $end, $items = 100) {
 
 		$apiQuery = '/orders/?startTime=' . $start . 'T00:00:00Z&endTime=' . $end . 'T23:59:59Z&size=' . $items;
