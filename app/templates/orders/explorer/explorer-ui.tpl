@@ -10,7 +10,7 @@
 	<b>Hinweise:</b>
 	Die vorliegenden Daten enthalten alle Käufe seit dem 23.&thinsp;März 2021 (Einführung Plenigo V3).
 	Der Kündigungsstatus für Daten älter als einen Monat ist nicht zu 100% genau. Alle Daten werden aber mindestens einmal am Ende des Monats aktualisiert.
-	Die Filterung nach <b>Drive-Segmenten</b> stellt jeweils den Stand des Nutzers <b>zum Zeitpunkt des Kaufs</b> dar. Ressort, Audience und Themengebiet beziehen sich jeweils auf den Artikel, auf dem der Nutzer den Kauf getätigt hat.
+	Die Filterung nach <b>Drive-Segmenten</b> stellt jeweils den Stand des Nutzers <b>zum Zeitpunkt des Kaufs</b> dar. Die Drive-Segmentdaten sind seit 1. März 2022 vorhanden. Ressort, Audience und Themengebiet beziehen sich jeweils auf den Artikel, auf dem der Nutzer den Kauf getätigt hat.
 </p>
 
 <div class="chart-layout">
@@ -115,7 +115,7 @@
 			</figure>
 
 			<figure>
-			Experimentgroup:
+			A/B-Testgroup (Drive):
 			<select v-model="testgroup" @change="calculateChurn">
 				<option value="">kein Filter</option>
 				<?php foreach ($testgroups as $testgroupName): ?>
