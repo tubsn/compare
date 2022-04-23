@@ -325,12 +325,22 @@ class Lists extends Controller {
 	public function tag($tag = null) {
 		Session::set('referer', '/tag/'.$tag);
 
+		//$this->Articles->from = '2000-01-01';
+		//$this->Articles->to = date('Y-m-d');
+
 		$viewData['tagList'] = $this->Articles->list_distinct('tag');
 		if (is_null($tag)) {$tag = $viewData['tagList'][0] ?? '';}
 
 		$tag = $this->decode_url($tag);
 
 		$viewData['articles'] = $this->Articles->list_by($tag, 'tag');
+
+		/*
+		$minDate = min(array_column($viewData['articles'], 'pubdate'));
+		$this->ArticleKPIs->from = date('Y-m-d', strtotime($minDate));
+		$this->ArticleKPIs->to = date('Y-m-d');
+		*/
+
 		$viewData['primaryChart'] = $this->ArticleKPIs->combined_kpis_filtered_chart($tag, 'tag');
 
 		$count = 0;
