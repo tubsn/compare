@@ -20,7 +20,7 @@ class Orders extends Controller {
 	public function list() {
 
 		Session::set('referer', '/orders/list');
-		$this->view->title = 'Bestelldaten - Eingang';
+		$this->view->title = 'Eingehende Bestellungen';
 
 		$viewData['orders'] = $this->Orders->list_plain();
 

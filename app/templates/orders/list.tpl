@@ -12,7 +12,7 @@
 Gesamtbestellungen: <b class="conversions"><?=$numberOfOrders?></b>
 &emsp; davon Plusseite: <b class="blue"><?=$plusOnly?></b>
 &emsp; davon Aboshop: <b class="blue"><?=$aboshopOnly?></b>
-&emsp; davon K-Umwandlung: <b title="Nutzer die im Kündigungsprozess ein neues Abo gekauft haben" class="blue"><?=$umwandlungOnly?></b>
+&emsp; davon Umwandlung: <b title="Nutzer die im Kündigungsprozess ein neues Abo gekauft haben" class="blue"><?=$umwandlungOnly?></b>
 <!--&emsp; davon Extern: <b class="blue"><?=$externalOnly?></b>-->
 &emsp; davon Gekündigt: <b class="redish"><?=$numberOfCancelled?></b>
 &emsp; Kündigerquote: <b class="orange"><?=round(($numberOfCancelled / $numberOfOrders) * 100)?>&thinsp;%</b>
@@ -27,16 +27,15 @@ Gesamtbestellungen: <b class="conversions"><?=$numberOfOrders?></b>
 	<th class="text-left">OrderID</th>
 	<th class="text-left" title="Plenigo Ansicht">Pln.</th>
 	<th class="text-left">UserID</th>
-	<th>Bestelldatum</th>
+	<th>Datum</th>
 	<th>Uhrzeit</th>
 	<th>Ursprung</th>
-	<th>Ressort</th>
+	<th>Referer</th>
 	<th>Produkt</th>
 	<!--<th>Bezeichnung</th>-->
 	<th>Preis</th>
 	<th>Bezahlmethode</th>
-	<th title="Drive-Segment bei Kauf">Segment</th>
-	<th>Gekündigt</th>
+	<th title="Drive-Segment bei Kauf">Drive-Segment</th>
 	<th style="text-align:right">Haltedauer</th>
 </tr>
 </thead>
@@ -49,28 +48,36 @@ Gesamtbestellungen: <b class="conversions"><?=$numberOfOrders?></b>
 	<td class="narrow" title="Drive Segment bei Bestellung: <?=$order['customer_order_segment']?>"><a href="/readers/<?=$order['customer_id']?>"><?=$order['customer_id']?></a></td>
 	<td><?=formatDate($order['order_date'],'Y-m-d')?> <span class="hidden"><?=formatDate($order['order_date'],'H:i')?></span></td>
 	<td><?=formatDate($order['order_date'],'H:i')?> Uhr</td>
+
 	<?php if (!empty($order['article_id'])): ?>
-	<td><a href="/artikel/<?=$order['article_id']?>"><?=$order['order_origin']?></a></td>
+	<td><a href="/artikel/<?=$order['article_id']?>"><?=ucfirst($order['article_ressort'] ?? 'unbekannt')?></a></td>
 	<?php else: ?>
 	<td><?=$order['order_origin'] ?? 'Unbekannt'?></td>
 	<?php endif ?>
-	<td><?=ucfirst($order['article_ressort'] ?? '-')?></td>
+
+	<td title="<?=$order['ga_source']?>"><?=ucfirst($order['referer_source'] ?? '-')?></td>
+
 	<td class="narrow"><?=$order['order_title']?></td>
-	<!--<td class="narrow"><?=$order['subscription_internal_title'] ?? $order['order_title']?></td>-->
 	<td><?=$order['order_price']?>&thinsp;€</td>
 	<td><?=$order['order_payment_method']?></td>
+
+	<?php if ($order['customer_order_segment'] == 'champion'): ?>
+	<td class="narrower"><span class="conversions"><?=ucfirst($order['customer_order_segment'] ?? 'Unbekannt')?></span></td>
+	<?php else: ?>
 	<td class="narrower"><?=ucfirst($order['customer_order_segment'] ?? 'Unbekannt')?></td>
+	<?php endif ?>
 
-	<td>
 	<?php if ($order['subscription_status'] == 'IGNORED'): ?>
+	<td data-sortdate="99999" class="text-right">
 		<span class="conversions">umgewandelt</span>
-	<?php endif ?>
-	<?php if ($order['cancelled']): ?>
-		<span title="Grund: <?=CANCELLATION_REASON[$order['cancellation_reason']] ?? ''?> | Drive Segment bei Kündigung: <?=$order['customer_cancel_segment']?>" class="cancelled">gekündigt</span>
-	<?php endif ?>
 	</td>
-
-	<td class="text-right" data-sortdate="<?=$order['retention']?>"><?=(is_null($order['retention'])) ? '-' : $order['retention'] . ' Tage' ?></td>
+	<?php elseif ($order['cancelled']): ?>
+	<td data-sortdate="<?=$order['retention'] ?? 0?>" class="text-right">
+		<span title="Kündigungsgrund: <?=CANCELLATION_REASON[$order['cancellation_reason']] ?? 'keine Angabe'?>" class="cancelled"><?=$order['retention']?> Tage</span>
+	</td>
+	<?php else: ?>
+		<td data-sortdate="-1" class="text-right">aktiv</td>
+	<?php endif ?>
 
 
 </tr>

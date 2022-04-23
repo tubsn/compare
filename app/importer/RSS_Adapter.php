@@ -96,6 +96,7 @@ class RSS_Adapter
 			return strpos($path,'.html') == false ;
 		});
 
+		if (!isset($paths[0])) {return 'unbekannt';}
 
 		switch (PORTAL) {
 
