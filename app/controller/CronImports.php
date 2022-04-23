@@ -156,6 +156,9 @@ class CronImports extends Controller {
 
 		$this->enrich_conversions_with_ga();
 		$this->enrich_conversions_with_drive_data();
+		$this->enrich_conversoins_with_referals();
+
+		echo 'Conversions angereichert | ' . date('H:i:s') . "\r\n";
 
 	}
 
@@ -174,6 +177,10 @@ class CronImports extends Controller {
 			$this->Orders->update($order, $orderID);
 		}
 
+	}
+
+	public function enrich_conversoins_with_referals() {
+		$this->Orders->assign_sources(3);
 	}
 
 	public function enrich_conversions_with_drive_data() {

@@ -245,12 +245,19 @@ class Orders extends Model
 		return $SQLstatement->fetchall();
 	}
 
-	public function assign_sources() {
+	public function assign_sources($days = null) {
+
+		if ($days) {
+			$this->from = date('Y-m-d', strtotime('today -' . $days . ' day'));
+			$this->to = date('Y-m-d');
+		}
+
+		else {
+			$this->from = '2000-01-01';
+			$this->to = date('Y-m-d');
+		}
 
 		$mapper = new MappingTool();
-
-		$this->from = '2000-01-01';
-		$this->to = date('Y-m-d');
 
 		$campaigns = $this->get_campaign_mediums();
 		$orders = $this->get_order_referals();
