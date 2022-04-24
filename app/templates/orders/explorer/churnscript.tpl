@@ -1,4 +1,4 @@
-<script src="https://unpkg.com/vue@3"></script>
+<script src="https://unpkg.com/vue@3.2.33/dist/vue.global.prod.js"></script>
 <script>
 
 document.addEventListener("DOMContentLoaded", function(){
@@ -8,6 +8,8 @@ Vue.createApp({
 		return {
 			from: '',
 			to: '',
+			month: '',
+			compressed: true,
 			product: '',
 			segment: '',
 			testgroup: '',
@@ -50,20 +52,37 @@ Vue.createApp({
 
 	methods: {
 		calculateChurn() {
-			fetch(`/api/explorer?from=${this.from}&to=${this.to}&product=${this.product}&segment=${this.segment}&testgroup=${this.testgroup}&origin=${this.origin}&source_grp=${this.source_grp}&source=${this.source}&ressort=${this.ressort}&type=${this.type}&audience=${this.audience}&days=${this.days}`)
+			fetch(`/api/explorer?from=${this.from}&to=${this.to}&compressed=${this.compressed}&product=${this.product}&segment=${this.segment}&testgroup=${this.testgroup}&origin=${this.origin}&source_grp=${this.source_grp}&source=${this.source}&ressort=${this.ressort}&type=${this.type}&audience=${this.audience}&days=${this.days}`)
 			.then(response => response.json())
 			.then(data => {
 				this.orders = data.orders;
 				this.cancelled = data.cancelled;
-				this.retention = data.retention;				
-
-
-				//console.log(ChartExplorer);
+				this.retention = data.retention;
 
 				let chart = this.convert_chartdata(data.chart.cancelled_orders, data.chart.dimensions);
 				ChartExplorer.updateSeries(chart);
 
 			});
+		},
+
+		filterMonth() {
+
+			if (!this.month) {
+				this.from = '';
+				this.to = '';
+			}
+
+			else {
+				let dates = this.month.split('|');
+				this.from = dates[0];
+				this.to = dates[1];
+			}
+
+			this.calculateChurn();
+		},
+
+		resetMonth() {
+			this.month = '';
 		},
 
 		setDays(days = 30) {

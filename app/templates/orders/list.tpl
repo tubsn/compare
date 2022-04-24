@@ -51,6 +51,8 @@ Gesamtbestellungen: <b class="conversions"><?=$numberOfOrders?></b>
 
 	<?php if (!empty($order['article_id'])): ?>
 	<td><a href="/artikel/<?=$order['article_id']?>"><?=ucfirst($order['article_ressort'] ?? 'unbekannt')?></a></td>
+	<?php elseif ($order['order_origin'] == 'Umwandlung'): ?>
+	<td><span class="pageviews"><?=$order['order_origin']?></span></td>
 	<?php else: ?>
 	<td><?=$order['order_origin'] ?? 'Unbekannt'?></td>
 	<?php endif ?>

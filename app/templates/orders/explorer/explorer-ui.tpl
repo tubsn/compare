@@ -22,9 +22,14 @@
 		<figure>
 		Abo-Bestellzeitraum filtern:
 		<fieldset class="explorer-datepicker">
-			<input @change="calculateChurn" v-model="from" type="date" name="from">
-			- <input @change="calculateChurn" v-model="to" type="date" name="to">
-			<!--<button @click="calculateChurn">filtern</button>-->
+			<input @change="calculateChurn" @input="resetMonth" v-model="from" type="date" name="from">
+			<input @change="calculateChurn" @input="resetMonth" v-model="to" type="date" name="to">
+			<select @change="filterMonth" v-model="month">
+				<option value="">Monat wählen:</option>
+				<?php foreach ($months as $month => $dates): ?>
+				<option value="<?=$dates['start']?>|<?=$dates['end']?>"><?=$month?></option>
+				<?php endforeach; ?>
+			</select>
 		</fieldset>
 		</figure>
 
@@ -123,6 +128,12 @@
 				<?php endforeach; ?>
 			</select>
 			</figure>
+		<!--
+		<figure>
+		Chart stauchen:
+		<input type="checkbox" checked v-model="compressed" @input="calculateChurn">
+		</figure>
+		-->
 
 		</div>
 
@@ -132,6 +143,7 @@
 			<button @click="setDays(1)">1 Tag</button>
 			<button @click="setDays(31)">31 Tagen</button>
 			<button @click="setDays(91)">3 Monaten</button>
+			<button @click="setDays(121)">6 Monaten</button>
 			<button @click="setDays(365)">1 Jahr</button>
 			<button @click="setDays(1000)">Max</button>
 		</div>
@@ -212,7 +224,8 @@
 
 #Chart-Explorer {position:relative; top:-.7em;}
 
-#explorer-app {display:grid; grid-template-columns: 1.5fr 1fr; grid-gap:1em; margin-bottom:1em;}
+#explorer-app {display:grid; grid-template-columns: 1.5fr 300px; grid-gap:1em; margin-bottom:1em;}
+@media only screen and (min-width: 2000px) {#explorer-app {grid-template-columns: 1.5fr 400px;}}
 @media only screen and (max-width: 768px) {#explorer-app {display:block;}}
 
 .explorer-ui, .explorer-results {width:100%; border:1px solid #c4c4c4; padding:1em 1.5em; box-sizing: border-box;}
@@ -225,8 +238,10 @@
 
 .explorer-results {align-self: stretch;}
 
-.explorer-datepicker {width:300px; display:flex; background-color:#f0f0f0; padding:0.4em; align-items:center;}
-.explorer-datepicker input {margin:0; margin-left:0.4em; margin-right:0.4em; cursor:pointer; width:auto; }
+.explorer-datepicker {box-sizing: border-box; display:flex; background-color:#f0f0f0; padding:0; align-items:center; gap:0.5em; padding:0.4em;}
+.explorer-datepicker input {margin:0; cursor:pointer; width:auto; padding:0.2em; min-width:7em;}
+.explorer-datepicker select {margin-bottom:0; min-width:130px}
+@media only screen and (max-width: 768px) {.explorer-datepicker input, .explorer-datepicker select {min-width:auto;}}
 
 .explorer-buttongroup button:first-of-type {border-top-left-radius:.3em; border-bottom-left-radius:.3em;}
 .explorer-buttongroup button:last-of-type {border-top-right-radius:.3em; border-bottom-right-radius:.3em;}

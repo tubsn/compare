@@ -28,6 +28,7 @@ class ChurnExplorer extends Controller {
 		$this->Articles->to = date('Y-m-d');
 
 		$this->view->title = 'The Ultimate Churn-Rate Explorer phew phew!';
+		$this->view->months = array_reverse($this->month_list());
 		$this->view->segments = $this->Orders->order_segments();
 		$this->view->products = $this->Orders->product_titles();
 		$this->view->ressorts = $this->Orders->order_ressorts();
@@ -65,6 +66,9 @@ class ChurnExplorer extends Controller {
 		$this->Orders->to = $options['to'];
 
 		$product = $options['product'] ?? null;
+		$compressed = false;
+		if (isset($options['compressed']) && $options['compressed'] == 'true') {$compressed = true;}
+
 		$retention = $options['days'] ?? null;
 		$segment = $options['segment'] ?? null;
 		$ressort = $options['ressort'] ?? null;
@@ -138,6 +142,10 @@ class ChurnExplorer extends Controller {
 			$data['retention'] = round($data['retentiondays'] / $data['cancelled'],2);
 		}
 
+		if ($compressed == 'true') {
+			$cancelled = $this->fill_gaps($cancelled);
+		}
+
 		$data['chart'] = $this->Charts->convert_as_integer($cancelled);
 
 		$this->view->json($data);
@@ -154,10 +162,46 @@ class ChurnExplorer extends Controller {
 		return array_sum(array_column($set,'cancelled_orders'));
 	}
 
+	private function month_list($startDate = '2021-04-01') {
+
+		$start = new \DateTime(date('Y-m-d', strtotime($startDate)));
+		$interval = new \DateInterval('P1M');
+		$end = new \DateTime(date('Y-m-d', strtotime('+1month')));
+		$period = new \DatePeriod($start, $interval, $end);
+
+		$monthList = [];
+		foreach ($period as $date) {
+			$monthList[$date->format('M Y')]['start'] = $date->format('Y-m-') . '01';
+			$monthList[$date->format('M Y')]['end'] = $date->format('Y-m-t');
+		}
+
+		return $monthList;
+
+	}
+
+	private function fill_gaps($array) {
+
+		$maxDays = max(array_keys($array));
+		$range = range(0,$maxDays);
+
+		$out = [];
+		foreach ($range as $day) {
+			if (isset($array[$day])) {
+				$out[$day] = $array[$day];
+			}
+			else {
+				$out[$day]['cancelled_orders'] = 0;
+			}
+		}
+
+		return $out;
+
+	}
+
 	private function sanitize_get_parameters() {
 		$params = array_map('strip_tags', $_GET);
 		//$params = array_map('htmlentities', $_GET); // Error With some Cats :/
-		$valid = array_flip(['from', 'to', 'product', 'segment', 'testgroup', 'ressort', 'type', 'audience', 'origin', 'source_grp', 'source', 'days']);
+		$valid = array_flip(['from', 'to', 'compressed' , 'product', 'segment', 'testgroup', 'ressort', 'type', 'audience', 'origin', 'source_grp', 'source', 'days']);
 		$params = array_intersect_key($params,$valid);
 
 		foreach ($params as $key => $value) {
@@ -170,6 +214,5 @@ class ChurnExplorer extends Controller {
 
 		return $params;
 	}
-
 
 }
