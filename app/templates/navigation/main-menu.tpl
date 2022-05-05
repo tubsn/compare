@@ -60,6 +60,7 @@
 				<li><a href="/stats/tag">nach #-Tag</a></li>
 				<li><a href="/stats/audience">nach Audiences</a></li>
 				<li><a href="/stats/audience-by-ressort">Audiences nach Ressort</a></li>
+				<li><a href="/stats/pubtime/">Audience Leserverhalten</a></li>
 				<li><a href="/stats/artikel">Publikationszeiten</a></li>
 			</ul>
 		</li>

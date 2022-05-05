@@ -142,9 +142,11 @@ class ChurnExplorer extends Controller {
 			$data['retention'] = round($data['retentiondays'] / $data['cancelled'],2);
 		}
 
+		
 		if ($compressed == 'true') {
 			$cancelled = $this->fill_gaps($cancelled);
 		}
+		
 
 		$data['chart'] = $this->Charts->convert_as_integer($cancelled);
 

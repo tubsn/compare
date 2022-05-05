@@ -96,7 +96,35 @@ class Import extends Controller {
 
 	}
 
-	public function import_segments() {
+	public function import_segments_by_date() {
+		$segments = $this->Readers->import_user_segments_by_day();
+
+		$segment_table_mapping = [
+			'low-usage-irregular' => 'low_usage_irregulars',
+			'high-usage-irregular' => 'high_usage_irregulars',
+			'loyal' => 'loyals',
+			'champion' => 'champions',
+		];
+
+		foreach ($segments as $set) {
+			$segmentField = $segment_table_mapping[$set['segment']];
+			$segmentFieldRegistered = $segmentField . '_reg';
+
+			$this->DailyKPIs->update([
+				$segmentField => $set['users'],
+				$segmentFieldRegistered => $set['registered_users'],
+			], $set['date']);
+		}
+
+		dump($segments);
+
+		echo 'Segment Import abgeschlossen! <a href="/admin">zurück</a><br/>';
+		echo 'Processing-Time: <b>'.round((microtime(true)-APP_START)*1000,2) . '</b>ms';
+
+	}
+
+
+	public function import_user_segments_from_csv() {
 
 		$path = ROOT . 'import/user-groups.csv';
 

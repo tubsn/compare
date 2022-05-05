@@ -44,6 +44,32 @@ class DailyKPIs extends Model
 
 	}
 
+
+	public function segments() {
+
+		$tablename = $this->db->table;
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT date, champions, champions_reg, 
+				high_usage_irregulars, high_usage_irregulars_reg,
+				low_usage_irregulars, low_usage_irregulars_reg,
+				loyals, loyals_reg,
+				daily_active_subscribers
+			 FROM $tablename
+			 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
+			 ORDER BY date ASC"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchAll(\PDO::FETCH_UNIQUE);
+		if (empty($output)) {return null;}
+		return $output;
+
+	}
+
+
 	public function list() {
 
 		$from = strip_tags($this->from);

@@ -156,6 +156,28 @@ class Orders extends Model
 
 	}
 
+	public function audience_by_time($audience) {
+
+		$table = $this->db->table;
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT DATE_FORMAT(pubdate,'%H') as hour, count(*) as orders
+			 FROM `$table`
+			 LEFT JOIN articles ON `id` = conversions.article_id
+			 WHERE (DATE(`pubdate`) BETWEEN :startDate AND :endDate)
+			 AND articles.audience = :audience
+			 GROUP BY hour
+			 ORDER BY hour DESC
+			 LIMIT 0, 1000"
+		);
+
+		$SQLstatement->execute([':startDate' => $this->from, ':endDate' => $this->to, ':audience' => $audience]);
+		$output = $SQLstatement->fetchall(\PDO::FETCH_UNIQUE);
+		if (empty($output)) {return null;}
+
+		return $output;
+
+	}
+
 
 
 	public function kpi_grouped_by($kpi, $groupby = 'ressort', $operation = 'sum', $filter = null) {

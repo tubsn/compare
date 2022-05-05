@@ -7,7 +7,9 @@ $routes->get('/', 'Stats@dashboard');
 $routes->get('/cards', 'Lists@cards');
 $routes->get('/freecharts', 'Stats@freecharts');
 $routes->get('/teasers[/{date}]', 'Teaser@index');
-$routes->get('/test', 'Import@import_segments');
+
+
+$routes->get('/segments', 'Import@import_segments_by_date');
 $routes->get('/filter', 'Lists@filter');
 $routes->post('/filter', 'Lists@filter');
 
@@ -87,6 +89,9 @@ $routes->get('/stats/tag', 'Stats@tags');
 $routes->get('/stats/audience', 'Stats@audiences');
 $routes->get('/stats/audience-by-ressort', 'Stats@audience_by_ressorts');
 $routes->get('/stats/artikel', 'Stats@artikel');
+$routes->get('/stats/segments', 'Stats@segments');
+$routes->get('/stats/pubtime[/{audience}]', 'Test@publications');
+
 
 // Portal Compare
 $routes->get('/portals', 'LongtermAnalysis@all_portals');
@@ -178,6 +183,7 @@ $routes->post('/admin', 'Admin@save_config');
 $routes->get('/admin/import', 'Import@feeds');
 $routes->get('/admin/discover', 'Admin@discover_upload');
 $routes->post('/admin/discover', 'Admin@discover_upload');
+$routes->get('/admin/csv_segments', 'Import@import_user_segments_from_csv');
 $routes->get('/admin/subscribers', 'Import@import_subscribers');
 $routes->get('/admin/orders', 'Import@order_import_form');
 $routes->get('/admin/topics', 'Warmup@topic_clusters');

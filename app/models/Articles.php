@@ -19,6 +19,7 @@ class Articles extends Model
 		$this->db = new SQLdb(DB_SETTINGS);
 		$this->db->table = 'articles';
 		$this->db->order = 'DESC';
+		$this->db->limit = 50000;		
 
 		$this->from = date('Y-m-d', strtotime(DEFAULT_FROM));
 		$this->to = date('Y-m-d', strtotime(DEFAULT_TO));
@@ -593,6 +594,26 @@ class Articles extends Model
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
 		$output = $SQLstatement->fetchall();
 		if (empty($output)) {return null;}
+		return $output;
+
+	}
+
+	public function audience_by_time($audience) {
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT DATE_FORMAT(pubdate,'%H') as hour, count(*) as articles
+			 FROM `articles`
+			 WHERE (DATE(`pubdate`) BETWEEN :startDate AND :endDate)
+			 AND audience = :audience
+			 GROUP BY hour
+			 ORDER BY hour DESC
+			 LIMIT 0, 1000"
+		);
+
+		$SQLstatement->execute([':startDate' => $this->from, ':endDate' => $this->to, ':audience' => $audience]);
+		$output = $SQLstatement->fetchall(\PDO::FETCH_UNIQUE);
+		if (empty($output)) {return null;}
+
 		return $output;
 
 	}

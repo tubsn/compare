@@ -108,7 +108,7 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 
 	<?php if ($reasons_chart): ?>
 	<figure class="">
-		<h3 class="text-center">Kündigungsgründe: <?=$reasons?></h3>
+		<h3 class="text-center">Kündigungsgründe</h3>
 		<?=$charts->create([
 			'metric' => $reasons_chart['metrics'] ,
 			'dimension' => $reasons_chart['dimensions'],

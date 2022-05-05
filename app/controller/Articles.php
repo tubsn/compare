@@ -304,6 +304,10 @@ class Articles extends Controller {
 				Session::set('from', date('Y-m-d', strtotime('yesterday -30days')));
 				Session::set('to', date('Y-m-d', strtotime('yesterday')));
 			break;
+			case 'letzte 365 Tage':
+				Session::set('from', date('Y-m-d', strtotime('yesterday -365days')));
+				Session::set('to', date('Y-m-d', strtotime('yesterday')));
+			break;			
 			case 'aktuelle Woche':
 				Session::set('from', date('Y-m-d', strtotime('monday this week')));
 				Session::set('to', date('Y-m-d', strtotime('sunday this week')));
@@ -332,6 +336,14 @@ class Articles extends Controller {
 				Session::set('from', date('Y-m-d', strtotime('first day of this month -3month')));
 				Session::set('to', date('Y-m-d', strtotime('last day of this month -1month')));
 			break;
+			case 'aktuelles Jahr':
+				Session::set('from', date('Y-m-d', strtotime('first day of january')));
+				Session::set('to', date('Y-m-d', strtotime('last day of december')));
+			break;				
+			case 'letztes Jahr':
+				Session::set('from', date('Y-m-d', strtotime('first day of january last year')));
+				Session::set('to', date('Y-m-d', strtotime('last day of december last year')));
+			break;		
 			case 'alle Daten':
 				Session::set('from', '2000-01-01');
 				Session::set('to', '2050-01-01');

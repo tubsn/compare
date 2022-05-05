@@ -238,5 +238,17 @@ class Stats extends Controller {
 
 	}
 
+	public function segments() {
+		Session::set('referer', '/stats/segments');
+
+		$data =  $this->DailyKPIs->segments();
+		$this->view->charts = $this->Charts;
+		$this->view->segments = $this->Charts->convert($data);
+
+		$this->view->title = 'Drive Segment Entwicklung';
+		$this->view->render('stats/segments');
+
+	}
+
 
 }

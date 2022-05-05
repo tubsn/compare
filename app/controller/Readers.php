@@ -62,7 +62,6 @@ class Readers extends Controller {
 
 	}
 
-
 	public function list($segment = null) {
 
 		if ($segment) {

@@ -214,6 +214,64 @@ class Readers extends Model
 
 	}
 
+	public function import_user_segments_by_day() {
+		
+		$from = '2022-04-01';
+		$to = '2022-04-03';
+
+		$cache = new RequestCache('segments', 0 * 60);
+		$segments = $cache->get();
+
+		if (!$segments) {
+			$segments = $this->drive_user_list_by_segment($from, $to);
+			$cache->save($segments);
+		}
+
+		return $segments;
+
+	}
+
+	private function drive_user_list_by_segment($from, $to) {
+
+		$bigQueryApi = new BigQuery;
+		$publisher = PORTAL;
+
+		$query ="
+			SELECT DATE_TRUNC(`date`, DAY) AS `date`,
+			`user_engagement_segment` AS `segment`,
+			COUNT(DISTINCT `inferred_user_id`) AS `users`,
+	        COUNT(DISTINCT CASE WHEN user_type='premium' THEN inferred_user_id END) AS `registered_users`,
+
+			FROM `artikel-reports-tool.DPA_Drive.dpa_drive_users`
+			JOIN
+			(SELECT `user_engagement_segment` AS `user_engagement_segment__`,
+				count(DISTINCT `inferred_user_id`) AS `mme_inner__`
+				FROM `artikel-reports-tool.DPA_Drive.dpa_drive_users`
+				WHERE `user_engagement_segment` != 'unknown'
+				AND `publisher` = '$publisher'
+				AND `user_engagement_segment` IN ('loyal', 'champion', 'high-usage-irregular', 'low-usage-irregular')
+				AND `date` >= CAST('$from' AS DATE)
+				AND `date` < CAST('$to' AS DATE)
+				GROUP BY `user_engagement_segment__`
+				ORDER BY `mme_inner__` DESC 
+				LIMIT 1000
+			) AS `anon_1` ON `user_engagement_segment` = `user_engagement_segment__`
+			WHERE `date` >= CAST('$from' AS DATE)
+				AND `date` < CAST('$to' AS DATE)
+				AND `user_engagement_segment` != 'unknown'
+				AND `publisher` = '$publisher'
+				AND `user_engagement_segment` IN ('loyal', 'champion', 'high-usage-irregular', 'low-usage-irregular')
+			GROUP BY `user_engagement_segment`,
+			`date`
+			ORDER BY `date` DESC
+			LIMIT 50000;
+		";
+
+		$data = $bigQueryApi->sql($query);
+
+		return  $data;
+	}
+
 	private function drive_user_list() {
 
 		$bigQueryApi = new BigQuery;

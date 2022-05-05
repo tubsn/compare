@@ -3,6 +3,7 @@
 namespace app\models;
 use app\importer\AnalyticsImport;
 use app\models\helpers\UTMCampaign;
+use \flundr\utility\Session;
 use \flundr\cache\RequestCache;
 
 class Analytics
@@ -140,6 +141,35 @@ class Analytics
 		$this->ga->maxResults = '1000';
 
 		return $this->ga->fetch();
+
+	}
+
+
+	public function use_timeframe_by_audience($audience) {
+
+		$from = date('Y-m-d', strtotime(DEFAULT_FROM));
+		$to = date('Y-m-d', strtotime(DEFAULT_TO));
+		if (Session::get('from')) {$from = Session::get('from');}
+		if (Session::get('to')) {$to = Session::get('to');}
+
+		if ($from <= '2005-01-01') {$from = '2019-01-01';}
+
+		$this->ga->metrics = 'ga:sessions';
+		$this->ga->from = $from;
+		$this->ga->to = $to;
+		$this->ga->dimensions = 'ga:hour';
+		$this->ga->sort = 'ga:hour';
+		$this->ga->filters = 'ga:contentGroup1==' . $audience;
+		$this->ga->maxResults = '50';
+
+		$cache = new RequestCache('AuciendesByHour' . PORTAL . $audience . $from . $to, 60*60);
+		$data = $cache->get();
+		if (empty($data)) {
+			$data = $this->ga->fetch();
+			$cache->save($data);
+		}
+
+		return $data;
 
 	}
 

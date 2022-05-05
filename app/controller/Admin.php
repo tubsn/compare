@@ -105,4 +105,33 @@ class Admin extends Controller {
 
 	}
 
+	public function reassign_ressorts() {
+
+		/* Reassign Articles
+		$articles = $this->Articles->all(['link','id']);
+		$articles = array_filter($articles, function($article) {
+			return strpos($article['link'],'/kultur/') !== false ;
+		});
+		
+		foreach ($articles as $article) {
+			$this->Articles->update(['ressort' => 'kultur'],$article['id']);
+			//echo $article['id'];
+		}
+		*/
+
+		/* Orders Anpassen
+		$orders = $this->Orders->all(['order_source','order_id']);
+		$orders = array_filter($orders, function($order) {
+			return strpos($order['order_source'],'/kultur/') !== false ;
+		});
+
+		foreach ($orders as $order) {
+			$this->Orders->update(['article_ressort' => 'kultur'],$order['order_id']);
+			//echo $article['id'];
+		}
+		*/
+
+	}
+
+
 }

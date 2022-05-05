@@ -243,6 +243,7 @@ class Plenigo
 				if ($paths[0] == 'lausitz') {return $paths[1];}
 				if ($paths[0] == 'ratgeber' || $paths[0] == 'blaulicht') {return 'nachrichten';}
 				if (isset($paths[1]) && $paths[1] == 'sport') {return $paths[1];}
+				if (isset($paths[1]) && $paths[1] == 'kultur') {return $paths[1];}
 			break;
 
 			case 'MOZ':
