@@ -106,7 +106,12 @@ class Chartengine
 		}
 
 		foreach ($output as $key => $value) {
-			$output[$key] = $this->implode($value, $asInteger);
+			if ($key == 'dimensions') {
+				$output[$key] = $this->implode($value, 0);
+			}
+			else {
+				$output[$key] = $this->implode($value, $asInteger);
+			}
 		}
 
 		return $output;
