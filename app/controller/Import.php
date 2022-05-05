@@ -96,7 +96,173 @@ class Import extends Controller {
 
 	}
 
+	public function csv_import_segments_by_date() {
+
+
+		$path = ROOT . 'import/temp/dau-user-alle.csv';
+
+		if (!file_exists($path)) {
+			throw new \Exception($path . ' Not found', 500);
+		}
+
+		$data = file($path, FILE_IGNORE_NEW_LINES);
+		$header = str_getcsv(array_shift($data),',');
+		//$csv = array_map('str_getcsv', $data);
+		$csv = array_map(function($set){
+			return str_getcsv($set,",");
+		},$data);
+
+		foreach ($csv as $key => $row) {
+			$csv[$key] = array_combine($header, $row);
+		}
+
+		$lr = array_filter($csv, function($data) {
+			return $data['publisher'] == 'LR';
+		});
+		$lr = array_column($lr, 'COUNT_DISTINCT(inferred_user_id)', '__timestamp');
+		ksort($lr);
+
+		foreach ($lr as $day => $users) {
+			$this->DailyKPIs->update(['daily_active_users' => $users],$day);
+		}
+
+
+
+	}
+
+
+	private function all_segments_save_to_db($csv) {
+
+		$fly = array_filter($csv, function($data) {
+			return $data['user_engagement_segment'] == 'fly-by';
+		});
+		$fly = array_column($fly, 'Anzahl Nutzer', '__timestamp');
+		ksort($fly);
+
+		$non = array_filter($csv, function($data) {
+			return $data['user_engagement_segment'] == 'non-engaged';
+		});
+		$non = array_column($non, 'Anzahl Nutzer', '__timestamp');
+		ksort($non);
+
+		$lui = array_filter($csv, function($data) {
+			return $data['user_engagement_segment'] == 'low-usage-irregular';
+		});
+		$lui = array_column($lui, 'Anzahl Nutzer', '__timestamp');
+		ksort($lui);
+
+		$loyal = array_filter($csv, function($data) {
+			return $data['user_engagement_segment'] == 'loyal';
+		});
+		$loyal = array_column($loyal, 'Anzahl Nutzer', '__timestamp');
+		ksort($loyal);
+
+		$hui = array_filter($csv, function($data) {
+			return $data['user_engagement_segment'] == 'high-usage-irregular';
+		});
+		$hui = array_column($hui, 'Anzahl Nutzer', '__timestamp');
+		ksort($hui);
+
+		$champ = array_filter($csv, function($data) {
+			return $data['user_engagement_segment'] == 'champion';
+		});
+		$champ = array_column($champ, 'Anzahl Nutzer', '__timestamp');
+		ksort($champ);
+
+		foreach ($champ as $day => $users) {
+			$this->DailyKPIs->update(['champions' => $users],$day);
+		}
+
+		foreach ($hui as $day => $users) {
+			$this->DailyKPIs->update(['high_usage_irregulars' => $users],$day);
+		}
+
+		foreach ($lui as $day => $users) {
+			$this->DailyKPIs->update(['low_usage_irregulars' => $users],$day);
+		}
+
+		foreach ($loyal as $day => $users) {
+			$this->DailyKPIs->update(['loyals' => $users],$day);
+		}
+
+		foreach ($non as $day => $users) {
+			$this->DailyKPIs->update(['nonengaged' => $users],$day);
+		}
+
+		foreach ($fly as $day => $users) {
+			$this->DailyKPIs->update(['flybys' => $users],$day);
+		}
+
+	}
+
+	private function registered_segments_save_to_db($csv) {
+
+		$fly = array_filter($csv, function($data) {
+			return $data['user_engagement_segment'] == 'fly-by';
+		});
+		$fly = array_column($fly, 'Anzahl Nutzer', '__timestamp');
+		ksort($fly);
+
+		$non = array_filter($csv, function($data) {
+			return $data['user_engagement_segment'] == 'non-engaged';
+		});
+		$non = array_column($non, 'Anzahl Nutzer', '__timestamp');
+		ksort($non);
+
+		$lui = array_filter($csv, function($data) {
+			return $data['user_engagement_segment'] == 'low-usage-irregular';
+		});
+		$lui = array_column($lui, 'Anzahl Nutzer', '__timestamp');
+		ksort($lui);
+
+		$loyal = array_filter($csv, function($data) {
+			return $data['user_engagement_segment'] == 'loyal';
+		});
+		$loyal = array_column($loyal, 'Anzahl Nutzer', '__timestamp');
+		ksort($loyal);
+
+		$hui = array_filter($csv, function($data) {
+			return $data['user_engagement_segment'] == 'high-usage-irregular';
+		});
+		$hui = array_column($hui, 'Anzahl Nutzer', '__timestamp');
+		ksort($hui);
+
+		$champ = array_filter($csv, function($data) {
+			return $data['user_engagement_segment'] == 'champion';
+		});
+		$champ = array_column($champ, 'Anzahl Nutzer', '__timestamp');
+		ksort($champ);
+
+		foreach ($champ as $day => $users) {
+			$this->DailyKPIs->update(['champions_reg' => $users],$day);
+		}
+
+		foreach ($hui as $day => $users) {
+			$this->DailyKPIs->update(['high_usage_irregulars_reg' => $users],$day);
+		}
+
+		foreach ($lui as $day => $users) {
+			$this->DailyKPIs->update(['low_usage_irregulars_reg' => $users],$day);
+		}
+
+		foreach ($loyal as $day => $users) {
+			$this->DailyKPIs->update(['loyals_reg' => $users],$day);
+		}
+
+		foreach ($non as $day => $users) {
+			$this->DailyKPIs->update(['nonengaged_reg' => $users],$day);
+		}
+
+		foreach ($fly as $day => $users) {
+			$this->DailyKPIs->update(['flybys_reg' => $users],$day);
+		}
+
+	}
+
+
+
 	public function import_segments_by_date() {
+
 		$segments = $this->Readers->import_user_segments_by_day();
 
 		$segment_table_mapping = [

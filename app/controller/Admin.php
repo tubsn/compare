@@ -107,12 +107,16 @@ class Admin extends Controller {
 
 	public function reassign_ressorts() {
 
+		if (!Auth::has_right('type')) {
+			throw new \Exception("Sie haben keine Berechtigung diese Seite aufzurufen", 403);
+		}
+
 		/* Reassign Articles
 		$articles = $this->Articles->all(['link','id']);
 		$articles = array_filter($articles, function($article) {
 			return strpos($article['link'],'/kultur/') !== false ;
 		});
-		
+
 		foreach ($articles as $article) {
 			$this->Articles->update(['ressort' => 'kultur'],$article['id']);
 			//echo $article['id'];

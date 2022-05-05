@@ -6,10 +6,8 @@ $routes->get('/', 'Stats@dashboard');
 // Teststuff
 $routes->get('/cards', 'Lists@cards');
 $routes->get('/freecharts', 'Stats@freecharts');
-$routes->get('/teasers[/{date}]', 'Teaser@index');
 
-
-$routes->get('/segments', 'Import@import_segments_by_date');
+$routes->get('/segments', 'Import@csv_import_segments_by_date');
 $routes->get('/filter', 'Lists@filter');
 $routes->post('/filter', 'Lists@filter');
 
@@ -176,6 +174,9 @@ $routes->get('/newsletter/nachdrehalert-score', 'Newsletter@nachdreh_alert_score
 
 // Incentives
 $routes->get('/incentives', 'Incentives@incentives');
+
+// Teasers
+$routes->get('/teasers[/{date}]', 'Teaser@index');
 
 // Admin - Config Area
 $routes->get('/admin', 'Admin@index');

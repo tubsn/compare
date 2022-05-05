@@ -9,14 +9,13 @@ use flundr\cache\RequestCache;
 class LongtermAnalysis extends Controller {
 
 	public function __construct() {
-
-		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
-
 		$this->view('DefaultLayout');
 		$this->models('Charts,Longterm,Orders,SalesKPIs');
 	}
 
 	public function overview() {
+
+		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$from = date('Y-m-d', strtotime('yesterday -3days'));
 		$to = date('Y-m-d', strtotime('yesterday'));
@@ -74,6 +73,8 @@ class LongtermAnalysis extends Controller {
 
 
 	public function all_portals() {
+
+		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$orderData = $this->Longterm->portal_orders();
 
@@ -133,6 +134,7 @@ class LongtermAnalysis extends Controller {
 
 	public function started_payment() {
 
+		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 		dd($this->Longterm->started_payment());
 
 	}

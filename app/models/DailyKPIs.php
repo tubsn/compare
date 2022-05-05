@@ -51,13 +51,62 @@ class DailyKPIs extends Model
 		$from = strip_tags($this->from);
 		$to = strip_tags($this->to);
 
+		/*
 		$SQLstatement = $this->db->connection->prepare(
-			"SELECT date, champions, champions_reg, 
+			"SELECT
+			    #DATE_FORMAT(date,'%Y-%V') as datum,
+			    date as datum,
+				champions, champions_reg,
 				high_usage_irregulars, high_usage_irregulars_reg,
 				low_usage_irregulars, low_usage_irregulars_reg,
-				loyals, loyals_reg,
-				daily_active_subscribers
+				loyals, loyals_reg, flybys, nonengaged,
+			#	round(avg(daily_active_users/sessions*100),3) as daily_active_users
+				round(daily_active_users/sessions*100,3) as daily_active_users
 			 FROM $tablename
+			 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
+			# GROUP BY datum
+			 ORDER BY date ASC"
+		);
+		*/
+
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT
+			    DATE_FORMAT(date,'%Y-%V') as datum,
+			    date as datum,
+				round(avg(subscribers/pageviews*100),3) as daily_active_users
+			 FROM $tablename
+			 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
+			 GROUP BY datum
+			 ORDER BY date ASC"
+		);
+
+
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchAll(\PDO::FETCH_UNIQUE);
+		if (empty($output)) {return null;}
+		return $output;
+
+	}
+
+	public function segments_quote() {
+
+		$tablename = $this->db->table;
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT date,
+			ROUND(champions / (champions+high_usage_irregulars+flybys+low_usage_irregulars+loyals+nonengaged) * 100,3) as champions,
+			ROUND(high_usage_irregulars / (champions+high_usage_irregulars+flybys+low_usage_irregulars+loyals+nonengaged) * 100,3) as high_usage_irregulars,
+			ROUND(flybys / (champions+high_usage_irregulars+flybys+low_usage_irregulars+loyals+nonengaged) * 100,3) as flybys,
+			ROUND(low_usage_irregulars / (champions+high_usage_irregulars+flybys+low_usage_irregulars+loyals+nonengaged) * 100,3) as low_usage_irregulars,
+			ROUND(loyals / (champions+high_usage_irregulars+flybys+low_usage_irregulars+loyals+nonengaged) * 100,3) as loyals,
+			ROUND(nonengaged / (champions+high_usage_irregulars+flybys+low_usage_irregulars+loyals+nonengaged) * 100,3) as nonengaged
+
+			 FROM $tablename
+
 			 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
 			 ORDER BY date ASC"
 		);
