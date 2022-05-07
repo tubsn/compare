@@ -83,6 +83,7 @@
 		<li><a href="/portals" aria-haspopup="true">Portaldaten</a>
 			<ul class="dropdown" aria-label="submenu">
 				<li><a href="/longterm">Abo- / KPI-Entwicklung</a></li>
+				<li><a href="/stats/segments">Nutzer-Entwicklung</a></li>
 				<li><a href="/teasers">Teaser-Statistiken (LR)</a></li>
 				<li><a href="/orders/map/local">Abo-Karte</a></li>
 				<li><a href="/portals">Portalvergleich</a></li>

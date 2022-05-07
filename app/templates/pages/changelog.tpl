@@ -8,13 +8,27 @@
 	<li>Übersicht Hall of Fame Artikel</li>
 	<li>Archiv Artikel die vor einem Monat oder Jahr gut performt haben darstellen</li>
 	<li>Alert Mails - z.B. Kündiger mit Technischem Problem </li>
-	<li>Eingehende Kündiger als Grafik</li>
 </ul>
 
 
 <h1>Changelog</h1>
 
 <hr>
+
+<h2>05.05.2022 - Import von historischen Drive Segmentdaten und Aboentwicklung</h2>
+
+<ul>
+	<li>In den täglichen Auswertungsdaten stehen jetzt alle User gruppiert nach Drive Segmenten zur Verfügung. Damit ist z.B. die Entwicklung unserer Loyalen Nutzer besser ersichtlich.</li>
+	<li>Aus den Daten lassen sich außerdem die Durchschnittliche Anzahl der aktiven Abonnenten auf dem Portal pro Tag darstellen.</li>
+</ul>
+
+
+<h2>23.04.2022 - Monatsauswahl beim Churn Explorer</h2>
+
+<ul>
+	<li>Filterung nach bestimmten Monaten erleichtert</li>
+</ul>
+
 
 <h2>19.04.2022 - Mappingtabelle für Referer bei Conversions</h2>
 

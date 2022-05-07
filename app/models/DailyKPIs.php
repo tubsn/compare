@@ -45,42 +45,185 @@ class DailyKPIs extends Model
 	}
 
 
+	private function timeframe($from, $to) {
+		$from = new \DateTime($from);
+		$to = new \DateTime($to);
+		$timeframe = $from->diff($to);
+		$days = $timeframe->format('%a');
+		return $days;
+	}
+
+
 	public function segments() {
 
 		$tablename = $this->db->table;
 		$from = strip_tags($this->from);
 		$to = strip_tags($this->to);
 
-		/*
-		$SQLstatement = $this->db->connection->prepare(
-			"SELECT
-			    #DATE_FORMAT(date,'%Y-%V') as datum,
-			    date as datum,
-				champions, champions_reg,
-				high_usage_irregulars, high_usage_irregulars_reg,
-				low_usage_irregulars, low_usage_irregulars_reg,
-				loyals, loyals_reg, flybys, nonengaged,
-			#	round(avg(daily_active_users/sessions*100),3) as daily_active_users
-				round(daily_active_users/sessions*100,3) as daily_active_users
-			 FROM $tablename
-			 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
-			# GROUP BY datum
-			 ORDER BY date ASC"
-		);
-		*/
+		$days = $this->timeframe($from, $to);
+
+		if ($days < 31) {
+	
+			$SQLstatement = $this->db->connection->prepare(
+				"SELECT
+				    #DATE_FORMAT(date,'%Y-%V') as datum,
+				    date as datum,
+					champions, champions_reg,
+					high_usage_irregulars, high_usage_irregulars_reg,
+					low_usage_irregulars, low_usage_irregulars_reg,
+					loyals, loyals_reg, flybys, nonengaged, nonengaged_reg, unknown, unknown_reg
+
+				 FROM $tablename
+				 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
+				# GROUP BY datum
+				 ORDER BY date ASC"
+			);
+
+		}
+
+		else {
+
+			$SQLstatement = $this->db->connection->prepare(
+				"SELECT
+				    DATE_FORMAT(date,'%Y-%v') as datum,
+				    date as datum,
+					sum(champions) as champions,
+					sum(high_usage_irregulars) as high_usage_irregulars,
+					sum(low_usage_irregulars) as low_usage_irregulars,
+					sum(loyals) as loyals,
+					sum(flybys) as flybys,
+					sum(nonengaged) as nonengaged,
+					sum(unknown) as unknown
+
+				 FROM $tablename
+				 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
+				 GROUP BY datum
+				 ORDER BY date ASC"
+			);
+
+		}
+
+		
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchAll(\PDO::FETCH_UNIQUE);
+		if (empty($output)) {return null;}
+		return $output;
+
+	}
+
+	public function premium_users() {
 
 
-		$SQLstatement = $this->db->connection->prepare(
-			"SELECT
-			    DATE_FORMAT(date,'%Y-%V') as datum,
-			    date as datum,
-				round(avg(subscribers/pageviews*100),3) as daily_active_users
-			 FROM $tablename
-			 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
-			 GROUP BY datum
-			 ORDER BY date ASC"
-		);
+		$tablename = $this->db->table;
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+		
+		$days = $this->timeframe($from, $to);
 
+		if ($days < 31) {
+
+			$SQLstatement = $this->db->connection->prepare(
+				"SELECT
+				    date as datum,
+					sum(champions + high_usage_irregulars + low_usage_irregulars + 
+					loyals + flybys + nonengaged + unknown) - sum(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg + 
+					loyals_reg + flybys_reg + nonengaged_reg + unknown_reg) as users,
+					sum(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg + 
+					loyals_reg + flybys_reg + nonengaged_reg + unknown_reg) as users_reg
+				 FROM $tablename
+				 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
+				 GROUP BY datum
+				 ORDER BY date ASC"
+			);
+
+		}
+
+		else {
+
+			$SQLstatement = $this->db->connection->prepare(
+				"SELECT
+				    DATE_FORMAT(date,'%Y-%m') as datum,
+					round(avg(champions + high_usage_irregulars + low_usage_irregulars + 
+					loyals + flybys + nonengaged + unknown) - avg(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg + 
+					loyals_reg + flybys_reg + nonengaged_reg + unknown_reg)) AS users,
+
+					round(avg(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg + 
+					loyals_reg + flybys_reg + nonengaged_reg + unknown_reg)) AS users_reg
+				 FROM $tablename
+				 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
+				 GROUP BY datum
+				 ORDER BY date ASC"
+			);
+
+		}
+
+	
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchAll(\PDO::FETCH_UNIQUE);
+		if (empty($output)) {return null;}
+		return $output;
+
+	}
+
+
+	public function quote_of_premium_users() {
+
+		$tablename = $this->db->table;
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$days = $this->timeframe($from, $to);
+
+		if ($days < 31) {
+		
+			$SQLstatement = $this->db->connection->prepare(
+				"SELECT
+				    date as datum,
+					round(avg(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg + 
+					loyals_reg + flybys_reg + nonengaged_reg + unknown_reg) / 
+					avg(champions + high_usage_irregulars + low_usage_irregulars + 
+					loyals + flybys + nonengaged + unknown) * 100 ,2) as reg_quote
+				 FROM $tablename
+				 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
+				 GROUP BY datum
+				 ORDER BY date ASC"
+			);
+
+		}
+	
+		elseif ($days < 300) {
+
+			$SQLstatement = $this->db->connection->prepare(
+				"SELECT
+				    DATE_FORMAT(date,'%Y-%v') as datum,
+					round(avg(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg + 
+					loyals_reg + flybys_reg + nonengaged_reg + unknown_reg) / 
+					avg(champions + high_usage_irregulars + low_usage_irregulars + 
+					loyals + flybys + nonengaged + unknown) * 100 ,2) as reg_quote
+				 FROM $tablename
+				 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
+				 GROUP BY datum
+				 ORDER BY date ASC"
+			);
+
+		}
+
+		else {
+		
+			$SQLstatement = $this->db->connection->prepare(
+				"SELECT
+				    DATE_FORMAT(date,'%Y-%m') as datum,
+					round(avg(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg + 
+					loyals_reg + flybys_reg + nonengaged_reg + unknown_reg) / 
+					avg(champions + high_usage_irregulars + low_usage_irregulars + 
+					loyals + flybys + nonengaged + unknown) * 100 ,2) as reg_quote
+				 FROM $tablename
+				 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
+				 GROUP BY datum
+				 ORDER BY date ASC"
+			);
+
+		}
 
 
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
@@ -89,6 +232,9 @@ class DailyKPIs extends Model
 		return $output;
 
 	}
+
+
+
 
 	public function segments_quote() {
 

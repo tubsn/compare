@@ -241,14 +241,16 @@ class Stats extends Controller {
 	public function segments() {
 		Session::set('referer', '/stats/segments');
 
-		$data =  $this->DailyKPIs->segments();
-
-		//dd($data);
+		$segments = $this->DailyKPIs->segments();
+		$premiumUsers = $this->DailyKPIs->premium_users();
+		$premiumUsersQuote = $this->DailyKPIs->quote_of_premium_users();
 
 		$this->view->charts = $this->Charts;
-		$this->view->segments = $this->Charts->convert($data,1);
+		$this->view->segments = $this->Charts->convert($segments,1);
+		$this->view->premiumUsers = $this->Charts->convert($premiumUsers,1);
+		$this->view->premiumUsersQuote = $this->Charts->convert($premiumUsersQuote,1);
 
-		$this->view->title = 'Drive Segment Entwicklung';
+		$this->view->title = 'Abonennten Entwicklung';
 		$this->view->render('stats/segments');
 
 	}

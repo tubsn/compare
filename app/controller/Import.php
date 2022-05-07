@@ -98,16 +98,24 @@ class Import extends Controller {
 
 	public function csv_import_segments_by_date() {
 
+		$pathNormal = ROOT . 'import/temp/lr-alle.csv';
+		$pathPremium = ROOT . 'import/temp/lr-premium.csv';
+		$normalUsers = $this->read_csv_with_header($pathNormal);
+		$premiumUsers = $this->read_csv_with_header($pathPremium);
 
-		$path = ROOT . 'import/temp/dau-user-alle.csv';
+		$this->save_segments_to_db($normalUsers);
+		$this->save_segments_to_db($premiumUsers, '_reg');
 
-		if (!file_exists($path)) {
-			throw new \Exception($path . ' Not found', 500);
+	}
+
+	private function read_csv_with_header($filepath) {
+
+		if (!file_exists($filepath)) {
+			throw new \Exception($filepath . ' Not found', 500);
 		}
 
-		$data = file($path, FILE_IGNORE_NEW_LINES);
+		$data = file($filepath, FILE_IGNORE_NEW_LINES);
 		$header = str_getcsv(array_shift($data),',');
-		//$csv = array_map('str_getcsv', $data);
 		$csv = array_map(function($set){
 			return str_getcsv($set,",");
 		},$data);
@@ -116,145 +124,47 @@ class Import extends Controller {
 			$csv[$key] = array_combine($header, $row);
 		}
 
-		$lr = array_filter($csv, function($data) {
-			return $data['publisher'] == 'LR';
-		});
-		$lr = array_column($lr, 'COUNT_DISTINCT(inferred_user_id)', '__timestamp');
-		ksort($lr);
-
-		foreach ($lr as $day => $users) {
-			$this->DailyKPIs->update(['daily_active_users' => $users],$day);
-		}
-
-
+		return $csv;
 
 	}
 
 
-	private function all_segments_save_to_db($csv) {
 
-		$fly = array_filter($csv, function($data) {
-			return $data['user_engagement_segment'] == 'fly-by';
-		});
-		$fly = array_column($fly, 'Anzahl Nutzer', '__timestamp');
-		ksort($fly);
+	private function save_segments_to_db($csv, $suffix = null) {
 
-		$non = array_filter($csv, function($data) {
-			return $data['user_engagement_segment'] == 'non-engaged';
-		});
-		$non = array_column($non, 'Anzahl Nutzer', '__timestamp');
-		ksort($non);
+		$segmentDatabaseMapping = [
+			'low-usage-irregular' => 'low_usage_irregulars',
+			'high-usage-irregular' => 'high_usage_irregulars',
+			'loyal' => 'loyals',
+			'champion' => 'champions',
+			'fly-by' => 'flybys',
+			'non-engaged' => 'nonengaged',
+			'unknown' => 'unknown',
+		];
 
-		$lui = array_filter($csv, function($data) {
-			return $data['user_engagement_segment'] == 'low-usage-irregular';
-		});
-		$lui = array_column($lui, 'Anzahl Nutzer', '__timestamp');
-		ksort($lui);
+		$segmentFieldName = 'user_engagement_segment';
+		$amountFieldName = 'Anzahl aktive User';
+		$dateFieldName = '__timestamp';
 
-		$loyal = array_filter($csv, function($data) {
-			return $data['user_engagement_segment'] == 'loyal';
-		});
-		$loyal = array_column($loyal, 'Anzahl Nutzer', '__timestamp');
-		ksort($loyal);
+		$data = array_group_by($dateFieldName, $csv);
 
-		$hui = array_filter($csv, function($data) {
-			return $data['user_engagement_segment'] == 'high-usage-irregular';
-		});
-		$hui = array_column($hui, 'Anzahl Nutzer', '__timestamp');
-		ksort($hui);
+		$segmentsByDate = [];
+		foreach ($data as $date => $segmentSets) {
 
-		$champ = array_filter($csv, function($data) {
-			return $data['user_engagement_segment'] == 'champion';
-		});
-		$champ = array_column($champ, 'Anzahl Nutzer', '__timestamp');
-		ksort($champ);
+			foreach ($segmentSets as $sets) {
+				$mappedSegment = $segmentDatabaseMapping[$sets[$segmentFieldName]];
+				if ($suffix) {$mappedSegment = $mappedSegment . $suffix;}
+				$segmentsByDate[$date][$mappedSegment] = $sets[$amountFieldName];
+			}
 
-		foreach ($champ as $day => $users) {
-			$this->DailyKPIs->update(['champions' => $users],$day);
 		}
 
-		foreach ($hui as $day => $users) {
-			$this->DailyKPIs->update(['high_usage_irregulars' => $users],$day);
-		}
+		ksort($segmentsByDate);
 
-		foreach ($lui as $day => $users) {
-			$this->DailyKPIs->update(['low_usage_irregulars' => $users],$day);
-		}
+		//dd($segmentsByDate);
 
-		foreach ($loyal as $day => $users) {
-			$this->DailyKPIs->update(['loyals' => $users],$day);
-		}
-
-		foreach ($non as $day => $users) {
-			$this->DailyKPIs->update(['nonengaged' => $users],$day);
-		}
-
-		foreach ($fly as $day => $users) {
-			$this->DailyKPIs->update(['flybys' => $users],$day);
-		}
-
-	}
-
-	private function registered_segments_save_to_db($csv) {
-
-		$fly = array_filter($csv, function($data) {
-			return $data['user_engagement_segment'] == 'fly-by';
-		});
-		$fly = array_column($fly, 'Anzahl Nutzer', '__timestamp');
-		ksort($fly);
-
-		$non = array_filter($csv, function($data) {
-			return $data['user_engagement_segment'] == 'non-engaged';
-		});
-		$non = array_column($non, 'Anzahl Nutzer', '__timestamp');
-		ksort($non);
-
-		$lui = array_filter($csv, function($data) {
-			return $data['user_engagement_segment'] == 'low-usage-irregular';
-		});
-		$lui = array_column($lui, 'Anzahl Nutzer', '__timestamp');
-		ksort($lui);
-
-		$loyal = array_filter($csv, function($data) {
-			return $data['user_engagement_segment'] == 'loyal';
-		});
-		$loyal = array_column($loyal, 'Anzahl Nutzer', '__timestamp');
-		ksort($loyal);
-
-		$hui = array_filter($csv, function($data) {
-			return $data['user_engagement_segment'] == 'high-usage-irregular';
-		});
-		$hui = array_column($hui, 'Anzahl Nutzer', '__timestamp');
-		ksort($hui);
-
-		$champ = array_filter($csv, function($data) {
-			return $data['user_engagement_segment'] == 'champion';
-		});
-		$champ = array_column($champ, 'Anzahl Nutzer', '__timestamp');
-		ksort($champ);
-
-		foreach ($champ as $day => $users) {
-			$this->DailyKPIs->update(['champions_reg' => $users],$day);
-		}
-
-		foreach ($hui as $day => $users) {
-			$this->DailyKPIs->update(['high_usage_irregulars_reg' => $users],$day);
-		}
-
-		foreach ($lui as $day => $users) {
-			$this->DailyKPIs->update(['low_usage_irregulars_reg' => $users],$day);
-		}
-
-		foreach ($loyal as $day => $users) {
-			$this->DailyKPIs->update(['loyals_reg' => $users],$day);
-		}
-
-		foreach ($non as $day => $users) {
-			$this->DailyKPIs->update(['nonengaged_reg' => $users],$day);
-		}
-
-		foreach ($fly as $day => $users) {
-			$this->DailyKPIs->update(['flybys_reg' => $users],$day);
+		foreach ($segmentsByDate as $day => $segmentData) {
+			$this->DailyKPIs->update($segmentData,$day);
 		}
 
 	}
