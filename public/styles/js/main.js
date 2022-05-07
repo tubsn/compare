@@ -1,7 +1,7 @@
 class Imports {
 
 	constructor() {
-
+		this.ignoreCancelled = false;
 	}
 
 	run (event) {
@@ -9,6 +9,7 @@ class Imports {
 		event.preventDefault();
 		let from = event.target.querySelector('input[name="from"]').value || new Date();
 		let to = event.target.querySelector('input[name="to"]').value || new Date();
+		this.ignoreCancelled = event.target.querySelector('input[name="ignore-cancelled"]').checked;
 		let dates = this.date_span(from, to);
 
 		console.log(dates);
@@ -89,15 +90,7 @@ class Imports {
 		duration = duration / 1000;
 
 		let text = document.createElement('p');
-		text.innerText = date + ' | Anzahl Käufe: ' + orders.length + ' | Importdauer: ' + duration + 's';
-
-		/*
-		for (let order of orders) {
-			let entry = document.createElement('p');
-			entry.innerHTML = order.order_id;
-			container.appendChild(entry);
-		}
-		*/
+		text.innerText = date + ' | erneuerte Käufe: ' + orders.length + ' | Importdauer: ' + duration + 's';
 
 		container.appendChild(text);
 		this.output.appendChild(container);
@@ -108,9 +101,12 @@ class Imports {
 
 		for(const date of dates) {
 
+			let ignoreOption = '';
+			if (this.ignoreCancelled) {ignoreOption = '?ignorecancelled';}
+
 			let start = new Date().getTime();
 
-			await fetch('/orders/import/' + date, {method: 'GET', credentials: 'same-origin'})
+			await fetch('/orders/import/' + date + ignoreOption, {method: 'GET', credentials: 'same-origin'})
 			.then(response => {
 				if(response.status === 404) {console.log(response.text()); return null;}
 				return response.json();
@@ -193,7 +189,7 @@ class Artikel {
 
 				//window.location = 'https://' + newPath;
 				window.location = `https://${subdomain}.lr-digital.de/switch-portal?page=${page.pathname}&from=${from}&to=${to}`;
-				
+
 			});
 		}
 

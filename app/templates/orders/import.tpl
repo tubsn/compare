@@ -13,6 +13,13 @@
 		<input type="date" name="to">
 	</label>
 </fieldset>
+
+<fieldset>
+	<label>
+		<input type="checkbox" checked name="ignore-cancelled"> Gekündigte ignorieren?
+	</label>
+</fieldset>
+
 <button type="submit" class="mb">Order-Daten aktualisieren</button>
 </form>
 
