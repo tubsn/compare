@@ -141,7 +141,10 @@ class Plenigo
 
 		if ($new['subscription_cancellation_date']) {
 			$new['cancelled'] = 1;
-			$new['cancellation_reason'] = $org['cancellationReasonUniqueId'] ?? null;
+
+			if (!empty($org['cancellationReasonUniqueId'])) {
+				$new['cancellation_reason'] = $org['cancellationReasonUniqueId'];
+			}
 
 			$start = new \DateTime(formatDate($org['orderDate'], 'Y-m-d'));
 			$end = new \DateTime(formatDate($org['cancellationDate'], 'Y-m-d'));
