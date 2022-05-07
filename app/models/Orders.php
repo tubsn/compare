@@ -764,9 +764,7 @@ class Orders extends Model
 		// Save to DB
 		foreach ($detailedOrders as $order) {
 
-			if ($this->get($order['order_id'])) {
-				$this->update($order, $order['order_id']);
-			} else {$this->create($order);}
+			$this->create_or_update($order);
 
 			if (isset($order['article_id'])) {
 				$conversions = new Conversions();

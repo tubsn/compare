@@ -63,7 +63,9 @@ class Import extends Controller {
 	}
 
 	public function order_import($date = null) {
-		$orders = $this->Orders->import($date);
+		$ignoreCancelled = false;
+		if (isset($_GET['ignorecancelled'])) {$ignoreCancelled = true;}
+		$orders = $this->Orders->import($date, $ignoreCancelled);
 		$this->view->json($orders);
 	}
 
