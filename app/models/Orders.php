@@ -741,7 +741,7 @@ class Orders extends Model
 	}
 
 
-	public function import($date, $client = 'LR') {
+	public function import($date, $ignoreCancelled = false) {
 
 		// don't do Imports prior to Plenigo V3
 		if ($date < '2021-03-23') {
@@ -749,9 +749,11 @@ class Orders extends Model
 		}
 
 		$plenigo = new Plenigo();
-		$plenigo->api->client($client);
-
 		$orderList = $plenigo->orders($date, $date, 100);
+
+		if ($ignoreCancelled) {
+			$orderList = $this->filter_cancelled_from($orderList);
+		}
 
 		$detailedOrders = [];
 		foreach ($orderList as $order) {
@@ -778,5 +780,28 @@ class Orders extends Model
 		return $detailedOrders;
 
 	}
+
+	private function filter_cancelled_from($orders) {
+
+		$orderIDs = array_column($orders,'order_id');
+		$ordersInDB = $this->get($orderIDs, ['order_id', 'cancelled']);
+
+		$cancelledOrders = array_filter($ordersInDB, function($order) {
+			if ($order['cancelled'] == true) {return $order;}
+		});
+
+		$cancelledOrders = array_column($cancelledOrders, 'order_id');
+
+		foreach ($orders as $key => $order) {
+			if (in_array($order['order_id'], $cancelledOrders)) {
+				unset($orders[$key]);
+			}
+		}
+
+		sort($orders);
+		return $orders;
+
+	}
+
 
 }

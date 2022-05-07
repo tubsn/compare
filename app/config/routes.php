@@ -75,7 +75,6 @@ $routes->get('/orders/{date:[\d]{4}-[\d]{2}-[\d]{2}?}', 'Livedata@orders_date');
 $routes->get('/orders/customer/{id:\d+}', 'Livedata@customer');
 $routes->get('/orders/subscription/{id:\d+}', 'Livedata@subscription');
 
-$routes->post('/orders/set_client', 'Livedata@set_client');
 $routes->post('/orders/set_date', 'Livedata@set_date');
 $routes->post('/orders/set_paid_filter', 'Livedata@set_paid_filter');
 
