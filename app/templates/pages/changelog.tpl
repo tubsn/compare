@@ -20,6 +20,7 @@
 <ul>
 	<li>In den täglichen Auswertungsdaten stehen jetzt alle User gruppiert nach Drive Segmenten zur Verfügung. Damit ist z.B. die Entwicklung unserer Loyalen Nutzer besser ersichtlich.</li>
 	<li>Aus den Daten lassen sich außerdem die Durchschnittliche Anzahl der aktiven Abonnenten auf dem Portal pro Tag darstellen.</li>
+	<li>Option hinzugefügt, um beim Conversionimport bereits gekündigte zu ignorieren (diese ändern sich ja nicht mehr). Dadurch erhöht sich die Importgeschwindigkeit bei vergangenen Monaten enorm.</li>
 </ul>
 
 
