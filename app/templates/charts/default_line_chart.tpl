@@ -129,6 +129,4 @@ let ChartOptions<?=$id?> = {
 let Chart<?=$id?> = new ApexCharts(document.querySelector("#Chart-<?=$id?>"), ChartOptions<?=$id?>);
 Chart<?=$id?>.render();
 
-
-
 </script>
