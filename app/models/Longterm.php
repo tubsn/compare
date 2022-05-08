@@ -28,6 +28,7 @@ class Longterm extends Model
 	public function portal_KPIs() {
 
 		$cache = new RequestCache('portalkpis', 30*60);
+		$cache->cacheDirectory = ROOT . 'cache' . DIRECTORY_SEPARATOR . 'portals';
 		$portalData = $cache->get();
 
 		if (empty($portalData)) {
@@ -42,6 +43,7 @@ class Longterm extends Model
 	public function portal_orders() {
 
 		$cache = new RequestCache('portalorders', 30*60);
+		$cache->cacheDirectory = ROOT . 'cache' . DIRECTORY_SEPARATOR . 'portals';
 		$portalData = $cache->get();
 
 		if (empty($portalData)) {
@@ -74,6 +76,7 @@ class Longterm extends Model
 	public function kpis($start = null) {
 
 		$cache = new RequestCache('kpidata' . $start . PORTAL, 30*60);
+		$cache->cacheDirectory = ROOT . 'cache' . DIRECTORY_SEPARATOR . 'portals';
 		$cachedData = $cache->get();
 		//if ($cachedData) {return $cachedData;}
 
@@ -139,6 +142,7 @@ class Longterm extends Model
 	public function orders($start = null) {
 
 		$cache = new RequestCache('orderdata' . $start . PORTAL, 30*60);
+		$cache->cacheDirectory = ROOT . 'cache' . DIRECTORY_SEPARATOR . 'portals';
 		$cachedData = $cache->get();
 		if ($cachedData) {return $cachedData;}
 
