@@ -245,6 +245,8 @@ class Stats extends Controller {
 		$premiumUsers = $this->DailyKPIs->premium_users();
 		$premiumUsersQuote = $this->DailyKPIs->quote_of_premium_users();
 
+		$this->view->maxChartHeight = ceil(max(array_column($premiumUsersQuote,'reg_quote')));
+
 		$this->view->charts = $this->Charts;
 		$this->view->segments = $this->Charts->convert($segments,1);
 		$this->view->premiumUsers = $this->Charts->convert($premiumUsers,1);

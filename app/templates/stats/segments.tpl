@@ -24,6 +24,8 @@
 		'tickamount' => 12,
 		'percent' => true,
 		'area' => true,
+		'ymax' => $maxChartHeight,
+		'ymin' => 0,
 		'name' => 'Anteil Abonnenten am Gesamttraffic',
 		'template' => 'charts/default_line_chart',
 	]);?>
@@ -59,7 +61,7 @@
 		  $segments['high_usage_irregulars'],
 		  $segments['loyals'],
 		  $segments['low_usage_irregulars'],
-		  $segments['flybys'],		  
+		  $segments['flybys'],
 		  $segments['nonengaged'],
 	     ],
 		'dimension' => $segments['dimensions'],

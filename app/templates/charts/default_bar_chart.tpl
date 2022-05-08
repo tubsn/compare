@@ -145,6 +145,8 @@ let ChartOptions<?=$id?> = {
 	yaxis: {
 		tickAmount: 4,
 		labels: {rotate: 0},
+		<?php if (isset($ymax)): ?>max: <?=$ymax?>,<?php endif; ?>
+		<?php if (isset($ymin)): ?>min: <?=$ymin?>,<?php endif; ?>		
 	}
 
 };

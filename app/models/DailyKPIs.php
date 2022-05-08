@@ -63,7 +63,7 @@ class DailyKPIs extends Model
 		$days = $this->timeframe($from, $to);
 
 		if ($days < 31) {
-	
+
 			$SQLstatement = $this->db->connection->prepare(
 				"SELECT
 				    #DATE_FORMAT(date,'%Y-%V') as datum,
@@ -103,7 +103,7 @@ class DailyKPIs extends Model
 
 		}
 
-		
+
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
 		$output = $SQLstatement->fetchAll(\PDO::FETCH_UNIQUE);
 		if (empty($output)) {return null;}
@@ -117,7 +117,7 @@ class DailyKPIs extends Model
 		$tablename = $this->db->table;
 		$from = strip_tags($this->from);
 		$to = strip_tags($this->to);
-		
+
 		$days = $this->timeframe($from, $to);
 
 		if ($days < 31) {
@@ -125,10 +125,12 @@ class DailyKPIs extends Model
 			$SQLstatement = $this->db->connection->prepare(
 				"SELECT
 				    date as datum,
-					sum(champions + high_usage_irregulars + low_usage_irregulars + 
-					loyals + flybys + nonengaged + unknown) - sum(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg + 
+					sum(champions + high_usage_irregulars + low_usage_irregulars +
+					loyals + flybys + nonengaged + unknown) -
+					sum(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg +
 					loyals_reg + flybys_reg + nonengaged_reg + unknown_reg) as users,
-					sum(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg + 
+
+					sum(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg +
 					loyals_reg + flybys_reg + nonengaged_reg + unknown_reg) as users_reg
 				 FROM $tablename
 				 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
@@ -143,12 +145,17 @@ class DailyKPIs extends Model
 			$SQLstatement = $this->db->connection->prepare(
 				"SELECT
 				    DATE_FORMAT(date,'%Y-%m') as datum,
-					round(avg(champions + high_usage_irregulars + low_usage_irregulars + 
-					loyals + flybys + nonengaged + unknown) - avg(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg + 
-					loyals_reg + flybys_reg + nonengaged_reg + unknown_reg)) AS users,
+					round(
+						avg(champions + high_usage_irregulars + low_usage_irregulars +
+						loyals + flybys + nonengaged + unknown) -
+						avg(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg +
+						loyals_reg + flybys_reg + nonengaged_reg + unknown_reg)
+					) AS users,
 
-					round(avg(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg + 
-					loyals_reg + flybys_reg + nonengaged_reg + unknown_reg)) AS users_reg
+					round(
+						avg(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg +
+						loyals_reg + flybys_reg + nonengaged_reg + unknown_reg)
+					) AS users_reg
 				 FROM $tablename
 				 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
 				 GROUP BY datum
@@ -157,7 +164,7 @@ class DailyKPIs extends Model
 
 		}
 
-	
+
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
 		$output = $SQLstatement->fetchAll(\PDO::FETCH_UNIQUE);
 		if (empty($output)) {return null;}
@@ -175,13 +182,13 @@ class DailyKPIs extends Model
 		$days = $this->timeframe($from, $to);
 
 		if ($days < 31) {
-		
+
 			$SQLstatement = $this->db->connection->prepare(
 				"SELECT
 				    date as datum,
-					round(avg(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg + 
-					loyals_reg + flybys_reg + nonengaged_reg + unknown_reg) / 
-					avg(champions + high_usage_irregulars + low_usage_irregulars + 
+					round(avg(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg +
+					loyals_reg + flybys_reg + nonengaged_reg + unknown_reg) /
+					avg(champions + high_usage_irregulars + low_usage_irregulars +
 					loyals + flybys + nonengaged + unknown) * 100 ,2) as reg_quote
 				 FROM $tablename
 				 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
@@ -190,16 +197,18 @@ class DailyKPIs extends Model
 			);
 
 		}
-	
+
 		elseif ($days < 300) {
 
 			$SQLstatement = $this->db->connection->prepare(
 				"SELECT
 				    DATE_FORMAT(date,'%Y-%v') as datum,
-					round(avg(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg + 
-					loyals_reg + flybys_reg + nonengaged_reg + unknown_reg) / 
-					avg(champions + high_usage_irregulars + low_usage_irregulars + 
-					loyals + flybys + nonengaged + unknown) * 100 ,2) as reg_quote
+					round(
+						avg(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg +
+						loyals_reg + flybys_reg + nonengaged_reg + unknown_reg) /
+						avg(champions + high_usage_irregulars + low_usage_irregulars +
+						loyals + flybys + nonengaged + unknown) * 100, 2
+					) as reg_quote
 				 FROM $tablename
 				 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
 				 GROUP BY datum
@@ -209,13 +218,13 @@ class DailyKPIs extends Model
 		}
 
 		else {
-		
+
 			$SQLstatement = $this->db->connection->prepare(
 				"SELECT
 				    DATE_FORMAT(date,'%Y-%m') as datum,
-					round(avg(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg + 
-					loyals_reg + flybys_reg + nonengaged_reg + unknown_reg) / 
-					avg(champions + high_usage_irregulars + low_usage_irregulars + 
+					round(avg(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg +
+					loyals_reg + flybys_reg + nonengaged_reg + unknown_reg) /
+					avg(champions + high_usage_irregulars + low_usage_irregulars +
 					loyals + flybys + nonengaged + unknown) * 100 ,2) as reg_quote
 				 FROM $tablename
 				 WHERE DATE(`date`) BETWEEN :startDate AND :endDate

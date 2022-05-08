@@ -26,6 +26,8 @@ class Chartengine
 	public $xfont;
 	public $prefix;
 	public $suffix;
+	public $ymax;
+	public $ymin;
 	public $legend;
 	public $tickamount;
 
@@ -78,6 +80,8 @@ class Chartengine
 			'tickamount' => $this->tickamount,
 			'prefix' => $this->prefix,
 			'suffix' => $this->suffix,
+			'ymax' => $this->ymax,
+			'ymin' => $this->ymin,
 			'showValues' => $this->showValues,
 			'name' => $this->name,
 		];

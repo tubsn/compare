@@ -102,6 +102,8 @@ let ChartOptions<?=$id?> = {
 	yaxis: {
 		tickAmount: 4,
 		labels: {rotate: 0},
+		<?php if (isset($ymax)): ?>max: <?=$ymax?>,<?php endif; ?>
+		<?php if (isset($ymin)): ?>min: <?=$ymin?>,<?php endif; ?>
 	},
 
 	grid: {row: {colors: ['#e5e5e5', 'transparent'], opacity: 0.2}},
@@ -126,4 +128,7 @@ let ChartOptions<?=$id?> = {
 
 let Chart<?=$id?> = new ApexCharts(document.querySelector("#Chart-<?=$id?>"), ChartOptions<?=$id?>);
 Chart<?=$id?>.render();
+
+
+
 </script>
