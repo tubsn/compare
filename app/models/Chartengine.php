@@ -157,9 +157,13 @@ class Chartengine
 
 	public function implode($array, $asInteger = false, $caps = false) {
 		if ($caps) {$array = array_map(function ($set) { return ucfirst($set); }, $array);}
-		if ($asInteger) {return implode(",", $array);}
+		if ($asInteger) {
+			$string = implode(",", $array);
+			return trim($string, ',');
+		}
 		$string = "'" . implode("','", $array) . "'";
 		$string = str_replace("''", 'null', $string);
+
 		return $string;
 	}
 
