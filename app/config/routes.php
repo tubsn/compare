@@ -7,7 +7,7 @@ $routes->get('/', 'Stats@dashboard');
 $routes->get('/cards', 'Lists@cards');
 $routes->get('/freecharts', 'Stats@freecharts');
 
-$routes->get('/segments', 'Import@csv_import_segments_by_date');
+$routes->get('/segments', 'Import@import_segments_by_date');
 $routes->get('/filter', 'Lists@filter');
 $routes->post('/filter', 'Lists@filter');
 

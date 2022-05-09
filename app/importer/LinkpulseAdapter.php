@@ -61,7 +61,7 @@ class LinkpulseAdapter
 		$output['pageviews'] = $data['pageviews'] ?? null;
 		$output['sessions'] = 0;
 		$output['conversions'] = $data['converted_usercount'] ?? null;
-		$output['subscribers'] = $data['subscribers'] ?? null;
+		$output['subscriberviews'] = $data['subscribers'] ?? null;
 
 		$output['ressort'] = $data['section'] ?? null;
 		$output['url'] = $data['url'] ?? null;

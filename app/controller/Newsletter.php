@@ -103,7 +103,7 @@ class Newsletter extends Controller {
 
 		if (!isset($regioDB[$region])) {
 			throw new \Exception("Unbekannte Ressort Region", 404);
-			
+
 		}
 
 		$this->Articles->from = date('Y-m-d', strtotime('-3days'));
@@ -157,10 +157,6 @@ class Newsletter extends Controller {
 		$this->Orders->to = $end;
 		$viewData['stats']['conversions'] = $this->Orders->count();
 
-		//$this->Articles->from = $start;
-		//$this->Articles->to = $end;
-		//$viewData['stats']['subscribers'] = $this->Articles->sum('subscribers');
-
 		$viewData['stats']['date'] = $yesterday;
 		$viewData['stats']['weekday'] = date('w', strtotime('yesterday'));
 
@@ -168,14 +164,6 @@ class Newsletter extends Controller {
 		$infoMail->subject = 'MOZ - Wochenbericht';
 		$infoMail->to = ['twinkler@moz.de'];
 		$infoMail->cc = ['sebastian.butt@lr-online.de'];
-
-		/*
-		if (PORTAL == 'MOZ') {
-			$infoMail->to = ['FGollner@moz.de'];
-			$infoMail->cc = ['sebastian.butt@lr-online.de', 'mariell.begemann@lr-online.de'];
-		}
-		*/
-
 
 		if ($send) {
 			$infoMail->send('newsletter/nachdreh-alert-score', $viewData);

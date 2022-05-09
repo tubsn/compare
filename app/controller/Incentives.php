@@ -56,7 +56,7 @@ class Incentives extends Controller {
 
 		return array_map(function($set) use ($avgBase) {
 			$set['pageviews'] = round($set['pageviews'] / $avgBase,2);
-			$set['subscribers'] = round($set['subscribers'] / $avgBase,2);
+			$set['subscriberviews'] = round($set['subscriberviews'] / $avgBase,2);
 			$set['conversions'] = round($set['conversions'] / $avgBase,2);
 			$set['mediatime'] = round($set['mediatime'] / $avgBase,2);
 			$set['avgmediatime'] = round($set['avgmediatime'],2);
@@ -72,12 +72,12 @@ class Incentives extends Controller {
 
 
 			$percentPageviews = $this->calculate_percentage($set['pageviews'], $base[$ressort]['pageviews']);
-			$percentSubscribers = $this->calculate_percentage($set['subscribers'], $base[$ressort]['subscribers']);
+			$percentSubscriberviews = $this->calculate_percentage($set['subscriberviews'], $base[$ressort]['subscriberviews']);
 			$percentConversions = $this->calculate_percentage($set['conversions'], $base[$ressort]['conversions']);
 			$percentMediatime = $this->calculate_percentage($set['mediatime'], $base[$ressort]['mediatime']);
 
 			$ressorts[$ressort]['pageviews'] = $percentPageviews;
-			$ressorts[$ressort]['subscribers'] = $percentSubscribers;
+			$ressorts[$ressort]['subscriberviews'] = $percentSubscriberviews;
 			$ressorts[$ressort]['conversions'] = $percentConversions;
 			$ressorts[$ressort]['mediatime'] = 	$percentMediatime;
 
@@ -101,10 +101,10 @@ class Incentives extends Controller {
 			if ($set['pageviews'] >= 30) {$set['pvclass'] = 'gold';}
 			if ($set['pageviews'] <= -20) {$set['pvclass'] = 'negative';}
 
-			if ($set['subscribers'] >= 10) {$set['subclass'] = 'bronze';}
-			if ($set['subscribers'] >= 20) {$set['subclass'] = 'silver';}
-			if ($set['subscribers'] >= 30) {$set['subclass'] = 'gold';}
-			if ($set['subscribers'] <= -20) {$set['subclass'] = 'negative';}
+			if ($set['subscriberviews'] >= 10) {$set['subclass'] = 'bronze';}
+			if ($set['subscriberviews'] >= 20) {$set['subclass'] = 'silver';}
+			if ($set['subscriberviews'] >= 30) {$set['subclass'] = 'gold';}
+			if ($set['subscriberviews'] <= -20) {$set['subclass'] = 'negative';}
 
 			if ($set['conversions'] >= 10) {$set['convclass'] = 'bronze';}
 			if ($set['conversions'] >= 20) {$set['convclass'] = 'silver';}

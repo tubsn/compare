@@ -63,7 +63,7 @@ class Lists extends Controller {
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
-		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');
+		$viewData['subscriberviews'] = $this->Articles->sum_up($viewData['articles'],'subscriberviews');
 		$viewData['avgmediatime'] = $this->Articles->average_up($viewData['articles'],'avgmediatime');
 		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
 		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
@@ -87,7 +87,7 @@ class Lists extends Controller {
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
-		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');
+		$viewData['subscriberviews'] = $this->Articles->sum_up($viewData['articles'],'subscriberviews');
 		$viewData['avgmediatime'] = $this->Articles->average_up($viewData['articles'],'avgmediatime');
 		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
 		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
@@ -113,14 +113,14 @@ class Lists extends Controller {
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
-		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');
+		$viewData['subscriberviews'] = $this->Articles->sum_up($viewData['articles'],'subscriberviews');
 		$viewData['avgmediatime'] = $this->Articles->average_up($viewData['articles'],'avgmediatime');
 		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
 		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
 		$viewData['numberOfArticles'] = $count;
 
 		$this->view->title = 'Artikel mit mehr als ' . $minScore . ' Score Punkten';
-		$this->view->info = 'Score-Formel: (conversions * 20) + (pageviews / 1000 * 5) + ((avgmediatime / 10) * 2) + (subscribers / 100 * 3)';
+		$this->view->info = 'Score-Formel: (conversions * 20) + (pageviews / 1000 * 5) + ((avgmediatime / 10) * 2) + (subscriberviews / 100 * 3)';
 		$this->view->referer('/score');
 		$this->view->render('pages/list', $viewData);
 
@@ -136,7 +136,7 @@ class Lists extends Controller {
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
-		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');
+		$viewData['subscriberviews'] = $this->Articles->sum_up($viewData['articles'],'subscriberviews');
 		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
 		$viewData['avgmediatime'] = $this->Articles->average_up($viewData['articles'],'avgmediatime');
 		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
@@ -154,14 +154,12 @@ class Lists extends Controller {
 		$count = 0;
 		if (is_array($viewData['articles'])) {$count = count($viewData['articles']);}
 
-
-		//$viewData['primaryChart'] = $this->Charts->get('subscribersByRessort');
-		$viewData['secondaryChart'] = $this->Charts->get('subscribers_by_date');
+		$viewData['secondaryChart'] = $this->Charts->get('subscriberviews_by_date');
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
 		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
-		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');
+		$viewData['subscriberviews'] = $this->Articles->sum_up($viewData['articles'],'subscriberviews');
 		$viewData['avgmediatime'] = $this->Articles->average_up($viewData['articles'],'avgmediatime');
 		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
 		$viewData['numberOfArticles'] = $count;
@@ -189,7 +187,7 @@ class Lists extends Controller {
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
-		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');
+		$viewData['subscriberviews'] = $this->Articles->sum_up($viewData['articles'],'subscriberviews');
 		$viewData['avgmediatime'] = $this->Articles->average_up($viewData['articles'],'avgmediatime');
 		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
 		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
@@ -216,7 +214,7 @@ class Lists extends Controller {
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
-		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');
+		$viewData['subscriberviews'] = $this->Articles->sum_up($viewData['articles'],'subscriberviews');
 		$viewData['avgmediatime'] = $this->Articles->average_up($viewData['articles'],'avgmediatime');
 		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
 		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
@@ -257,7 +255,7 @@ class Lists extends Controller {
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
-		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');
+		$viewData['subscriberviews'] = $this->Articles->sum_up($viewData['articles'],'subscriberviews');
 		$viewData['avgmediatime'] = $this->Articles->average_up($viewData['articles'],'avgmediatime');
 		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
 		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
@@ -285,7 +283,7 @@ class Lists extends Controller {
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
-		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');
+		$viewData['subscriberviews'] = $this->Articles->sum_up($viewData['articles'],'subscriberviews');
 		$viewData['avgmediatime'] = $this->Articles->average_up($viewData['articles'],'avgmediatime');
 		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
 		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
@@ -311,7 +309,7 @@ class Lists extends Controller {
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
-		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');
+		$viewData['subscriberviews'] = $this->Articles->sum_up($viewData['articles'],'subscriberviews');
 		$viewData['avgmediatime'] = $this->Articles->average_up($viewData['articles'],'avgmediatime');
 		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
 		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
@@ -348,7 +346,7 @@ class Lists extends Controller {
 
 		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
 		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
-		$viewData['subscribers'] = $this->Articles->sum_up($viewData['articles'],'subscribers');
+		$viewData['subscriberviews'] = $this->Articles->sum_up($viewData['articles'],'subscriberviews');
 		$viewData['avgmediatime'] = $this->Articles->average_up($viewData['articles'],'avgmediatime');
 		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
 		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
@@ -369,7 +367,7 @@ class Lists extends Controller {
 	public function top5() {
 		Session::set('referer', '/top5');
 		$viewData['list']['conversions'] = $this->Articles->conversions_only(5);
-		$viewData['list']['subscribers'] = $this->Articles->subscriber_only(5);
+		$viewData['list']['subscriberviews'] = $this->Articles->subscriber_only(5);
 		$viewData['list']['mediatime'] = $this->Articles->mediatime_only($minimum = 150, $limit=5);
 		$viewData['list']['pageviews'] = $this->Articles->pageviews_only($minimum = 5, $limit=5);
 
@@ -429,62 +427,6 @@ class Lists extends Controller {
 		$this->view->render('pages/discover');
 
 	}
-
-	/*
-	public function filter() {
-
-		Session::set('referer', '/filter');
-
-		$db = new \flundr\database\SQLdb(DB_SETTINGS);
-		$db->table = 'articles';
-
-		$from = date('Y-m-d', strtotime('yesterday -6days'));
-		$to = date('Y-m-d', strtotime('yesterday'));
-
-		if (Session::get('from')) {$from = Session::get('from');}
-		if (Session::get('to')) {$to = Session::get('to');}
-
-
-		$kpis['conversions'] = strip_tags($_POST['conversions'] ?? null);
-		$kpis['pageviews'] = strip_tags($_POST['pageviews'] ?? null);
-		$kpis['avgmediatime'] = strip_tags($_POST['avgmediatime'] ?? null);
-		$kpis['subscribers'] = strip_tags($_POST['subscribers'] ?? null);
-		$kpis['cancelled'] = strip_tags($_POST['cancelled'] ?? null);
-
-		$viewData['kpis'] = $kpis;
-
-		$filter = null;
-
-		foreach ($kpis as $kpi => $value) {
-			if (empty($value)) {continue;}
-
-			$value = str_replace('--','', $value);
-			$value = str_replace('#','', $value);
-			$value = str_replace(';','', $value);
-
-			$filter .= ' AND ' . $kpi . ' ' . $value;
-		}
-
-		$SQLstatement = $db->connection->prepare(
-			"SELECT *
-			 FROM `articles`
-			 WHERE (DATE(`pubdate`) BETWEEN :startDate AND :endDate)
-			 $filter
-			 ORDER BY pageviews DESC
-			 LIMIT 0, 1000"
-		);
-
-		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
-		$output = $SQLstatement->fetchall();
-
-		$viewData['articles'] = $output ;
-		$this->view->title = 'Gefilterte Artikel: ' . count($output);
-		$this->view->navigation = 'navigation/kpi-selector';
-		$this->view->render('pages/list', $viewData);
-
-	}
-	*/
-
 
 	private function decode_url($urlString) {
 		$urlString = urldecode($urlString);

@@ -20,7 +20,7 @@ class Stats extends Controller {
 		Session::set('referer', '/');
 
 		$viewData['articles'] = $this->Articles->count('*');
-		$viewData['subscribers'] = $this->Articles->sum('subscribers');
+		$viewData['subscriberviews'] = $this->DailyKPIs->sum('subscriberviews');
 		$viewData['avgmediatime'] = $this->Articles->average('avgmediatime');
 		//$viewData['avgmediatime'] = $this->DailyKPIs->avg('avgmediatime');
 		$viewData['pageviews'] = $this->DailyKPIs->sum('pageviews');
@@ -63,7 +63,7 @@ class Stats extends Controller {
 		$viewData['articles'] = $this->Articles->count('*', 'ressort');
 		$viewData['plusarticles'] = $this->Articles->sum('plus', 'ressort');
 		$viewData['pageviews'] = $this->Articles->sum('pageviews', 'ressort');
-		$viewData['subscribers'] = $this->Articles->sum('subscribers', 'ressort');
+		$viewData['subscriberviews'] = $this->Articles->sum('subscriberviews', 'ressort');
 		$viewData['mediatime'] = $this->Articles->sum('mediatime', 'ressort');
 		$viewData['sessions'] = $this->Articles->sum('sessions', 'ressort');
 		$viewData['conversions'] = $this->Articles->sum('conversions', 'ressort');
@@ -71,7 +71,7 @@ class Stats extends Controller {
 		$viewData['cancelled'] = $this->Articles->sum('cancelled', 'ressort');
 
 		$viewData['groupedStats'] = $this->Articles->stats_grouped_by($column = 'ressort', $order = 'conversions DESC, ressort ASC');
-		$viewData['chartOne'] = $this->Charts->get('avg_subscribers_by', ['ressort', 'DESC']);
+		$viewData['chartOne'] = $this->Charts->get('avg_subscriberviews_by', ['ressort', 'DESC']);
 		$viewData['chartOneTitle'] = 'Durchschnittliche Subscriber nach Ressort';
 		$viewData['chartTwo'] = $this->Charts->get('avg_pageviews_by', ['ressort', 'DESC']);
 		$viewData['chartTwoTitle'] = 'Durchschnittliche Pageviews nach Ressort';
@@ -89,7 +89,7 @@ class Stats extends Controller {
 		$viewData['articles'] = $this->Articles->count('*', 'type');
 		$viewData['plusarticles'] = $this->Articles->sum('plus', 'type');
 		$viewData['pageviews'] = $this->Articles->sum('pageviews', 'type');
-		$viewData['subscribers'] = $this->Articles->sum('subscribers', 'type');
+		$viewData['subscriberviews'] = $this->Articles->sum('subscriberviews', 'type');
 		$viewData['mediatime'] = $this->Articles->sum('mediatime', 'type');
 		$viewData['sessions'] = $this->Articles->sum('sessions', 'type');
 		$viewData['conversions'] = $this->Articles->sum('conversions', 'type');
@@ -98,7 +98,7 @@ class Stats extends Controller {
 
 		$viewData['groupedStats'] = $this->Articles->stats_grouped_by($column = 'type', $order = 'conversions DESC');
 
-		$viewData['chartOne'] = $this->Charts->get('avg_subscribers_by', ['type', 'DESC']);
+		$viewData['chartOne'] = $this->Charts->get('avg_subscriberviews_by', ['type', 'DESC']);
 		$viewData['chartOneTitle'] = 'Durchschnittliche Subscriber nach Inhaltstyp';
 		$viewData['chartTwo'] = $this->Charts->get('avg_pageviews_by', ['type', 'DESC']);
 		$viewData['chartTwoTitle'] = 'Durchschnittliche Pageviews nach Inhaltstyp';
@@ -116,7 +116,7 @@ class Stats extends Controller {
 		$viewData['articles'] = $this->Articles->count('*', 'audience');
 		$viewData['plusarticles'] = $this->Articles->sum('plus', 'audience');
 		$viewData['pageviews'] = $this->Articles->sum('pageviews', 'audience');
-		$viewData['subscribers'] = $this->Articles->sum('subscribers', 'audience');
+		$viewData['subscriberviews'] = $this->Articles->sum('subscriberviews', 'audience');
 		$viewData['mediatime'] = $this->Articles->sum('mediatime', 'audience');
 		$viewData['sessions'] = $this->Articles->sum('sessions', 'audience');
 		$viewData['conversions'] = $this->Articles->sum('conversions', 'audience');
@@ -125,7 +125,7 @@ class Stats extends Controller {
 
 		$viewData['groupedStats'] = $this->Articles->stats_grouped_by($column = 'audience', $order = 'conversions DESC');
 
-		$viewData['chartOne'] = $this->Charts->get('avg_subscribers_by', ['audience', 'DESC']);
+		$viewData['chartOne'] = $this->Charts->get('avg_subscriberviews_by', ['audience', 'DESC']);
 		$viewData['chartOneTitle'] = 'Durchschnittliche Subscriber nach Audience';
 		$viewData['chartTwo'] = $this->Charts->get('avg_pageviews_by', ['audience', 'DESC']);
 		$viewData['chartTwoTitle'] = 'Durchschnittliche Pageviews nach Audience';
@@ -143,7 +143,7 @@ class Stats extends Controller {
 		$viewData['articles'] = $this->Articles->count('*', 'tag');
 		$viewData['plusarticles'] = $this->Articles->sum('plus', 'tag');
 		$viewData['pageviews'] = $this->Articles->sum('pageviews', 'tag');
-		$viewData['subscribers'] = $this->Articles->sum('subscribers', 'tag');
+		$viewData['subscriberviews'] = $this->Articles->sum('subscriberviews', 'tag');
 		$viewData['mediatime'] = $this->Articles->sum('mediatime', 'tag');
 		$viewData['sessions'] = $this->Articles->sum('sessions', 'tag');
 		$viewData['conversions'] = $this->Articles->sum('conversions', 'tag');
@@ -151,7 +151,7 @@ class Stats extends Controller {
 		$viewData['cancelled'] = $this->Articles->sum('cancelled', 'tag');
 
 		$viewData['groupedStats'] = $this->Articles->stats_grouped_by($column = 'tag', $order = 'conversions DESC');
-		$viewData['chartOne'] = $this->Charts->get('avg_subscribers_by', ['tag', 'DESC']);
+		$viewData['chartOne'] = $this->Charts->get('avg_subscriberviews_by', ['tag', 'DESC']);
 		$viewData['chartOneTitle'] = 'Durchschnittliche Subscriber nach #Tag';
 		$viewData['chartTwo'] = $this->Charts->get('avg_pageviews_by', ['tag', 'DESC']);
 		$viewData['chartTwoTitle'] = 'Durchschnittliche Pageviews nach #Tag';

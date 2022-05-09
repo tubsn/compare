@@ -7,7 +7,7 @@
 
 
 <style>
-.calendar-timeframe, .calendar-datepicker {display:none !important;} 
+.calendar-timeframe, .calendar-datepicker {display:none !important;}
 </style>
 
 <?php include tpl('navigation/date-picker');?>
@@ -134,7 +134,7 @@
 
 		<tr>
 			<th style="text-align:right">Bestellungen</th>
-			<?php foreach ($salesData as $month => $set): ?>			
+			<?php foreach ($salesData as $month => $set): ?>
 			<td class="text-right"><?=$plenigoOrders[$month]['orders'] ?? '-'?></td>
 			<?php endforeach; ?>
 		</tr>
@@ -244,7 +244,7 @@
 
 	<figure class="mb">
 		<?=$charts->create([
-			'metric' => [$kpis['pageviews'], $kpis['sessions'], $kpis['subscribers']],
+			'metric' => [$kpis['pageviews'], $kpis['sessions'], $kpis['subscriberviews']],
 			'dimension' => $kpis['dimensions'],
 			'color' => ['#7698be', '#a5bcd5', '#4e6783'],
 			'height' => 350,
@@ -261,7 +261,7 @@
 	<figure class="mb">
 		<h3 class="text-right" style="margin-bottom:0">Subscriberviews</h3>
 		<?=$charts->create([
-			'metric' => $charts->cut_left($kpis['subscribers'],0),
+			'metric' => $charts->cut_left($kpis['subscriberviews'],0),
 			'dimension' => $charts->cut_left($kpis['dimensions'],0),
 			'color' => '#4e6783',
 			'height' => 350,
@@ -346,21 +346,21 @@
 			<th style="text-align:right">Monat</th>
 			<?php foreach ($kpiHistory as $month => $set): ?>
 			<td style="text-align:right"><i><?=formatDate($month, 'M\'y')?></i><br />
-		 	<?=$difference($set['subscribers'], $set['subscribers_past'])?></td>
+		 	<?=$difference($set['subscriberviews'], $set['subscriberviews_past'])?></td>
 			<?php endforeach; ?>
 		</tr>
 
 		<tr>
 			<th style="text-align:right">Aktuell</th>
 			<?php foreach ($kpiHistory as $month => $set): ?>
-			<td class="text-right"><b><?=gnum($set['subscribers'])?></b></td>
+			<td class="text-right"><b><?=gnum($set['subscriberviews'])?></b></td>
 			<?php endforeach; ?>
 		</tr>
 
 		<tr>
 			<th style="text-align:right">Vorjahr</th>
 			<?php foreach ($kpiHistory as $month => $set): ?>
-			<td class="text-right"><?=gnum($set['subscribers_past'])?></td>
+			<td class="text-right"><?=gnum($set['subscriberviews_past'])?></td>
 			<?php endforeach; ?>
 		</tr>
 
@@ -378,7 +378,7 @@
 			<th>Datum</th>
 			<th style="text-align:right">Pageviews</th>
 			<th style="text-align:right">Pageviews Last Year</th>
-			<th style="text-align:right">Subscribers</th>
+			<th style="text-align:right">Subscriberviews</th>
 			<th style="text-align:right">Subs Last Year</th>
 			<th style="text-align:right">Mediatime</th>
 			<th style="text-align:right">Mediatime</th>
@@ -391,8 +391,8 @@
 			<td><?=$month?></td>
 			<td class="text-right"><?=gnum($set['pageviews'])?> &thinsp; <?=$difference($set['pageviews'], $set['pageviews_past'])?></td>
 			<td class="text-right"><?=gnum($set['pageviews_past'])?></td>
-			<td class="text-right"><?=gnum($set['subscribers'])?> &thinsp; <?=$difference($set['subscribers'], $set['subscribers_past'])?></td>
-			<td class="text-right"><?=gnum($set['subscribers_past'])?></td>
+			<td class="text-right"><?=gnum($set['subscriberviews'])?> &thinsp; <?=$difference($set['subscriberviews'], $set['subscriberviews_past'])?></td>
+			<td class="text-right"><?=gnum($set['subscriberviews_past'])?></td>
 			<td class="text-right"><?=$set['avgmediatime']?>&thinsp;s</td>
 			<td class="text-right"><?=$set['avgmediatime_past']?>&thinsp;s</td>
 		</tr>

@@ -37,8 +37,8 @@
 	<?php endif; ?>
 
 	<p>
-	<?php if ($article['subscribers']): ?>
-	Subscriber-Anteil: <span title="Registrierte Leser: <?=$article['subscribers']?>" class="bluebg"><?=round($article['subscribers'] / $article['pageviews'] * 100)?>%</span>
+	<?php if ($article['subscriberviews']): ?>
+	Subscriber-Anteil: <span title="Registrierte Leser: <?=$article['subscriberviews']?>" class="bluebg"><?=round($article['subscriberviews'] / $article['pageviews'] * 100)?>%</span>
 	<?php endif; ?>
 
 	<?php if ($article['buyintent']): ?>
@@ -47,7 +47,7 @@
 
 
 	<?php if ($ressortAvgergeSubs && $ressortAvgergeSubs != 1): ?>
-	<br />Subscribers: <span class="subscribers"><?=$article['subscribers']?></span> <small>(Ø-Ressort: <?=$ressortAvgergeSubs?>)</small>
+	<br />Subscriberviews: <span class="subscribers"><?=$article['subscriberviews']?></span> <small>(Ø-Ressort: <?=$ressortAvgergeSubs?>)</small>
 	<?php endif; ?>
 
 	</p>

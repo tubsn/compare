@@ -19,7 +19,7 @@ class Articles extends Model
 		$this->db = new SQLdb(DB_SETTINGS);
 		$this->db->table = 'articles';
 		$this->db->order = 'DESC';
-		$this->db->limit = 50000;		
+		$this->db->limit = 50000;
 
 		$this->from = date('Y-m-d', strtotime(DEFAULT_FROM));
 		$this->to = date('Y-m-d', strtotime(DEFAULT_TO));
@@ -274,7 +274,7 @@ class Articles extends Model
 		];
 
 		if (isset($gaData['buyintent'])) { $stats['buyintent'] = $gaData['buyintent']; }
-		if (isset($gaData['subscribers'])) { $stats['subscribers'] = $gaData['subscribers']; }
+		if (isset($gaData['subscriberviews'])) { $stats['subscriberviews'] = $gaData['subscriberviews']; }
 		if (isset($gaData['Itemquantity'])) { $stats['conversions'] = $gaData['Itemquantity']; }
 
 		$this->update($stats,$id);
@@ -381,7 +381,7 @@ class Articles extends Model
 			"SELECT *
 			 FROM `articles`
 			 WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate
-			 ORDER BY `subscribers` DESC
+			 ORDER BY `subscriberviews` DESC
 			 LIMIT 0, $limit"
 		);
 
@@ -488,17 +488,6 @@ class Articles extends Model
 
 	public function by_weeks_ago($weeksAgo = 1) {
 
-		/* Date Stuff
-	 	#WHERE `pubdate` >= curdate() - INTERVAL DAYOFWEEK(curdate())+6 DAY
-		#AND `pubdate` < curdate() - INTERVAL DAYOFWEEK(curdate())-1 DAY
-
-		WHERE MONTH(columnName) = MONTH(CURRENT_DATE())
-		AND YEAR(columnName) = YEAR(CURRENT_DATE())
-
-		Vor 2 Wochen
-		WHERE YEARWEEK(`pubdate`,1) = YEARWEEK(NOW() - INTERVAL 2 WEEK,1)
-		*/
-
 		$weeksAgo = intval($weeksAgo);
 		$SQLstatement = $this->db->connection->prepare(
 			"SELECT id,pubdate
@@ -516,8 +505,6 @@ class Articles extends Model
 		return $output;
 
 	}
-
-
 
 
 	public function top_pageviews_days_ago($days = 1) {
@@ -628,7 +615,7 @@ class Articles extends Model
 			"SELECT *,
 			 round(sum(
 			 	(IFNULL(conversions, 0) * 20) + (IFNULL(pageviews, 0) / 1000 * 5) +
-			 	((IFNULL(avgmediatime, 0) / 10) * 2) + (IFNULL(subscribers, 0) / 100 * 3)
+			 	((IFNULL(avgmediatime, 0) / 10) * 2) + (IFNULL(subscriberviews, 0) / 100 * 3)
 			 ),1) as score
 			 FROM `articles`
 			 WHERE (DATE(`pubdate`) BETWEEN :startDate AND :endDate)
@@ -654,10 +641,10 @@ class Articles extends Model
 		$SQLstatement = $this->db->connection->prepare(
 			"SELECT ressort,
 			ressort,
-			 COUNT( if(conversions>0 AND subscribers>=100, 1, NULL) ) as spielmacher,
-			 COUNT( if(conversions>0 AND subscribers<100, 1, NULL) ) as stuermer,
-			 COUNT( if((conversions IS NULL OR conversions=0) AND subscribers>=100, 1, NULL) ) as abwehr,
-			 COUNT( if((conversions IS NULL OR conversions=0) AND subscribers<100, 1, NULL) ) as geister,
+			 COUNT( if(conversions>0 AND subscriberviews>=100, 1, NULL) ) as spielmacher,
+			 COUNT( if(conversions>0 AND subscriberviews<100, 1, NULL) ) as stuermer,
+			 COUNT( if((conversions IS NULL OR conversions=0) AND subscriberviews>=100, 1, NULL) ) as abwehr,
+			 COUNT( if((conversions IS NULL OR conversions=0) AND subscriberviews<100, 1, NULL) ) as geister,
 			 COUNT(id) as artikel
 
 			 FROM `articles`
@@ -678,10 +665,10 @@ class Articles extends Model
 
 	public function valueables_by_group($group) {
 
-		$filter = 'AND (conversions IS NULL OR conversions=0) AND subscribers<100';
-		if ($group == 'stuermer') {$filter = 'AND conversions>0 AND subscribers<100';}
-		if ($group == 'abwehr') {$filter = 'AND (conversions IS NULL OR conversions=0) AND subscribers>=100';}
-		if ($group == 'spielmacher') {$filter = 'AND conversions>0 AND subscribers>=100';}
+		$filter = 'AND (conversions IS NULL OR conversions=0) AND subscriberviews<100';
+		if ($group == 'stuermer') {$filter = 'AND conversions>0 AND subscriberviews<100';}
+		if ($group == 'abwehr') {$filter = 'AND (conversions IS NULL OR conversions=0) AND subscriberviews>=100';}
+		if ($group == 'spielmacher') {$filter = 'AND conversions>0 AND subscriberviews>=100';}
 
 		$from = strip_tags($this->from);
 		$to = strip_tags($this->to);
@@ -737,10 +724,10 @@ class Articles extends Model
         	WHERE temptable.$column = maintable.$column
 			AND `pageviews` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as pageviews,
 
-       		(SELECT sum(subscribers)
+       		(SELECT sum(subscriberviews)
         	FROM `articles` AS temptable
         	WHERE temptable.$column = maintable.$column
-			AND `subscribers` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as subscribers,
+			AND `subscriberviews` > 0 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate) as subscriberviews,
 
        		(SELECT sum(mediatime)
         	FROM `articles` AS temptable

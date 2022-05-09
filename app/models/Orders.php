@@ -224,7 +224,7 @@ class Orders extends Model
 			 articles.audience as audience,
 			 articles.image as image,
 			 articles.pageviews as pageviews,
-			 articles.subscribers as subscribers,
+			 articles.subscriberviews as subscriberviews,
 			 ifnull(conversions.article_ressort, articles.ressort) as ressort,
 			 articles.author as author,
 			 articles.kicker as kicker,

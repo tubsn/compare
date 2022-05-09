@@ -35,7 +35,7 @@ class KilkayaAPI
 		'pageview' => 'pageviews',
 		'session' => 'sessions',
 		'conversion' => 'conversions',
-		'subscriber' => 'subscribers',
+		'subscriber' => 'subscriberviews',
 		'image' => 'image',
 		'description' => 'description',
 		'published' => 'pubdate',

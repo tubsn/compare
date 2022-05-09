@@ -236,7 +236,7 @@ class Exports extends Controller {
 
 		return array_map(function($set) use ($avgBase) {
 			$set['pageviews'] = round($set['pageviews'] / $avgBase,2);
-			$set['subscribers'] = round($set['subscribers'] / $avgBase,2);
+			$set['subscriberviews'] = round($set['subscriberviews'] / $avgBase,2);
 			$set['conversions'] = round($set['conversions'] / $avgBase,2);
 			$set['mediatime'] = round($set['mediatime'] / $avgBase,2);
 			$set['avgmediatime'] = round($set['avgmediatime'],2);

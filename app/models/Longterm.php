@@ -100,7 +100,7 @@ class Longterm extends Model
 
 			$pageviews = $this->KPIs->sum('pageviews') ?? 0;
 			$sessions = $this->KPIs->sum('sessions') ?? 0;
-			$subscribers = $this->KPIs->sum('subscribers') ?? 0;
+			$subscriberviews = $this->KPIs->sum('subscriberviews') ?? 0;
 
 			$articles = $this->Articles->count();
 			$buyintents = $this->Articles->sum('buyintent');
@@ -108,15 +108,15 @@ class Longterm extends Model
 
 			$scoreArticles = count($this->Articles->score_articles() ?? []);
 
-			$spielmacher = $this->Articles->count_with_filter('conversions>0 AND subscribers>=100');
-			$geister = $this->Articles->count_with_filter('(conversions IS NULL OR conversions=0) AND subscribers < 100');
+			$spielmacher = $this->Articles->count_with_filter('conversions>0 AND subscriberviews>=100');
+			$geister = $this->Articles->count_with_filter('(conversions IS NULL OR conversions=0) AND subscriberviews < 100');
 
 			$avgmediatime = $this->KPIs->avg('avgmediatime');
 
 			$output[$dimension]['sessions'] = $sessions;
 			$output[$dimension]['pageviews'] = $pageviews;
 			$output[$dimension]['pageviewsmio'] = round($pageviews/1000000,2);
-			$output[$dimension]['subscribers'] = $subscribers;
+			$output[$dimension]['subscriberviews'] = $subscriberviews;
 			$output[$dimension]['avgmediatime'] = round($avgmediatime,2);
 			$output[$dimension]['buyintents'] = $buyintents;
 			$output[$dimension]['articles'] = $articles;
@@ -125,7 +125,7 @@ class Longterm extends Model
 			$output[$dimension]['geister'] = $geister;
 			$output[$dimension]['scoreArticles'] = $scoreArticles;
 
-			$output[$dimension]['quoteSubscribers'] = percentage($subscribers, $pageviews);
+			$output[$dimension]['quoteSubscriberviews'] = percentage($subscriberviews, $pageviews);
 			$output[$dimension]['quoteScore'] = percentage($scoreArticles, $articles);
 			$output[$dimension]['quotePlus'] = percentage($plus, $articles);
 			$output[$dimension]['quoteSpielmacher'] = percentage($spielmacher, $articles);

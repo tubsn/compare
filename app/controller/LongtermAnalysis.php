@@ -25,7 +25,7 @@ class LongtermAnalysis extends Controller {
 
 		$kpiData = $this->Longterm->kpis($lastYear);
 
-		$kpiHistory = $this->Longterm->compare_fields_with_past($kpiData, ['pageviews','sessions','subscribers','avgmediatime']);
+		$kpiHistory = $this->Longterm->compare_fields_with_past($kpiData, ['pageviews','sessions','subscriberviews','avgmediatime']);
 		$kpiData = $this->Longterm->remove_before($kpiData, '2020-11');
 
 		$orderData = $this->Longterm->orders($lastYear);

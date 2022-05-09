@@ -26,7 +26,7 @@ Artikel Vergleich
 		<div class="mb">
 		PV: <span class="bluebg"><?=$article['pageviews']?></span>
 		MT: <span class="greenbg"><?=round($article['avgmediatime'])?>&thinsp;s</span>
-		Subs: <span class="subscribers"><?=$article['subscribers']?></span>
+		Subs: <span class="subscribers"><?=$article['subscriberviews']?></span>
 		Conv: <span class="orangebg"><?=$article['conversions']?></span>
 		</div>
 

@@ -39,17 +39,17 @@
 	<td><?=number_format(($stats['pageviews'] / $stats['artikel']),0,'.','.') ?? 0?></td>
 
 	<?php if ($stats['pageviews'] > 0): ?>
-	<td title="Plus-Leser: <?=$stats['subscribers']?> (<?=round($stats['subscribers'] / $stats['pageviews'] * 100)?>%)">
+	<td title="Plus-Leser: <?=$stats['subscriberviews']?> (<?=round($stats['subscriberviews'] / $stats['pageviews'] * 100)?>%)">
 		<div class="indicator plusleser">
-			<div style="width:<?=round($stats['subscribers'] / $stats['pageviews'] * 100)?>%;"><?=round($stats['subscribers'] / $stats['pageviews'] * 100)?></div>
+			<div style="width:<?=round($stats['subscriberviews'] / $stats['pageviews'] * 100)?>%;"><?=round($stats['subscriberviews'] / $stats['pageviews'] * 100)?></div>
 		</div>
 	</td>
 	<?php else: ?>
 	<td><div class="indicator plusleser"><div>0</div></div></td>
 	<?php endif; ?>
 
-	<td><?=number_format($stats['subscribers'],0,'.','.') ?? 0?></td>
-	<td><span class="<?php if (($stats['subscribers'] / $stats['artikel']) > 99): ?>subscribers<?php endif ?>"><?=number_format(($stats['subscribers'] / $stats['artikel']),0,'.','.') ?? 0?></span></td>
+	<td><?=number_format($stats['subscriberviews'],0,'.','.') ?? 0?></td>
+	<td><span class="<?php if (($stats['subscriberviews'] / $stats['artikel']) > 99): ?>subscribers<?php endif ?>"><?=number_format(($stats['subscriberviews'] / $stats['artikel']),0,'.','.') ?? 0?></span></td>
 
 
 

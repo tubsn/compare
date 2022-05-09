@@ -3,15 +3,17 @@
 <h1 class="text-center">Portalvergleich LR, MOZ und SWP</h1>
 <p class="nt text-center">Hinweis: Für Einige Kennzahlen stehen nicht alle Zeiträume zur Verfügung und sind daher abgeschnitten.</p>
 
+<?php dump($lr)?>
+
 
 <div class="col-2" style="grid-template-columns: 1fr 1fr; margin-top:2em;">
 
 	<figure class="mb">
 		<h3 class="text-center">Subscriberviews Entwicklung</h3>
 		<?=$charts->create([
-			'metric' => [$charts->cut_left($lr['kpi']['subscribers'],1),
-			 			 $charts->cut_left($moz['kpi']['subscribers'],1),
-			  	 		 $charts->cut_left($swp['kpi']['subscribers'],1)],
+			'metric' => [$charts->cut_left($lr['kpi']['subscriberviews'],1),
+			 			 $charts->cut_left($moz['kpi']['subscriberviews'],1),
+			  	 		 $charts->cut_left($swp['kpi']['subscriberviews'],1)],
 			'dimension' => $charts->cut_left($swp['kpi']['dimensions'],1),
 			'color' => ['#df886d', '#0967a8', '#e50046'],
 			'height' => 350,
@@ -26,9 +28,9 @@
 	<figure class="mb">
 		<h3 class="text-center">Anteil Subscriberviews an Pageviews</h3>
 		<?=$charts->create([
-			'metric' => [$charts->cut_left($lr['kpi']['quoteSubscribers'],1),
-			 			 $charts->cut_left($moz['kpi']['quoteSubscribers'],1),
-			  	 		 $charts->cut_left($swp['kpi']['quoteSubscribers'],1)],
+			'metric' => [$charts->cut_left($lr['kpi']['quoteSubscriberviews'],1),
+			 			 $charts->cut_left($moz['kpi']['quoteSubscriberviews'],1),
+			  	 		 $charts->cut_left($swp['kpi']['quoteSubscriberviews'],1)],
 			'dimension' => $charts->cut_left($swp['kpi']['dimensions'],1),
 			'color' => ['#df886d', '#0967a8', '#e50046'],
 			'height' => 350,

@@ -9,14 +9,14 @@ Die Daten werden <b>auf Lebensdauer des Artikels</b> gruppiert. Der eingestellte
 </p>
 
 <p class="light-box" style="margin-bottom:2em;">
-Artikel: <b title="davon Plusartikel: <?=$plusarticles?>"><?=$articles?></b> 
+Artikel: <b title="davon Plusartikel: <?=$plusarticles?>"><?=$articles?></b>
 &emsp; Pageviews: <b title="Besuche: <?=number_format($sessions,0,',','.')?>" class="blue"><?=number_format($pageviews,0,',','.')?></b>
 <?php if ($articles > 0): ?>
 &emsp; ⌀-Pageviews: <b class="blue"><?=number_format(($pageviews / $articles), 0,',','.') ?></b>
 <?php endif ?>
-&emsp; Subscribers: <b class="deepblue"><?=number_format($subscribers,0,',','.')?></b>
+&emsp; Subscriberviews: <b class="deepblue"><?=number_format($subscriberviews,0,',','.')?></b>
 <?php if ($articles > 0): ?>
-&emsp; ⌀-Subscriber: <b class="deepblue"><?=number_format(($subscribers / $articles), 0,',','.') ?></b>
+&emsp; ⌀-Subscribeviews: <b class="deepblue"><?=number_format(($subscriberviews / $articles), 0,',','.') ?></b>
 <?php endif ?>
 &emsp; Mediatime: <b class="green"><?=number_format($mediatime,0,',','.')?>s</b>
 &emsp; Kauf-Reize: <b class="orange"><?=$buyintents?></b>

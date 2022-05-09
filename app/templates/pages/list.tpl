@@ -14,7 +14,7 @@
 
 <p class="light-box" style="margin-bottom:2em;">
 Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=number_format($pageviews,0,',','.')?></b>
-&emsp; Subscribers: <b class="deepblue"><?=number_format($subscribers,0,',','.')?></b>
+&emsp; Subscriberviews: <b class="deepblue"><?=number_format($subscriberviews,0,',','.')?></b>
 <?php if ($numberOfArticles > 0): ?>
 &emsp; ⌀-Pageviews: <b class="blue"><?=number_format(($pageviews / $numberOfArticles), 0,',','.') ?></b>
 <?php endif ?>
@@ -156,17 +156,17 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 	<?php endif ?>
 
 	<?php if (isset($showSubscribersInTable) && $showSubscribersInTable == true): ?>
-	<td><div<?php if ($article['subscribers'] > 750): ?> class="subscribers"<?php endif; ?>><?=number_format($article['subscribers'],0,'.','.') ?? 0?></div></td>
+	<td><div<?php if ($article['subscriberviews'] > 750): ?> class="subscribers"<?php endif; ?>><?=number_format($article['subscriberviews'],0,'.','.') ?? 0?></div></td>
 	<?php endif; ?>
 
-	<?php if ($article['pageviews'] && $article['subscribers'] && ($article['subscribers'] < $article['pageviews'])): ?>
-	<td data-sortdate="<?=$article['subscribers']?>" title="Plus-Leser: <?=$article['subscribers']?>">
+	<?php if ($article['pageviews'] && $article['subscriberviews'] && ($article['subscriberviews'] < $article['pageviews'])): ?>
+	<td data-sortdate="<?=$article['subscriberviews']?>" title="Plus-Leser: <?=$article['subscriberviews']?>">
 		<div class="indicator plusleser">
-			<div style="width:<?=round($article['subscribers'] / $article['pageviews'] * 100)?>%;"><?=round($article['subscribers'] / $article['pageviews'] * 100)?></div>
+			<div style="width:<?=round($article['subscriberviews'] / $article['pageviews'] * 100)?>%;"><?=round($article['subscriberviews'] / $article['pageviews'] * 100)?></div>
 		</div>
 
 		<div class="indicator-data">
-			<div<?php if ($article['subscribers'] > 750): ?> class="subscribers"<?php endif; ?>><?=number_format($article['subscribers'],0,'.','.') ?? 0?></div>
+			<div<?php if ($article['subscriberviews'] > 750): ?> class="subscribers"<?php endif; ?>><?=number_format($article['subscriberviews'],0,'.','.') ?? 0?></div>
 		</div>
 	</td>
 	<?php else: ?>

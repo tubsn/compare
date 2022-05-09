@@ -47,7 +47,7 @@ foreach ($articles as $article) {
 		$article['pageviews'],
 		$article['sessions'],
 		$article['conversions'],
-		$article['subscribers'],
+		$article['subscriberviews'],
 		$article['mediatime'],
 		$article['avgmediatime'],
 		$article['buyintent'],

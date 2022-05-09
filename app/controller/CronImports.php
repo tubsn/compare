@@ -24,7 +24,7 @@ class CronImports extends Controller {
 			$pubDate = formatDate($article['pubdate'],'Y-m-d');
 			$gaData = $this->Analytics->by_article_id($id, $pubDate);
 
-			$gaData['totals']['subscribers'] = $this->Kilkaya->subscribers($id, $pubDate);
+			$gaData['totals']['subscriberviews'] = $this->Kilkaya->subscribers($id, $pubDate);
 			$gaData['totals']['buyintent'] = $this->Analytics->buy_intention_by_article_id($id, $pubDate);
 			unset($gaData['totals']['Itemquantity']); // Don't Overwrite Plenigo Conversions
 

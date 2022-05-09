@@ -32,7 +32,7 @@ class DailyKPIs extends Model
 		$to = strip_tags($this->to);
 
 		$SQLstatement = $this->db->connection->prepare(
-			"SELECT sum(pageviews) as pageviews, sum(subscribers) as subscribers, sum(mediatime) as mediatime, avg(avgmediatime) as avgmediatime
+			"SELECT sum(pageviews) as pageviews, sum(subscriberviews) as subscriberviews, sum(mediatime) as mediatime, avg(avgmediatime) as avgmediatime
 			 FROM $tablename
 			 WHERE DATE(`date`) BETWEEN :startDate AND :endDate"
 		);
@@ -378,10 +378,10 @@ class DailyKPIs extends Model
 			throw new \Exception("Import Failed", 404);
 		}
 
-		foreach ($dates as $date => $subscribers) {
+		foreach ($dates as $date => $subscriberviews) {
 			if (empty($date)) {continue;}
 			$set['date'] = $date;
-			$set['subscribers'] = $subscribers;
+			$set['subscriberviews'] = $subscriberviews;
 			$this->create_or_update($set);
 		}
 

@@ -47,7 +47,7 @@ class Articles extends Controller {
 		if ($ressortStats['pageviews'] ?? 0 > 0) {$ressortPageviewsAverage = $ressortStats['pageviews'] / $ressortStats['artikel'];}
 		else {$ressortPageviewsAverage = 1;}
 
-		if ($ressortStats['subscribers'] ?? 0 > 0) {$ressortSubsAverage = $ressortStats['subscribers'] / $ressortStats['artikel'];}
+		if ($ressortStats['subscriberviews'] ?? 0 > 0) {$ressortSubsAverage = $ressortStats['subscriberviews'] / $ressortStats['artikel'];}
 		else {$ressortSubsAverage = 1;}
 
 		$pageViewsToRessort = ($viewData['article']['pageviews'] / $ressortPageviewsAverage * 100);
@@ -176,8 +176,8 @@ class Articles extends Controller {
 		$lifeTimeTotals['buyintent'] = $this->Analytics->buy_intention_by_article_id($id, $pubDate);
 
 		// Subscribed Readers
-		$subscribers = $this->Kilkaya->subscribers($id, $pubDate);
-		$lifeTimeTotals['subscribers'] = $subscribers;
+		$subscriberviews = $this->Kilkaya->subscribers($id, $pubDate);
+		$lifeTimeTotals['subscriberviews'] = $subscriberviews;
 
 		$this->Articles->add_stats($lifeTimeTotals,$id);
 		$this->ArticleKPIs->add($dailyStats,$id);
@@ -307,7 +307,7 @@ class Articles extends Controller {
 			case 'letzte 365 Tage':
 				Session::set('from', date('Y-m-d', strtotime('yesterday -365days')));
 				Session::set('to', date('Y-m-d', strtotime('yesterday')));
-			break;			
+			break;
 			case 'aktuelle Woche':
 				Session::set('from', date('Y-m-d', strtotime('monday this week')));
 				Session::set('to', date('Y-m-d', strtotime('sunday this week')));
@@ -339,11 +339,11 @@ class Articles extends Controller {
 			case 'aktuelles Jahr':
 				Session::set('from', date('Y-m-d', strtotime('first day of january')));
 				Session::set('to', date('Y-m-d', strtotime('last day of december')));
-			break;				
+			break;
 			case 'letztes Jahr':
 				Session::set('from', date('Y-m-d', strtotime('first day of january last year')));
 				Session::set('to', date('Y-m-d', strtotime('last day of december last year')));
-			break;		
+			break;
 			case 'alle Daten':
 				Session::set('from', '2000-01-01');
 				Session::set('to', '2050-01-01');

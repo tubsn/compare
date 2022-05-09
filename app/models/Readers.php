@@ -214,62 +214,103 @@ class Readers extends Model
 
 	}
 
-	public function import_user_segments_by_day() {
-		
-		$from = '2022-04-01';
-		$to = '2022-04-03';
+	public function import_user_segments() {
 
-		$cache = new RequestCache('segments', 0 * 60);
+		$from = '2022-05-02';
+		$to = '2022-05-03';
+
+		$cache = new RequestCache('segments', 30 * 60);
 		$segments = $cache->get();
 
 		if (!$segments) {
-			$segments = $this->drive_user_list_by_segment($from, $to);
+			$segments = $this->drive_active_user_segments($from, $to);
 			$cache->save($segments);
 		}
 
-		return $segments;
+		$this->save_segments_to_db($segments);
 
 	}
 
-	private function drive_user_list_by_segment($from, $to) {
+	private function save_segments_to_db($csv) {
+
+		$segmentDatabaseMapping = [
+			'low-usage-irregular' => 'low_usage_irregulars',
+			'high-usage-irregular' => 'high_usage_irregulars',
+			'loyal' => 'loyals',
+			'champion' => 'champions',
+			'fly-by' => 'flybys',
+			'non-engaged' => 'nonengaged',
+			'unknown' => 'unknown',
+		];
+
+		$segmentFieldName = 'user_engagement_segment';
+		$usersFieldName = 'users';
+		$registeredUsersFieldName = 'registered_users';
+		$registeredSuffix = '_reg';
+		$dateFieldName = 'date';
+
+		$data = array_group_by($dateFieldName, $csv);
+
+		$segmentsByDate = [];
+		foreach ($data as $date => $segmentSets) {
+
+			foreach ($segmentSets as $sets) {
+				$mappedSegment = $segmentDatabaseMapping[$sets[$segmentFieldName]];
+				$segmentsByDate[$date][$mappedSegment] = $sets[$usersFieldName];
+				$segmentsByDate[$date][$mappedSegment . $registeredSuffix] = $sets[$registeredUsersFieldName];
+			}
+
+			$segmentsByDate[$date]['users'] = array_sum(array_column($segmentSets, $usersFieldName));
+			$segmentsByDate[$date]['users' . $registeredSuffix] = array_sum(array_column($segmentSets, $registeredUsersFieldName));
+
+		}
+
+		ksort($segmentsByDate);
+
+		dd($segmentsByDate);
+
+		foreach ($segmentsByDate as $day => $segmentData) {
+			$this->DailyKPIs->update($segmentData,$day);
+		}
+
+	}
+
+	private function drive_active_user_segments($from, $to) {
 
 		$bigQueryApi = new BigQuery;
 		$publisher = PORTAL;
 
-		$query ="
-			SELECT DATE_TRUNC(`date`, DAY) AS `date`,
-			`user_engagement_segment` AS `segment`,
-			COUNT(DISTINCT `inferred_user_id`) AS `users`,
-	        COUNT(DISTINCT CASE WHEN user_type='premium' THEN inferred_user_id END) AS `registered_users`,
+		$query =
+			"SELECT DATE_TRUNC(`page_view_start_local`, DAY) AS `date`,
+			       `user_engagement_segment` AS `user_engagement_segment`,
+			       COUNT(DISTINCT inferred_user_id) AS `users`,
+				   COUNT(DISTINCT CASE WHEN user.user_type='premium' THEN inferred_user_id END) AS `registered_users`
 
-			FROM `artikel-reports-tool.DPA_Drive.dpa_drive_users`
+			FROM `artikel-reports-tool.DPA_Drive.dpa_drive_pageviews`
 			JOIN
-			(SELECT `user_engagement_segment` AS `user_engagement_segment__`,
-				count(DISTINCT `inferred_user_id`) AS `mme_inner__`
-				FROM `artikel-reports-tool.DPA_Drive.dpa_drive_users`
-				WHERE `user_engagement_segment` != 'unknown'
-				AND `publisher` = '$publisher'
-				AND `user_engagement_segment` IN ('loyal', 'champion', 'high-usage-irregular', 'low-usage-irregular')
-				AND `date` >= CAST('$from' AS DATE)
-				AND `date` < CAST('$to' AS DATE)
-				GROUP BY `user_engagement_segment__`
-				ORDER BY `mme_inner__` DESC 
-				LIMIT 1000
-			) AS `anon_1` ON `user_engagement_segment` = `user_engagement_segment__`
-			WHERE `date` >= CAST('$from' AS DATE)
-				AND `date` < CAST('$to' AS DATE)
-				AND `user_engagement_segment` != 'unknown'
-				AND `publisher` = '$publisher'
-				AND `user_engagement_segment` IN ('loyal', 'champion', 'high-usage-irregular', 'low-usage-irregular')
+			  (SELECT `user_engagement_segment` AS `user_engagement_segment__`,
+			          COUNT(DISTINCT inferred_user_id) AS `mme_inner__`
+			   FROM `artikel-reports-tool.DPA_Drive.dpa_drive_pageviews`
+			   WHERE `publisher` = 'LR'
+			     AND `page_view_start_local` >= CAST('$from' AS DATE)
+			     AND `page_view_start_local` < CAST('$to' AS DATE)
+			   GROUP BY `user_engagement_segment__`
+			   ORDER BY `mme_inner__` DESC
+			   LIMIT 100) AS `anon_1` ON `user_engagement_segment` = `user_engagement_segment__`
+			WHERE `page_view_start_local` >= CAST('$from' AS DATE)
+			  AND `page_view_start_local` < CAST('$to' AS DATE)
+			  AND `publisher` = '$publisher'
 			GROUP BY `user_engagement_segment`,
-			`date`
-			ORDER BY `date` DESC
+			         `date`
+			ORDER BY `users` DESC
 			LIMIT 50000;
 		";
 
 		$data = $bigQueryApi->sql($query);
 
 		return  $data;
+
+
 	}
 
 	private function drive_user_list() {

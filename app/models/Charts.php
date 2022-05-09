@@ -227,36 +227,36 @@ class Charts
 
 	}
 
-	public function subscribers_by($group = 'ressort') {
+	public function subscriberviews_by($group = 'ressort') {
 
 		$chart = new Chartengine();
-		$chart->kpi = 'subscribers';
+		$chart->kpi = 'subscriberviews';
 		$chart->groupby = $group;
-		$chart->name = 'Subscribers';
+		$chart->name = 'Subscriberviews';
 		$chart->color = '#314e6f';
 		return $chart->init();
 
 	}
 
-	public function avg_subscribers_by($group = 'ressort', $sort = null) {
+	public function avg_subscriberviews_by($group = 'ressort', $sort = null) {
 
 		$chart = new Chartengine();
-		$chart->kpi = 'subscribers';
+		$chart->kpi = 'subscriberviews';
 		$chart->groupby = $group;
 		$chart->operation = 'avg';
 		$chart->sort = $sort;
-		$chart->name = 'Durchschnittliche Subscribers';
+		$chart->name = 'Durchschnittliche Subscriberviews';
 		$chart->color = '#314e6f';
 		return $chart->init();
 
 	}
 
-	public function subscribers_by_date() {
+	public function subscriberviews_by_date() {
 
 		$chart = new Chartengine();
-		$chart->kpi = 'subscribers';
+		$chart->kpi = 'subscriberviews';
 		$chart->groupby = 'DATE(pubdate)';
-		$chart->name = 'Subscribers';
+		$chart->name = 'Subscriberviews';
 		$chart->color = '#314e6f';
 		$chart->template = 'charts/default_line_chart';
 		if ($this->timeframe() > 31) {$chart->groupby = "DATE_FORMAT(pubdate,'%Y-%u')"; $chart->suffix = ' KW';}
@@ -265,13 +265,13 @@ class Charts
 
 	}
 
-	public function subscribers_by_date_wholepage() {
+	public function subscriberviews_by_date_wholepage() {
 
 		$chart = new Chartengine();
-		$chart->kpi = 'subscribers';
+		$chart->kpi = 'subscriberviews';
 		$chart->source = 'DailyKPIs';
 		$chart->groupby = 'DATE(date)';
-		$chart->name = 'Subscribers';
+		$chart->name = 'Subscriberviews';
 		$chart->color = '#314e6f';
 		$chart->template = 'charts/default_line_chart';
 		if ($this->timeframe() > 31) {$chart->groupby = "DATE_FORMAT(date,'%Y-%u')"; $chart->suffix = ' KW';}
@@ -283,10 +283,10 @@ class Charts
 	public function subscriberquote_by($group = 'ressort', $sort = null) {
 
 		$chart = new Chartengine();
-		$chart->kpi = 'round(sum(subscribers)/sum(pageviews)*100)';
+		$chart->kpi = 'round(sum(subscriberviews)/sum(pageviews)*100)';
 		$chart->groupby = $group;
 		$chart->operation = null;
-		$chart->name = 'Anteil an Subscribern';
+		$chart->name = 'Anteil an Subscriberviews';
 		$chart->percent = true;
 		$chart->color = '#314e6f';
 		$chart->sort = $sort;

@@ -20,7 +20,7 @@
 
 <p class="light-box" style="margin-bottom:2em; margin-top:1em; width:100%; text-align:center; box-sizing:border-box">
 Produzierte Artikel: <b><?=$articles?></b>
-&emsp; Subscribers: <b class="deepblue"><?=number_format($subscribers,0,',','.')?></b>
+&emsp; Subscriberviews: <b class="deepblue"><?=number_format($subscriberviews,0,',','.')?></b>
 &emsp; Conversions Plusseite: <b class="blue"><?=$plusOnly?></b>
 &emsp; Conversions Aboshop: <b class="blue"><?=$aboshopOnly?></b>
 &emsp; ⌀-Mediatime: <b class="green"><?=number_format($avgmediatime,0,',','.')?>&thinsp;s</b>
@@ -35,13 +35,13 @@ Produzierte Artikel: <b><?=$articles?></b>
 <div class="col-2" style="grid-template-columns: 2fr 1fr;">
 
 	<figure class="mb">
-		<h3 class="text-center">Subscriber nach Ressort</h3>
-		<?=$charts->get('subscribers_by', 'ressort');?>
+		<h3 class="text-center">Subscriberviews nach Ressort</h3>
+		<?=$charts->get('avg_subscriberviews_by', 'ressort');?>
 	</figure>
 
 	<figure class="mb">
-		<h3 class="text-center">Subscriber im Zeitverlauf</h3>
-		<?=$charts->get('subscribers_by_date_wholepage');?>
+		<h3 class="text-center">Subscriberviews im Zeitverlauf</h3>
+		<?=$charts->get('subscriberviews_by_date_wholepage');?>
 	</figure>
 
 </div>

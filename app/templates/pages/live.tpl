@@ -10,7 +10,7 @@ from.value = null;
 let to = document.querySelector('input[name="to"]');
 to.value = null;
 
-function refresh() {    
+function refresh() {
     setTimeout(function () {
         location.reload()
     }, 300000);
@@ -40,7 +40,7 @@ Pageviews: <b class="pageviews"><?=number_format($pageviews,0,',','.')?></b>
 		<th>Titel</th>
 		<th>Pageviews</th>
 		<th>Conversions</th>
-		<th>Subscribers</th>
+		<th>Subscriberviews</th>
 		<th>Mediatime</th>
 		<th>Artikel</th>
 	</tr>
@@ -51,11 +51,11 @@ Pageviews: <b class="pageviews"><?=number_format($pageviews,0,',','.')?></b>
 		<td><?=ucfirst($article['ressort'])?></td>
 		<td><img style="height: 35px;"src="<?=$article['image']?>"></td>
 		<td><a href="/artikel/<?=$article['id']?>"><?=$article['title']?></a></td>
-		
+
 		<?php if ($article['pageviews'] > 2500): ?>
 		<td><span class="pageviews"><?=$article['pageviews']?></span></td>
-		<?php else: ?>			
-		<td><?=$article['pageviews']?></td>			
+		<?php else: ?>
+		<td><?=$article['pageviews']?></td>
 		<?php endif ?>
 
 		<?php if ($article['conversions'] > 0): ?>
@@ -64,16 +64,16 @@ Pageviews: <b class="pageviews"><?=number_format($pageviews,0,',','.')?></b>
 		<td><?=$article['conversions']?></td>
 		<?php endif ?>
 
-		<?php if ($article['subscribers'] > 100): ?>
-		<td><span class="subscribers"><?=$article['subscribers']?></span></td>
-		<?php else: ?>		
-		<td><?=$article['subscribers']?></td>			
-		<?php endif ?>		
+		<?php if ($article['subscriberviews'] > 100): ?>
+		<td><span class="subscribers"><?=$article['subscriberviews']?></span></td>
+		<?php else: ?>
+		<td><?=$article['subscriberviews']?></td>			
+		<?php endif ?>
 
 		<?php if ($article['avgmediatime'] > 100): ?>
 		<td><span class="greenbg"><?=$article['avgmediatime']?></span></td>
-		<?php else: ?>			
-		<td><?=$article['avgmediatime']?></td>			
+		<?php else: ?>
+		<td><?=$article['avgmediatime']?></td>
 		<?php endif ?>
 		<td><a href="https://<?=$article['url']?>">öffnen</a></td>
 	</tr>

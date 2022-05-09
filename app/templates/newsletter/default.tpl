@@ -66,10 +66,10 @@ table.fancy {margin-bottom:3em;}
 
 	<td class="text-right"><div<?php if ($article['pageviews'] > 2500): ?> class="pageviews"<?php endif; ?>><?=number_format($article['pageviews'],0,'.','.')?></div></td>
 
-	<?php if ($article['pageviews'] && $article['subscribers']): ?>
-	<td title="Plus-Leser: <?=$article['subscribers']?>">
+	<?php if ($article['pageviews'] && $article['subscriberviews']): ?>
+	<td title="Plus-Leser: <?=$article['subscriberviews']?>">
 		<div class="indicator plusleser">
-			<div style="width:<?=round($article['subscribers'] / $article['pageviews'] * 100)?>%;"><?=round($article['subscribers'] / $article['pageviews'] * 100)?></div>
+			<div style="width:<?=round($article['subscriberviews'] / $article['pageviews'] * 100)?>%;"><?=round($article['subscriberviews'] / $article['pageviews'] * 100)?></div>
 		</div>
 	</td>
 	<?php else: ?>

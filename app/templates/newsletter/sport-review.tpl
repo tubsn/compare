@@ -20,7 +20,7 @@ Bei allen anderen Texten unterhalb dieser Richtwerte müssen wir uns ehrlich die
 		<th class="space-left">Artikel</th>
 		<th>Ressort</th>
 		<th class="center">Pageviews</th>
-		<th class="center">Subscribers</th>
+		<th class="center">Subscriberviews</th>
 		<th class="center">Conversions</th>
 		<th class="center">Mediatime</th>
 		<th class="center">Pubdate</th>
@@ -45,10 +45,10 @@ Bei allen anderen Texten unterhalb dieser Richtwerte müssen wir uns ehrlich die
 		<td class="center"><?=number_format($article['pageviews'],0,'.','.')?></td>
 		<?php endif ?>
 
-		<?php if ($article['subscribers'] >= 700): ?>
-		<td class="center"><div class="subscribers"><?=number_format($article['subscribers'],0,'.','.')?></div></td>
+		<?php if ($article['subscriberviews'] >= 700): ?>
+		<td class="center"><div class="subscribers"><?=number_format($article['subscriberviews'],0,'.','.')?></div></td>
 		<?php else: ?>
-		<td class="center"><?=number_format($article['subscribers'],0,'.','.')?></td>
+		<td class="center"><?=number_format($article['subscriberviews'],0,'.','.')?></td>
 		<?php endif ?>
 
 

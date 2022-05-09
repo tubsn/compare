@@ -6,7 +6,7 @@
 <tr>
 	<td class="center"><b>Conversions: <span class="conversions"><?=$stats['conversions']?></span></b></td>
 	<td class="center"><b>Pageviews: <span class="pageviews"><?=number_format($stats['pageviews'],0,'.','.')?></span></b></td>
-	<td class="center"><b>Subscriberviews: <span class="subscribers"><?=number_format($stats['subscribers'],0,'.','.')?></span></b></td>
+	<td class="center"><b>Subscriberviews: <span class="subscribers"><?=number_format($stats['subscriberviews'],0,'.','.')?></span></b></td>
 	<td class="center"><b>⌀-Mediatime: <span class="mediatime"><?=round($stats['avgmediatime'])?></span></b></td>
 	<td class="right">Gesamt-Ergebnis für <?=TAGESNAMEN[$stats['weekday']]?> - <?=$stats['date']?></td>
 </tr>
@@ -22,7 +22,7 @@
 		<th class="space-left">Artikel</th>
 		<th>Ressort</th>
 		<th class="center">Pageviews</th>
-		<th class="center">Subscribers</th>
+		<th class="center">Subscriberviews</th>
 		<th class="center">Conversions</th>
 		<th class="center">Mediatime</th>
 		<th class="center">Pubdate</th>
@@ -53,10 +53,10 @@
 		<td class="center"><?=number_format($article['pageviews'],0,'.','.')?></td>
 		<?php endif ?>
 
-		<?php if ($article['subscribers'] >= 400): ?>
-		<td class="center"><div class="subscribers"><?=number_format($article['subscribers'],0,'.','.')?></div></td>
+		<?php if ($article['subscriberviews'] >= 400): ?>
+		<td class="center"><div class="subscribers"><?=number_format($article['subscriberviews'],0,'.','.')?></div></td>
 		<?php else: ?>
-		<td class="center"><?=number_format($article['subscribers'],0,'.','.')?></td>
+		<td class="center"><?=number_format($article['subscriberviews'],0,'.','.')?></td>
 		<?php endif ?>
 
 
@@ -79,7 +79,7 @@
 </table>
 
 <p>Hinweis: In dieser Liste erscheinen Artikel der letzten drei Publikations-Tage, die von einer hochentwickelten AI nach folgender Formel
-<i>(conversions * 20) + (pageviews / 1000 * 5) + ((avgmediatime / 10) * 2) + (subscribers / 100 * 3)</i>
+<i>(conversions * 20) + (pageviews / 1000 * 5) + ((avgmediatime / 10) * 2) + (subscriberviews / 100 * 3)</i>
 ausgesucht werden. Sollte etwas fehlen oder zuviel angezeigt werden, passen wir die Formel sofort an.</p>
 
 <p>Alle weiteren Daten im Compare-Tool auf: <a href="<?=PAGEURL?>">reports.lr-digital.de</a></p>

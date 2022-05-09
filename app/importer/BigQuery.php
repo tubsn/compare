@@ -33,6 +33,11 @@ class BigQuery
 			$rowData = [];
 		    foreach ($row as $column => $value) {
 
+				if (is_a($value, 'DateTime')) {
+	    			$rowData[$column] = $value->format('Y-m-d');
+					continue;
+				}
+
 		    	if ($column == 'date') {
 		    		$rowData[$column] = $value->formatAsString();
 		    		continue;

@@ -26,7 +26,7 @@
 <tr>
 	<td><?=ucfirst($ressort)?></td>
 	<td class="<?=$stats['pvclass']?>"><?=$stats['pageviews']?>&thinsp;%</td>
-	<td class="<?=$stats['subclass']?>"><?=$stats['subscribers']?>&thinsp;%</td>
+	<td class="<?=$stats['subclass']?>"><?=$stats['subscriberviews']?>&thinsp;%</td>
 	<td class="<?=$stats['convclass']?>"><?=$stats['conversions']?>&thinsp;%</td>
 	<td class="<?=$stats['mclass']?>"><?=$stats['mediatime']?>&thinsp;%</td>
 </tr>
@@ -55,7 +55,7 @@
 <tr>
 	<td><?=ucfirst($ressort)?></td>
 	<td><?=$stats['pageviews']?></td>
-	<td><?=$stats['subscribers']?></td>
+	<td><?=$stats['subscriberviews']?></td>
 	<td><?=$stats['conversions']?></td>
 	<td><?=$stats['mediatime']?></td>
 </tr>
@@ -85,7 +85,7 @@
 <tr>
 	<td><?=ucfirst($ressort)?></td>
 	<td><?=$stats['pageviews']?></td>
-	<td><?=$stats['subscribers']?></td>
+	<td><?=$stats['subscriberviews']?></td>
 	<td><?=$stats['conversions']?></td>
 	<td><?=$stats['mediatime']?></td>
 </tr>

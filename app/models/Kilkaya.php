@@ -136,7 +136,7 @@ class Kilkaya
 		$api->filters = [ ['operator' => 'like', 'field' => 'url', 'value' => '*' . $id . '*'] ];
 
 		$api->run_query();
-		return $api->response['subscribers'] ?? null;
+		return $api->response['subscriberviews'] ?? null;
 	}
 
 	public function subscribers_grouped_by_date($from, $to) {
@@ -149,7 +149,7 @@ class Kilkaya
 
 		$api->run_query();
 
-		return array_column($api->response, 'subscribers', 'day');
+		return array_column($api->response, 'subscriberviews', 'day');
 
 	}
 

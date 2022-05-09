@@ -56,10 +56,10 @@ table.fancy:first-of-type {margin-bottom:3em;}
 	<td class="text-right"><div<?php if ($article['pageviews'] > 2500): ?> class="pageviews"<?php endif; ?>><?=number_format($article['pageviews'],0,'.','.')?></div></td>
 
 <!--
-	<?php if ($article['pageviews'] && $article['subscribers']): ?>
-	<td title="Plus-Leser: <?=$article['subscribers']?>">
+	<?php if ($article['pageviews'] && $article['subscriberviews']): ?>
+	<td title="Plus-Leser: <?=$article['subscriberviews']?>">
 		<div class="indicator plusleser">
-			<div style="width:<?=round($article['subscribers'] / $article['pageviews'] * 100)?>%;"><?=round($article['subscribers'] / $article['pageviews'] * 100)?></div>
+			<div style="width:<?=round($article['subscriberviews'] / $article['pageviews'] * 100)?>%;"><?=round($article['subscriberviews'] / $article['pageviews'] * 100)?></div>
 		</div>
 	</td>
 	<?php else: ?>
@@ -67,8 +67,8 @@ table.fancy:first-of-type {margin-bottom:3em;}
 	<?php endif; ?>
 -->
 
-	<?php if ($article['pageviews'] && $article['subscribers']): ?>
-	<td class="text-right" title="Plus-Leser: <?=$article['subscribers']?>"><span class="subscribers nowrap"><?=round($article['subscribers'] / $article['pageviews'] * 100)?>&thinsp;%</span></td>
+	<?php if ($article['pageviews'] && $article['subscriberviews']): ?>
+	<td class="text-right" title="Plus-Leser: <?=$article['subscriberviews']?>"><span class="subscribers nowrap"><?=round($article['subscriberviews'] / $article['pageviews'] * 100)?>&thinsp;%</span></td>
 	<?php else: ?>
 	<td class="text-right">0%</td>
 	<?php endif; ?>

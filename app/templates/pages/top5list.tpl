@@ -26,8 +26,8 @@
 	<th>Inhaltstyp</th>
 	<th>Ressort</th>
 	<?php if (auth_rights('author')): ?><th>Autor</th><?php endif; ?>
-	<?php if ($tableTitle != 'subscribers'): ?><th>Klicks</th><?php endif; ?>
-	<?php if ($tableTitle == 'subscribers'): ?><th>Subs</th><?php endif; ?>
+	<?php if ($tableTitle != 'subscriberviews'): ?><th>Klicks</th><?php endif; ?>
+	<?php if ($tableTitle == 'subscriberviews'): ?><th>Subs</th><?php endif; ?>
 	<th>%-Subs</th>
 	<th>%-MT</th>
 	<th>Conv</th>
@@ -100,18 +100,18 @@
 	<td class="narrow"><a href="/author/<?=urlencode(str_replace('/', '-slash-', $article['author'] ?? 'Unbekannt'))?>"><?=$article['author'] ?? 'Unbekannt'?></a></td>
 	<?php endif ?>
 
-	<?php if ($tableTitle != 'subscribers'): ?>
+	<?php if ($tableTitle != 'subscriberviews'): ?>
 	<td class="text-right"><div<?php if ($article['pageviews'] > 2500): ?> class="pageviews"<?php endif; ?>><?=number_format($article['pageviews'],0,'.','.')?></div></td>
 	<?php endif; ?>
 
-	<?php if ($tableTitle == 'subscribers'): ?>
-	<td><div<?php if ($article['subscribers'] > 1000): ?> class="subscribers"<?php endif; ?>><?=$article['subscribers']?></div></td>
+	<?php if ($tableTitle == 'subscriberviews'): ?>
+	<td><div<?php if ($article['subscriberviews'] > 1000): ?> class="subscribers"<?php endif; ?>><?=$article['subscriberviews']?></div></td>
 	<?php endif; ?>
 
-	<?php if ($article['pageviews'] && $article['subscribers']): ?>
-	<td title="Plus-Leser: <?=$article['subscribers']?>">
+	<?php if ($article['pageviews'] && $article['subscriberviews']): ?>
+	<td title="Plus-Leser: <?=$article['subscriberviews']?>">
 		<div class="indicator plusleser">
-			<div style="width:<?=round($article['subscribers'] / $article['pageviews'] * 100)?>%;"><?=round($article['subscribers'] / $article['pageviews'] * 100)?></div>
+			<div style="width:<?=round($article['subscriberviews'] / $article['pageviews'] * 100)?>%;"><?=round($article['subscriberviews'] / $article['pageviews'] * 100)?></div>
 		</div>
 	</td>
 	<?php else: ?>
