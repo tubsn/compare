@@ -216,17 +216,8 @@ class Readers extends Model
 	}
 
 	public function import_user_segments($from, $to) {
-
-		$cache = new RequestCache('segments', 30 * 60);
-		$segments = $cache->get();
-
-		if (!$segments) {
-			$segments = $this->drive_active_user_segments($from, $to);
-			$cache->save($segments);
-		}
-
+		$segments = $this->drive_active_user_segments($from, $to);
 		$this->save_segments_to_db($segments);
-
 	}
 
 	private function save_segments_to_db($csv) {
