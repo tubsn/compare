@@ -7,7 +7,7 @@ $routes->get('/', 'Stats@dashboard');
 $routes->get('/cards', 'Lists@cards');
 $routes->get('/freecharts', 'Stats@freecharts');
 
-$routes->get('/segments', 'Import@import_segments_by_date');
+$routes->get('/segments', 'Import@import_dailyKPI_segments');
 $routes->get('/filter', 'Lists@filter');
 $routes->post('/filter', 'Lists@filter');
 
@@ -183,7 +183,8 @@ $routes->post('/admin', 'Admin@save_config');
 $routes->get('/admin/import', 'Import@feeds');
 $routes->get('/admin/discover', 'Admin@discover_upload');
 $routes->post('/admin/discover', 'Admin@discover_upload');
-$routes->get('/admin/csv_segments', 'Import@import_user_segments_from_csv');
+$routes->get('/admin/experimentdata', 'Import@experiment_data');
+$routes->get('/admin/kpisegments', 'Import@import_dailyKPI_segments');
 $routes->get('/admin/subscribers', 'Import@import_subscribers');
 $routes->get('/admin/orders', 'Import@order_import_form');
 $routes->get('/admin/topics', 'Warmup@topic_clusters');

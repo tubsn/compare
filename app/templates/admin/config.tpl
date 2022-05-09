@@ -90,7 +90,15 @@ Hier können Artikel, Conversions und Kampagnendaten inklusive Klick- und Kündi
 
 <hr>
 
-	<h3>Drive Usersegmente Importieren</h3>
+	<h3>Drive User-KPIs Importieren</h3>
+	<p>Importiert Anzahl von Nutzern der letzten 3 Tage nach Drive Segmenten.</p>
+
+	<a class="button noline" href="/admin/kpisegments">Drive Segment KPIs importieren</a>
+	</p>
+
+<hr>
+
+	<h3>Drive Kauf-Usersegmente Importieren</h3>
 	<p>Hier werden aus den Drive Tabellen alle Usersegmente von Käufern und Kündigern der letzten 3 Tage importiert.</p>
 
 	<a class="button noline" href="/admin/warmup/readers">Drive Segmente importieren</a>

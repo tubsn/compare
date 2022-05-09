@@ -115,10 +115,15 @@ class CronImports extends Controller {
 
 		$from = date('Y-m-d', strtotime('yesterday -3days'));
 		$to = date('Y-m-d', strtotime('yesterday'));
-		$this->DailyKPIs->import_subscribers($from, $to);
 
+		$this->DailyKPIs->import_subscribers($from, $to);
 		echo 'Global KPIs importiert | ' . date('H:i:s') . "\r\n";
+
+		$segments = $this->Readers->import_user_segments($from, $to);
+		echo 'Global KPI User Segments importiert | ' . date('H:i:s') . "\r\n";
+
 	}
+
 
 	public function import_utm_campaigns($days = 5) {
 

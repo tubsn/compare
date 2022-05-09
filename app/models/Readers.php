@@ -6,6 +6,7 @@ use \flundr\database\SQLdb;
 use	\app\importer\DPA_Drive_User;
 use \app\importer\BigQuery;
 use	\app\models\Orders;
+use	\app\models\DailyKPIs;
 use \flundr\cache\RequestCache;
 
 class Readers extends Model
@@ -214,10 +215,7 @@ class Readers extends Model
 
 	}
 
-	public function import_user_segments() {
-
-		$from = '2022-05-02';
-		$to = '2022-05-03';
+	public function import_user_segments($from, $to) {
 
 		$cache = new RequestCache('segments', 30 * 60);
 		$segments = $cache->get();
@@ -261,16 +259,15 @@ class Readers extends Model
 			}
 
 			$segmentsByDate[$date]['users'] = array_sum(array_column($segmentSets, $usersFieldName));
-			$segmentsByDate[$date]['users' . $registeredSuffix] = array_sum(array_column($segmentSets, $registeredUsersFieldName));
+			$segmentsByDate[$date]['subscribers'] = array_sum(array_column($segmentSets, $registeredUsersFieldName));
 
 		}
 
 		ksort($segmentsByDate);
 
-		dd($segmentsByDate);
-
+		$dailyKPIs = new DailyKPIs();
 		foreach ($segmentsByDate as $day => $segmentData) {
-			$this->DailyKPIs->update($segmentData,$day);
+			$dailyKPIs->update($segmentData,$day);
 		}
 
 	}
@@ -285,7 +282,6 @@ class Readers extends Model
 			       `user_engagement_segment` AS `user_engagement_segment`,
 			       COUNT(DISTINCT inferred_user_id) AS `users`,
 				   COUNT(DISTINCT CASE WHEN user.user_type='premium' THEN inferred_user_id END) AS `registered_users`
-
 			FROM `artikel-reports-tool.DPA_Drive.dpa_drive_pageviews`
 			JOIN
 			  (SELECT `user_engagement_segment` AS `user_engagement_segment__`,
