@@ -4,6 +4,7 @@ namespace app\controller;
 use flundr\mvc\Controller;
 use flundr\utility\Session;
 use flundr\auth\Auth;
+use app\models\helpers\CSVImports;
 
 class Test extends Controller {
 
@@ -14,6 +15,14 @@ class Test extends Controller {
 		$this->view('DefaultLayout');
 		$this->models('Articles,Orders,Conversions,Analytics,Charts');
 	}
+
+	public function segments() {
+
+		$CSVImport = new CSVImports();
+		$CSVImport->csv_import_segments_by_date();
+
+	}
+
 
 	public function index($id) {
 

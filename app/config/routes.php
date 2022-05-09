@@ -7,7 +7,7 @@ $routes->get('/', 'Stats@dashboard');
 $routes->get('/cards', 'Lists@cards');
 $routes->get('/freecharts', 'Stats@freecharts');
 
-$routes->get('/segments', 'Import@import_dailyKPI_segments');
+$routes->get('/segments', 'Test@segments');
 $routes->get('/filter', 'Lists@filter');
 $routes->post('/filter', 'Lists@filter');
 

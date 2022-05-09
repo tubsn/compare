@@ -3,6 +3,7 @@
 namespace app\models\helpers;
 
 use \flundr\cache\RequestCache;
+use	\app\models\DailyKPIs;
 
 class CSVImports
 {
@@ -122,14 +123,21 @@ class CSVImports
 				$segmentsByDate[$date][$mappedSegment] = $sets[$amountFieldName];
 			}
 
+			if ($suffix == '_reg') {
+				$segmentsByDate[$date]['subscribers'] = array_sum(array_column($segmentSets, 'Anzahl aktive User'));
+			}
+			else {
+				$segmentsByDate[$date]['users'] = array_sum(array_column($segmentSets, 'Anzahl aktive User'));
+			}
+
 		}
 
 		ksort($segmentsByDate);
 
 		//dd($segmentsByDate);
-
+		$dailyKPIs = new DailyKPIs();
 		foreach ($segmentsByDate as $day => $segmentData) {
-			$this->DailyKPIs->update($segmentData,$day);
+			$dailyKPIs->update($segmentData,$day);
 		}
 
 	}
