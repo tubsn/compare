@@ -241,6 +241,9 @@ class Articles extends Model
 		$from = strip_tags($this->from);
 		$to = strip_tags($this->to);
 		$clusterGroup = strip_tags($clusterGroup);
+		$clusterGroup = str_replace('--','', $clusterGroup);
+		$clusterGroup = str_replace('#','', $clusterGroup);
+		$clusterGroup = str_replace(';','', $clusterGroup);
 
 		$SQLstatement = $this->db->connection->prepare(
 			"UPDATE `articles`
