@@ -211,6 +211,14 @@ class Articles extends Model
 		$oldClusterGroup = strip_tags($oldClusterGroup);
 		$newClusterGroup = strip_tags($newClusterGroup);
 
+		// SQL Protection
+		$oldClusterGroup = str_replace('--','', $oldClusterGroup);
+		$oldClusterGroup = str_replace('#','', $oldClusterGroup);
+		$oldClusterGroup = str_replace(';','', $oldClusterGroup);
+		$newClusterGroup = str_replace('--','', $newClusterGroup);
+		$newClusterGroup = str_replace('#','', $newClusterGroup);
+		$newClusterGroup = str_replace(';','', $newClusterGroup);
+
 		$SQLstatement = $this->db->connection->prepare(
 			"UPDATE `articles`
 			SET `$newClusterGroup` = :newClusterValue
@@ -605,6 +613,125 @@ class Articles extends Model
 
 	}
 
+	public function produced_over_time($field, $periodIndicator = 'day') {
+
+		switch ($periodIndicator) {
+			case 'day':
+				$set = $this->produced_groupby($field, '%Y-%m-%d');
+				$range = $this->min_max_dates_from_array($set);
+				$dates = $this->date_range($range['min'], $range['max'], 'Y-m-d');
+				break;
+			case 'weekday':
+				$set = $this->produced_groupby($field, '%w');
+				$dates = range(0,6);
+				break;
+			case 'hour':
+				$set = $this->produced_groupby($field, '%k');
+				$dates = range(0,23);
+				break;							
+			case 'week':
+				$set = $this->produced_groupby($field, '%Y-%u');
+				$range = $this->min_max_dates_from_array($set);
+				$dates = $this->date_range($range['min'], $range['max'], 'Y-W');
+				break;			
+			case 'month':
+				$set = $this->produced_groupby($field, '%Y-%m');
+				$range = $this->min_max_dates_from_array($set);
+				$dates = $this->date_range($range['min'], $range['max'], 'Y-m');
+				break;
+			default:
+				break;
+		}
+
+		$out = [];
+		foreach ($set as $fieldName => $data) {
+		
+			$articlesPerDay = array_column($data, 'articles', 'date');
+
+			foreach ($dates as $date) {
+				
+				if ($periodIndicator == 'weekday') {
+					$dayNames = ['So','Mo','Di','Mi','Do','Fr','Sa'];
+					$out[$dayNames[$date]][$fieldName] = $articlesPerDay[$date] ?? 0;
+					continue;
+				}
+
+				$out[$date][$fieldName] = $articlesPerDay[$date] ?? 0;
+
+			}
+		}
+
+		if ($periodIndicator == 'weekday') {
+			$sunday = array_shift($out);
+			$out['So'] = $sunday;
+		}
+
+		return $out;
+
+	}
+
+
+	private function date_range($start, $end, $format = 'Y-m-d') {
+
+		$periodFactor = 'P1D';
+
+		if ($format == 'Y-m') {$periodFactor = 'P1M';}
+		if ($format == 'Y-W') {
+			$periodFactor = 'P1W';
+			$start = explode('-', $start);
+			$start = implode('W', $start);
+			$end = explode('-', $end);
+			$end = implode('W', $end);			
+		}
+
+        $start = new \DateTime($start);
+        $end = new \DateTime($end . '+1day');
+
+        $daterange = new \DatePeriod($start, new \DateInterval($periodFactor), $end);
+
+        $dates = [];
+        foreach($daterange as $date){
+			array_push($dates, $date->format($format));
+        }
+
+        return $dates;
+
+	}
+
+	public function min_max_dates_from_array($array, $dateKey = 'date') {
+
+		$min = null;
+		$max = null;
+		foreach ($array as $data) {
+			$tempMax = max(array_column($data,'date'));
+			$tempMin = min(array_column($data,'date'));
+			if ($max <= $tempMax) {$max = $tempMax;}
+			if (is_null($min)) {$min = $tempMin;}
+			if ($tempMin <= $min) {$min = $tempMin;}
+		}
+
+		return ['min' => $min, 'max' => $max];
+
+	}
+
+	public function produced_groupby($field = 'type', $dateFormat = '%Y-%m-%d') {
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT $field, DATE_FORMAT(pubdate, '$dateFormat') as date ,count(*) as articles
+			 FROM `articles`
+			 WHERE (DATE(`pubdate`) BETWEEN :startDate AND :endDate)
+			 AND $field is not null
+			 GROUP BY $field, date
+			 ORDER BY $field, date asc"
+		);
+
+		$SQLstatement->execute([':startDate' => $this->from, ':endDate' => $this->to]);
+		$output = $SQLstatement->fetchall();
+		if (empty($output)) {return null;}
+
+		return array_group_by($field, $output);
+
+	}
 
 	public function score_articles($minScore = 100, $filter = null) {
 
@@ -636,11 +763,11 @@ class Articles extends Model
 	}
 
 
-	public function value_articles() {
+	public function value_articles($group = 'ressort') {
 
 		$SQLstatement = $this->db->connection->prepare(
-			"SELECT ressort,
-			ressort,
+			"SELECT $group,
+			$group,
 			 COUNT( if(conversions>0 AND subscriberviews>=100, 1, NULL) ) as spielmacher,
 			 COUNT( if(conversions>0 AND subscriberviews<100, 1, NULL) ) as stuermer,
 			 COUNT( if((conversions IS NULL OR conversions=0) AND subscriberviews>=100, 1, NULL) ) as abwehr,
@@ -649,8 +776,35 @@ class Articles extends Model
 
 			 FROM `articles`
 			 WHERE (DATE(`pubdate`) BETWEEN :startDate AND :endDate)
-			 AND ressort != '' AND ressort != 'bilder' AND ressort != 'ratgeber'
-			 GROUP BY ressort
+			 AND $group != '' AND ressort != 'bilder' AND ressort != 'ratgeber'
+			 GROUP BY $group
+			 ORDER BY spielmacher DESC
+			 LIMIT 0, 1000"
+		);
+
+		$SQLstatement->execute([':startDate' => $this->from, ':endDate' => $this->to]);
+		$output = $SQLstatement->fetchall(\PDO::FETCH_UNIQUE);
+		if (empty($output)) {return null;}
+
+		return $output;
+
+	}
+
+	public function value_articles_by_audience() {
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT audience,
+			audience,
+			 COUNT( if(conversions>0 AND subscriberviews>=100, 1, NULL) ) as spielmacher,
+			 COUNT( if(conversions>0 AND subscriberviews<100, 1, NULL) ) as stuermer,
+			 COUNT( if((conversions IS NULL OR conversions=0) AND subscriberviews>=100, 1, NULL) ) as abwehr,
+			 COUNT( if((conversions IS NULL OR conversions=0) AND subscriberviews<100, 1, NULL) ) as geister,
+			 COUNT(id) as artikel
+
+			 FROM `articles`
+			 WHERE (DATE(`pubdate`) BETWEEN :startDate AND :endDate)
+			 AND audience != ''
+			 GROUP BY audience
 			 ORDER BY spielmacher DESC
 			 LIMIT 0, 1000"
 		);
