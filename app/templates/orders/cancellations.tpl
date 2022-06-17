@@ -43,10 +43,6 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 		</figure>
 
 
-
-
-
-
 		<figure class="mb">
 			<h3 class="text-center">Plusseiten Bestellquote</h3>
 			<p class="nt text-center">Kunden die über die Plusseite gekauft haben</p>

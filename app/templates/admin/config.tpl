@@ -48,12 +48,17 @@
 <h3>Daten-Exports</h3>
 <p>
 Hier können Artikel, Conversions und Kampagnendaten inklusive Klick- und Kündigerstatistik als Excel-Datei exportiert werden.
-<div style="display:flex; gap:5px; align-items: start;">
+<div style="display:flex; gap:5px; align-items: start; margin-bottom:.3em;">
 	<a class="button noline" href="/export/articles">Artikeldaten</a>
 	<a class="button" href="/export/conversions">Conversiondaten</a>
 	<a class="button" href="/export/kpis">Portaldaten</a>
-	<a class="button" href="/export/campaigns">UTM-Kampagnen</a>
 </div>
+
+<div style="display:flex; gap:5px; align-items: start;">
+	<a class="button" href="/export/campaigns">UTM-Kampagnen</a>
+	<a class="button" href="/export/readers">Leserdaten</a>
+</div>
+
 </p>
 
 

@@ -55,7 +55,8 @@ class Charts
 		return call_user_func(array($this, $chartname));
 	}
 
-	private function timeframe() {
+	public function timeframe() {
+		if (empty(Session::get('from'))) {return 30;}
 		$from = new \DateTime(Session::get('from'));
 		$to = new \DateTime(Session::get('to'));
 		$timeframe = $from->diff($to);
@@ -203,6 +204,68 @@ class Charts
 	}
 
 
+	public function article_production_by($field = 'type', $frame = 'auto') {
+
+		$chart = new Chartengine();
+		$articles = new Articles();
+
+		if ($frame == 'weekday') {
+			$productionStats = $articles->produced_over_time($field, 'weekday');
+		}
+
+		elseif ($frame == 'hour') {
+			$chart->suffix = 'Uhr';
+			$productionStats = $articles->produced_over_time($field, 'hour');
+		}
+
+		else {
+			switch (true) {
+
+				case $this->timeframe() > 91: 
+					$productionStats = $articles->produced_over_time($field, 'month');
+					break;
+
+				case $this->timeframe() > 31: 
+					$productionStats = $articles->produced_over_time($field, 'week');
+					$chart->suffix = ' KW';
+					break;
+
+				default: 
+					$productionStats = $articles->produced_over_time($field, 'day'); break;
+			}
+		}
+
+		$chartData  = $this->convert($productionStats,true);
+
+		$dimensions = $chartData['dimensions'];
+		unset($chartData['dimensions']);
+		
+		$metric = [];
+		foreach ($chartData as $data) {
+			array_push($metric,$data);
+		}
+
+		$colors = [
+			'#C52233','#FFA630','#D7E8BA','#4DA1A9','#2E5077','#2F4858','#F26419','#F48668','#C5C392','#73A580','#99582A',
+			'#BB9457','#694873','#FF6B6B','#FFD93D','#6BCB77','#4D96FF','#064635','#519259','#F0BB62','#F4EEA9','#8FBDD3',
+			'#E4D1B9','#BE8C63','#FF7F3F','#A97155',		
+		];
+
+		$chart->metric = $metric;
+		$chart->dimension = $dimensions;
+		$chart->name = array_keys($chartData);
+		$chart->height = 700;
+		$chart->legend = 'top';
+		$chart->color = $colors;
+		$chart->area = false;
+		//if ($this->timeframe() > 31) {$chart->tickamount = 12;}
+		//if ($this->timeframe() > 91) {$chart->tickamount = 18;}
+		$chart->template = 'charts/default_bar_chart';
+		return $chart->init();
+
+	}
+
+
 
 	public function pageviewsByRessort() {
 
@@ -307,6 +370,7 @@ class Charts
 		return $chart->init();
 
 	}
+
 
 	public function conversions_by_date() {
 
@@ -432,7 +496,7 @@ class Charts
 		$chart->groupby = "DATE(pubdate)";
 		$chart->operation = 'count';
 		$chart->name = 'produzierte Artikel';
-		$chart->color = '#515151';
+		$chart->color = '#2F5772';
 		$chart->template = 'charts/default_line_chart';
 
 		if ($this->timeframe() > 31) {
@@ -499,7 +563,7 @@ class Charts
 		$chart->groupby = "DATE(pubdate)";
 		$chart->operation = null;
 		$chart->name = 'Plusquote in %';
-		$chart->color = '#cc9b8d';
+		$chart->color = '#C52233';
 		$chart->template = 'charts/default_line_chart';
 
 		if ($this->timeframe() > 31) {

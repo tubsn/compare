@@ -15,6 +15,27 @@
 
 <hr>
 
+
+<h2>04.06.2022 - Clustermanager Erweiterung</h2>
+
+<ul>
+	<li>Im Clustermanager lassen sich jetzt alle Artikel eines bestimmten Ressorts, zu einem anderen zuweisen. (Ressort Umbenennen)</li>
+</ul>
+
+<h2>20.05.2022 - Audience Artikel Mindest-Produktion</h2>
+
+<ul>
+	<li>Es ist jetzt möglich für die Audience pro Ressort Tabelle mindestwerte zu hinterlegen, die von der Redaktion pro Woche produziert werden sollten. Die Tabelle gibt entsprechend farbliches Feedback wieder.</li>
+</ul>
+
+
+<h2>15.05.2022 - Neue Grafiken zur Artikel Publikation</h2>
+
+<ul>
+	<li>Audiences und Themengebiete werden jetzt in den Publikationsstatistiken nach Wochentag, Uhrzeit oder Entwicklung grafisch dargestellt.</li>
+</ul>
+
+
 <h2>05.05.2022 - Import von historischen Drive Segmentdaten und Aboentwicklung</h2>
 
 <ul>

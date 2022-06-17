@@ -224,7 +224,6 @@ class Articles extends Model
 			SET `$newClusterGroup` = :newClusterValue
 			WHERE (DATE(`pubdate`) BETWEEN :startDate AND :endDate) AND `$oldClusterGroup` = :oldClusterValue");
 
-
 		$SQLstatement->execute([
 			':startDate' => $from,
 			':endDate' => $to,

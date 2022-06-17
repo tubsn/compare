@@ -164,34 +164,112 @@ class Stats extends Controller {
 
 	}
 
-	public function value_articles() {
+	public function value_articles($groupedBy = 'ressort') {
 
-		Session::set('referer', '/valueable');
-		$this->view->wertschoepfend = $this->Articles->value_articles();
+		Session::set('referer', '/valueable');		
 
-		$this->view->artikel = array_column($this->view->wertschoepfend,'artikel');
-		$this->view->spielmacher = array_column($this->view->wertschoepfend,'spielmacher');
-		$this->view->stuermer = array_column($this->view->wertschoepfend,'stuermer');
-		$this->view->abwehr = array_column($this->view->wertschoepfend,'abwehr');
-		$this->view->geister = array_column($this->view->wertschoepfend,'geister');
+		$this->view->wertschoepfend = $this->Articles->value_articles($groupedBy);
 
+		$artikel = array_column($this->view->wertschoepfend,'artikel');
+		$spielmacher = array_column($this->view->wertschoepfend,'spielmacher');
+		$stuermer = array_column($this->view->wertschoepfend,'stuermer');
+		$abwehr = array_column($this->view->wertschoepfend,'abwehr');
+		$geister = array_column($this->view->wertschoepfend,'geister');
+
+		$this->view->artikelCount = array_sum($artikel);
+		$this->view->spielmacherCount = array_sum($spielmacher);
+		$this->view->stuermerCount = array_sum($stuermer);
+		$this->view->abwehrCount = array_sum($abwehr);
+		$this->view->geisterCount = array_sum($geister);
+
+		$this->view->artikel = $artikel;
+		$this->view->spielmacher = $spielmacher;
+		$this->view->stuermer = $stuermer;
+		$this->view->abwehr = $abwehr;
+		$this->view->geister = $geister;
+
+		$this->view->quoteKeepers = percentage(($this->view->spielmacherCount + $this->view->abwehrCount), $this->view->artikelCount,1);
+		$this->view->quoteNew = percentage(($this->view->spielmacherCount + $this->view->stuermerCount), $this->view->artikelCount,1);
+
+		$this->view->group = $groupedBy;
 		$this->view->title = 'Wertschöpfende Artikel';
 		$this->view->render('pages/wertschoepfend');
 
 	}
 
+	public function value_articles_audience() {
+		return $this->value_articles('audience');
+	}
+
+	public function value_articles_thema() {
+		return $this->value_articles('type');
+	}
+
 	public function audience_by_ressorts() {
 
 		Session::set('referer', '/stats/audience-by-ressort');
+		$this->view->days = $this->Charts->timeframe();
 
 		$ressortList = $this->Articles->list_distinct('ressort');
 		$audiencesByRessort = $this->Articles->audiences_by_ressort();
+
 		$summedRessorts = $this->Articles->kpi_grouped_by('audience','ressort','count');
 		$summedAudiences = $this->Articles->kpi_grouped_by('ressort','audience','count');
 
+		if (PORTAL == 'MOZ') {
+			// Combine and Remove Hack
+			$audiencesByRessort = array_map(function ($set) {
+				
+				if (isset($set['seelow']) || isset($set['bad-freienwalde']) ) {
+					$set['seelow+bad-freienwalde'] = $set['seelow'] ?? 0 + $set['bad-freienwalde'] ?? 0;
+					unset($set['seelow']);
+					unset($set['bad-freienwalde']);
+				}
+
+				return $set; 
+
+			}, $audiencesByRessort);
+
+			$audiencesByRessort = array_map(function ($set) use ($seeba){
+				
+				if (isset($set['brandenburg']) || isset($set['wirtschaft']) || isset($set['berlin']) ) {
+					$set['brandenburg-kombiniert'] = $set['brandenburg'] ?? 0 + $set['wirtschaft'] ?? 0 + $set['berlin'] ?? 0;
+					unset($set['brandenburg']);
+					unset($set['wirtschaft']);
+					unset($set['berlin']);
+				}
+
+				return $set; 
+
+			}, $audiencesByRessort);
+
+			$seeba = 0;
+			foreach ($audiencesByRessort as $ressorts) {
+				$seeba = $seeba + $ressorts['seelow+bad-freienwalde'] ?? 0; 
+			}
+
+			$brbko = 0;
+			foreach ($audiencesByRessort as $ressorts) {
+				$brbko = $brbko + $ressorts['brandenburg-kombiniert'] ?? 0; 
+			}
+
+			array_push($ressortList, 'seelow+bad-freienwalde');
+			array_push($ressortList, 'brandenburg-kombiniert');
+
+			array_push($summedRessorts, ['ressort' => 'seelow+bad-freienwalde', 'audience' => $seeba]);
+			array_push($summedRessorts, ['ressort' => 'brandenburg-kombiniert', 'audience' => $brbko]);
+		}
+
+
 		$filteredRessorts = [];
 		if (PORTAL == 'LR') {$filteredRessorts = ['bilder','ratgeber','blaulicht','unbekannt','leser_service'];}
-		if (PORTAL == 'MOZ') {$filteredRessorts = ['nachrichten','politik','bilder','panorama','themen','wissen','anzeigen','lokales','unbekannt'];}
+		if (PORTAL == 'MOZ') {
+			$filteredRessorts = [
+				'nachrichten','politik','bilder','panorama','themen','wissen','anzeigen','lokales','unbekannt',
+				'bad-belzig', 'brandenburg-havel', 'rathenow', 'falkensee', 'berlin', 'wirtschaft', 'brandenburg',
+				'seelow', 'bad-freienwalde'
+			];
+		}
 
 		$ressortList = array_filter($ressortList, function($ressort) use ($filteredRessorts) {
 			if (in_array($ressort, $filteredRessorts)) {return null;}
@@ -221,9 +299,8 @@ class Stats extends Controller {
 	public function artikel() {
 		Session::set('referer', '/stats/artikel');
 		$viewData['charts'] = $this->Charts;
-		$this->view->title = 'Artikel Publikationen';
+		$this->view->title = 'Artikel Produktions Statistiken';
 		$this->view->render('pages/artikel-entwicklung', $viewData);
-
 	}
 
 

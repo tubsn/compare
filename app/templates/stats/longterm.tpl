@@ -1,11 +1,5 @@
 <main>
 
-
-<?php if (PORTAL == 'MOZ' || PORTAL == 'SWP'): ?>
-	<div class="box mbig" style="margin-bottom:3em; background-color:#953737; color:white;"><b>Achtung Aboentwicklung für SWP und MOZ unvollständig!</b></div>
-<?php endif ?>
-
-
 <style>
 .calendar-timeframe, .calendar-datepicker {display:none !important;}
 </style>
@@ -419,7 +413,7 @@
 		<?=$charts->create([
 			'metric' => [$charts->cut_left($kpis['quoteGeister'],5), $charts->cut_left($kpis['quoteSpielmacher'],5)],
 			'dimension' => $charts->cut_left($kpis['dimensions'],5),
-			'color' => ['#bd6161', '#5fb486'],
+			'color' => ['#CE4851', '#94C1C7'],
 			'height' => 350,
 			'legend' => 'top',
 			'percent' => true,
@@ -437,7 +431,7 @@
 		<?=$charts->create([
 			'metric' => $charts->cut_left($kpis['quotePlus'],5),
 			'dimension' => $charts->cut_left($kpis['dimensions'],5),
-			'color' => '#6a6a6a',
+			'color' => '#CE799D',
 			'height' => 350,
 			'legend' => 'top',
 			'area' => true,
@@ -454,7 +448,7 @@
 		<?=$charts->create([
 			'metric' => $charts->cut_left($kpis['articles'],5),
 			'dimension' => $charts->cut_left($kpis['dimensions'],5),
-			'color' => '#6a6a6a',
+			'color' => '#717289',
 			'height' => 350,
 			'legend' => 'top',
 			'area' => true,
@@ -465,19 +459,19 @@
 	</figure>
 
 
-	<figure class="mb">
-		<h3 class="text-center">⌀-Mediatime Entwicklung in Sekunden (GA)</h3>
-		<?=$charts->create([
-			'metric' => $kpis['avgmediatime'],
-			'dimension' => $kpis['dimensions'],
-			'color' => '#82b292',
-			'height' => 350,
-			'legend' => 'top',
-			'area' => true,
-			'name' => 'Mediatime',
-			'template' => 'charts/default_line_chart',
-		]);?>
-	</figure>
+<figure class="mb">
+	<h3 class="text-center">Kaufreiz zu Bestellung</h3>
+	<?=$charts->create([
+		'metric' => [$charts->cut_left($kpis['buyintents'],5), $orders['orders']],
+		'dimension' => $orders['dimensions'],
+		'color' => ['#F09D51','#F06543'],
+		'height' => 350,
+		'legend' => 'top',
+		'area' => true,
+		'name' => ['Klicks auf Bestellknopf','Bestellungen'],
+		'template' => 'charts/default_line_chart',
+	]);?>
+</figure>
 
 
 
@@ -509,7 +503,7 @@
 		<?=$charts->create([
 			'metric' => $sales['app_user'],
 			'dimension' => $sales['dimensions'],
-			'color' => '#d0bd85',
+			'color' => '#587291',
 			'height' => 350,
 			'legend' => 'top',
 			'area' => true,
@@ -521,20 +515,6 @@
 </div>
 
 <p class="text-center" style="margin-top:-1em; margin-bottom:4em;">App Nutzer sind <b>aktive User in dem Zeitraum</b> (nicht die Anzahl der App installationen).</p>
-
-<figure class="mb">
-	<h3 class="text-center">Kaufreiz zu Bestellung</h3>
-	<?=$charts->create([
-		'metric' => [$charts->cut_left($kpis['buyintents'],5), $orders['orders']],
-		'dimension' => $orders['dimensions'],
-		'color' => ['#e29881','#82b292'],
-		'height' => 450,
-		'legend' => 'top',
-		'area' => true,
-		'name' => ['Klicks auf Bestellknopf','Bestellungen'],
-		'template' => 'charts/default_line_chart',
-	]);?>
-</figure>
 
 
 </main>

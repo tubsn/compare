@@ -2,15 +2,17 @@
 
 <?php include tpl('navigation/date-picker');?>
 
-<h1>Wertschöpfende Artikel, die Kunden halten: <span class="greenbg"> <b><?=array_sum($spielmacher) + array_sum($abwehr);?></b></span> Kunden gewinnen: <span class="conversions"><b><?=array_sum($spielmacher) + array_sum($stuermer);?></b></span></h1>
+<h1>Artikel, die Kunden halten: <span title="Spielmacher + Abwehr Artikel: <?=$spielmacherCount + $abwehrCount;?>" class="greenbg"> <b><?=$quoteKeepers?>&thinsp;%</b></span> 
+	bzw. Kunden gewinnen: <span title="Spielmacher + Stürmer Artikel: <?=$spielmacherCount + $stuermerCount;?>" class="conversions"><b><?=$quoteNew?>&thinsp;%</b></span></h1>
+
 
 
 <p class="light-box" style="margin-bottom:2em;">
-Gesamtproduzierte Artikel: <b><?=array_sum($artikel);?></b>
-&emsp; Geister: <b class="geister"><?=array_sum($geister);?></b>
-&emsp; Abwehr: <b class="abwehr"><?=array_sum($abwehr);?></b>
-&emsp; Stürmer: <b class="stuermer"><?=array_sum($stuermer);?></b>
-&emsp; Spielmacher: <b class="spielmacher"><?=array_sum($spielmacher);?></b>
+Gesamtproduzierte Artikel: <b><?=$artikelCount;?></b>
+&emsp; Geister: <b class="geister"><?=$geisterCount;?></b>
+&emsp; Abwehr: <b class="abwehr"><?=$abwehrCount;?></b>
+&emsp; Stürmer: <b class="stuermer"><?=$stuermerCount;?></b>
+&emsp; Spielmacher: <b class="spielmacher"><?=$spielmacherCount;?></b>
 </p>
 
 <p>
@@ -76,7 +78,7 @@ Gesamtproduzierte Artikel: <b><?=array_sum($artikel);?></b>
 
 	<tr style="text-align:right">
 
-	<td style="text-align:left"><a href="/ressort/<?=$row['ressort']?>"><?=ucfirst($row['ressort'])?></a></td>
+	<td style="text-align:left"><a href="/<?=$group?>/<?=$row[$group]?>"><?=ucfirst($row[$group])?></a></td>
 	<td><?=$row['artikel']?></td>
 	<td><span class="geisterbg"><?=$row['geister']?></span></td>
 	<td><?=round(($row['geister'] / $row['artikel'] * 100),2)?>&thinsp;%</td>
@@ -93,7 +95,11 @@ Gesamtproduzierte Artikel: <b><?=array_sum($artikel);?></b>
 	</tbody>
 </table>
 
-<a class="button" href="/export/value">Daten exportieren</a>
+<?php if ($group == 'audience'): ?>
+<a class="button" href="/export/valueaudience">Daten exportieren</a>
+<?php else: ?>
+<a class="button" href="/export/value">Daten exportieren</a>	
+<?php endif ?>
 
 
 <script>
@@ -304,11 +310,16 @@ let chartFlip = false;
 changeButton.onclick = function(){
 
 	if (chartFlip) {
-		wertchart.updateOptions({chart: {stacked: true, stackType: '100%'}})
+		wertchart.updateOptions({
+			chart: {stacked: true, stackType: '100%'}, yaxis: {max: 100}
+		});
+	
 		chartFlip = false;
 	}
 	else {
-		wertchart.updateOptions({chart: {stacked: true, stackType: 'normal'}, yaxis: {max: 300},})
+		wertchart.updateOptions({
+			  chart: {stacked: true, stackType: 'normal'},yaxis: {max: 500},
+		});
 		chartFlip = true;
 	}
 

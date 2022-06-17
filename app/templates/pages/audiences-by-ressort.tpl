@@ -9,6 +9,12 @@
 <p><?=$info?></p>
 <?php endif; ?>
 
+<style>
+	.goal-failed {background-color: #e6b4af;}
+	.goal-close {background-color: #f9e6bc;}
+	.goal-reached {background-color: #8fb06e;}
+</style>
+
 <table class="fancy mb wide condensed js-sortable">
 <thead>
 	<tr class="text-right">
@@ -26,9 +32,20 @@
 	<td style="max-width:100px" class="text-right"><a href="/audience/<?=$audience?>"><?=$audience?></a></td>
 	<?php foreach ($ressortList as $ressort): ?>
 		<?php if (!empty($values[$ressort])): ?>
-		<td class="text-center" style="padding:3px"><span class="num-articles"><?=$values[$ressort] ?? '-'?></span></td>
+			<?php 
+				$class = 'no-goal';
+				if (isset(RESSORT_AUDIENCE_REQUIREMENTS[$ressort][$audience])) {
+					$class = 'goal-failed';
+					if ($values[$ressort]/$days > RESSORT_AUDIENCE_REQUIREMENTS[$ressort][$audience]/7) {$class = 'goal-reached';}
+				}
+			?>
+		<td class="text-center <?=$class?>" style="padding:3px"><span class="num-articles"><?=$values[$ressort] ?? '-'?></span></td>
 		<?php else: ?>
-		<td class="text-center" style="padding:3px">-</td>
+			<?php if (isset(RESSORT_AUDIENCE_REQUIREMENTS[$ressort][$audience])): ?>
+				<td class="text-center goal-failed" style="padding:3px">-</td>
+			<?php else: ?>
+				<td class="text-center" style="padding:3px">-</td>
+			<?php endif ?>
 		<?php endif; ?>
 	<?php endforeach ?>
 	<td class="text-right"><b><?=$summedAudiences[$audience]?></b></td>

@@ -4,10 +4,6 @@
 
 <h1><?=$page['title'] ?? 'Statistiken'?></h1>
 
-<p>
-</p>
-
-
 <section class="stats-layout">
 
 
@@ -18,7 +14,7 @@
 	<?=$charts->create([
 		'metric' => $premiumUsersQuote['reg_quote'],
 		'dimension' => $premiumUsersQuote['dimensions'],
-		'color' => '#1572A1',
+		'color' => '#2F5772',
 		'height' => 250,
 		'legend' => 'top',
 		'tickamount' => 12,
@@ -31,6 +27,7 @@
 	]);?>
 </figure>
 
+
 <figure class="mb">
 	<h3 class="text-center">Ø-Aufkommen an Besuchern / Abonnenten am Tag</h3>
 	<?=$charts->create([
@@ -39,7 +36,7 @@
 			$premiumUsers['users_reg'],
 	     ],
 		'dimension' => $premiumUsers['dimensions'],
-		'color' => ['#1572A1', '#889EAF'],
+		'color' => ['#2F5772', '#C52233'],
 		'height' => 250,
 		'legend' => 'top',
 		'tickamount' => 12,
@@ -51,8 +48,9 @@
 		'template' => 'charts/default_bar_chart',
 	]);?>
 </figure>
-</div>
 
+
+</div>
 
 <figure class="mb">
 	<?=$charts->create([
@@ -62,41 +60,21 @@
 		  $segments['loyals'],
 		  $segments['low_usage_irregulars'],
 		  $segments['flybys'],
-		  $segments['nonengaged'],
+		  //$segments['nonengaged'],
 	     ],
 		'dimension' => $segments['dimensions'],
-		'color' => ['#506D84', '#D4B499', '#889EAF','#F3D5C0', '#8E7F7F', '#BBBBBB'],
-		'height' => 450,
+		'color' => ['#923737', '#468C98', '#2F5772','#EABDA8', '#E5E5E5', '#B0C0C4', '#99B0BC'],
+		'height' => 650,
 		'legend' => 'top',
 		'tickamount' => 30,
 		'stacked' => false,
 		'stackedTo100' => false,
 		'area' => false,
 		'showValues' => false,
-		'name' => ['champions', 'high_usage_irregulars', 'loyals', 'low_usage_irregulars','unknown', 'fly-bys','nonengaged',],
+		'name' => ['champions', 'high_usage_irregulars', 'loyals', 'low_usage_irregulars','fly-bys','nonengaged','unknown'],
 		'template' => 'charts/default_line_chart',
 	]);?>
 </figure>
-
-
-<!--
-<figure class="mb">
-	<h3 class="text-center">Segment Verteilung</h3>
-	<?=$charts->create([
-		'metric' => [$segments['champions_reg'], $segments['high_usage_irregulars_reg'], $segments['loyals_reg'], $segments['low_usage_irregulars_reg']],
-		'dimension' => $segments['dimensions'],
-		'color' => ['#1572A1', '#9AD0EC', '#EFDAD7', '#D885A3'],
-		'height' => 750,
-		'legend' => 'top',
-		'tickamount' => 30,
-		'stacked' => false,
-		'area' => false,
-		'showValues' => false,
-		'name' => ['champions', 'high_usage_irregulars', 'loyals', 'low_usage_irregulars',],
-		'template' => 'charts/default_line_chart',
-	]);?>
-</figure>
--->
 
 
 </section>

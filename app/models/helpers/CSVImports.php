@@ -4,6 +4,7 @@ namespace app\models\helpers;
 
 use \flundr\cache\RequestCache;
 use	\app\models\DailyKPIs;
+use	\app\models\Orders;
 
 class CSVImports
 {
@@ -11,6 +12,8 @@ class CSVImports
 	function __construct() {}
 
 	public function import_drive_experiment_data_from_csv() {
+
+		$Orders = new Orders();
 
 		$path = ROOT . 'import/user-groups.csv';
 
@@ -42,23 +45,23 @@ class CSVImports
 
 		foreach ($testingGroup as $id => $value) {
 			if (empty($value)) {continue;}
-			$this->Orders->update(['customer_testgroup' => $value], $id);
+			$Orders->update(['customer_testgroup' => $value], $id);
 		}
 
 		foreach ($cancelSegment as $id => $value) {
 			if (empty($value) || $value == 'unknown') {
-				$this->Orders->update(['customer_cancel_segment' => null], $id);
+				$Orders->update(['customer_cancel_segment' => null], $id);
 				continue;
 			}
-			$this->Orders->update(['customer_cancel_segment' => $value], $id);
+			$Orders->update(['customer_cancel_segment' => $value], $id);
 		}
 
 		foreach ($startSegment as $id => $value) {
 			if (empty($value) || $value == 'unknown') {
-				$this->Orders->update(['customer_cancel_segment' => null], $id);
+				$Orders->update(['customer_cancel_segment' => null], $id);
 				continue;
 			}
-			$this->Orders->update(['customer_order_segment' => $value], $id);
+			$Orders->update(['customer_order_segment' => $value], $id);
 		}
 
 	}

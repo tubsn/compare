@@ -38,10 +38,13 @@
 
 		<li><a href="/valueable" aria-haspopup="true">Wertschöpfende Artikel</a>
 			<ul class="dropdown" aria-label="submenu">
-				<li><a href="/valueable/geister">Geister</a></li>
-				<li><a href="/valueable/abwehr">Abwehr</a></li>
-				<li><a href="/valueable/stuermer">Stürmer</a></li>
-				<li><a href="/valueable/spielmacher">Spielmacher</a></li>
+				<li><a href="/valueable/">Nach Ressorts</a></li>
+				<li><a href="/valueable/audience">Nach Audiences</a></li>
+				<li><a href="/valueable/type">Nach Themen</a></li>
+				<li><a href="/valueable/geister">Geister-Liste</a></li>
+				<li><a href="/valueable/abwehr">Abwehr-Liste</a></li>
+				<li><a href="/valueable/stuermer">Stürmer-Liste</a></li>
+				<li><a href="/valueable/spielmacher">Spielmacher-Liste</a></li>
 			</ul>
 		</li>
 
@@ -61,7 +64,7 @@
 				<li><a href="/stats/audience">nach Audiences</a></li>
 				<li><a href="/stats/audience-by-ressort">Audiences nach Ressort</a></li>
 				<li><a href="/stats/pubtime/">Audience Leserverhalten</a></li>
-				<li><a href="/stats/artikel">Publikationszeiten</a></li>
+				<li><a href="/stats/artikel">Artikel-Produktion</a></li>
 			</ul>
 		</li>
 
@@ -71,8 +74,9 @@
 				<li><a href="/orders">Eingehende Bestellungen</a></li>
 				<li><a href="/orders/list-cancellations">Eingehende Kündigungen</a></li>
 				<li><a href="/orders/clustered">Bestellungen nach Cluster</a></li>
-				<li class="hightlight"><a href="/orders/explorer">Churn-Explorer (NEU)</a></li>
+				<li><a href="/orders/explorer">Churn-Explorer</a></li>
 				<li><a href="/orders/behavior">Kundenverhalten</a></li>
+				<li><a href="/stats/segments">Nutzer-Entwicklung</a></li>
 				<li><a href="/orders/campaigns">UTM-Kampagnen</a></li>
 				<li><a href="/orders/today">Echtzeit Bestelleingang</a></li>
 				<!--<li><a href="/readers/multiple-orders">Mehrfach - Bestellungen</a></li>-->
@@ -83,7 +87,6 @@
 		<li><a href="/portals" aria-haspopup="true">Portaldaten</a>
 			<ul class="dropdown" aria-label="submenu">
 				<li><a href="/longterm">Abo- / KPI-Entwicklung</a></li>
-				<li><a href="/stats/segments">Nutzer-Entwicklung</a></li>
 				<li><a href="/teasers">Teaser-Statistiken (LR)</a></li>
 				<li><a href="/orders/map/local">Abo-Karte</a></li>
 				<li><a href="/portals">Portalvergleich</a></li>

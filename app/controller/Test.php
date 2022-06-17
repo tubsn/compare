@@ -10,14 +10,22 @@ class Test extends Controller {
 
 	public function __construct() {
 
-		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
+		//if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Articles,Orders,Conversions,Analytics,Charts');
+		$this->models('Articles,Orders,Conversions,Analytics,Charts,Readers');
 	}
+	
+	public function showip() {
+
+		dd($_SERVER['REMOTE_ADDR']);
+
+	}
+
 
 	public function segments() {
 
+		$this->Readers->import_user_segments('2022-05-20', '2022-05-21');
 		$CSVImport = new CSVImports();
 		$CSVImport->csv_import_segments_by_date();
 

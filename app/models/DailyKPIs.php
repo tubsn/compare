@@ -113,7 +113,6 @@ class DailyKPIs extends Model
 
 	public function premium_users() {
 
-
 		$tablename = $this->db->table;
 		$from = strip_tags($this->from);
 		$to = strip_tags($this->to);

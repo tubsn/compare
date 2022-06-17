@@ -98,6 +98,8 @@ class Kilkaya
 
 	private function today_as_chart_data($data, $kpiName = 'pageviews', $resolution = 3) {
 
+		if ($kpiName == 'subscribers') {$kpiName = 'subscriberviews';}
+
 		$values = null;
 		$time = null;
 		$counter = 0;

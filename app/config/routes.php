@@ -4,12 +4,13 @@
 $routes->get('/', 'Stats@dashboard');
 
 // Teststuff
+$routes->get('/showip', 'Test@showip');
+
 $routes->get('/cards', 'Lists@cards');
 $routes->get('/freecharts', 'Stats@freecharts');
-
-$routes->get('/segments', 'Test@segments');
 $routes->get('/filter', 'Lists@filter');
 $routes->post('/filter', 'Lists@filter');
+$routes->get('/segments', 'Test@segments');
 
 // Article Lists
 $routes->get('/unclassified/types', 'Lists@unset_only');
@@ -44,6 +45,8 @@ $routes->get('/epaper/import', 'Epaper@import');
 
 // Valueables
 $routes->get('/valueable', 'Stats@value_articles');
+$routes->get('/valueable/audience', 'Stats@value_articles_audience');
+$routes->get('/valueable/type', 'Stats@value_articles_thema');
 $routes->get('/valueable/{type}', 'Lists@valueables');
 
 // Print Maps
@@ -160,7 +163,9 @@ $routes->get('/export/conversions', 'Exports@conversions');
 $routes->get('/export/kpis', 'Exports@KPIs');
 $routes->get('/export/json', 'Exports@full_json');
 $routes->get('/export/ressorts', 'Exports@ressort_stats');
+$routes->get('/export/readers', 'Exports@readers');
 $routes->get('/export/value', 'Exports@value_articles');
+$routes->get('/export/valueaudience', 'Exports@value_articles_by_audience');
 $routes->get('/export/linkpulse/current', 'Exports@linkpulse_current');
 $routes->get('/export/linkpulse/halftime', 'Exports@linkpulse_halftime');
 

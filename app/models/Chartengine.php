@@ -23,12 +23,14 @@ class Chartengine
 	public $percent;
 	public $seconds;
 	public $stacked;
+	public $stackedTo100;
 	public $xfont;
 	public $prefix;
 	public $suffix;
 	public $ymax;
 	public $ymin;
 	public $legend;
+	public $zoom;
 	public $tickamount;
 
 	public $metric;
@@ -77,6 +79,8 @@ class Chartengine
 			'seconds' => $this->seconds,
 			'xfont' => $this->xfont,
 			'legend' => $this->legend,
+			'stacked' => $this->stacked,
+			'stackedTo100' => $this->stackedTo100,
 			'tickamount' => $this->tickamount,
 			'prefix' => $this->prefix,
 			'suffix' => $this->suffix,
@@ -84,6 +88,7 @@ class Chartengine
 			'ymin' => $this->ymin,
 			'showValues' => $this->showValues,
 			'name' => $this->name,
+			'zoom' => $this->zoom,
 		];
 
 		return $this->render($this->template, $data);

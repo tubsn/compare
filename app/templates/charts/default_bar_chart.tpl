@@ -36,6 +36,7 @@ let ChartOptions<?=$id?> = {
 		stacked: false,
 		<?php endif; ?>
 	},
+	
 	<?php if (is_array($metric) && !is_array($color)): ?>
 	theme: {
 		monochrome: {
@@ -76,7 +77,7 @@ let ChartOptions<?=$id?> = {
 		bar: {
 			borderRadius: 0,
 			horizontal: false,
-            //columnWidth: '25%',
+      //columnWidth: '70%',
 		}
 	},
 	<?php if (is_array($metric)): ?>
@@ -87,7 +88,7 @@ let ChartOptions<?=$id?> = {
     },
 	<?php endif; ?>
 	<?php if (isset($legend)): ?>
-	legend: {position: '<?=$legend?>'},
+	legend: {position: '<?=$legend?>', fontSize: '20px', fontFamily: 'fira sans condensed, sans-serif',},
 	<?php else: ?>
 	legend: {show:false,},
 	<?php endif; ?>
@@ -101,7 +102,7 @@ let ChartOptions<?=$id?> = {
   		offsetX: 0,
   		offsetY: 20,
 		style: {
-		  fontSize: '18px',
+		  fontSize: '16px',
 		  fontFamily: 'fira sans condensed, sans-serif',
 		  colors: ['#fff']
 		},
@@ -115,6 +116,7 @@ let ChartOptions<?=$id?> = {
 		},
 
 	},
+	states: {active: {allowMultipleDataPointsSelection: false}},
 	grid: {row: {colors: ['#e5e5e5', 'transparent'], opacity: 0.2}},
 	xaxis: {
 		categories: [<?=$dimension?>],
@@ -124,7 +126,7 @@ let ChartOptions<?=$id?> = {
 				<?php if (isset($xfont)): ?>
 				fontSize: '<?=$xfont?>',
 				<?php else: ?>
-				fontSize: '16px',
+				fontSize: '13px',
 				<?php endif; ?>
 				fontFamily: 'fira sans, sans-serif',
 				fontWeight: 400,
@@ -147,7 +149,7 @@ let ChartOptions<?=$id?> = {
 		labels: {rotate: 0},
 		<?php if (isset($ymax)): ?>max: <?=$ymax?>,<?php endif; ?>
 		<?php if (isset($ymin)): ?>min: <?=$ymin?>,<?php endif; ?>		
-	}
+	},
 
 };
 

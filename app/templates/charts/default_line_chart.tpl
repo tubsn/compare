@@ -56,6 +56,8 @@ let ChartOptions<?=$id?> = {
 	legend: {
 	show:true,
 	position: '<?=$legend?>',
+	fontSize: '20px', 
+	fontFamily: 'fira sans condensed, sans-serif',	
 	horizontalAlign: 'center',
 	onItemHover: {highlightDataSeries: true},
 	floating: true,
@@ -106,6 +108,7 @@ let ChartOptions<?=$id?> = {
 		<?php if (isset($ymin)): ?>min: <?=$ymin?>,<?php endif; ?>
 	},
 
+	states: {active: {allowMultipleDataPointsSelection: false}},
 	grid: {row: {colors: ['#e5e5e5', 'transparent'], opacity: 0.2}},
 
 	tooltip: {

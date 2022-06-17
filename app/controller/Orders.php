@@ -135,6 +135,7 @@ class Orders extends Controller {
 		$this->view->info = null;
 
 		$viewData['orders'] = $this->Orders->list();
+
 		$viewData['numberOfOrders'] = count($viewData['orders'] ?? []);
 		$viewData['numberOfCancelled'] = count($this->Orders->filter_cancelled($viewData['orders']));
 		$viewData['firstDayChurners'] = $this->Orders->group_by('article_ressort', 'retention = 0');

@@ -162,6 +162,38 @@
 	</table>
 
 
+	<hr>
+
+
+	<h3>Auflistung aller Ressorts</h3>
+	<table class="fancy js-sortable">
+	<thead>
+		<tr>
+			<th style="text-align:right">Artikel</th>
+			<th>Ressorts</th>
+			<th>Ressort umbenennen</th>
+
+		</tr>
+	</thead>
+
+	<tbody>
+	<?php foreach ($ressorts as $cluster => $count): ?>
+		<tr>
+			<td class="text-right"><?=$count?></td>
+			<td><a href="/ressort/<?=urlencode(str_replace('/', '-slash-', $cluster))?>"><?=htmlentities($cluster)?></a></td>
+			<td>
+				<form method="post" action="" class="flex-form">
+					<input type="hidden" name="cluster" value="ressort">
+					<input type="hidden" name="clusterValue" value="<?=htmlentities($cluster)?>">
+					<input list="ressorts" placeholder="neues Ressort zuweisen" name="ressort">
+					<button onclick="let newValue = this.parentElement.querySelector('input:nth-of-type(3)').value; if(newValue == '') {newValue = 'Leer'}; return confirm('Umbenennen von Ressort bestätigen\n<?=htmlentities($cluster)?> wird zu ' + newValue);" class="light">Umbenennen</button>
+				</form>
+			</td>
+		</tr>
+
+	<?php endforeach; ?>
+	</tbody>
+	</table>
 
 
 
@@ -183,24 +215,10 @@
 	<?php endforeach; ?>
 </datalist>
 
-
-<!--
-	<form class="" action="" method="post">
-	<input type="hidden" name="CSRFToken" value="<?=$CSRFToken;?>">
-		<label>Rolle:
-			<select name="level">
-				<option<?= $user['level'] == 'User' ? ' selected' : '' ?>>User</option>
-				<option<?= $user['level'] == 'Admin' ? ' selected' : '' ?>>Admin</option>
-			</select>
-		</label>
-		<label>E-Mail: <input name="email" value="<?=$user['email']?>"></label>
-		<label>Passwort: <input placeholder="******" type="password" name="password"></label>
-
-	<button type="submit">Daten speichern</button>&ensp;
-	<a class="button light" href="/admin/users">zurück zur Übersicht</a>
-
-	</form>
--->
-
+<datalist id="ressorts">
+	<?php foreach ($availableRessorts as $ressort): ?>
+	<option value="<?=htmlentities($ressort)?>">
+	<?php endforeach; ?>
+</datalist>
 
 </main>

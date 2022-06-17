@@ -20,6 +20,24 @@ class Readers extends Model
 		$this->db->orderby = 'date';
 	}
 
+
+	public function list() {
+
+		$table = $this->db->table;
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT *
+			 FROM $table
+			 #WHERE DATE(`order_date`) BETWEEN :startDate AND :endDate
+			 #ORDER BY order_date DESC"
+		);
+
+		$SQLstatement->execute();
+		$output = $SQLstatement->fetchall();
+		return $output;
+
+	}
+
 	public function update_latest_orders() {
 
 		$orders = new Orders();
@@ -278,7 +296,7 @@ class Readers extends Model
 			  (SELECT `user_engagement_segment` AS `user_engagement_segment__`,
 			          COUNT(DISTINCT inferred_user_id) AS `mme_inner__`
 			   FROM `artikel-reports-tool.DPA_Drive.dpa_drive_pageviews`
-			   WHERE `publisher` = 'LR'
+			   WHERE `publisher` = '$publisher'
 			     AND `page_view_start_local` >= CAST('$from' AS DATE)
 			     AND `page_view_start_local` < CAST('$to' AS DATE)
 			   GROUP BY `user_engagement_segment__`

@@ -67,6 +67,7 @@ class Admin extends Controller {
 		$viewData['types'] = $this->Articles->count_distinct('type');
 		$viewData['tags'] = $this->Articles->count_distinct('tag');
 		$viewData['audiences'] = $this->Articles->count_distinct('audience');
+		$viewData['ressorts'] = $this->Articles->count_distinct('ressort');
 
 		// Gather All Types
 		$this->Articles->from = '0000-00-00';
@@ -75,6 +76,7 @@ class Admin extends Controller {
 		$viewData['availableTypes'] = $this->Articles->list_distinct('type');
 		$viewData['availableAudiences'] = $this->Articles->list_distinct('audience');
 		$viewData['availableTags'] = $this->Articles->list_distinct('tag');
+		$viewData['availableRessorts'] = $this->Articles->list_distinct('ressort');
 
 		$this->view->title = 'Themen-Cluster-Manager';
 		$this->view->render('admin/type-manager', $viewData);
@@ -90,6 +92,7 @@ class Admin extends Controller {
 		if (isset($_POST['type'])) {$newClusterGroup = 'type'; $newClusterValue = strip_tags($_POST['type']);}
 		if (isset($_POST['audience'])) {$newClusterGroup = 'audience'; $newClusterValue = strip_tags($_POST['audience']);}
 		if (isset($_POST['tag'])) {$newClusterGroup = 'tag'; $newClusterValue = strip_tags($_POST['tag']);}
+		if (isset($_POST['ressort'])) {$newClusterGroup = 'ressort'; $newClusterValue = strip_tags($_POST['ressort']);}
 		if (isset($_POST['cluster'])) {$oldClusterGroup = strip_tags($_POST['cluster']);}
 		if (isset($_POST['clusterValue'])) {$oldClusterValue = strip_tags($_POST['clusterValue']);}
 		if (!isset($oldClusterGroup)) {throw new \Exception("Cluster-Art nicht erkannt", 400);}

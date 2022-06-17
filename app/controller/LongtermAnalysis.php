@@ -130,7 +130,10 @@ class LongtermAnalysis extends Controller {
 
 	}
 
-
+	public function show_ip() {
+		echo $_SERVER['REMOTE_ADDR'];
+		die;
+	}
 
 	public function started_payment() {
 
