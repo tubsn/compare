@@ -37,6 +37,13 @@ class Readers extends Controller {
 	}
 
 
+
+	public function stats() {
+
+		dd($this->Readers->stats());
+
+	}
+
 	public function detail($id) {
 
 		$this->Orders->from = '2000-01-01';

@@ -21,8 +21,9 @@
 <p class="light-box" style="margin-bottom:2em; margin-top:1em; width:100%; text-align:center; box-sizing:border-box">
 Produzierte Artikel: <b><?=$articles?></b>
 &emsp; Subscriberviews: <b class="deepblue"><?=number_format($subscriberviews,0,',','.')?></b>
-&emsp; Conversions Plusseite: <b class="blue"><?=$plusOnly?></b>
-&emsp; Conversions Aboshop: <b class="blue"><?=$aboshopOnly?></b>
+&emsp; ⌀-Abonennten online am Tag: <b class="blue" style="color:#C52233"><?=gnum($premiumAvg)?></b>
+<!--&emsp; Conversions Plusseite: <b class="blue"><?=$plusOnly?></b>-->
+<!--&emsp; Conversions Aboshop: <b class="blue"><?=$aboshopOnly?></b>-->
 &emsp; ⌀-Mediatime: <b class="green"><?=number_format($avgmediatime,0,',','.')?>&thinsp;s</b>
 &emsp; Gekündigt: <b class="redish"><?=$numberOfCancelled?></b>
 &emsp; Kündigerquote: <b class="orange"><?=$cancelQuote?>&thinsp;%</b>
@@ -61,7 +62,6 @@ Produzierte Artikel: <b><?=$articles?></b>
 
 </div>
 
-<hr>
 
 
 <div class="col-2" style="grid-template-columns: 1fr 1fr;">
@@ -77,5 +77,26 @@ Produzierte Artikel: <b><?=$articles?></b>
 	</figure>
 
 </div>
+
+<figure class="mb">
+	<h3 class="text-center">Ø-Aufkommen an Besuchern / Abonnenten am Tag</h3>
+	<?=$charts->create([
+		'metric' => [
+			$premiumUsers['users'],
+			$premiumUsers['users_reg'],
+	     ],
+		'dimension' => $premiumUsers['dimensions'],
+		'color' => ['#2F5772', '#C52233'],
+		'height' => 250,
+		'legend' => 'top',
+		'tickamount' => 12,
+		'stacked' => false,
+		'area' => false,
+		'xfont' => '13px',
+		'showValues' => false,
+		'name' => ['Besucher pro Tag', 'Abonnenten pro Tag'],
+		'template' => 'charts/default_bar_chart',
+	]);?>
+</figure>
 
 </main>

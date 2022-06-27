@@ -722,6 +722,14 @@ class Orders extends Model
 		});
 	}
 
+	public function filter_yearly($orders) {
+		if (empty($orders)) {return [];}
+		return array_filter($orders, function($order) {
+			$stringPosition = strpos($order['subscription_internal_title'], '12M');
+			if ($stringPosition !== false) {return $order;}
+		});
+	}
+
 	public function filter_umwandlung($orders) {
 		if (empty($orders)) {return [];}
 		return array_filter($orders, function($order) {

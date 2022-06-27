@@ -103,7 +103,7 @@ class CronImports extends Controller {
 		$this->Epaper->to = date('Y-m-d', strtotime('yesterday'));
 
 		$this->Epaper->import_ressort_stats_to_db();
-		$this->Epaper->import_event_clicks_to_db();
+		//$this->Epaper->import_event_clicks_to_db(); Import Disabled Event is not working 23.Jun.22
 
 		echo 'ePaper Daten importiert | ' . date('H:i:s') . "\r\n";
 

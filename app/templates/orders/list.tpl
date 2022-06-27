@@ -12,6 +12,7 @@
 Gesamtbestellungen: <b class="conversions"><?=$numberOfOrders?></b>
 &emsp; davon Plusseite: <b class="blue"><?=$plusOnly?></b>
 &emsp; davon Aboshop: <b class="blue"><?=$aboshopOnly?></b>
+&emsp; davon Jahresabos: <b class="blue"><?=$yearlyOnly?></b>
 &emsp; davon Umwandlung: <b title="Nutzer die im Kündigungsprozess ein neues Abo gekauft haben" class="blue"><?=$umwandlungOnly?></b>
 <!--&emsp; davon Extern: <b class="blue"><?=$externalOnly?></b>-->
 &emsp; davon Gekündigt: <b class="redish"><?=$numberOfCancelled?></b>

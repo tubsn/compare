@@ -168,7 +168,7 @@ class ChurnExplorer extends Controller {
 
 		$start = new \DateTime(date('Y-m-d', strtotime($startDate)));
 		$interval = new \DateInterval('P1M');
-		$end = new \DateTime(date('Y-m-d', strtotime('+1month')));
+		$end = new \DateTime(date('Y-m-d'));
 		$period = new \DatePeriod($start, $interval, $end);
 
 		$monthList = [];

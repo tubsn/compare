@@ -24,19 +24,31 @@ class Readers extends Model
 	public function list() {
 
 		$table = $this->db->table;
-
-		$SQLstatement = $this->db->connection->prepare(
-			"SELECT *
-			 FROM $table
-			 #WHERE DATE(`order_date`) BETWEEN :startDate AND :endDate
-			 #ORDER BY order_date DESC"
-		);
-
+		$SQLstatement = $this->db->connection->prepare("SELECT * FROM $table");
 		$SQLstatement->execute();
 		$output = $SQLstatement->fetchall();
 		return $output;
 
 	}
+
+	public function stats() {
+
+		$table = $this->db->table;
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT order_fav_thema, count(user_id) as users
+			FROM $table
+
+			#LEFT JOIN conversions ON `user_id` = conversions.customer_id
+			GROUP BY order_fav_thema
+			"
+		);
+		$SQLstatement->execute();
+		$output = $SQLstatement->fetchall(\PDO::FETCH_COLUMN | \PDO::FETCH_UNIQUE);
+		return $output;
+
+	}
+
+
 
 	public function update_latest_orders() {
 

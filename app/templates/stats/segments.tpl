@@ -44,7 +44,7 @@
 		'area' => false,
 		'xfont' => '13px',
 		'showValues' => false,
-		'name' => ['Besucher', 'Abonnenten'],
+		'name' => ['Besucher pro Tag', 'Abonnenten pro Tag'],
 		'template' => 'charts/default_bar_chart',
 	]);?>
 </figure>

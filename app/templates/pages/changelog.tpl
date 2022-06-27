@@ -15,6 +15,13 @@
 
 <hr>
 
+<h2>21.06.2022 - Neue KPI für täglich eingeloggte Abonnenten</h2>
+
+<ul>
+	<li>Auf der Startseite lässt sich jetzt ablesen wieviele Besucher und wieviele Abonnenten wir am Tag verzeichnen.</li>
+	<li>Im Bestelleingang werden jetzt alle Jahresabos zusammengezählt ausgewiesen.</li>	
+</ul>
+
 
 <h2>04.06.2022 - Clustermanager Erweiterung</h2>
 

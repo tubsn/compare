@@ -46,8 +46,13 @@ class Stats extends Controller {
 
 		$viewData['averageRetention'] = $this->Orders->average($this->Orders->filter_cancelled($viewData['orders']),'retention');
 
-		// Charts
+		$premiumUsers = $this->DailyKPIs->premium_users();
+		$this->view->premiumUsers = $this->Charts->convert($premiumUsers,1);
 
+		$registeredUsers = array_column($premiumUsers,'users_reg');
+		$this->view->premiumAvg = round(array_sum($registeredUsers)/count($registeredUsers));
+
+		// Charts
 		$viewData['charts'] = $this->Charts;
 
 		//$viewData['combinedChart'][0] = $this->Articles->mediatime_by_ressort_chart();

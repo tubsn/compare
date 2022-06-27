@@ -18,7 +18,6 @@ Sessions: <b class="conversions deepblue"><?=gnum($sessions)?></b>
 &emsp; pot. Downloader: <b class="redish"><?=percentage($sessions-$sessionsArticle, $sessions)?>&thinsp;%</b>*
 &emsp; Pageviews: <b class="blue"><?=gnum($pageviews)?></b>
 &emsp; davon Artikel: <b class="blue"><?=gnum($pageviewsArticle)?></b>
-&emsp; Klicks vom Hauptportal (Navi): <b class="orange"><?=gnum($epaperBtnClicks)?></b>
 </p>
 
 

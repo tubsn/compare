@@ -63,8 +63,8 @@ class Epaper extends Controller {
 		$this->view->pageviews = array_sum(array_column($this->view->dailyStats, 'pageviews'));
 		$this->view->pageviewsArticle = array_sum(array_column($this->view->dailyStats, 'pageviews_article'));
 
-		$this->view->epaperBtnClicksByDate = $this->Epaper->clicks_on_epaper_btn();
-		$this->view->epaperBtnClicks = array_sum($this->view->epaperBtnClicksByDate);
+		//$this->view->epaperBtnClicksByDate = $this->Epaper->clicks_on_epaper_btn();
+		//$this->view->epaperBtnClicks = array_sum($this->view->epaperBtnClicksByDate);
 
 		$this->view->charts = $this->Charts;
 

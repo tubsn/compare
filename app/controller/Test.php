@@ -25,9 +25,9 @@ class Test extends Controller {
 
 	public function segments() {
 
-		$this->Readers->import_user_segments('2022-05-20', '2022-05-21');
-		$CSVImport = new CSVImports();
-		$CSVImport->csv_import_segments_by_date();
+		$this->Readers->import_user_segments('2022-06-21', '2022-06-24');
+		//$CSVImport = new CSVImports();
+		//$CSVImport->csv_import_segments_by_date();
 
 	}
 
