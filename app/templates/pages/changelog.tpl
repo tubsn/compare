@@ -15,11 +15,17 @@
 
 <hr>
 
+<h2>27.06.2022 - UTM Kampagnen Filterbar</h2>
+
+<ul>
+	<li>Die UTM Kampagnen in der Bestellliste sind jetzt nach Source, Medium und Campaign filterbar.</li>
+</ul>
+
 <h2>21.06.2022 - Neue KPI für täglich eingeloggte Abonnenten</h2>
 
 <ul>
 	<li>Auf der Startseite lässt sich jetzt ablesen wieviele Besucher und wieviele Abonnenten wir am Tag verzeichnen.</li>
-	<li>Im Bestelleingang werden jetzt alle Jahresabos zusammengezählt ausgewiesen.</li>	
+	<li>Im Bestelleingang werden jetzt alle Jahresabos zusammengezählt ausgewiesen.</li>
 </ul>
 
 

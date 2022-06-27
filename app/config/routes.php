@@ -64,7 +64,7 @@ $routes->get('/orders/map/local', 'Orders@map_local');
 $routes->get('/orders/map/germany', 'Orders@map_germany');
 $routes->get('/orders/map/local/cancelled', 'Orders@map_local_cancelled');
 $routes->get('/orders/map/germany/cancelled', 'Orders@map_germany_cancelled');
-$routes->get('/orders/campaigns', 'Orders@campaigns');
+$routes->get('/orders/utm[/{field}/{campaign}]', 'Orders@utm');
 $routes->get('/orders/import/{date:[\d]{4}-[\d]{2}-[\d]{2}?}', 'Import@order_import');
 
 $routes->get('/orders/live', 'Livedata@index');

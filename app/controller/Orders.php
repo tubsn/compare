@@ -68,15 +68,33 @@ class Orders extends Controller {
 
 	}
 
+	public function utm($field = 'campaign', $campaign = null) {
 
-	public function campaigns() {
+		Session::set('referer', '/orders/utm');
 
-		$viewData['campaigns'] = $this->Campaigns->list();
+		if ($campaign == null) {
+			$viewData['campaigns'] = $this->Campaigns->list();
+			$this->view->title = 'UTM Kampagnen - Übersicht';
+		}
+
+		else {
+			switch ($field) {
+				case 'campaign': $field = 'utm_campaign';break;
+				case 'medium': $field = 'utm_medium';break;
+				case 'source': $field = 'utm_source';break;
+				default: $field = 'utm_campaign'; break;
+			}
+
+			$this->Campaigns->from = '2000-01-01';
+			$this->Campaigns->to = '2050-01-01';
+			$viewData['campaigns'] = $this->Campaigns->filter_campaign_field($campaign, $field);
+			$this->view->title = 'Gesamtzeitraum: ' . $field . ' - ' . $campaign;
+		}
+
 		$viewData['numberOfCampaigns'] = count($viewData['campaigns'] ?? []);
 		$viewData['numberOfCancelled'] = count($this->Campaigns->filter_cancelled($viewData['campaigns']));
 		$viewData['averageRetention'] = $this->Orders->average($this->Campaigns->filter_cancelled($viewData['campaigns']),'retention');
 
-		$this->view->title = 'UTM Kampagnen - Übersicht';
 		$this->view->info = 'Daten aus Google Analytics (ohne Sampling) - Nutzer ohne Tracking-Consent sind ausgeschlossen.';
 		$this->view->render('orders/list-campaigns', $viewData);
 

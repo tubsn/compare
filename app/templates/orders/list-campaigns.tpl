@@ -42,9 +42,9 @@ Kampagnenbestellungen: <b class="conversions"><?=$numberOfCampaigns?></b>
 	<!--<td class="narrow"><a href="/readers/<?=$campaign['customer_id']?>"><?=$campaign['customer_id']?></a></td>-->
 	<td><?=formatDate($campaign['order_date'],'Y-m-d')?> <span class="hidden"><?=formatDate($campaign['order_date'],'H:i')?></span></td>
 	<td><?=formatDate($campaign['order_date'],'H:i')?> Uhr</td>
-	<td class="narrow"><?=$campaign['utm_source']?></td>
-	<td class="narrow"><?=$campaign['utm_medium']?></td>
-	<td style="max-width:350px" class="narrow"><?=$campaign['utm_campaign']?></td>
+	<td class="narrow"><a href="/orders/utm/source/<?=$campaign['utm_source']?>"><?=$campaign['utm_source']?></a></td>
+	<td class="narrow"><a href="/orders/utm/medium/<?=$campaign['utm_medium']?>"><?=$campaign['utm_medium']?></a></td>
+	<td style="max-width:350px" class="narrow"><a href="/orders/utm/campaign/<?=$campaign['utm_campaign']?>"><?=$campaign['utm_campaign']?></a></td>
 
 	<td><?=$campaign['order_price']?>&thinsp;€</td>
 	<!--<td><?=$campaign['subscription_internal_title']?></td>-->

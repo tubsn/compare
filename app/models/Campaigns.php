@@ -84,6 +84,51 @@ class Campaigns extends Model
 
 	}
 
+	public function filter_campaign_field($needle, $fieldName = 'utm_campaign') {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+		$limit = 10000;
+
+		$SQLstatement = $this->db->connection->prepare(
+
+			"SELECT
+			 campaigns.order_id,
+			 conversions.customer_id as customer_id,
+			 conversions.order_date as order_date,
+		 	 campaigns.utm_source,
+			 campaigns.utm_medium,
+			 campaigns.utm_campaign,
+			 campaigns.utm_term,
+			 conversions.article_id as article_id,
+			 conversions.article_ressort as article_ressort,
+			 conversions.order_price as order_price,
+			 conversions.subscription_internal_title as subscription_internal_title,
+			 conversions.cancelled as cancelled,
+			 conversions.retention as retention
+
+			 FROM campaigns
+
+			 LEFT JOIN conversions ON conversions.order_id = campaigns.order_id
+
+			 WHERE DATE(campaigns.ga_date) BETWEEN :startDate AND :endDate
+			 AND $fieldName = :needle
+			 ORDER BY conversions.order_date DESC
+			 LIMIT 0, $limit"
+
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to, ':needle' => $needle]);
+		$orders = $SQLstatement->fetchall();
+
+		return $orders;
+
+	}
+
+
+
+
+
 	public function medium_by_id() {
 
 		$from = strip_tags($this->from);
