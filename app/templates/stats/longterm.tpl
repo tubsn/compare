@@ -129,7 +129,7 @@
 		<tr>
 			<th style="text-align:right">Bestellungen</th>
 			<?php foreach ($salesData as $month => $set): ?>
-			<td class="text-right"><?=$plenigoOrders[$month]['orders'] ?? '-'?></td>
+			<td class="text-right"><?=$plenigoOrders[$month]['orders'] ?? $set['orders'] ?? '-'?></td>
 			<?php endforeach; ?>
 		</tr>
 
