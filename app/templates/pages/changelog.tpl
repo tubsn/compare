@@ -15,6 +15,29 @@
 
 <hr>
 
+
+<h2>24.08.2022 - Einführung Transaktions Analysen</h2>
+
+<ul>
+	<li>Es ist jetzt möglich über die Plenigo API Transaktionen, Fehlbuchungen und Rückbuchungen zu betrachten.</li>
+	<li>Dadurch können z.B. Schnorrer oder Kunden mit mehreren Abos identifiziert werden.</li>
+	<li>Für die Portale ist es möglich Rückbucher-Quoten zu vergleichen.</li>
+	<li>Anhand erfolgreicher Transaktionen lässt sich rückwirkend grob, die Anzahl aller in diesem Zeitraum aktiven Abos bestimmen.</li>
+</ul>
+
+<h2>17.08.2022 - New Cluster Views and Bugfixes</h2>
+
+<ul>
+	<li>Neue Darstellung von Artikel KPIs gruppiert nach Cluster und Ressort.</li>
+	<li>Fehler bei Datumsanzeigen in Grafiken wenn als Zeitraum "alle Daten" ausgewählt war behoben.</li>
+</ul>
+
+<h2>28.07.2022 - Plenigo API Update</h2>
+
+<ul>
+	<li>Es können jetzt auch mehr als 100 Bestellungen über die API abgerufen werden.</li>
+</ul>
+
 <h2>27.06.2022 - UTM Kampagnen Filterbar</h2>
 
 <ul>

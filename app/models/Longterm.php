@@ -100,6 +100,8 @@ class Longterm extends Model
 
 			$pageviews = $this->KPIs->sum('pageviews') ?? 0;
 			$sessions = $this->KPIs->sum('sessions') ?? 0;
+			$dailyActiveSubs = round($this->KPIs->avg('subscribers') ?? 0);
+			$users = $this->KPIs->sum('users') ?? 0;
 			$subscriberviews = $this->KPIs->sum('subscriberviews') ?? 0;
 
 			$articles = $this->Articles->count();
@@ -117,6 +119,8 @@ class Longterm extends Model
 			$output[$dimension]['pageviews'] = $pageviews;
 			$output[$dimension]['pageviewsmio'] = round($pageviews/1000000,2);
 			$output[$dimension]['subscriberviews'] = $subscriberviews;
+			$output[$dimension]['dailyActiveSubscribers'] = $dailyActiveSubs;
+			$output[$dimension]['users'] = $users;
 			$output[$dimension]['avgmediatime'] = round($avgmediatime,2);
 			$output[$dimension]['buyintents'] = $buyintents;
 			$output[$dimension]['articles'] = $articles;

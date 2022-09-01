@@ -7,6 +7,7 @@ $routes->get('/', 'Stats@dashboard');
 $routes->get('/showip', 'Test@showip');
 
 $routes->get('/cards', 'Lists@cards');
+$routes->get('/optins', 'Test@optins');
 $routes->get('/freecharts', 'Stats@freecharts');
 $routes->get('/filter', 'Lists@filter');
 $routes->post('/filter', 'Lists@filter');
@@ -58,6 +59,7 @@ $routes->get('/print/germany/cancelled', 'Orders@map_print_germany_cancelled');
 // Orders
 $routes->get('/orders', 'Orders@list');
 $routes->get('/orders/list-cancellations', 'Orders@list_cancellations');
+$routes->get('/orders/list-daily', 'Orders@list_by_day');
 $routes->get('/orders/behavior', 'Orders@customer_behavior');
 $routes->get('/orders/clustered', 'Orders@clustered');
 $routes->get('/orders/map/local', 'Orders@map_local');
@@ -81,6 +83,12 @@ $routes->get('/orders/subscription/{id:\d+}', 'Livedata@subscription');
 $routes->post('/orders/set_date', 'Livedata@set_date');
 $routes->post('/orders/set_paid_filter', 'Livedata@set_paid_filter');
 
+
+// Invoices & Transactions
+$routes->get('/invoices[/{month}]', 'Transactions@invoice_download');
+$routes->get('/transactions', 'Transactions@index');
+$routes->post('/transactions', 'Transactions@index');
+
 // Stats
 $routes->get('/stats', 'Stats@dashboard');
 $routes->get('/stats/ressort', 'Stats@ressorts');
@@ -88,6 +96,11 @@ $routes->get('/stats/thema', 'Stats@themen');
 $routes->get('/stats/tag', 'Stats@tags');
 $routes->get('/stats/audience', 'Stats@audiences');
 $routes->get('/stats/audience-by-ressort', 'Stats@audience_by_ressorts');
+
+$routes->get('/stats/cluster/audiences', 'Stats@cluster_audiences');
+$routes->get('/stats/cluster/types', 'Stats@cluster_types');
+$routes->get('/stats/cluster/tags', 'Stats@cluster_tags');
+
 $routes->get('/stats/artikel', 'Stats@artikel');
 $routes->get('/stats/segments', 'Stats@segments');
 $routes->get('/stats/pubtime[/{audience}]', 'Test@publications');

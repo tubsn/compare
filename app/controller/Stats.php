@@ -47,17 +47,18 @@ class Stats extends Controller {
 		$viewData['averageRetention'] = $this->Orders->average($this->Orders->filter_cancelled($viewData['orders']),'retention');
 
 		$premiumUsers = $this->DailyKPIs->premium_users();
-		$this->view->premiumUsers = $this->Charts->convert($premiumUsers,1);
 
-		$registeredUsers = array_column($premiumUsers,'users_reg');
-		$this->view->premiumAvg = round(array_sum($registeredUsers)/count($registeredUsers));
+		if ($premiumUsers) {
+			$this->view->premiumUsers = $this->Charts->convert($premiumUsers,1);
+
+			$registeredUsers = array_column($premiumUsers,'users_reg');
+			$allUsers = array_column($premiumUsers,'users');
+			$this->view->usersAvg = round(array_sum($allUsers)/count($allUsers));
+			$this->view->premiumAvg = round(array_sum($registeredUsers)/count($registeredUsers));
+		}
 
 		// Charts
 		$viewData['charts'] = $this->Charts;
-
-		//$viewData['combinedChart'][0] = $this->Articles->mediatime_by_ressort_chart();
-		//$viewData['combinedChart'][1] = $this->Articles->pageviews_by_ressort_chart();
-
 		$this->view->title = 'Compare - Dashboard';
 		$this->view->render('pages/dashboard', $viewData);
 
@@ -171,7 +172,7 @@ class Stats extends Controller {
 
 	public function value_articles($groupedBy = 'ressort') {
 
-		Session::set('referer', '/valueable');		
+		Session::set('referer', '/valueable');
 
 		$this->view->wertschoepfend = $this->Articles->value_articles($groupedBy);
 
@@ -215,56 +216,6 @@ class Stats extends Controller {
 		Session::set('referer', '/stats/audience-by-ressort');
 		$this->view->days = $this->Charts->timeframe();
 
-		$ressortList = $this->Articles->list_distinct('ressort');
-		$audiencesByRessort = $this->Articles->audiences_by_ressort();
-
-		$summedRessorts = $this->Articles->kpi_grouped_by('audience','ressort','count');
-		$summedAudiences = $this->Articles->kpi_grouped_by('ressort','audience','count');
-
-		if (PORTAL == 'MOZ') {
-			// Combine and Remove Hack
-			$audiencesByRessort = array_map(function ($set) {
-				
-				if (isset($set['seelow']) || isset($set['bad-freienwalde']) ) {
-					$set['seelow+bad-freienwalde'] = $set['seelow'] ?? 0 + $set['bad-freienwalde'] ?? 0;
-					unset($set['seelow']);
-					unset($set['bad-freienwalde']);
-				}
-
-				return $set; 
-
-			}, $audiencesByRessort);
-
-			$audiencesByRessort = array_map(function ($set) use ($seeba){
-				
-				if (isset($set['brandenburg']) || isset($set['wirtschaft']) || isset($set['berlin']) ) {
-					$set['brandenburg-kombiniert'] = $set['brandenburg'] ?? 0 + $set['wirtschaft'] ?? 0 + $set['berlin'] ?? 0;
-					unset($set['brandenburg']);
-					unset($set['wirtschaft']);
-					unset($set['berlin']);
-				}
-
-				return $set; 
-
-			}, $audiencesByRessort);
-
-			$seeba = 0;
-			foreach ($audiencesByRessort as $ressorts) {
-				$seeba = $seeba + $ressorts['seelow+bad-freienwalde'] ?? 0; 
-			}
-
-			$brbko = 0;
-			foreach ($audiencesByRessort as $ressorts) {
-				$brbko = $brbko + $ressorts['brandenburg-kombiniert'] ?? 0; 
-			}
-
-			array_push($ressortList, 'seelow+bad-freienwalde');
-			array_push($ressortList, 'brandenburg-kombiniert');
-
-			array_push($summedRessorts, ['ressort' => 'seelow+bad-freienwalde', 'audience' => $seeba]);
-			array_push($summedRessorts, ['ressort' => 'brandenburg-kombiniert', 'audience' => $brbko]);
-		}
-
 
 		$filteredRessorts = [];
 		if (PORTAL == 'LR') {$filteredRessorts = ['bilder','ratgeber','blaulicht','unbekannt','leser_service'];}
@@ -275,6 +226,57 @@ class Stats extends Controller {
 				'seelow', 'bad-freienwalde'
 			];
 		}
+
+		$ressortList = $this->Articles->list_distinct('ressort');
+		$audiencesByRessort = $this->Articles->audiences_by_ressort();
+
+		$summedRessorts = $this->Articles->kpi_grouped_by('audience','ressort','count');
+		$summedAudiences = $this->Articles->kpi_grouped_by('ressort','audience','count');
+
+		if (PORTAL == 'MOZ') {
+			// Combine and Remove Hack
+			$audiencesByRessort = array_map(function ($set) {
+
+				if (isset($set['seelow']) || isset($set['bad-freienwalde']) ) {
+					$set['seelow+bad-freienwalde'] = $set['seelow'] ?? 0 + $set['bad-freienwalde'] ?? 0;
+					unset($set['seelow']);
+					unset($set['bad-freienwalde']);
+				}
+
+				return $set;
+
+			}, $audiencesByRessort);
+
+			$audiencesByRessort = array_map(function ($set) use ($seeba){
+
+				if (isset($set['brandenburg']) || isset($set['wirtschaft']) || isset($set['berlin']) ) {
+					$set['brandenburg-kombiniert'] = $set['brandenburg'] ?? 0 + $set['wirtschaft'] ?? 0 + $set['berlin'] ?? 0;
+					unset($set['brandenburg']);
+					unset($set['wirtschaft']);
+					unset($set['berlin']);
+				}
+
+				return $set;
+
+			}, $audiencesByRessort);
+
+			$seeba = 0;
+			foreach ($audiencesByRessort as $ressorts) {
+				$seeba = $seeba + $ressorts['seelow+bad-freienwalde'] ?? 0;
+			}
+
+			$brbko = 0;
+			foreach ($audiencesByRessort as $ressorts) {
+				$brbko = $brbko + $ressorts['brandenburg-kombiniert'] ?? 0;
+			}
+
+			array_push($ressortList, 'seelow+bad-freienwalde');
+			array_push($ressortList, 'brandenburg-kombiniert');
+
+			array_push($summedRessorts, ['ressort' => 'seelow+bad-freienwalde', 'audience' => $seeba]);
+			array_push($summedRessorts, ['ressort' => 'brandenburg-kombiniert', 'audience' => $brbko]);
+		}
+
 
 		$ressortList = array_filter($ressortList, function($ressort) use ($filteredRessorts) {
 			if (in_array($ressort, $filteredRessorts)) {return null;}
@@ -296,6 +298,7 @@ class Stats extends Controller {
 		$this->view->summedRessorts = $summedRessorts;
 
 		$this->view->title = 'Audience Artikel nach Ressort';
+		$this->view->info = 'Hinweis: Die Summe der produzierten Audience Artikel (letzte Spalte) beinhaltet Artikel über alle Ressorts (auch ausgeblendete wie z.B. Politik).';
 		$this->view->render('pages/audiences-by-ressort');
 
 	}
@@ -319,6 +322,26 @@ class Stats extends Controller {
 		$this->view->render('stats/testcharts');
 
 	}
+
+
+	public function cluster_audiences() {
+		$this->view->cluster = $this->Articles->cluster_by_ressort('audience');
+		$this->view->title = 'Audience-Cluster nach Ressort';
+		$this->view->render('stats/cluster-stats');
+	}
+
+	public function cluster_types() {
+		$this->view->cluster = $this->Articles->cluster_by_ressort('type');
+		$this->view->title = 'Themen-Cluster nach Ressort';
+		$this->view->render('stats/cluster-stats');
+	}
+
+	public function cluster_tags() {
+		$this->view->cluster = $this->Articles->cluster_by_ressort('tag');
+		$this->view->title = 'Tag-Cluster nach Ressort';
+		$this->view->render('stats/cluster-stats');
+	}
+
 
 	public function segments() {
 		Session::set('referer', '/stats/segments');

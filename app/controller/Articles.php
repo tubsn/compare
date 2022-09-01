@@ -242,12 +242,13 @@ class Articles extends Controller {
 		$page = strip_tags($_GET['page'] ?? '/');
 		$from = strip_tags($_GET['from'] ?? null);
 		$to = strip_tags($_GET['to'] ?? null);
+		$getParameters = strip_tags($_GET['get'] ?? null);
 
 		Session::set('timeframe', 'Zeitraum');
 		if ($from) {Session::set('from', $from);}
 		if ($to) {Session::set('to', $to);}
 
-		$this->view->redirect($page);
+		$this->view->redirect($page . $getParameters);
 
 	}
 

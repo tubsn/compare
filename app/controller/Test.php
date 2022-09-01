@@ -5,17 +5,26 @@ use flundr\mvc\Controller;
 use flundr\utility\Session;
 use flundr\auth\Auth;
 use app\models\helpers\CSVImports;
+use app\importer\PlenigoAPI;
 
 class Test extends Controller {
 
 	public function __construct() {
 
-		//if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
+		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Articles,Orders,Conversions,Analytics,Charts,Readers');
+		$this->models('Articles,Orders,Conversions,Analytics,Charts,Readers,Plenigo');
 	}
-	
+
+
+	public function optins() {
+		$plenigo = new PlenigoApi;
+		dd($plenigo->test());
+	}
+
+
+
 	public function showip() {
 
 		dd($_SERVER['REMOTE_ADDR']);
@@ -25,7 +34,7 @@ class Test extends Controller {
 
 	public function segments() {
 
-		$this->Readers->import_user_segments('2022-06-21', '2022-06-24');
+		$this->Readers->import_user_segments('2022-08-29', '2022-09-01');
 		//$CSVImport = new CSVImports();
 		//$CSVImport->csv_import_segments_by_date();
 

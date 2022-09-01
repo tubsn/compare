@@ -34,6 +34,7 @@ class Import extends Controller {
 				// Always Import Articles with Audience
 				if (isset($article['audience']) && !empty($article['audience'])) {return $article;}
 
+				// DPA Artikel Filter
 				$dpaFilterPattern = "/\b(?:dpa)\b/i"; // Filter DPA
 				if (preg_match($dpaFilterPattern,$article['author'])) {return null;}
 

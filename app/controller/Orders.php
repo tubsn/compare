@@ -42,6 +42,19 @@ class Orders extends Controller {
 
 	}
 
+	public function list_by_day() {
+		
+		Session::set('referer', '/orders/list-daily');
+		$this->view->title = 'Conversion-Eingang nach Tagen';
+
+		$viewData['orders'] = $this->Orders->list_by_day();
+		$viewData['orders_by_day'] = array_group_by('day', $viewData['orders']);
+
+		$this->view->render('orders/list-daily', $viewData);
+
+	}
+
+
 	public function list_cancellations() {
 
 		Session::set('referer', '/orders/list-cancellactions');

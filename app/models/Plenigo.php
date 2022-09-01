@@ -2,6 +2,7 @@
 
 namespace app\models;
 use \flundr\utility\Session;
+use \flundr\cache\RequestCache;
 use app\importer\PlenigoAPI;
 
 class Plenigo
@@ -16,6 +17,7 @@ class Plenigo
 	public function orders($start, $end, $items, $showAll = false) {
 
 		$orders = $this->api->orders($start, $end, $items);
+		
 		if (empty($orders)) {return [];}
 
 		if (!$showAll) {$orders = array_filter($orders, [$this, 'remove_free_products']);}
@@ -63,6 +65,153 @@ class Plenigo
 		dd($order);
 	}
 
+
+	public function invoices($start = 'today', $end = 'today') {
+
+		$invoices = $this->api->invoices($start, $end);
+		$invoices = array_map([$this, 'map_customer_with_invoice_data'], $invoices);
+
+		return $invoices;
+	}
+
+
+	public function transactions($start, $end) {
+		
+		$transactions = $this->api->transactions($start, $end);
+
+		// Exclude the Mandate Creations
+		$transactions = array_filter($transactions, function($transaction) {
+			if ($transaction['paymentAction'] != 'SEPA_MANDATE_CREATION') {return $transaction;}
+		});
+
+		return $transactions;
+
+	}
+
+	public function transactions_clustered($start, $end) {
+
+		$transactions = $this->api->transactions($start, $end);
+
+		if (empty($transactions)) {
+			return [];
+		}
+
+		// Debug for Paypal Only
+		if (isset($_GET['paypal'])) {
+			$transactions = array_filter($transactions, function($transaction) {
+				if ($transaction['paymentProvider'] == 'PAYPAL') {return $transaction;}
+			});			
+		}
+
+		// Debug for Stripe Only
+		if (isset($_GET['stripe'])) {
+			$transactions = array_filter($transactions, function($transaction) {
+				if ($transaction['paymentProvider'] == 'STRIPE') {return $transaction;}
+			});			
+		}
+
+		// Separating the Mandate-Creations from the rest
+		$mandates = $this->array_filter('paymentAction', 'SEPA_MANDATE_CREATION', $transactions);
+		$transactionsWithoutMandates = array_filter($transactions, function($entry) {
+			if ($entry['paymentAction'] != 'SEPA_MANDATE_CREATION') {return $entry;}
+		});
+
+		$success = $this->filter_succes($transactionsWithoutMandates);
+		$chargebacks = $this->filter_chargebacks($transactionsWithoutMandates);
+		$failures = $this->filter_failed($transactionsWithoutMandates);
+
+		return [
+			'Transaktionen' => $transactionsWithoutMandates,
+			'Erfolgreiche Transaktionen' => $success,
+			'Fehlgeschlagene Transaktionen' => $failures,
+			'Rückzahlungen' => $chargebacks,
+			'SEPA Mandate' => $mandates,
+		];
+
+	}
+
+	private function filter_failed(array $array) {
+		return array_filter($array, function($entry) {
+			if (
+				$entry['paymentStatus'] == 'FAILURE' 
+				|| $entry['paymentAction'] == 'PAYPAL_REFUND'
+				|| $entry['paymentAction'] == 'CREDIT_CARD_REFUND'
+				|| $entry['paymentAction'] == 'SEPA_VOID'
+			) {return $entry;}
+		});
+	}
+
+	private function filter_succes(array $array) {
+		return array_filter($array, function($entry) {
+			if (
+				$entry['paymentStatus'] == 'SUCCESS' 
+				&& $entry['paymentAction'] != 'PAYPAL_REFUND'
+				&& $entry['paymentAction'] != 'CREDIT_CARD_REFUND'
+				&& $entry['paymentAction'] != 'SEPA_VOID'
+			) {return $entry;}
+		});
+	}
+
+	private function filter_chargebacks(array $array) {
+		return array_filter($array, function($entry) {
+			if (
+				$entry['paymentAction'] == 'SEPA_DEBIT_RETURN' 
+				|| $entry['paymentAction'] == 'PAYPAL_REFUND'
+				|| $entry['paymentAction'] == 'CREDIT_CARD_REFUND'
+				|| $entry['paymentAction'] == 'SEPA_VOID'
+			) {return $entry;}
+		});
+	}
+
+	private function array_filter($column, $value, array $array) {
+		return array_filter($array, function($entry) use ($column, $value) {
+			if ($entry[$column] == $value) {return $entry;}
+		});
+	}
+
+
+	// Costs see agreements
+	// Paypal 2,99% + 35 Cent
+	// Stripe 1.5% + 13 Cent
+	// Stripe Visa 2,4% + 20 Cent
+
+	private function calculate_paypal_costs($amount) {return round(0.39 + (0.0299 * $amount),2);}
+	private function calculate_stripe_costs($amount) {return round(0.13 + (0.015 * $amount),2);}
+	private function calculate_stripe_creditcard_costs($amount) {return round(0.20 + (0.024 * $amount),2);}
+
+	public function calculate_transaction_costs($transactions) {
+
+		$total = 0;
+		foreach ($transactions as $transaction) {
+			$amount = 0;
+			if ($transaction['paymentMethod'] == 'PAYPAL') {$amount = $this->calculate_paypal_costs($transaction['amount']);}
+			if ($transaction['paymentMethod'] == 'BANK_ACCOUNT') {$amount = $this->calculate_stripe_costs($transaction['amount']);}
+			if ($transaction['paymentMethod'] == 'CREDIT_CARD') {$amount = $this->calculate_stripe_creditcard_costs($transaction['amount']);}
+			$total += $amount;
+		}
+
+		return $total;
+	}
+
+	public function calculate_chargeback_costs($transactions) {
+
+		// Paypal 0 + Transaktionskosten 
+		// Stripe 3,5€
+
+		$total = 0;
+		foreach ($transactions as $transaction) {
+			$amount = 0;
+			if ($transaction['paymentMethod'] == 'PAYPAL') {$amount = $this->calculate_paypal_costs($transaction['amount']);}
+			if ($transaction['paymentMethod'] == 'BANK_ACCOUNT') {$amount = 3.5;}
+			if ($transaction['paymentMethod'] == 'CREDIT_CARD') {$amount = 3.5;}
+			$total += $amount;
+		}
+		
+		return $total;
+
+	}
+
+
 	private function map_order($org) {
 
 		$new['order_id'] = $org['orderId'];
@@ -101,8 +250,11 @@ class Plenigo
 
 		if (empty($subscription['cancellationDate']) && $subscription['status'] == 'INACTIVE') {
 			$subscription = $this->api->chain($subscription['chainId']);
+			//dd($subscription);
 			$subscription = $subscription['items'][0];
 		}
+
+
 
 		return $subscription;
 
@@ -169,7 +321,53 @@ class Plenigo
 		if (empty($address['postcode'])) {$new['customer_postcode'] = null;} else {$new['customer_postcode'] = $address['postcode'];}
 		$new['customer_country'] = $address['country'];
 
-		switch ($address['salutation']) {
+		switch ($address['salutation'] ?? null) {
+			case 'MRS':
+				$new['customer_gender'] = 'female';
+				break;
+			case 'MR':
+				$new['customer_gender'] = 'male';
+				break;
+			case 'FIRM':
+				$new['customer_gender'] = 'company';
+				break;
+			default:
+				$new['customer_gender'] = null;
+				break;
+		}
+
+		return $new;
+
+	}
+
+	private function map_customer_with_invoice_data($org) {
+
+		if (empty($org['invoiceAddress'])) {
+			$address = $org['items'][0]['deliveryAddress'];
+		}
+
+		else {$address = $org['invoiceAddress'];}
+
+		$new['invoice_id'] = $org['invoiceId'];
+		$new['invoice_date'] = $org['invoiceDate'];
+		$new['invoice_type'] = $org['type'];
+		$new['invoice_status'] = $org['status'];
+		$new['invoice_price'] = $org['accumulatedPrice'] ?? null;
+		$new['invoice_payment_method'] = $org['paymentMethod']  ?? null;
+		$new['invoice_transaction_id'] = $org['transactionId'] ?? null;
+		$new['customer_id'] = $org['invoiceCustomerId'];
+		$new['customer_email'] = $org['customerEmail'];
+		$new['customer_firstname'] = $address['firstName'] ?? null;
+		$new['customer_lastname'] = $address['lastName'] ?? null;
+		$new['customer_company'] = $address['companyName'] ?? null;
+
+
+		$new['customer_id'] = $org['invoiceCustomerId'];
+		if (empty($address['city'])) {$new['customer_city'] = null;} else {$new['customer_city'] = $address['city'];}
+		if (empty($address['postcode'])) {$new['customer_postcode'] = null;} else {$new['customer_postcode'] = $address['postcode'];}
+		$new['customer_country'] = $address['country'];
+
+		switch ($address['salutation'] ?? null) {
 			case 'MRS':
 				$new['customer_gender'] = 'female';
 				break;

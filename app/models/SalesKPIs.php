@@ -33,7 +33,8 @@ class SalesKPIs extends Model
 			"SELECT DATE_FORMAT(date,'%Y-%m') as date,
 			 paying, trial1month, trial3for3, reduced, yearly, orders, cancelled, (0-'cancelled') as negativcancelled,
 			 app_user_android, app_user_ios, (app_user_android + app_user_ios) as app_user,
-			 IFNULL(paying,0)+IFNULL(trial3for3,0)+IFNULL(trial1month,0)+IFNULL(yearly,0) as active FROM $tablename
+			 IFNULL(paying,0)+IFNULL(trial3for3,0)+IFNULL(trial1month,0)+IFNULL(yearly,0) as active, revenue
+			FROM $tablename
 			ORDER BY date ASC"
 		);
 

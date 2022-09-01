@@ -23,6 +23,24 @@
 	</figure>
 
 	<figure class="mb">
+		<h3 class="text-center">Daily Active Subscribers</h3>
+		<?=$charts->create([
+			'metric' => [$charts->cut_left($lr['kpi']['dailyActiveSubscribers'],4),
+			 			 $charts->cut_left($moz['kpi']['dailyActiveSubscribers'],4),
+			  	 		 $charts->cut_left($swp['kpi']['dailyActiveSubscribers'],4)],
+			'dimension' => $charts->cut_left($swp['kpi']['dimensions'],4),
+			'color' => ['#df886d', '#0967a8', '#e50046'],
+			'height' => 350,
+			'legend' => 'top',
+			'area' => false,
+			'showValues' => false,
+			'name' => ['LR', 'MOZ', 'SWP'],
+			'template' => 'charts/default_line_chart',
+		]);?>
+	</figure>
+
+<!--
+	<figure class="mb">
 		<h3 class="text-center">Anteil Subscriberviews an Pageviews</h3>
 		<?=$charts->create([
 			'metric' => [$charts->cut_left($lr['kpi']['quoteSubscriberviews'],1),
@@ -39,6 +57,8 @@
 			'template' => 'charts/default_line_chart',
 		]);?>
 	</figure>
+-->
+
 
 </div>
 

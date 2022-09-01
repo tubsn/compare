@@ -220,6 +220,7 @@ class MappingTool
 			'lronline',
 			'print',
 			'display',
+			'cpc',
 			'edgead',
 			'edge',
 			'edge ad',

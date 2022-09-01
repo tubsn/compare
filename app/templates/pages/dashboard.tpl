@@ -5,6 +5,7 @@
 <h1>
 	Conversions: <span class="conversions"><?=$numberOfOrders?></span>
 	<?php if ($mediatime > 0): ?>
+	<!--
 	&ensp; Lesedauer:
 	<span class="greenbg">
 		<?php if ($mtDays): ?><?=$mtDays?>t<?php endif; ?>
@@ -12,22 +13,26 @@
 		<?php if ($mtMinutes): ?><?=$mtMinutes?>m<?php endif; ?>
 		<?php if ($mtSeconds): ?><?=$mtSeconds?>s<?php endif; ?>
 	</span>
+	-->
 	<?php endif; ?>
-	&ensp; Pageviews: <span class="pageviews"><?=number_format($pageviews,0,',','.')?></span>
+	&ensp; <span title="⌀-Zahl von online Abonnenten pro Tag">Daily Active Subs:</span> <span class="das"><?=gnum($premiumAvg)?></span>
+	&ensp; Pageviews: <span class="pageviews"><?=gnum($pageviews)?></span>
 </h1>
 
 <hr>
 
 <p class="light-box" style="margin-bottom:2em; margin-top:1em; width:100%; text-align:center; box-sizing:border-box">
-Produzierte Artikel: <b><?=$articles?></b>
+Artikel: <b><?=$articles?></b>
 &emsp; Subscriberviews: <b class="deepblue"><?=number_format($subscriberviews,0,',','.')?></b>
-&emsp; ⌀-Abonennten online am Tag: <b class="blue" style="color:#C52233"><?=gnum($premiumAvg)?></b>
-<!--&emsp; Conversions Plusseite: <b class="blue"><?=$plusOnly?></b>-->
-<!--&emsp; Conversions Aboshop: <b class="blue"><?=$aboshopOnly?></b>-->
+
+&emsp; ⌀-Besucher pro Tag: <b class="blue"><?=gnum($usersAvg)?></b>
 &emsp; ⌀-Mediatime: <b class="green"><?=number_format($avgmediatime,0,',','.')?>&thinsp;s</b>
+&emsp; Conv. Plusseite: <b class="blue"><?=$plusOnly?></b>
+&emsp; Conv. Aboshop: <b class="blue"><?=$aboshopOnly?></b>
+
 &emsp; Gekündigt: <b class="redish"><?=$numberOfCancelled?></b>
 &emsp; Kündigerquote: <b class="orange"><?=$cancelQuote?>&thinsp;%</b>
-&emsp; ⌀-Haltedauer bei Kündigern: <b class="blue"><?=number_format($averageRetention,2,',','.')?> Tage</b>
+&emsp; ⌀-Haltedauer: <b class="blue"><?=number_format($averageRetention,2,',','.')?> Tage</b>
 </p>
 
 <hr/>
@@ -78,25 +83,45 @@ Produzierte Artikel: <b><?=$articles?></b>
 
 </div>
 
+<p class="text-center" style="margin-bottom:2em; ">(<b>Achtung:</b> Tracking von Plusnutzern (Daily Active Subscribers) seit August'22 leider gestört)</p>
+
+<div class="col-2" style="grid-template-columns: 1fr 2fr;">
+
 <figure class="mb">
-	<h3 class="text-center">Ø-Aufkommen an Besuchern / Abonnenten am Tag</h3>
+	<h3 class="text-center">Ø-Besucher pro Tag</h3>
 	<?=$charts->create([
-		'metric' => [
-			$premiumUsers['users'],
-			$premiumUsers['users_reg'],
-	     ],
+		'metric' => $premiumUsers['users'],
 		'dimension' => $premiumUsers['dimensions'],
-		'color' => ['#2F5772', '#C52233'],
-		'height' => 250,
+		'color' => '#2F5772',
+		'height' => 300,
 		'legend' => 'top',
 		'tickamount' => 12,
 		'stacked' => false,
-		'area' => false,
+		'area' => true,
 		'xfont' => '13px',
 		'showValues' => false,
-		'name' => ['Besucher pro Tag', 'Abonnenten pro Tag'],
+		'name' => 'Besucher pro Tag',
+		'template' => 'charts/default_line_chart',
+	]);?>
+</figure>
+
+<figure class="mb">
+	<h3 class="text-center">Daily Active Subscribers (Ø-Abonnenten am Tag)</h3>
+	<?=$charts->create([
+		'metric' => $premiumUsers['users_reg'],
+		'dimension' => $premiumUsers['dimensions'],
+		'color' => '#d99fd2',
+		'height' => 300,
+		'legend' => 'top',
+		'tickamount' => 12,
+		'stacked' => false,
+		'area' => true,
+		'xfont' => '13px',
+		'showValues' => false,
+		'name' => 'Abonnenten pro Tag',
 		'template' => 'charts/default_bar_chart',
 	]);?>
 </figure>
+</div>
 
 </main>

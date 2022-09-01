@@ -23,6 +23,7 @@ Vue.createApp({
 			orders: 0,
 			cancelled: 0,
 			retention: 0,
+			paymethod: '',
 		}
 	},
 
@@ -52,7 +53,7 @@ Vue.createApp({
 
 	methods: {
 		calculateChurn() {
-			fetch(`/api/explorer?from=${this.from}&to=${this.to}&compressed=${this.compressed}&product=${this.product}&segment=${this.segment}&testgroup=${this.testgroup}&origin=${this.origin}&source_grp=${this.source_grp}&source=${this.source}&ressort=${this.ressort}&type=${this.type}&audience=${this.audience}&days=${this.days}`)
+			fetch(`/api/explorer?from=${this.from}&to=${this.to}&compressed=${this.compressed}&product=${this.product}&segment=${this.segment}&testgroup=${this.testgroup}&origin=${this.origin}&source_grp=${this.source_grp}&source=${this.source}&ressort=${this.ressort}&type=${this.type}&audience=${this.audience}&days=${this.days}&paymethod=${this.paymethod}`)
 			.then(response => response.json())
 			.then(data => {
 				this.orders = data.orders;

@@ -12,8 +12,12 @@
 --orange: #df886d;
 --pink: #eed0e8;
 --red: #fddbdb;
+--bright-red: #C52233;
 --dark-red: #f77474;
 --darkest-red: #c65b5b;
+--pink: #d99fd2;
+--light-pink: #e8cee5;
+--lightest-pink: #e7d1ee;
 }
 
 body {margin:0; font-size:16px;}
@@ -70,7 +74,7 @@ animation: menu-scroll-in 0.1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;}
 /* Bugfix for Textintend Right */
 .main-nav ul li ul li a:after {content: "\0000a0";  letter-spacing: 0.5em;}
 
-.main-nav ul li ul li.hightlight {background-color: #315984;}
+.main-nav ul li ul li.highlight {background-color: #315984;}
 
 .main-logo {width:80px; position:absolute; left:48.5%; top:1%;}
 .main-logo:hover {animation: wobble 0.7s both;}
@@ -102,9 +106,9 @@ animation: menu-scroll-in 0.1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;}
 .artikel-audiences {min-height:150px; background-color:#f7dec3; margin-bottom:1em; padding:0.5em;}
 .artikel-tags {min-height:180px; background-color:#f7dec3; margin-bottom:1em; padding:0.5em;}
 
-table.fancy.red th {background-color:#b46060;}
+table.fancy.table-cancelled th {background-color:#b46060;}
 table.fancy.neutral th {background-color:#404040;}
-table.fancy.red th:hover {background-color:#aa4747;}
+table.fancy.table-cancelled th:hover {background-color:#aa4747;}
 table.fancy tr th:hover {background-color:#486f99}
 
 table.collapsed tr:nth-of-type(1n+100) {display: none;}
@@ -151,13 +155,14 @@ th.text-left {text-align:left !important;}
 .deepblue {color: var(--deep-blue)}
 .green {color: var(--green)}
 .redish {color: var(--dark-red)}
+.red {color: var(--bright-red)}
 
 .geister {color:#b24646;}
 .abwehr {color:#779142;}
 .stuermer {color:#abbd86;}
 .spielmacher {color:#44a771;}
 
-.light-box {background-color: #eef0f2; display:inline-block; margin-bottom:2em; padding:1em;}
+.light-box {background-color: #eef0f2; display:inline-block; margin-bottom:2em; padding:1em; box-sizing: border-box;}
 .meta-info-box ul {display:flex; gap:2em; margin:0; padding:0;}
 .meta-info-box li {list-style-type: none; margin:0;}
 .meta-info-box {background-color: #eef0f2; margin-bottom:1em; padding:1em; display:grid; grid-template-columns: 1fr max-content; align-items: center;}
@@ -173,12 +178,15 @@ th.text-left {text-align:left !important;}
 .score { background-color: var(--pink); display:inline-block; padding:0.1em .3em; border-radius:1em;}
 .cancelled { background-color: var(--red); display:inline-block; padding:0.1em .3em; border-radius:1em;}
 
-.bluebg, .orangebg, .darkorangebg, .greenbg, .pageviews, .subscribers,
-.geisterbg, .abwehrbg, .stuermerbg, .spielmacherbg, .num-articles
+.bluebg, .orangebg, .darkorangebg, .greenbg, .das, .pageviews, .subscribers,
+.geisterbg, .abwehrbg, .stuermerbg, .spielmacherbg, .num-articles, .stripe, .paypal
  {background-color: var(--light-blue); display:inline-block; padding:0.1em .5em; border-radius:1em;}
 
 .subscribers {background-color: var(--dark-blue);}
 .greenbg {background-color: var(--light-green);}
+.das {background-color: var(--light-pink);}
+.stripe {background-color: var(--lightest-pink);}
+.paypal {background-color: var(--light-blue);}
 .orangebg {background-color: var(--light-orange);}
 .darkorangebg {background-color: var(--orange);}
 .geisterbg {background-color:#ec9a9a;}

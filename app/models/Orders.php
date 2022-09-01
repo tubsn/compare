@@ -70,6 +70,48 @@ class Orders extends Model
 	}
 
 
+	public function list_by_day($filter = null) {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+		if (!is_null($filter)) {$filter = 'AND ' . strip_tags($filter);}
+
+		//$from = date('Y-m-d', strtotime('-3 days'));
+		//$to = date('Y-m-d', strtotime('today'));
+
+		$SQLstatement = $this->db->connection->prepare(
+
+			"SELECT DATE_FORMAT(order_date, '%Y-%m-%d') as day, conversions.*,
+			 articles.title as article_title,
+			 articles.type as article_type,
+			 articles.audience as article_audience,
+			 articles.tag as article_tag,
+			 ifnull(conversions.article_ressort, articles.ressort) as article_ressort,
+			 articles.author as article_author,
+			 articles.kicker as article_kicker,
+			 articles.image as article_image,
+			 articles.conversions as article_conversions,
+			 articles.cancelled as article_cancellations,
+			 articles.pubdate as article_pubdate
+
+			 FROM conversions
+			 LEFT JOIN articles ON `id` = conversions.article_id
+
+			 WHERE DATE(conversions.order_date) BETWEEN :startDate AND :endDate
+			 $filter
+			 ORDER BY day DESC, conversions.order_date DESC"
+
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$orders = $SQLstatement->fetchall();
+
+		return $orders;
+
+	}
+
+
+
 	public function list_plain() {
 
 		$from = strip_tags($this->from);
@@ -397,6 +439,10 @@ class Orders extends Model
 
 	public function product_titles() {
 		return $this->list_distinct('subscription_internal_title');
+	}
+
+	public function order_payment_methods() {
+		return $this->list_distinct('order_payment_method');
 	}
 
 	public function order_segments() {

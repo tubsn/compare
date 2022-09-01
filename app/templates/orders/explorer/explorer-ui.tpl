@@ -128,6 +128,17 @@
 				<?php endforeach; ?>
 			</select>
 			</figure>
+
+			<figure>
+			Zahlmethoden:
+			<select v-model="paymethod" @change="calculateChurn">
+				<option value="">kein Filter</option>
+				<?php foreach ($paymentMethods as $paymentMethodName): ?>
+				<option value="<?=$paymentMethodName?>"><?=ucfirst(strtolower($paymentMethodName))?></option>
+				<?php endforeach; ?>
+			</select>
+			</figure>
+
 		<!--
 		<figure>
 		Chart stauchen:

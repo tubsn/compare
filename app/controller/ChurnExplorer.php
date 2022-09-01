@@ -31,6 +31,7 @@ class ChurnExplorer extends Controller {
 		$this->view->months = array_reverse($this->month_list());
 		$this->view->segments = $this->Orders->order_segments();
 		$this->view->products = $this->Orders->product_titles();
+		$this->view->paymentMethods = $this->Orders->order_payment_methods();
 		$this->view->ressorts = $this->Orders->order_ressorts();
 		$this->view->groupedSources = $this->Orders->order_referer_source_grouped();
 		$this->view->sources = $this->Orders->order_referer_source();
@@ -78,6 +79,7 @@ class ChurnExplorer extends Controller {
 		$sourceGrouped = $options['source_grp'] ?? null;
 		$source = $options['source'] ?? null;
 		$testgroup = $options['testgroup'] ?? null;
+		$paymethod = $options['paymethod'] ?? null;
 
 		$orderFilters = [];
 		$cancelFilters = [];
@@ -125,6 +127,11 @@ class ChurnExplorer extends Controller {
 		if (!empty($testgroup)) {
 			array_push($orderFilters, "customer_testgroup = '$testgroup'");
 			array_push($cancelFilters, "customer_testgroup = '$testgroup'");
+		}
+
+		if (!empty($paymethod)) {
+			array_push($orderFilters, "order_payment_method = '$paymethod'");
+			array_push($cancelFilters, "order_payment_method = '$paymethod'");
 		}
 
 		if ($retention) {
@@ -203,7 +210,7 @@ class ChurnExplorer extends Controller {
 	private function sanitize_get_parameters() {
 		$params = array_map('strip_tags', $_GET);
 		//$params = array_map('htmlentities', $_GET); // Error With some Cats :/
-		$valid = array_flip(['from', 'to', 'compressed' , 'product', 'segment', 'testgroup', 'ressort', 'type', 'audience', 'origin', 'source_grp', 'source', 'days']);
+		$valid = array_flip(['from', 'to', 'compressed' , 'product', 'segment', 'testgroup', 'ressort', 'type', 'audience', 'origin', 'source_grp', 'source', 'days', 'paymethod']);
 		$params = array_intersect_key($params,$valid);
 
 		foreach ($params as $key => $value) {

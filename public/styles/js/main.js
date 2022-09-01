@@ -187,8 +187,7 @@ class Artikel {
 				let newPath = oldPath.replace(/^[^.]*/, subdomain)
 				let page = new URL(oldPath);
 
-				//window.location = 'https://' + newPath;
-				window.location = `https://${subdomain}.lr-digital.de/switch-portal?page=${page.pathname}&from=${from}&to=${to}`;
+				window.location = `https://${subdomain}.lr-digital.de/switch-portal?page=${page.pathname}&from=${from}&to=${to}&get=${page.search}`;
 
 			});
 		}

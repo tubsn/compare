@@ -283,7 +283,7 @@
 <?php foreach ($conversions as $conversion): ?>
 
 <?php if ($conversion['cancelled']): ?>
-<table class="fancy red">
+<table class="fancy table-cancelled">
 <?php else: ?>
 <table class="fancy">
 <?php endif; ?>

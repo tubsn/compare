@@ -38,14 +38,12 @@ class Warmup extends Controller {
 
 		$articles = $this->Articles->by_date_range($from, $to);
 
-		//dd($articles);
-
 		foreach ($articles as $article) {
 			$id = $article['id'];
 			$pubDate = formatDate($article['pubdate'],'Y-m-d');
 			$gaData = $this->Analytics->by_article_id($id, $pubDate);
 
-			$gaData['totals']['subscriberviews'] = $this->Kilkaya->subscriber($id, $pubDate);
+			$gaData['totals']['subscriberviews'] = $this->Kilkaya->subscribers($id, $pubDate);
 			$gaData['totals']['buyintent'] = $this->Analytics->buy_intention_by_article_id($id, $pubDate);
 
 			// Dont Upgrade Conversions in a Specific Time Period after the Plenigo V3 Update...

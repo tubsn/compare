@@ -97,6 +97,7 @@ class Chartengine
 
 	public function array_to_chartdata($data, $asInteger = false) {
 
+		if (empty($data)) {return null;}
 		$output['dimensions'] = array_keys($data);
 
 		// For Multidimensional Chart Arrays e.g. [2022-01-01][data][values]
@@ -165,11 +166,19 @@ class Chartengine
 	}
 
 	public function implode($array, $asInteger = false, $caps = false) {
+
 		if ($caps) {$array = array_map(function ($set) { return ucfirst($set); }, $array);}
 		if ($asInteger) {
+			// still needs to return 'null' for null values!
+			$array = array_map(function ($set) {
+				if (!$set) {$set = "'null'";}
+				return $set;
+			}, $array);
+
 			$string = implode(",", $array);
 			return trim($string, ',');
 		}
+
 		$string = "'" . implode("','", $array) . "'";
 		$string = str_replace("''", 'null', $string);
 
@@ -273,6 +282,7 @@ class Chartengine
 			$this->operation,
 			$this->filter
 		);
+
 	}
 
 

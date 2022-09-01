@@ -22,11 +22,20 @@ class Readers extends Controller {
 		$this->Orders->to = '3000-01-01';
 		$customers = $this->Orders->customers_with_multiple_orders();
 
-		//dd($customers);
+		$stats = [];
+		foreach ($customers as $id => $customer) {
+			$orders = count($customer);
+			$stats[$id] = $orders;
+		}
 
+		$stats = array_count_values($stats);
 
+		$this->view->stats = $stats;
+		$this->view->multipleOrders = array_sum($stats);
+		$this->view->orders = $this->Orders->count();
 		$this->view->customers = $customers;
 
+		$this->view->title = 'Übersicht von Kunden mit Mehrfach-Bestellungen';
 		$this->view->render('orders/multiple-orders');
 
 	}

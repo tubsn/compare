@@ -4,8 +4,8 @@ switch (PORTAL) {
 
 	case 'LR':
 
-		define('PORTAL_URL', 'https://www.lr-online.de');
-		define('PORTAL_URL_SHORT', 'www.lr-online.de');
+		define('PORTAL_URL', 'https://www.lr-online.de'); // used for Article Imports
+		define('PORTAL_URL_SHORT', 'www.lr.de');
 		define('PORTAL_EPAPER_URL', 'https://epaper.lr-online.de');
 		define('PORTAL_NAME', 'LR');
 
@@ -342,7 +342,6 @@ switch (PORTAL) {
 			'https://www.swp.de/sport/fussball-lokal/?_XML=RSS',
 			'https://www.swp.de/sport/mehr-lokalsport/?_XML=RSS',
 			'https://www.swp.de/politik/?_XML=RSS',
-			'https://www.swp.de/politik/landespolitik/?_XML=RSS',
 			'https://www.swp.de/wirtschaft/?_XML=RSS',
 		]);
 	break;

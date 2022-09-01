@@ -1,17 +1,47 @@
 <main class="">
 
+<style>
+.calendar-timeframe, .calendar-datepicker {display:none !important;}
+</style>
+
 <?php include tpl('navigation/date-picker');?>
 
 <?php if ($page['title']): ?>
 <h1><?=$page['title']?></h1>
 <?php endif; ?>
 
-<p>Übersicht von Kunden mit Mehrfach Bestellungen</p>
 
 <p class="light-box" style="margin-bottom:2em;">
-Gesamtbestellungen: <b class="conversions">blub</b>
-&emsp; davon Plusseite: <b class="blue">blub</b>
+Gesamtbestellungen seit April 2021: <b class="conversions"><?=$orders?></b>
+&emsp; Mehrfachbestellungen: <b class="blue"><?=$multipleOrders?></b>
+&emsp; Anteil von Mehrfachbestellungen: <b class="blue"><?=percentage($multipleOrders,$orders)?>%</b>
 </p>
+
+
+<h3>Verteilung Kunden mit Mehrfachabos</h3>
+<table class="fancy mb js-sortable">
+<thead>
+<tr class="text-left">
+	<th>Anzahl an Bestellungen</th>
+	<th>Kunden</th>
+	<th>Anteil an Gesamtabos</th>
+</tr>
+</thead>
+<tbody>
+<?php foreach ($stats as $numOfOrders => $count): ?>
+<tr>
+<td><?=$numOfOrders?></td>
+<td><?=$count?></td>
+<td><?=percentage($count, $orders)?>&thinsp;%</td>
+</tr>
+<?php endforeach ?>
+</tbody>
+</table>
+
+
+<hr>
+
+<h3>Kundenliste nach Plenigonummern</h3>
 
 <?php foreach ($customers as $customerID => $orders): ?>
 

@@ -98,15 +98,15 @@ class DailyKPIs extends Model
 				 FROM $tablename
 				 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
 				 GROUP BY datum
+				 HAVING champions IS NOT NULL OR unknown IS NOT NULL
 				 ORDER BY date ASC"
 			);
 
 		}
 
-
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
 		$output = $SQLstatement->fetchAll(\PDO::FETCH_UNIQUE);
-		if (empty($output)) {return null;}
+		if (empty($output)) {return [];}
 		return $output;
 
 	}
@@ -134,6 +134,7 @@ class DailyKPIs extends Model
 				 FROM $tablename
 				 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
 				 GROUP BY datum
+				 HAVING users IS NOT NULL OR users_reg IS NOT NULL
 				 ORDER BY date ASC"
 			);
 
@@ -158,15 +159,15 @@ class DailyKPIs extends Model
 				 FROM $tablename
 				 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
 				 GROUP BY datum
+				 HAVING users IS NOT NULL OR users_reg IS NOT NULL
 				 ORDER BY date ASC"
 			);
 
 		}
 
-
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
 		$output = $SQLstatement->fetchAll(\PDO::FETCH_UNIQUE);
-		if (empty($output)) {return null;}
+		if (empty($output)) {return [];}
 		return $output;
 
 	}
@@ -211,6 +212,7 @@ class DailyKPIs extends Model
 				 FROM $tablename
 				 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
 				 GROUP BY datum
+				 HAVING reg_quote IS NOT NULL
 				 ORDER BY date ASC"
 			);
 
@@ -228,11 +230,11 @@ class DailyKPIs extends Model
 				 FROM $tablename
 				 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
 				 GROUP BY datum
+				 HAVING reg_quote IS NOT NULL
 				 ORDER BY date ASC"
 			);
 
 		}
-
 
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
 		$output = $SQLstatement->fetchAll(\PDO::FETCH_UNIQUE);
@@ -259,10 +261,10 @@ class DailyKPIs extends Model
 			ROUND(loyals / (champions+high_usage_irregulars+flybys+low_usage_irregulars+loyals+nonengaged) * 100,3) as loyals,
 			ROUND(nonengaged / (champions+high_usage_irregulars+flybys+low_usage_irregulars+loyals+nonengaged) * 100,3) as nonengaged
 
-			 FROM $tablename
+			FROM $tablename
 
-			 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
-			 ORDER BY date ASC"
+			WHERE DATE(`date`) BETWEEN :startDate AND :endDate
+			ORDER BY date ASC"
 		);
 
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);

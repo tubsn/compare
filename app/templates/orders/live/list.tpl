@@ -4,7 +4,6 @@
 
 <h1><?=$page['title'] ?? 'Bestellungen'?>: <?=count($orders)?></h1>
 
-<p>Achtung aktuell können nur maximal 100 Einträge angezeigt werden!</p>
 
 <table class="fancy js-sortable wide">
 <thead>

@@ -8,6 +8,7 @@
 
 <h1 class="text-center"><?=PORTAL?>+ Aboentwicklung </h1>
 
+<?php if (PORTAL == 'LR'): ?>
 
 <figure class="mb">
 	<h3 class="text-center">aktive Abonnenten</h3>
@@ -20,14 +21,42 @@
 
 		'stacked' => true,
 		'showValues' => false,
-		'name' => ['Vollabo', 'Probe 1Monat', 'Probe 3Für3', '99cent (PrintKombi)', 'Jahresabos'],
+		'name' => ['Vollabo', 'Probe 1 Monat', 'Probe 3 Monate', '99cent (PrintKombi)', 'Jahresabos'],
 		'template' => 'charts/default_bar_chart',
 	]);?>
 </figure>
 
+<?php else: ?>
+
+<figure class="mb">
+	<h3 class="text-center">aktive Abonnenten</h3>
+	<?=$charts->create([
+		'metric' => [
+			$charts->cut_left($sales['paying'],16),
+			$charts->cut_left($sales['trial1month'],16),
+			$charts->cut_left($sales['trial3for3'],16),
+		    $charts->cut_left($sales['yearly'],16)
+		],
+		'dimension' => $charts->cut_left($sales['dimensions'],16),
+		'color' => ['#1572A1', '#9AD0EC', '#9AD0EC', '#EFDAD7', '#D885A3'],
+		'height' => 450,
+		'legend' => 'top',
+
+		'stacked' => true,
+		'showValues' => false,
+		'name' => ['Vollabo', 'Probe 1 Monat', 'Probe 3 Monate', 'Jahresabos'],
+		'template' => 'charts/default_bar_chart',
+	]);?>
+</figure>
+
+<?php endif ?>
+
+
 
 <div class="col-2" style="grid-template-columns: 1fr 1fr 1fr; margin-top:2em;">
 
+
+<?php if (PORTAL == 'LR'): ?>
 
 	<figure class="mb">
 		<h3 class="text-center">aktive Vollabos + Proben + Jahresabos</h3>
@@ -57,10 +86,49 @@
 			'stacked' => true,
 			'xfont' => '13px',
 			'showValues' => false,
-			'name' => ['1Monat Proben', '3für3 Proben'],
+			'name' => ['1 Monat Proben', '3 Monats Proben'],
 			'template' => 'charts/default_bar_chart',
 		]);?>
 	</figure>
+
+<?php else: ?>
+
+
+
+	<figure class="mb">
+		<h3 class="text-center">aktive Vollabos + Proben + Jahresabos</h3>
+		<?=$charts->create([
+			'metric' => $charts->cut_left($sales['active'],16),
+			'dimension' => $charts->cut_left($sales['dimensions'],16),
+			'color' => '#1572A1',
+			'height' => 350,
+			'legend' => 'top',
+			'xfont' => '13px',
+			'area' => true,
+			'showValues' => false,
+			'name' => 'Aktive Abos',
+			'template' => 'charts/default_line_chart',
+		]);?>
+	</figure>
+
+	<figure class="mb">
+		<h3 class="text-center">aktive Proben</h3>
+		<?=$charts->create([
+			'metric' => [$charts->cut_left($sales['trial1month'],16), $charts->cut_left($sales['trial3for3'],16)],
+			'dimension' => $charts->cut_left($sales['dimensions'],16),
+			'color' => '#9AD0EC',
+			'height' => 350,
+			'legend' => 'top',
+			'area' => false,
+			'stacked' => true,
+			'xfont' => '13px',
+			'showValues' => false,
+			'name' => ['1 Monat Proben', '3 Monats Proben'],
+			'template' => 'charts/default_bar_chart',
+		]);?>
+	</figure>
+
+<?php endif ?>
 
 
 	<figure class="mb">

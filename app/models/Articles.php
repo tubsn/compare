@@ -429,7 +429,6 @@ class Articles extends Model
 	}
 
 
-
 	public function by_date_range($start, $end = null) {
 
 		if (is_null($end)) {$end = $start;}
@@ -974,6 +973,36 @@ class Articles extends Model
 		}
 
 		return $audienceArray;
+
+	}
+
+
+	public function cluster_by_ressort($cluster = 'audience') {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$clusters = $this->list_distinct($cluster);
+
+		$output = [];
+
+		foreach ($clusters as $clusterName) {
+
+			$SQLstatement = $this->db->connection->prepare(
+				"SELECT ressort, count(id) as articles, sum(subscriberviews) as subscriberviews, sum(conversions) as conversions, sum(pageviews) as pageviews
+				 FROM `articles`
+				 WHERE `$cluster` = '$clusterName'
+				 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate
+				 GROUP BY ressort
+				 ORDER BY sum(subscriberviews) DESC"
+			);
+
+			$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+			$dbData = $SQLstatement->fetchall(\PDO::FETCH_UNIQUE);
+			$output[$clusterName] = $dbData;
+		}
+
+		return $output;
 
 	}
 
