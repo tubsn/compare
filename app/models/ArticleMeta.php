@@ -65,6 +65,8 @@ class ArticleMeta extends Model
 	}
 
 	public function topics_for($IDs) {
+
+		if (empty($IDs)) {throw new \Exception("No Article IDs given", 404);}
 		$IDs = implode(',', array_map('intval', $IDs)); // Intval for all IDs
 		$table = $this->db->table;
 		$SQLstatement = $this->db->connection->prepare(
@@ -197,6 +199,9 @@ class ArticleMeta extends Model
 
 	public function import_drive_data() {
 		$drive = $this->drive_data_from_bigquery();
+
+		//dd($drive);
+
 		$drive = array_map([$this, 'map_drive_data'], $drive);
 	}
 

@@ -45,6 +45,13 @@
 <hr />
 
 
+<h3>Mini-Stats</h3>
+<p>
+Berechnung von aktiven Jahresabos, die in ein normalabo gewechselt sind (Für Aktive Kunden Statistik).
+</p>
+	<a class="button noline mb" href="/orders/yearlyconverters">Jahresabo Converter</a>
+<hr />
+
 <h3>Daten-Exports</h3>
 <p>
 Hier können Artikel, Conversions und Kampagnendaten inklusive Klick- und Kündigerstatistik als Excel-Datei exportiert werden.

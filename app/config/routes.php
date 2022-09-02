@@ -82,7 +82,7 @@ $routes->get('/orders/subscription/{id:\d+}', 'Livedata@subscription');
 
 $routes->post('/orders/set_date', 'Livedata@set_date');
 $routes->post('/orders/set_paid_filter', 'Livedata@set_paid_filter');
-
+$routes->get('/orders/yearlyconverters', 'Orders@yearly_converters');
 
 // Invoices & Transactions
 $routes->get('/invoices[/{month}]', 'Transactions@invoice_download');

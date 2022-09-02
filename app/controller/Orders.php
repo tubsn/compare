@@ -81,6 +81,10 @@ class Orders extends Controller {
 
 	}
 
+	public function yearly_converters() {
+		dump($this->Orders->count_yearly_into_default_subscription());
+	}
+
 	public function utm($field = 'campaign', $campaign = null) {
 
 		Session::set('referer', '/orders/utm');

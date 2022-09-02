@@ -419,6 +419,21 @@ class Orders extends Model
 		return $this->count("order_origin = 'Plusseite'");
 	}
 
+	public function count_yearly_into_default_subscription() {
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT count(*) as orders
+			 FROM `conversions`
+			 WHERE `subscription_internal_title` LIKE '%12M%' 
+			 AND `subscription_price` < 10 
+			 AND (`subscription_end_date` is null || `subscription_end_date` > CURRENT_DATE)"
+		);
+
+		$SQLstatement->execute();
+		$output = $SQLstatement->fetch();
+		return $output['orders'];
+	}
+
 	public function list_distinct($column) {
 
 		$column = strip_tags($column);
