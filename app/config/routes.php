@@ -4,14 +4,9 @@
 $routes->get('/', 'Stats@dashboard');
 
 // Teststuff
-$routes->get('/showip', 'Test@showip');
-
 $routes->get('/cards', 'Lists@cards');
 $routes->get('/optins', 'Test@optins');
-$routes->get('/freecharts', 'Stats@freecharts');
-$routes->get('/filter', 'Lists@filter');
-$routes->post('/filter', 'Lists@filter');
-$routes->get('/segments', 'Test@segments');
+
 
 // Article Lists
 $routes->get('/unclassified/types', 'Lists@unset_only');
@@ -56,16 +51,18 @@ $routes->get('/print/germany', 'Orders@map_print_germany');
 $routes->get('/print/local/cancelled', 'Orders@map_print_local_cancelled');
 $routes->get('/print/germany/cancelled', 'Orders@map_print_germany_cancelled');
 
+// Maps
+$routes->get('/orders/map/local', 'Maps@map_local');
+$routes->get('/orders/map/germany', 'Maps@map_germany');
+$routes->get('/orders/map/local/cancelled', 'Maps@map_local_cancelled');
+$routes->get('/orders/map/germany/cancelled', 'Maps@map_germany_cancelled');
+
 // Orders
 $routes->get('/orders', 'Orders@list');
 $routes->get('/orders/list-cancellations', 'Orders@list_cancellations');
 $routes->get('/orders/list-daily', 'Orders@list_by_day');
 $routes->get('/orders/behavior', 'Orders@customer_behavior');
 $routes->get('/orders/clustered', 'Orders@clustered');
-$routes->get('/orders/map/local', 'Orders@map_local');
-$routes->get('/orders/map/germany', 'Orders@map_germany');
-$routes->get('/orders/map/local/cancelled', 'Orders@map_local_cancelled');
-$routes->get('/orders/map/germany/cancelled', 'Orders@map_germany_cancelled');
 $routes->get('/orders/utm[/{field}/{campaign}]', 'Orders@utm');
 $routes->get('/orders/import/{date:[\d]{4}-[\d]{2}-[\d]{2}?}', 'Import@order_import');
 
@@ -103,13 +100,13 @@ $routes->get('/stats/cluster/tags', 'Stats@cluster_tags');
 
 $routes->get('/stats/artikel', 'Stats@artikel');
 $routes->get('/stats/segments', 'Stats@segments');
-$routes->get('/stats/pubtime[/{audience}]', 'Test@publications');
+$routes->get('/stats/pubtime[/{audience}]', 'Stats@publications');
 
 
 // Portal Compare
 $routes->get('/portals', 'LongtermAnalysis@all_portals');
 
-// Longterm Analysis
+// Longterm KPI Overview
 $routes->get('/longterm', 'LongtermAnalysis@overview');
 
 // campaigns
@@ -128,9 +125,9 @@ $routes->get('/orders/explorer', 'ChurnExplorer@index');
 $routes->get('/api/explorer', 'ChurnExplorer@api');
 
 // Apis
-$routes->get('/api/orders', 'LongtermAnalysis@provide_portal_orders');
-$routes->get('/api/kpis', 'LongtermAnalysis@provide_portal_kpis');
-$routes->get('/api/portals', 'LongtermAnalysis@provide_combined_kpis');
+$routes->get('/api/orders', 'API@provide_portal_orders');
+$routes->get('/api/kpis', 'API@provide_portal_kpis');
+$routes->get('/api/portals', 'API@provide_combined_kpis');
 $routes->get('/api/yesterday', 'Exports@yesterday_stats');
 $routes->get('/api/orders-today', 'Livedata@api_orders_today');
 $routes->get('/api/articles-today', 'Livedata@api_articles_today');
@@ -139,6 +136,7 @@ $routes->get('/api/stats-today[/{resolution:\d+}]', 'Livedata@api_stats_today');
 $routes->get('/api/active-users', 'Livedata@api_active_users');
 $routes->get('/api/live', 'Livedata@api_live');
 $routes->get('/api/teaser/{date}/{hour}', 'Teaser@api_positions');
+$routes->get('/showip', 'API@showip');
 
 // Readers
 $routes->get('/readers/{id:[\d]{12}?}', 'Readers@detail');
@@ -216,6 +214,9 @@ $routes->get('/admin/warmup/sources[/{daysago}]', 'Warmup@enrich_conversions_wit
 $routes->get('/admin/warmup/buyintents[/{daysago}]', 'Warmup@enrich_article_with_buy_intents');
 $routes->get('/admin/warmup/{weeksago}', 'Warmup@weeks_ago');
 $routes->get('/admin/mailsend', 'Newsletter@trigger_newsletter_sends');
+
+// Manual Segment imports
+$routes->get('/segments', 'Import@segments');
 
 // Admin - Typemanager
 $routes->get('/admin/cluster', 'Admin@cluster_manager');

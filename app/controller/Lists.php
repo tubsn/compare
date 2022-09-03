@@ -19,7 +19,7 @@ class Lists extends Controller {
 		$this->view->title = 'Artikel-Übersicht';
 		$this->view->info = '(Es werden maximal 2000 Artikel dargestellt)';
 		$this->view->referer('/');
-		$this->view->render('pages/list', $viewData);
+		$this->view->render('articles/list', $viewData);
 	}
 
 
@@ -30,7 +30,7 @@ class Lists extends Controller {
 		$viewData['articles'] = $this->Articles->conversions_only();
 
 		$this->view->title = 'Krams';
-		$this->view->render('pages/cards', $viewData);
+		$this->view->render('articles/cards', $viewData);
 
 	}
 
@@ -41,7 +41,7 @@ class Lists extends Controller {
 		$this->view->title = 'Artikel ohne Themenzuweisung: ' . $count;
 		$this->view->info = 'Liste aller nicht zugeordneten Artikel für diesen Zeitraum <b>(um alle zu listen oben rechts "alle Daten" einstellen)</b> | <a href="/admin/topics">Artikel automatisch zuordnen (Beta)</a>';
 		$this->view->referer('/unclassified/types');
-		$this->view->render('pages/list', $viewData);
+		$this->view->render('articles/list', $viewData);
 	}
 
 	public function unset_audience_only() {
@@ -51,7 +51,7 @@ class Lists extends Controller {
 		$this->view->title = 'Artikel ohne Audience: ' . $count;
 		$this->view->info = 'Liste aller Artikel ohne Audience für diesen Zeitraum <b>(um alle zu listen oben rechts "alle Daten" einstellen)</b>';
 		$this->view->referer('/unclassified/audiences');
-		$this->view->render('pages/list', $viewData);
+		$this->view->render('articles/list', $viewData);
 	}
 
 	public function conversions() {
@@ -75,7 +75,7 @@ class Lists extends Controller {
 		}
 		$this->view->info = '<b>Hinweis:</b> Auf dieser Seite wird nach dem Publikationsdatum des Artikels gefiltert! Die <b>Gesamtzahl der Conversions</b> ergibt sich aus der <b>Summe, der in den Artikeln erreichten Conversions</b>, die an diesen Tagen Produziert wurden. <br/><b>Achtung:</b> Im Diagramm werden taggenau <b>alle Conversions in diesem Zeitraum</b> gezeigt (auch Plusseite).';
 		$this->view->referer('/conversions');
-		$this->view->render('pages/list', $viewData);
+		$this->view->render('articles/list', $viewData);
 	}
 
 	public function pageviews() {
@@ -96,7 +96,7 @@ class Lists extends Controller {
 		$this->view->title = 'Klick-Highlights: ' . $count;
 		$this->view->info = 'Auflistung von Artikeln mit <b>mehr als 2500</b> klicks, die im eingestellten Zeitraum publiziert wurden.';
 		$this->view->referer('/pageviews');
-		$this->view->render('pages/list', $viewData);
+		$this->view->render('articles/list', $viewData);
 	}
 
 
@@ -122,7 +122,7 @@ class Lists extends Controller {
 		$this->view->title = 'Artikel mit mehr als ' . $minScore . ' Score Punkten';
 		$this->view->info = 'Score-Formel: (conversions * 20) + (pageviews / 1000 * 5) + ((avgmediatime / 10) * 2) + (subscriberviews / 100 * 3)';
 		$this->view->referer('/score');
-		$this->view->render('pages/list', $viewData);
+		$this->view->render('articles/list', $viewData);
 
 	}
 
@@ -145,7 +145,7 @@ class Lists extends Controller {
 		$this->view->title = 'Mediatime-Highlights: ' . $count;
 		$this->view->info = 'Auflistung von Artikeln mit <b>mehr als 150s</b> durchschnittlicher Mediatime, die im eingestellten Zeitraum publiziert wurden.';
 		$this->view->referer('/mediatime');
-		$this->view->render('pages/list', $viewData);
+		$this->view->render('articles/list', $viewData);
 	}
 
 	public function subscribers() {
@@ -169,7 +169,7 @@ class Lists extends Controller {
 		$this->view->title = 'Von Abonnenten gelesene Artikel';
 		$this->view->info = '<b>Bitte beachten:</b> wir haben verhältnismäßig wenige aktive Abonnenten die einen Plusartikel auch tatsächlich lesen können!';
 		$this->view->referer('/subscribers');
-		$this->view->render('pages/list', $viewData);
+		$this->view->render('articles/list', $viewData);
 	}
 
 	public function author($author) {
@@ -196,7 +196,7 @@ class Lists extends Controller {
 		$this->view->title = 'Autorenseite - '. $author . ' - Artikel: ' . $count;
 		$this->view->info = null;
 		$this->view->referer('/author/' . $author);
-		$this->view->render('pages/list', $viewData);
+		$this->view->render('articles/list', $viewData);
 	}
 
 	public function author_fuzzy($author) {
@@ -223,7 +223,7 @@ class Lists extends Controller {
 		$this->view->title = 'Autorenseite - '. $author . ' - Artikel: ' . $count;
 		$this->view->info = null;
 		$this->view->referer('/author/' . $author);
-		$this->view->render('pages/list', $viewData);
+		$this->view->render('articles/list', $viewData);
 	}
 
 
@@ -265,7 +265,7 @@ class Lists extends Controller {
 		$this->view->navigation = 'navigation/ressort-menu';
 		$this->view->title = 'Artikel aus ' . ucwords($ressort) . ': ' . $count;
 		$this->view->info = null;
-		$this->view->render('pages/list', $viewData);
+		$this->view->render('articles/list', $viewData);
 	}
 
 	public function type($type = null) {
@@ -291,7 +291,7 @@ class Lists extends Controller {
 
 		$this->view->navigation = 'navigation/type-menu';
 		$this->view->title = $type . ' - Artikel: ' . $count;
-		$this->view->render('pages/list', $viewData);
+		$this->view->render('articles/list', $viewData);
 	}
 
 	public function audience($audience = null) {
@@ -317,14 +317,11 @@ class Lists extends Controller {
 
 		$this->view->navigation = 'navigation/audience-menu';
 		$this->view->title = 'Audience: ' . $audience . ' - Artikel: ' . $count;
-		$this->view->render('pages/list', $viewData);
+		$this->view->render('articles/list', $viewData);
 	}
 
 	public function tag($tag = null) {
 		Session::set('referer', '/tag/'.$tag);
-
-		//$this->Articles->from = '2000-01-01';
-		//$this->Articles->to = date('Y-m-d');
 
 		$viewData['tagList'] = $this->Articles->list_distinct('tag');
 		if (is_null($tag)) {$tag = $viewData['tagList'][0] ?? '';}
@@ -332,12 +329,6 @@ class Lists extends Controller {
 		$tag = $this->decode_url($tag);
 
 		$viewData['articles'] = $this->Articles->list_by($tag, 'tag');
-
-		/*
-		$minDate = min(array_column($viewData['articles'], 'pubdate'));
-		$this->ArticleKPIs->from = date('Y-m-d', strtotime($minDate));
-		$this->ArticleKPIs->to = date('Y-m-d');
-		*/
 
 		$viewData['primaryChart'] = $this->ArticleKPIs->combined_kpis_filtered_chart($tag, 'tag');
 
@@ -359,7 +350,7 @@ class Lists extends Controller {
 		$this->view->navigation = 'navigation/tag-menu';
 		$this->view->title = '#Tag - ' . ucwords($tag) . ': ' . $count;
 		$this->view->info = null;
-		$this->view->render('pages/list', $viewData);
+		$this->view->render('articles/list', $viewData);
 
 	}
 
@@ -413,7 +404,7 @@ class Lists extends Controller {
 		}
 
 		$this->view->title = ucfirst($type) . ' - Artikel: ' . count($viewData['articles'] ?? []);
-		$this->view->render('pages/list', $viewData);
+		$this->view->render('articles/list', $viewData);
 	}
 
 	public function discover() {

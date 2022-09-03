@@ -72,14 +72,14 @@ class Articles extends Controller {
 
 		// Rendering
 		$this->view->title = htmlentities($viewData['article']['title']);
-		$this->view->render('pages/detail', $viewData);
+		$this->view->render('articles/detail', $viewData);
 	}
 
 	public function edit($id) {
 
 		$viewData['article'] = $this->Articles->get($id);
 		$this->view->backlink = '/artikel/' . $id;
-		$this->view->render('pages/edit', $viewData);
+		$this->view->render('articles/edit', $viewData);
 
 	}
 
@@ -123,7 +123,7 @@ class Articles extends Controller {
 		$viewData['medium'] = $mediumStats;
 
 		$this->view->backlink = '/artikel/' . $id;
-		$this->view->render('pages/medium', $viewData);
+		$this->view->render('articles/medium', $viewData);
 
 	}
 

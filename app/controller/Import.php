@@ -108,10 +108,16 @@ class Import extends Controller {
 		echo 'Processing-Time: <b>'.round((microtime(true)-APP_START)*1000,2) . '</b>ms';
 	}
 
+	// Used for manuell reimports 
+	public function segments() {
+		$this->Readers->import_user_segments('2022-08-29', '2022-09-01');
+		//$CSVImport = new CSVImports();
+		//$CSVImport->csv_import_segments_by_date();
+	}
+
 	public function experiment_data() {
 		$CSVImports = New CSVImports();
 		$CSVImports->import_drive_experiment_data_from_csv();
 	}
-
 
 }

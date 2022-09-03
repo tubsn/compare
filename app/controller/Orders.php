@@ -43,7 +43,7 @@ class Orders extends Controller {
 	}
 
 	public function list_by_day() {
-		
+
 		Session::set('referer', '/orders/list-daily');
 		$this->view->title = 'Conversion-Eingang nach Tagen';
 
@@ -210,8 +210,6 @@ class Orders extends Controller {
 		$viewData['activeAfterOneYear'] = $yearlyCustomers[1]['orders'] ?? 0;
 		$viewData['yearlyActiveTimespan'] = $this->Charts->convert_as_integer($yearlyCustomers);
 
-		//dd($viewData['yearlyActiveTimespan']);
-
 		$viewData['churnSameDay'] = $this->Orders->sum_up($this->Orders->cancelled_by_retention_days('retention = 0'),'cancelled_orders');
 		$viewData['churn30'] = $this->Orders->sum_up($this->Orders->cancelled_by_retention_days('retention < 31'),'cancelled_orders');
 		$viewData['churn90'] = $this->Orders->sum_up($this->Orders->cancelled_by_retention_days('retention < 90'),'cancelled_orders');
@@ -220,82 +218,9 @@ class Orders extends Controller {
 		$this->view->charts = $this->Charts;
 		$this->view->longterm = $this->Longterm->chartdata('orders');
 
-		//dd($this->view->longterm);
-
 		$this->view->render('orders/cancellations', $viewData);
 
 	}
-
-	public function map_local($cancelled = false) {
-
-		Session::set('referer', '/orders/map/local');
-
-		$datasets = count($this->Orders->group_by('customer_postcode') ?? 0);
-		$this->view->title = 'Verteilung von Käufen nach Postleitzahl - Datensätze: ' . $datasets;
-
-		if ($cancelled) {
-			$this->view->showCancelled = true;
-			$this->view->title = 'Kündigerquote nach Postleitzahl - Datensätze: ' . $datasets;
-		}
-
-		$this->view->PLZs = $this->Maps->colored_geo_orders();
-		$this->view->render('orders/map-local');
-	}
-
-	public function map_germany($cancelled = false) {
-
-		Session::set('referer', '/orders/map/germany');
-
-		$datasets = count($this->Orders->group_by('customer_postcode') ?? 0);
-		$this->view->title = 'Verteilung von Käufen nach Postleitzahl - Datensätze: ' . $datasets;
-
-		if ($cancelled) {
-			$this->view->showCancelled = true;
-			$this->view->title = 'Kündigerquote nach Postleitzahl - Datensätze: ' . $datasets;
-		}
-
-		$this->view->PLZs = $this->Maps->colored_geo_orders_3steps();
-		$this->view->render('orders/map-germany');
-	}
-
-	public function map_local_cancelled() {$this->map_local(true);}
-	public function map_germany_cancelled() {$this->map_germany(true);}
-
-
-
-	public function map_print_local($cancelled = false) {
-
-		Session::set('referer', '/print/local');
-
-		$this->view->title = 'LR Printabos nach Postleitzahl (54336 Abonennten)';
-
-		if ($cancelled) {
-			$this->view->showCancelled = true;
-			$this->view->title = 'Kündiger letzte 3 Monate nach Postleitzahl';
-		}
-
-		$this->view->PLZs = $this->Maps->csv_import();
-		$this->view->render('orders/map-print-local');
-	}
-
-	public function map_print_germany($cancelled = false) {
-
-		Session::set('referer', '/print/germany');
-
-		$this->view->title = 'LR Printabos nach Postleitzahl (54336 Abonennten)';
-
-		if ($cancelled) {
-			$this->view->showCancelled = true;
-			$this->view->title = 'Kündiger letzte 3 Monate nach Postleitzahl';
-		}
-
-		$this->view->PLZs = $this->Maps->csv_import();
-		$this->view->render('orders/map-print-ger');
-	}
-
-	public function map_print_local_cancelled() {$this->map_print_local(true);}
-	public function map_print_germany_cancelled() {$this->map_print_germany(true);}
-
 
 
 }

@@ -21,81 +21,8 @@ class Test extends Controller {
 	public function optins() {
 		$plenigo = new PlenigoApi;
 		dd($plenigo->test());
-	}
 
-
-
-	public function showip() {
-
-		dd($_SERVER['REMOTE_ADDR']);
-
-	}
-
-
-	public function segments() {
-
-		$this->Readers->import_user_segments('2022-08-29', '2022-09-01');
-		//$CSVImport = new CSVImports();
-		//$CSVImport->csv_import_segments_by_date();
-
-	}
-
-
-	public function index($id) {
-
-		$article = $this->Articles->get($id);
-		$pubDate = formatDate($article['pubdate'],'Y-m-d');
-
-		$buyintent = $this->Analytics->buy_intention_by_article_id($id, $pubDate);
-
-
-		echo 'Paywallklicks: ' . $buyintent .'<br>';
-		echo 'Conversions:' . $article['conversions'] .'<br>';
-		dump($article);
-
-	}
-
-	public function publications($audience = ARTICLE_AUDIENCES[0]) {
-
-		$this->view->audienceList = ARTICLE_AUDIENCES;
-
-		$articles = $this->Articles->audience_by_time($audience);
-		$orders = $this->Orders->audience_by_time($audience);
-		$sessions = $this->Analytics->use_timeframe_by_audience(ucfirst($audience));
-
-		$data = [];
-		foreach (range(0,23) as $key => $void) {
-			$data[$key]['articles'] = $articles[$key]['articles'] ?? 0;
-			$data[$key]['orders'] = $orders[$key]['orders'] ?? 0;
-			$data[$key]['sessions'] = $sessions[$key]['Sessions'] ?? 0;
-		}
-
-		$this->view->audience = ucFirst($audience);
-		$this->view->chart = $this->Charts->convert($data);
-		$this->view->charts = $this->Charts;
-
-		$this->view->title = 'Zeitliche Interessensverteilung: ' . ucFirst($audience);
-		$this->view->render('pages/audiences-by-time');
-
-	}
-
-
-	private function fill_gaps($array) {
-
-		$maxDays = 23;
-		$range = range(0,$maxDays);
-
-		$out = [];
-		foreach ($range as $day) {
-			if (isset($array[$day])) {
-				$out[$day] = $array[$day];
-			}
-			else {
-				$out[$day]['articles'] = 0;
-			}
-		}
-
-		return $out;
+		//$this->view->active = $this->Orders->active_after_days(60);
 
 	}
 

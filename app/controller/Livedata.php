@@ -38,7 +38,7 @@ class Livedata extends Controller {
 		$viewData['articles'] = $this->Kilkaya->articles_today();
 
 		$this->view->title = 'Livedashboard von Heute';
-		$this->view->render('pages/live', $viewData);
+		$this->view->render('stats/live', $viewData);
 
 	}
 
@@ -62,7 +62,7 @@ class Livedata extends Controller {
 
 		$import = new PortalImport();
 		$this->view->articles = $import->articles($swpID, $mozID, $lrID);
-		$this->view->render('pages/article-compare');
+		$this->view->render('articles/article-compare');
 
 	}
 

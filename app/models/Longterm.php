@@ -67,12 +67,6 @@ class Longterm extends Model
 
 	}
 
-	public function started_payment() {
-
-		return $this->Orders->active_after_days();
-
-	}
-
 	public function kpis($start = null) {
 
 		$cache = new RequestCache('kpidata' . $start . PORTAL, 30*60);

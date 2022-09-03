@@ -48,7 +48,7 @@ class Incentives extends Controller {
 
 		Session::set('referer', '/incentives');
 		$this->view->title = 'Entwicklung im Vergleich zum ersten Halbjahr';
-		$this->view->render('stats/kpi-entwicklung');
+		$this->view->render('pages/incentives');
 
 	}
 

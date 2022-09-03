@@ -12,7 +12,7 @@ class Stats extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Articles,Conversions,Orders,Plenigo,DailyKPIs,Linkpulse,Charts,ArticlesMeta');
+		$this->models('Articles,Conversions,Orders,Plenigo,DailyKPIs,Linkpulse,Charts,ArticlesMeta,Analytics');
 	}
 
 	public function dashboard() {
@@ -86,7 +86,7 @@ class Stats extends Controller {
 		$this->view->title = 'Statistiken nach Ressort';
 		$this->view->class = 'Ressort';
 		$this->view->urlPrefix = '/ressort/';
-		$this->view->render('stats/stats', $viewData);
+		$this->view->render('stats/content-stats', $viewData);
 
 	}
 
@@ -113,7 +113,7 @@ class Stats extends Controller {
 		$this->view->title = 'Statistiken nach Inhaltstyp / Thema';
 		$this->view->class = 'Thema';
 		$this->view->urlPrefix = '/type/';
-		$this->view->render('stats/stats', $viewData);
+		$this->view->render('stats/content-stats', $viewData);
 
 	}
 
@@ -140,7 +140,7 @@ class Stats extends Controller {
 		$this->view->title = 'Statistiken nach Audiences';
 		$this->view->class = 'Audience';
 		$this->view->urlPrefix = '/audience/';
-		$this->view->render('stats/stats', $viewData);
+		$this->view->render('stats/content-stats', $viewData);
 
 	}
 
@@ -166,7 +166,7 @@ class Stats extends Controller {
 		$this->view->title = 'Statistiken nach #-Tag';
 		$this->view->class = 'Tag';
 		$this->view->urlPrefix = '/tag/';
-		$this->view->render('stats/stats', $viewData);
+		$this->view->render('stats/content-stats', $viewData);
 
 	}
 
@@ -199,7 +199,7 @@ class Stats extends Controller {
 
 		$this->view->group = $groupedBy;
 		$this->view->title = 'Wertschöpfende Artikel';
-		$this->view->render('pages/wertschoepfend');
+		$this->view->render('articles/wertschoepfend');
 
 	}
 
@@ -308,21 +308,8 @@ class Stats extends Controller {
 		Session::set('referer', '/stats/artikel');
 		$viewData['charts'] = $this->Charts;
 		$this->view->title = 'Artikel Produktions Statistiken';
-		$this->view->render('pages/artikel-entwicklung', $viewData);
+		$this->view->render('articles/artikel-entwicklung', $viewData);
 	}
-
-
-	public function freecharts() {
-
-		$this->view->active = $this->Orders->active_after_days(60);
-
-		$this->view->charts = $this->Charts;
-		Session::set('referer', '/freecharts');
-		$this->view->title = 'Überblick';
-		$this->view->render('stats/testcharts');
-
-	}
-
 
 	public function cluster_audiences() {
 		$this->view->cluster = $this->Articles->cluster_by_ressort('audience');
@@ -340,6 +327,30 @@ class Stats extends Controller {
 		$this->view->cluster = $this->Articles->cluster_by_ressort('tag');
 		$this->view->title = 'Tag-Cluster nach Ressort';
 		$this->view->render('stats/cluster-stats');
+	}
+
+	public function publications($audience = ARTICLE_AUDIENCES[0]) {
+
+		$this->view->audienceList = ARTICLE_AUDIENCES;
+
+		$articles = $this->Articles->audience_by_time($audience);
+		$orders = $this->Orders->audience_by_time($audience);
+		$sessions = $this->Analytics->use_timeframe_by_audience(ucfirst($audience));
+
+		$data = [];
+		foreach (range(0,23) as $key => $void) {
+			$data[$key]['articles'] = $articles[$key]['articles'] ?? 0;
+			$data[$key]['orders'] = $orders[$key]['orders'] ?? 0;
+			$data[$key]['sessions'] = $sessions[$key]['Sessions'] ?? 0;
+		}
+
+		$this->view->audience = ucFirst($audience);
+		$this->view->chart = $this->Charts->convert($data);
+		$this->view->charts = $this->Charts;
+
+		$this->view->title = 'Zeitliche Interessensverteilung: ' . ucFirst($audience);
+		$this->view->render('pages/audiences-by-time');
+
 	}
 
 

@@ -11,11 +11,10 @@ class LongtermAnalysis extends Controller {
 	public function __construct() {
 		$this->view('DefaultLayout');
 		$this->models('Charts,Longterm,Orders,SalesKPIs');
+		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 	}
 
 	public function overview() {
-
-		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$from = date('Y-m-d', strtotime('yesterday -3days'));
 		$to = date('Y-m-d', strtotime('yesterday'));
@@ -47,34 +46,11 @@ class LongtermAnalysis extends Controller {
 
 		$this->view->title = 'Langzeit Analysen';
 		$this->view->templates['footer'] = null;
-		$this->view->render('stats/longterm');
+		$this->view->render('stats/portal-kpis');
 
 	}
-
-	public function view_calc_difference($current, $historic) {
-
-		$class = '';
-		$percent = percentage($current, $historic,1);
-		if ($percent != 0) {
-			$class = 'negative';
-			$percent = round($percent - 100,1);
-			$percent .= '&thinsp;%';
-
-			if (strpos($percent, '-') !== 0) {
-				$percent = '+' . $percent;
-				$class = 'positive';
-			}
-
-		}
-
-		return '<span style="font-family:var(--font-highlight)" class="' . $class . '">' . $percent . '</span>';
-
-	}
-
 
 	public function all_portals() {
-
-		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$orderData = $this->Longterm->portal_orders();
 
@@ -108,38 +84,28 @@ class LongtermAnalysis extends Controller {
 
 	}
 
+	public function view_calc_difference($current, $historic) {
 
-	public function provide_portal_orders() {
-		header('Access-Control-Allow-Origin: *');
-		$this->view->json($this->Longterm->orders());
-	}
+		$class = '';
+		$percent = percentage($current, $historic,1);
+		if ($percent != 0) {
+			$class = 'negative';
+			$percent = round($percent - 100,1);
+			$percent .= '&thinsp;%';
 
-	public function provide_portal_kpis() {
-		header('Access-Control-Allow-Origin: *');
-		$this->view->json($this->Longterm->kpis());
-	}
+			if (strpos($percent, '-') !== 0) {
+				$percent = '+' . $percent;
+				$class = 'positive';
+			}
 
-	public function provide_combined_kpis() {
+		}
 
-		$out['kpis'] = $this->Longterm->portal_KPIs();
-		$out['orders'] = $this->Longterm->portal_orders();
-		$out['quotes'] = $this->Longterm->combine_portal_data($out['orders'], $out['kpis']);
+		return '<span style="font-family:var(--font-highlight)" class="' . $class . '">' . $percent . '</span>';
 
-		header('Access-Control-Allow-Origin: *');
-		$this->view->json($out);
-
-	}
-
-	public function show_ip() {
-		echo $_SERVER['REMOTE_ADDR'];
-		die;
 	}
 
 	public function started_payment() {
-
-		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
-		dd($this->Longterm->started_payment());
-
+		dd($this->Orders->active_after_days(190));
 	}
 
 

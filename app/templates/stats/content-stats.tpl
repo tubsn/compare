@@ -43,7 +43,7 @@ Artikel: <b title="davon Plusartikel: <?=$plusarticles?>"><?=$articles?></b>
 
 	<div>
 		<?php if ($groupedStats): ?>
-		<?php include tpl('stats/stats-table');	?>
+		<?php include tpl('stats/content-stats-table');	?>
 		<?php else: ?>
 		<h3>keine Artikel vorhanden</h3>
 		<?php endif; ?>

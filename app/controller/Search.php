@@ -51,7 +51,7 @@ class Search extends Controller {
 		}
 
 		$this->view->title = 'Suchergebnisse: ' . $query;
-		$this->view->render('pages/list', $viewData);
+		$this->view->render('articles/list', $viewData);
 	}
 
 

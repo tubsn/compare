@@ -15,17 +15,17 @@ class StaticPages extends Controller {
 
 	public function faq() {
 		$this->view->title = 'Compare F.A.Q. - Häufig gestellte Fragen';
-		$this->view->render('pages/faq');
+		$this->view->render('pages/static/faq');
 	}
 
 	public function changelog() {
 		$this->view->title = 'Entwicklungs Dokumentation - Changelog';
-		$this->view->render('pages/changelog');
+		$this->view->render('pages/static/changelog');
 	}
 
 	public function favilink() {
-		$this->view->title = 'Favoriten Snippet einrichten';		
-		$this->view->render('pages/favilink');
+		$this->view->title = 'Favoriten Snippet einrichten';
+		$this->view->render('pages/static/favilink');
 	}
 
 }
