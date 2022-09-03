@@ -122,19 +122,11 @@ class DailyKPIs extends Model
 		if ($days < 31) {
 
 			$SQLstatement = $this->db->connection->prepare(
-				"SELECT
-				    date as datum,
-					sum(champions + high_usage_irregulars + low_usage_irregulars +
-					loyals + flybys + nonengaged + unknown) -
-					sum(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg +
-					loyals_reg + flybys_reg + nonengaged_reg + unknown_reg) as users,
-
-					sum(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg +
-					loyals_reg + flybys_reg + nonengaged_reg + unknown_reg) as users_reg
+				"SELECT date as datum, sum(users) as users, sum(subscribers) as subscribers
 				 FROM $tablename
 				 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
 				 GROUP BY datum
-				 HAVING users IS NOT NULL OR users_reg IS NOT NULL
+				 HAVING users IS NOT NULL OR subscribers IS NOT NULL
 				 ORDER BY date ASC"
 			);
 
@@ -145,21 +137,11 @@ class DailyKPIs extends Model
 			$SQLstatement = $this->db->connection->prepare(
 				"SELECT
 				    DATE_FORMAT(date,'%Y-%m') as datum,
-					round(
-						avg(champions + high_usage_irregulars + low_usage_irregulars +
-						loyals + flybys + nonengaged + unknown) -
-						avg(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg +
-						loyals_reg + flybys_reg + nonengaged_reg + unknown_reg)
-					) AS users,
-
-					round(
-						avg(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg +
-						loyals_reg + flybys_reg + nonengaged_reg + unknown_reg)
-					) AS users_reg
+					round(avg(users)) AS users,	round(avg(subscribers)) AS subscribers
 				 FROM $tablename
 				 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
 				 GROUP BY datum
-				 HAVING users IS NOT NULL OR users_reg IS NOT NULL
+				 HAVING users IS NOT NULL OR subscribers IS NOT NULL
 				 ORDER BY date ASC"
 			);
 
@@ -186,10 +168,8 @@ class DailyKPIs extends Model
 			$SQLstatement = $this->db->connection->prepare(
 				"SELECT
 				    date as datum,
-					round(avg(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg +
-					loyals_reg + flybys_reg + nonengaged_reg + unknown_reg) /
-					avg(champions + high_usage_irregulars + low_usage_irregulars +
-					loyals + flybys + nonengaged + unknown) * 100 ,2) as reg_quote
+					round(avg(subscribers) /
+					avg(users) * 100 ,2) as reg_quote
 				 FROM $tablename
 				 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
 				 GROUP BY datum
@@ -204,10 +184,8 @@ class DailyKPIs extends Model
 				"SELECT
 				    DATE_FORMAT(date,'%Y-%v') as datum,
 					round(
-						avg(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg +
-						loyals_reg + flybys_reg + nonengaged_reg + unknown_reg) /
-						avg(champions + high_usage_irregulars + low_usage_irregulars +
-						loyals + flybys + nonengaged + unknown) * 100, 2
+						avg(subscribers) /
+						avg(users) * 100, 2
 					) as reg_quote
 				 FROM $tablename
 				 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
@@ -223,10 +201,8 @@ class DailyKPIs extends Model
 			$SQLstatement = $this->db->connection->prepare(
 				"SELECT
 				    DATE_FORMAT(date,'%Y-%m') as datum,
-					round(avg(champions_reg + high_usage_irregulars_reg + low_usage_irregulars_reg +
-					loyals_reg + flybys_reg + nonengaged_reg + unknown_reg) /
-					avg(champions + high_usage_irregulars + low_usage_irregulars +
-					loyals + flybys + nonengaged + unknown) * 100 ,2) as reg_quote
+					round(avg(subscribers) /
+					avg(users) * 100 ,2) as reg_quote
 				 FROM $tablename
 				 WHERE DATE(`date`) BETWEEN :startDate AND :endDate
 				 GROUP BY datum
@@ -254,12 +230,12 @@ class DailyKPIs extends Model
 
 		$SQLstatement = $this->db->connection->prepare(
 			"SELECT date,
-			ROUND(champions / (champions+high_usage_irregulars+flybys+low_usage_irregulars+loyals+nonengaged) * 100,3) as champions,
-			ROUND(high_usage_irregulars / (champions+high_usage_irregulars+flybys+low_usage_irregulars+loyals+nonengaged) * 100,3) as high_usage_irregulars,
-			ROUND(flybys / (champions+high_usage_irregulars+flybys+low_usage_irregulars+loyals+nonengaged) * 100,3) as flybys,
-			ROUND(low_usage_irregulars / (champions+high_usage_irregulars+flybys+low_usage_irregulars+loyals+nonengaged) * 100,3) as low_usage_irregulars,
-			ROUND(loyals / (champions+high_usage_irregulars+flybys+low_usage_irregulars+loyals+nonengaged) * 100,3) as loyals,
-			ROUND(nonengaged / (champions+high_usage_irregulars+flybys+low_usage_irregulars+loyals+nonengaged) * 100,3) as nonengaged
+			ROUND(champions / users * 100,3) as champions,
+			ROUND(high_usage_irregulars / (users) * 100,3) as high_usage_irregulars,
+			ROUND(flybys / (users) * 100,3) as flybys,
+			ROUND(low_usage_irregulars / (users) * 100,3) as low_usage_irregulars,
+			ROUND(loyals / (users) * 100,3) as loyals,
+			ROUND(nonengaged / (users) * 100,3) as nonengaged
 
 			FROM $tablename
 

@@ -33,7 +33,7 @@
 	<?=$charts->create([
 		'metric' => [
 			$premiumUsers['users'],
-			$premiumUsers['users_reg'],
+			$premiumUsers['subscribers'],
 	     ],
 		'dimension' => $premiumUsers['dimensions'],
 		'color' => ['#2F5772', '#C52233'],
