@@ -22,6 +22,7 @@ class ArticleMeta extends Model
 		$this->db->primaryIndex = 'article_id';
 		$this->db->orderby = 'article_id';
 		$this->db->order = 'DESC';
+		$this->db->limit = 100000;
 
 		$this->from = date('Y-m-d', strtotime(DEFAULT_FROM));
 		$this->to = date('Y-m-d', strtotime(DEFAULT_TO));
@@ -76,11 +77,14 @@ class ArticleMeta extends Model
 		$SQLstatement->execute();
 		$topics = $SQLstatement->fetchall(\PDO::FETCH_KEY_PAIR);
 
-		return array_map([$this, 'map_topics'], $topics);
+		//return array_map([$this, 'map_topics'], $topics);
+		return $topics;
 
 	}
 
 	private function map_topics($topic) {
+
+		// The Topic Mapping is not Used at the moment!!!
 
 		if (PORTAL == 'LR') {
 			switch ($topic) {
@@ -104,7 +108,6 @@ class ArticleMeta extends Model
 			}
 		}
 
-		/*
 		if (PORTAL == 'MOZ') {
 			switch ($topic) {
 				case 'Vermischtes: Soziales': 			$topic = 'Soziales'; break;
@@ -126,7 +129,7 @@ class ArticleMeta extends Model
 				default: return null; break;
 			}
 		}
-		*/
+
 
 		if (PORTAL == 'SWP') {
 			switch ($topic) {
@@ -199,9 +202,6 @@ class ArticleMeta extends Model
 
 	public function import_drive_data() {
 		$drive = $this->drive_data_from_bigquery();
-
-		//dd($drive);
-
 		$drive = array_map([$this, 'map_drive_data'], $drive);
 	}
 

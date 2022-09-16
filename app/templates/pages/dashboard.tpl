@@ -83,8 +83,6 @@ Artikel: <b><?=$articles?></b>
 
 </div>
 
-<p class="text-center" style="margin-bottom:2em; ">(<b>Achtung:</b> Tracking von Plusnutzern (Daily Active Subscribers) seit August'22 leider gestört)</p>
-
 <div class="col-2" style="grid-template-columns: 1fr 2fr;">
 
 <figure class="mb">
@@ -123,5 +121,9 @@ Artikel: <b><?=$articles?></b>
 	]);?>
 </figure>
 </div>
+
+
+<p class="text-center" style="margin-bottom:2em; ">(<b>Achtung:</b> Die Daily Active Subscribers für August 2022 mussten aufgrund eines Trackingproblems mit Füllwerten ergänzt werden)</p>
+
 
 </main>

@@ -1,16 +1,21 @@
-Vermischtes: Soziales
-Verkehr/Infrastruktur
-Vermischtes: Freizeit/Hobbys
-Sport: Nicht-Fußball
-Bildung/Erziehung
-Wirtschaft: Unternehmen
+Bildung
+Erziehung
+Fußball
+Gesundheit
+Infrastruktur
+Justiz
+Katastrophen
+Kriminalität
 Kultur
-Vermischtes: Sonstiges
-Vermischtes: Gesundheit
-Sport: Fußball
-Wirtschaft: Verbraucher
+Leute
+Mix
 Politik
-Justiz/Kriminalität
-Vermischtes: Wissenschaft
-Katastrophe/Unglück
-Vermischtes: Leute
+Religion
+Soziales
+Sport
+Unternehmen
+Verbraucher
+Verkehr
+Wirtschaft
+Wissenschaft
+Wohnen

@@ -8,6 +8,7 @@ use \app\importer\BigQuery;
 use	\app\models\Orders;
 use	\app\models\DailyKPIs;
 use \flundr\cache\RequestCache;
+use \flundr\utility\Session;
 
 class Readers extends Model
 {
@@ -324,7 +325,6 @@ class Readers extends Model
 		";
 
 		$data = $bigQueryApi->sql($query);
-
 		return  $data;
 
 
@@ -349,6 +349,86 @@ class Readers extends Model
 
 		return  $data;
 	}
+
+
+	public function audience_sizes() {
+		return $this->dwh_audience_sizes();
+	}
+
+	private function dwh_audience_sizes() {
+
+		$bigQueryApi = new BigQuery;
+		$query ="SELECT * FROM `artikel-reports-tool.NDI_Dashboards.dpa_drive_audiences_size` LIMIT 1000";
+		$data = $bigQueryApi->sql($query);
+
+		return  $data;
+
+	}
+
+
+	public function zip_codes() {
+
+		$bigQueryApi = new BigQuery;
+		$query ="
+			SELECT day, uid, publisher, city, zipcode FROM `artikel-reports-tool.NDI_Drive.dpa_drive_geo_locations` 
+			WHERE publisher = 'LR' AND day = '2022-09-03' LIMIT 1000
+		";
+
+		$data = $bigQueryApi->sql($query);
+
+		return  $data;
+
+	}
+
+
+	public function users_by_city() {
+		$bigQueryApi = new BigQuery;
+		$query ="
+			SELECT count(uid) as users, city FROM `artikel-reports-tool.NDI_Drive.dpa_drive_geo_locations` 
+			WHERE 
+			publisher = 'LR'
+			AND day = '2022-09-03' 
+			group by city order by users DESC
+			LIMIT 1000
+		";
+
+		$data = $bigQueryApi->sql($query);
+
+		return  $data;
+
+	}
+
+	public function users_by_zipcode() {
+
+
+		$from = date('Y-m-d', strtotime(DEFAULT_FROM));
+		$to = date('Y-m-d', strtotime(DEFAULT_TO));
+
+		if (Session::get('from')) {$from = Session::get('from');}
+		if (Session::get('to')) {$to = Session::get('to');}
+
+		$cache = new RequestCache('zipcodes'.PORTAL.$from.$to, 60 * 60);
+		$zipcodes = $cache->get();
+
+		if (!empty($zipcodes)) {return $zipcodes;}
+
+		$bigQueryApi = new BigQuery;
+		$query ="
+			SELECT zipcode, count(uid) as users FROM `artikel-reports-tool.NDI_Drive.dpa_drive_geo_locations` 
+			WHERE 
+			publisher = '".PORTAL."'
+			AND day between '$from' AND '$to' 
+			group by zipcode order by users DESC
+			LIMIT 1000
+		";
+
+		$data = $bigQueryApi->sql($query);
+		$zipcodes = array_column($data, 'users', 'zipcode');
+		$cache->save($zipcodes);
+		return $zipcodes;
+
+	}
+
 
 
 }

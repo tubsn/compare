@@ -83,17 +83,7 @@ class Exports extends Controller {
 
 	public function value_articles() {
 
-		$sessionFrom = Session::get('from') ?? '0000-00-00';
-		$sessionTo = Session::get('to') ?? '2099-01-01';
-
-		Session::set('from','0000-00-00');
-		Session::set('to', '2099-01-01');
-
 		$artikel = $this->Articles->value_articles();
-
-		Session::set('from', $sessionFrom);
-		Session::set('to', $sessionTo);
-
 		$this->view->title = 'Wertschoepfende-Artikel.csv';
 		$this->view->export($artikel);
 

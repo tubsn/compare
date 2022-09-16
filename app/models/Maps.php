@@ -60,6 +60,36 @@ class Maps extends Model
 	}
 
 
+	public function colored_plz_users($PLZtoThree = false) {
+
+		$readers = new Readers();
+		$zipCodes = $readers->users_by_zipcode();
+		$zipCodes = $this->filter_invalid_plz($zipCodes);
+		//return $this->Orders->group_by('customer_postcode');
+
+		if ($PLZtoThree) {
+			$zipCodes = $this->shorten_and_group_PLZ_keys($zipCodes);
+		}
+
+		$min = -3;
+
+		$multiplier = 0.5;
+		$maxAmount = max($zipCodes) * $multiplier;
+		$maxQuote = 100;
+
+		$zipCodeColors = ['a3bf6a', '3a7b40', '0a3c11'];
+
+		$areaData = [];
+		foreach ($zipCodes as $plz => $amount) {
+			$areaData[$plz]['orders'] = $amount;
+			$areaData[$plz]['orderColor'] = '#' . $this->percentage_color($areaData[$plz]['orders'], $min, $maxAmount, $zipCodeColors);
+		}
+
+		return $areaData;
+
+	}
+
+
 
 	public function colored_geo_orders($PLZtoThree = false) {
 

@@ -1,7 +1,21 @@
-Lokale Wirtschaft & Unternehmer
-Verkehr, Transport & Pendler
-Lokal- Und Landespolitik
-Stadtgespräch
-Crime, Justiz & Katastrophe
-Lokalsport
-Sonstiges
+Bildung
+Erziehung
+Fußball
+Gesundheit
+Infrastruktur
+Justiz
+Katastrophen
+Kriminalität
+Kultur
+Leute
+Mix
+Politik
+Religion
+Soziales
+Sport
+Unternehmen
+Verbraucher
+Verkehr
+Wirtschaft
+Wissenschaft
+Wohnen

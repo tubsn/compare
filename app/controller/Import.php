@@ -110,7 +110,7 @@ class Import extends Controller {
 
 	// Used for manuell reimports 
 	public function segments() {
-		$this->Readers->import_user_segments('2022-08-29', '2022-09-01');
+		$this->Readers->import_user_segments('2022-08-19', '2022-08-21');
 		//$CSVImport = new CSVImports();
 		//$CSVImport->csv_import_segments_by_date();
 	}
@@ -118,6 +118,13 @@ class Import extends Controller {
 	public function experiment_data() {
 		$CSVImports = New CSVImports();
 		$CSVImports->import_drive_experiment_data_from_csv();
+	}
+
+	public function topics() {
+
+		$CSVImports = New CSVImports();
+		$CSVImports->import_drive_topics();
+
 	}
 
 }

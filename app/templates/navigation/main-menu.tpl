@@ -96,6 +96,7 @@
 				<li><a target="_blank" href="https://datastudio.google.com/reporting/e4aaadbb-dd68-404f-866d-5c9beb52e6d3/page/p_25ynp9bisc">Kündigergründe Board</a></li>
 				<li><a href="/readers/multiple-orders">Mehrfachbestellungen</a></li>				
 				<li><a href="/orders/map/local">Abo-Karte</a></li>
+				<li><a href="/readers/map/local">Nutzer-Karte</a></li>
 				<li class="highlight"><a href="/transactions">Plenigo - Buchungen</a></li>
 				<li><a href="/portals">Portalvergleich</a></li>
 			</ul>

@@ -25,7 +25,6 @@ class ArticleImport
 		$url = $this->portalURL . '/' . $articleID . '?_XML=rss';
 		$curlData = $this->curl_with_redirect($url);
 
-
 		$url = $curlData['url'];
 		$rssData = $curlData['data'];
 

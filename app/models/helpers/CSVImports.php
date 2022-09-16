@@ -5,11 +5,64 @@ namespace app\models\helpers;
 use \flundr\cache\RequestCache;
 use	\app\models\DailyKPIs;
 use	\app\models\Orders;
+use	\app\models\Articles;
 
 class CSVImports
 {
 
 	function __construct() {}
+
+
+
+	public function import_drive_topics() {
+
+		$topics = $this->import_drive_topics_from_csv();
+
+		$articleDB = new Articles();
+
+		$IDs = $articleDB->all(['id']);
+		$IDs = array_column($IDs,'id');
+
+		//dd($IDs);
+
+		foreach ($IDs as $id) {
+			if (isset($topics[$id])) {
+				$articleDB->update(['type' => $topics[$id]],$id);
+				unset($topics[$id]);
+			}
+		}
+
+		echo "Artikel die nicht in Compare enthalten waren:";
+		dump($topics);
+		echo "jobs Done";
+
+	}
+
+	private function import_drive_topics_from_csv() {
+
+		$path = ROOT . 'import/drive-'.strToLower(PORTAL).'-artikel-topics.csv';
+
+		if (!file_exists($path)) {
+			throw new \Exception($path . ' Not found', 500);
+		}
+
+		$data = file($path, FILE_IGNORE_NEW_LINES);
+		$header = str_getcsv(array_shift($data),',');
+
+		$csv = array_map(function($set){
+			return str_getcsv($set,",");
+		},$data);
+
+		foreach ($csv as $key => $row) {
+			$csv[$key] = array_combine($header, $row);
+		}
+
+		$csv = array_column($csv, 'type','id');
+		return $csv;
+
+	}
+
+
 
 	public function import_drive_experiment_data_from_csv() {
 

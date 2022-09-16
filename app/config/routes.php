@@ -6,6 +6,8 @@ $routes->get('/', 'Stats@dashboard');
 // Teststuff
 $routes->get('/cards', 'Lists@cards');
 $routes->get('/optins', 'Test@optins');
+$routes->get('/sizes', 'Test@audience_sizes');
+$routes->get('/import/topics', 'Import@topics');
 
 
 // Article Lists
@@ -134,16 +136,18 @@ $routes->get('/api/articles-today', 'Livedata@api_articles_today');
 $routes->get('/api/article/{id}', 'Livedata@api_article');
 $routes->get('/api/stats-today[/{resolution:\d+}]', 'Livedata@api_stats_today');
 $routes->get('/api/active-users', 'Livedata@api_active_users');
-$routes->get('/api/live', 'Livedata@api_live');
 $routes->get('/api/teaser/{date}/{hour}', 'Teaser@api_positions');
 $routes->get('/showip', 'API@showip');
 
 // Readers
 $routes->get('/readers/{id:[\d]{12}?}', 'Readers@detail');
+$routes->get('/readers/test/{id}', 'Test@reader');
 $routes->get('/readers/list[/{segment}]', 'Readers@list');
 $routes->get('/readers/sessionlist', 'Readers@session_list');
 $routes->get('/readers/multiple-orders', 'Readers@with_multiple_orders');
 $routes->get('/readers/engagement', 'Readers@engagement_alert');
+$routes->get('/readers/map/local', 'Maps@users_local');
+$routes->get('/readers/map/germany', 'Maps@users_germany');
 
 $routes->get('/readers/import', 'Import@import_readers');
 

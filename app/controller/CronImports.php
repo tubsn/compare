@@ -90,9 +90,12 @@ class CronImports extends Controller {
 
 		}
 
-		$this->ArticleMeta->import_drive_data(); // Emotions and Stuff from DPA Drive
+		echo 'RSS Feeds Importiert | ' . date('H:i:s') . "\r\n";
 
-		echo 'Article Feed Import abgeschlossen | ' . date('H:i:s') . "\r\n";
+		$this->ArticleMeta->import_drive_data(); // Emotions and Stuff from DPA Drive
+		$this->assign_drive_topics(); // Assigns new Drive Topics to Article Table
+
+		echo 'Article Import abgeschlossen | ' . date('H:i:s') . "\r\n";
 
 	}
 
@@ -197,5 +200,26 @@ class CronImports extends Controller {
 		echo 'Drive Userdaten importiert | ' . date('H:i:s') . "\r\n";
 
 	}
+
+
+	public function assign_drive_topics() {
+
+		$unsetIDs = $this->Articles->get_unset_ids();
+		$topics = $this->ArticleMeta->topics_for($unsetIDs);
+
+		// No new Topics found
+		if (empty($topics)) {
+			echo 'keine neuen Drive Topics zugeordnet | ' . date('H:i:s') . "\r\n";		
+			return null;
+		}
+
+		foreach ($topics as $id => $type) {
+			$this->Articles->update(['type' => $type], $id);
+		}
+
+		echo 'Drive Topics zugeordnet | ' . date('H:i:s') . "\r\n";
+
+	}
+
 
 }

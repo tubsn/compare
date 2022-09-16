@@ -29,5 +29,4 @@ let newLocation = '<?=PAGEURL?>/artikel/'+artID;window.location = newLocation;}e
 <img src="/styles/img/faviconani.gif"></a>
 
 
-
 </main>

@@ -68,7 +68,7 @@ class Articles extends Model
 			 FROM `articles`
 			 WHERE DATE(`pubdate`) BETWEEN :startDate AND :endDate AND type IS NULL
 			 ORDER BY pubdate DESC
-			 LIMIT 0, 5000"
+			 LIMIT 0, 100000"
 		);
 
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
@@ -134,6 +134,30 @@ class Articles extends Model
 		return $output;
 
 	}
+
+
+	public function list_all_audiences() {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT *
+			 FROM `articles`
+			 WHERE (`audience` is not NULL or `audience` != '')
+			 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			 ORDER BY 'pubdate' DESC
+			 LIMIT 0, 25000"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall();
+		if (empty($output)) {return null;}
+		return $output;
+
+	}	
+
+
 
 	public function list_by_fuzzy($searchterm, $column, $order = 'pubdate') {
 
@@ -770,9 +794,9 @@ class Articles extends Model
 			"SELECT $group,
 			$group,
 			 COUNT( if(conversions>0 AND subscriberviews>=100, 1, NULL) ) as spielmacher,
-			 COUNT( if(conversions>0 AND subscriberviews<100, 1, NULL) ) as stuermer,
+			 COUNT( if(conversions>0 AND (subscriberviews IS NULL OR subscriberviews<100), 1, NULL) ) as stuermer,
 			 COUNT( if((conversions IS NULL OR conversions=0) AND subscriberviews>=100, 1, NULL) ) as abwehr,
-			 COUNT( if((conversions IS NULL OR conversions=0) AND subscriberviews<100, 1, NULL) ) as geister,
+			 COUNT( if((conversions IS NULL OR conversions=0) AND (subscriberviews IS NULL OR subscriberviews<100), 1, NULL) ) as geister,
 			 COUNT(id) as artikel
 
 			 FROM `articles`
@@ -780,7 +804,7 @@ class Articles extends Model
 			 AND $group != '' AND ressort != 'bilder' AND ressort != 'ratgeber'
 			 GROUP BY $group
 			 ORDER BY spielmacher DESC
-			 LIMIT 0, 1000"
+			 LIMIT 0, 10000"
 		);
 
 		$SQLstatement->execute([':startDate' => $this->from, ':endDate' => $this->to]);
@@ -797,9 +821,9 @@ class Articles extends Model
 			"SELECT audience,
 			audience,
 			 COUNT( if(conversions>0 AND subscriberviews>=100, 1, NULL) ) as spielmacher,
-			 COUNT( if(conversions>0 AND subscriberviews<100, 1, NULL) ) as stuermer,
+			 COUNT( if(conversions>0 AND (subscriberviews IS NULL OR subscriberviews<100), 1, NULL) ) as stuermer,
 			 COUNT( if((conversions IS NULL OR conversions=0) AND subscriberviews>=100, 1, NULL) ) as abwehr,
-			 COUNT( if((conversions IS NULL OR conversions=0) AND subscriberviews<100, 1, NULL) ) as geister,
+			 COUNT( if((conversions IS NULL OR conversions=0) AND (subscriberviews IS NULL OR subscriberviews<100), 1, NULL) ) as geister,
 			 COUNT(id) as artikel
 
 			 FROM `articles`
@@ -820,8 +844,8 @@ class Articles extends Model
 
 	public function valueables_by_group($group) {
 
-		$filter = 'AND (conversions IS NULL OR conversions=0) AND subscriberviews<100';
-		if ($group == 'stuermer') {$filter = 'AND conversions>0 AND subscriberviews<100';}
+		$filter = 'AND (conversions IS NULL OR conversions=0) AND (subscriberviews IS NULL OR subscriberviews<100)';
+		if ($group == 'stuermer') {$filter = 'AND conversions>0 AND (subscriberviews IS NULL OR subscriberviews<100)';}
 		if ($group == 'abwehr') {$filter = 'AND (conversions IS NULL OR conversions=0) AND subscriberviews>=100';}
 		if ($group == 'spielmacher') {$filter = 'AND conversions>0 AND subscriberviews>=100';}
 

@@ -298,10 +298,17 @@ class Lists extends Controller {
 		Session::set('referer', '/audience/'.$audience);
 
 		$viewData['audienceList'] = $this->Articles->list_distinct('audience');
+		array_push($viewData['audienceList'],'Alle');
 		if (is_null($audience)) {$audience = $viewData['audienceList'][0] ?? '';}
 
 		$audience = $this->decode_url($audience);
-		$viewData['articles'] = $this->Articles->list_by($audience, 'audience');
+
+		if ($audience == 'Alle') {
+			$viewData['articles'] = $this->Articles->list_all_audiences();
+		}
+		else {$viewData['articles'] = $this->Articles->list_by($audience, 'audience');}
+
+
 		$viewData['primaryChart'] = $this->ArticleKPIs->combined_kpis_filtered_chart($audience, 'audience');
 
 		$count = 0;

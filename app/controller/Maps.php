@@ -17,6 +17,27 @@ class Maps extends Controller {
 	}
 
 
+	public function users_local() {
+
+		Session::set('referer', '/readers/map/local');
+		$this->view->PLZs = $this->Maps->colored_plz_users(false);
+		
+		$this->view->title = 'Verteilungskarte unserer Nutzer nach Drive IP Daten';
+		$this->view->render('pages/readers/maps/local');
+
+	}
+
+	public function users_germany() {
+
+		Session::set('referer', '/readers/map/germany');
+		$this->view->PLZs = $this->Maps->colored_plz_users(true);
+		
+		$this->view->title = 'Verteilungskarte unserer Nutzer nach Drive IP Daten';
+		$this->view->render('pages/readers/maps/germany');
+
+	}
+
+
 	public function map_local($cancelled = false) {
 
 		Session::set('referer', '/orders/map/local');

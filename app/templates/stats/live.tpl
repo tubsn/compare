@@ -113,6 +113,4 @@ Pageviews: <b class="pageviews"><?=number_format($pageviews,0,',','.')?></b>
 
 <?php endif ?>
 
-<div class="text-center"><b>Hinweis:</b> Diese Seite befindet sich aktuell im Aufbau!</div>
-
 </main>

@@ -105,7 +105,7 @@ class Longterm extends Model
 			$scoreArticles = count($this->Articles->score_articles() ?? []);
 
 			$spielmacher = $this->Articles->count_with_filter('conversions>0 AND subscriberviews>=100');
-			$geister = $this->Articles->count_with_filter('(conversions IS NULL OR conversions=0) AND subscriberviews < 100');
+			$geister = $this->Articles->count_with_filter('(conversions IS NULL OR conversions=0) AND (subscriberviews IS NULL OR subscriberviews < 100)');
 
 			$avgmediatime = $this->KPIs->avg('avgmediatime');
 
