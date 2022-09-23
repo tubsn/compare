@@ -11,14 +11,13 @@ class Test extends Controller {
 
 	public function __construct() {
 		$this->view('DefaultLayout');
-		$this->models('Articles,Orders,Conversions,Analytics,Charts,Readers,Plenigo');
+		$this->models('Articles,Orders,Conversions,Analytics,Charts,Readers,Plenigo,Cleverpush');
 	}
 
 	public function audience_sizes() {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 		dd($this->Readers->audience_sizes());
 	}
-
 
 	public function optins() {
 

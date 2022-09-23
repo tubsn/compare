@@ -8,6 +8,7 @@
 			<option<?php if (PORTAL == 'MOZ'): ?> selected<?php endif ?>>MOZ</option>
 			<option<?php if (PORTAL == 'SWP'): ?> selected<?php endif ?>>SWP</option>
 		</select>
+		</div>
 
 		<form action="/settimeframe" method="post" class="calendar-timeframe">
 			<select name="timeframe" class="js-timeframe">
@@ -25,15 +26,17 @@
 				<?php endforeach ?>
 			</select>
 		</form>
-		&thinsp;
-		</div>
 
-		<form method="post" action="/settimeframe">
-			<fieldset class="calendar-datepicker">
+		<form method="post" action="/settimeframe" class="calendar-datepicker">
+			<fieldset>
 				<input type="date" name="from" value="<?=session('from')?>"> -
 				<input type="date" name="to" value="<?=session('to')?>">
+				<button class="calendar-button" type="submit"></button>
 			</fieldset>
-			<button class="calendar-button" type="submit"></button>
+			
 		</form>
+
+
 	</div>
+
 </div>

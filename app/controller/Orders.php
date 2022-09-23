@@ -31,6 +31,7 @@ class Orders extends Controller {
 		$viewData['numberOfOrders'] = count($viewData['orders'] ?? []);
 		$viewData['numberOfCancelled'] = count($this->Orders->filter_cancelled($viewData['orders']));
 		$viewData['plusOnly'] = count($this->Orders->filter_plus_only($viewData['orders']));
+		$viewData['pushOnly'] = count($this->Orders->filter_push_only($viewData['orders']));
 		$viewData['aboshopOnly'] = count($this->Orders->filter_aboshop($viewData['orders']));
 		$viewData['yearlyOnly'] = count($this->Orders->filter_yearly($viewData['orders']));
 		$viewData['externalOnly'] = count($this->Orders->filter_external($viewData['orders']));

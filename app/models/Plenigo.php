@@ -21,8 +21,18 @@ class Plenigo
 		if (empty($orders)) {return [];}
 
 		if (!$showAll) {$orders = array_filter($orders, [$this, 'remove_free_products']);}
-		$orders = array_map([$this, 'map_order'], $orders);
-		return $orders;
+		
+		$orderData = array_map([$this, 'map_order'], $orders);
+		$subscriptionData = array_map([$this, 'map_subscription_data'], $orders);
+		$customerData = array_map([$this, 'map_customer'], $orders);
+
+		$output = [];
+		foreach ($orders as $key => $order) {
+			
+			$output[$key] = array_merge($orderData[$key], $subscriptionData[$key], $customerData[$key]);
+
+		}
+		return $output;
 	}
 
 	public function customer($id) {
@@ -216,7 +226,6 @@ class Plenigo
 
 		$new['order_id'] = $org['orderId'];
 		$new['order_date'] = date("Y-m-d H:i:s", strtotime($org['orderDate']));
-
 		$new['order_title'] = $org['items'][0]['title'];
 		$new['order_price'] = $org['items'][0]['price'];
 		$new['order_payment_method'] = $org['paymentMethod'];
@@ -276,14 +285,14 @@ class Plenigo
 		$new['subscription_end_date'] = null;
 
 		/* Date has to be Converted cause Plenigo saves UTC Dates */
-		if ($org['startDate']) {
+		if (isset($org['startDate'])) {
 			$new['subscription_start_date'] = date("Y-m-d H:i:s", strtotime($org['startDate']));
 		}
 
-		if ($org['cancellationDate']) {
+		if (isset($org['cancellationDate'])) {
 			$new['subscription_cancellation_date'] = date("Y-m-d H:i:s", strtotime($org['cancellationDate']));
 		}
-		if ($org['endDate']) {
+		if (isset($org['endDate'])) {
 			$new['subscription_end_date'] = date("Y-m-d H:i:s", strtotime($org['endDate']));
 		}
 

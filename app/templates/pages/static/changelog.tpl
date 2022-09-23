@@ -15,6 +15,20 @@
 
 <hr>
 
+<h2>22.09.2022 - Integration der Cleverpush API</h2>
+
+<ul>
+	<li>Daten der Cleverpush API stehen jetzt in Compare zur verfügung.</li>
+	<li>Bug mit fehlender Datum-Einstellung behoben, wenn man von Echtzeitbestellungen auf die Startseite wechselt.</li>
+</ul>
+
+<h2>19.09.2022 - Überarbeitung Bookmarklets</h2>
+
+<ul>
+	<li>Neues Bookmartlet für Realtimestats hinzugefügt, welches auf unseren Portalen einen Layer mit Statistikdaten direkt am Artikel einblendet</li>
+	<li>Verbesserung des Compare Link Bookmarklets. Ab sofort wird automatisch das jeweilige Portal als Startseite bzw. der geöffnete Artikel auf dem jeweiligen Portal angesprungen. Vorher war dies nur für das Portal von dem das Bookmarktlet ursprünglich stammte möglich.</li>
+</ul>
+
 
 <h2>24.08.2022 - Einführung Transaktions Analysen</h2>
 

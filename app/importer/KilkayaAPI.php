@@ -173,7 +173,7 @@ class KilkayaAPI
 		$this->handle_queued_query();
 
 		if (!isset($curlData['data'])) {
-			dump($curlData);
+			//dump($curlData);
 			throw new \Exception("No Response Data", 404);
 
 		}
@@ -251,6 +251,7 @@ class KilkayaAPI
 		}
 
 		curl_close ($ch);
+
 		return json_decode($recievedData, true);
 
 	}

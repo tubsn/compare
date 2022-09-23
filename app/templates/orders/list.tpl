@@ -13,9 +13,10 @@ Gesamtbestellungen: <b class="conversions"><?=$numberOfOrders?></b>
 &emsp; davon Plusseite: <b class="blue"><?=$plusOnly?></b>
 &emsp; davon Aboshop: <b class="blue"><?=$aboshopOnly?></b>
 &emsp; davon Jahresabos: <b class="blue"><?=$yearlyOnly?></b>
+&emsp; davon Push: <b class="blue"><?=$pushOnly?></b>
 &emsp; davon Umwandlung: <b title="Nutzer die im Kündigungsprozess ein neues Abo gekauft haben" class="blue"><?=$umwandlungOnly?></b>
 <!--&emsp; davon Extern: <b class="blue"><?=$externalOnly?></b>-->
-&emsp; davon Gekündigt: <b class="redish"><?=$numberOfCancelled?></b>
+&emsp; Gekündigt: <b class="redish"><?=$numberOfCancelled?></b>
 &emsp; Kündigerquote: <b class="orange"><?=round(($numberOfCancelled / $numberOfOrders) * 100)?>&thinsp;%</b>
 &emsp; ⌀-Haltedauer: <b class="blue"><?=number_format($averageRetention,2,',','.')?> Tage</b>
 </p>

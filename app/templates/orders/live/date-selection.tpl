@@ -26,13 +26,4 @@
 </select>
 </div>
 
-<!--
-<br />
-<div>
-	<form method="get" action="/order" onsubmit="preventDefault(); alert('muh');">
-		<input onchange="this.form.submit()" name="id" type="text">
-	</form>
-</div>
--->
-
 </div>

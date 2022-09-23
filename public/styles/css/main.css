@@ -245,13 +245,8 @@ a.type-link, a.type-link-light, a.audience-link {text-decoration: none; color: v
 
 .box {padding:1em; background:#d0e5fb; margin-bottom:1em;}
 
-
 .card-layout {display:flex;flex-wrap: wrap;}
-
-.article-card {
-	width:500px;
-	padding:1em;
-}
+.article-card {width:500px; padding:1em;}
 
 .floating-settings {
 background-color: #f0f0f0; padding: .6em .6em .3em .6em; position: absolute;
@@ -259,32 +254,32 @@ right: 0; top:-1em; display:flex; flex-wrap: wrap; align-items:center; gap:1em;}
 
 .floating-settings form {min-width:120px}
 
+.calendar-container {position:relative; font-size:.9em; line-height:100%;}
+.calendar-container select, .calendar-container input {margin:0; padding:0; background-color:white;}
+.calendar-container * {box-sizing: border-box; margin:0;}
+.calendar-container select, .calendar-container input {padding:3px;}
+.calendar-container input[type='date'] {padding:3px; font-size:0.85em;}
 
-.calendar-container {position:relative; bottom:5px;}
+.calendar-portal {display:flex; gap:0.3em;}
 
+.calendar-picker {background-color:#f0f0f0; padding:0.4em .6em 0.4em .6em; display:flex; position:absolute; right:0; align-items:start; gap:0.3em; flex-wrap: wrap}
+@media only screen and (max-width: 1200px) {.calendar-picker {position:static; justify-content: center;}}
+
+.calendar-datepicker fieldset {display:flex; gap:0.3em; align-items:center}
 .timeframe-picker {display:flex; gap:1em;}
-.icon-calendar {max-width:40px; position:relative; bottom:-5px; cursor:pointer; border:0; }
+.icon-calendar {max-width:40px; position:relative; top:5px; cursor:pointer; border:0; }
 
-.calendar-picker {background-color:#f0f0f0; padding:0.4em .6em 0.1em .6em; display:flex; position:absolute; right:0;}
-
-.calendar-portal {display:inline-block;}
-.calendar-portal select {min-height:27px}
-
-
-.calendar-picker form {display:inline-block;}
-.calendar-picker select, .calendar-picker input, .calendar-picker fieldset, .calendar-picker button {margin:0;}
-.calendar-picker form:first-child {vertical-align: top;}
-
-.calendar-picker input, .calendar-picker select {width:auto; display:inline-block; font-size:0.8em; cursor:pointer;}
-.calendar-picker fieldset {display:inline-block;}
+.calendar-picker input, .calendar-picker select {width:auto; display:inline-block; cursor:pointer;}
 
 .calendar-button {background-image: url('/styles/img/flundr/icon-calendar.svg'); background-color:transparent; background-size:cover;
-width: 30px; height: 30px; position: relative; bottom: 7px; left: 4px;
+width: 25px; height: 25px; position:relative; top:-1px; left:2px; border:0; cursor:pointer;
 }
 
 button.calendar-button:hover {background-color:white !important;}
 button.calendar-button:active {background-color:#7fb5fb !important;}
 button.calendar-button:focus {background-color:white !important;}
+
+
 
 
 .searchbox {position:relative;}

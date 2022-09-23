@@ -244,6 +244,9 @@ class Articles extends Controller {
 		$to = strip_tags($_GET['to'] ?? null);
 		$getParameters = strip_tags($_GET['get'] ?? null);
 
+		if (is_null($from) || $from == 'null') {$from = date('Y-m-d', strtotime(DEFAULT_FROM));}
+		if (is_null($to) || $to == 'null') {$to = date('Y-m-d', strtotime(DEFAULT_TO));}
+
 		Session::set('timeframe', 'Zeitraum');
 		if ($from) {Session::set('from', $from);}
 		if ($to) {Session::set('to', $to);}

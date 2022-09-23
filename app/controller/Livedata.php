@@ -16,7 +16,7 @@ class Livedata extends Controller {
 	public function __construct() {
 
 		$this->view('DefaultLayout');
-		$this->models('Articles,Plenigo,Linkpulse,Kilkaya,DailyKPIs');
+		$this->models('Articles,Plenigo,Linkpulse,Kilkaya,DailyKPIs,Orders,Readers,Charts');
 	}
 
 	public function index() {
@@ -42,6 +42,57 @@ class Livedata extends Controller {
 
 	}
 
+	public function live_article($id = null) {
+
+		//dd($this->Articles->get($id));
+
+		$data = $this->Kilkaya->article($id,'7days ago');
+		$this->view->json($data);
+
+		//Array(4) [ "66542171", "66560951", "66582167", "66580995" ]
+
+	}
+
+	public function compared_conversion_sources() {
+
+		$from = date('Y-m-d', strtotime(DEFAULT_FROM));
+		$to = date('Y-m-d', strtotime(DEFAULT_TO));
+
+		if (Session::get('from')) {$from = Session::get('from');}
+		if (Session::get('to')) {$to = Session::get('to');}
+
+		//$from = '2022-08-30';
+		//$to = '2022-09-15';
+
+		$kilkaya = $this->Kilkaya->conversions($from, $to);
+		$kilkaya = array_column($kilkaya, 'conversions', 'day');
+
+		$this->Orders->from = $from;
+		$this->Orders->to = $to;
+
+		$plenigo = $this->Orders->kpi_grouped_by('order_id','DATE(order_date)','count');
+
+		//dd($plenigo);
+
+		$plenigo = array_column($plenigo, 'order_id', 'DATE(order_date)');
+
+		$both = [];
+		foreach ($kilkaya as $day => $kilkayaOrders) {
+
+			$both[$day]['kilkaya'] = $kilkayaOrders;
+			$both[$day]['plenigo'] = $plenigo[$day] ?? null;
+
+		}
+
+		$this->view->charts = $this->Charts;
+		$this->view->data = $this->Charts->convert($both);
+
+		$this->view->title = 'Conversion Quellvergleich';
+		$this->view->render('orders/source-compare');
+
+	}
+
+
 	public function api_article($id) {
 
 		$article = $this->Articles->get($id);
@@ -54,6 +105,7 @@ class Livedata extends Controller {
 		$pubdate = $article['pubdate'] ?? date('Y-m-d', strtotime('-7days'));
 		$stats = $this->Kilkaya->article($id, $pubdate);
 
+		header('Access-Control-Allow-Origin: *');
 		$this->view->json(array_merge($article, $stats));
 
 	}
@@ -152,6 +204,7 @@ class Livedata extends Controller {
 		$this->end = date('Y-m-d', strtotime('today'));
 
 		$viewData['orders'] = $this->Plenigo->orders($this->start, $this->end, $this->items, $paidFilter);
+
 		$this->view->title = 'Bestellungen Heute';
 		$this->view->referer('/orders/today');
 		$this->view->render('orders/live/list',$viewData);

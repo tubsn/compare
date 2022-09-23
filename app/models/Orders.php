@@ -769,6 +769,13 @@ class Orders extends Model
 		});
 	}
 
+	public function filter_push_only($orders) {
+		if (empty($orders)) {return [];}
+		return array_filter($orders, function($order) {
+			if ($order['referer_source'] == 'Push') {return $order;}
+		});
+	}
+
 	public function filter_external($orders) {
 		if (empty($orders)) {return [];}
 		return array_filter($orders, function($order) {

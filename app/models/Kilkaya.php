@@ -167,6 +167,20 @@ class Kilkaya
 		return $api->response;
 	}
 
+	public function conversions($from, $to) {
+
+		$api = new KilkayaAPI();
+		$api->from = date('Y-m-d', strtotime($from));
+		$api->to = date('Y-m-d', strtotime($to));
+		$api->columns = ['conversion', '_day'];
+		$api->sortBy = '_day';
+		$api->order = 'asc';
+
+		$api->run_query();
+		return $api->response;
+	}
+
+
 	public function article($id, $pubdate) {
 
 		$api = new KilkayaAPI();

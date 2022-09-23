@@ -22,7 +22,6 @@ class Stats extends Controller {
 		$viewData['articles'] = $this->Articles->count('*');
 		$viewData['subscriberviews'] = $this->DailyKPIs->sum('subscriberviews');
 		$viewData['avgmediatime'] = $this->Articles->average('avgmediatime');
-		//$viewData['avgmediatime'] = $this->DailyKPIs->avg('avgmediatime');
 		$viewData['pageviews'] = $this->DailyKPIs->sum('pageviews');
 
 		// Mediatime

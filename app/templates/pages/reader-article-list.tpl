@@ -10,7 +10,7 @@
 				<th></th>
 				<th>Thumb</th>
 				<th>Title</th>
-				<th>Inhaltstyp</th>
+				<th>Thema</th>
 				<th>Ressort</th>
 				<th>Klicks</th>
 				<th>⌀-MT</th>

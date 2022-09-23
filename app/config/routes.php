@@ -10,6 +10,7 @@ $routes->get('/sizes', 'Test@audience_sizes');
 $routes->get('/import/topics', 'Import@topics');
 
 
+
 // Article Lists
 $routes->get('/unclassified/types', 'Lists@unset_only');
 $routes->get('/unclassified/audiences', 'Lists@unset_audience_only');
@@ -73,6 +74,7 @@ $routes->get('/orders/yesterday', 'Livedata@orders_yesterday');
 $routes->get('/orders/today', 'Livedata@orders_today');
 
 $routes->get('/orders/payguys', 'LongtermAnalysis@started_payment');
+$routes->get('/orders/sources', 'Livedata@compared_conversion_sources');
 
 $routes->get('/orders/{id:\d{7}}', 'Livedata@order');
 $routes->get('/orders/{date:[\d]{4}-[\d]{2}-[\d]{2}?}', 'Livedata@orders_date');
@@ -82,6 +84,7 @@ $routes->get('/orders/subscription/{id:\d+}', 'Livedata@subscription');
 $routes->post('/orders/set_date', 'Livedata@set_date');
 $routes->post('/orders/set_paid_filter', 'Livedata@set_paid_filter');
 $routes->get('/orders/yearlyconverters', 'Orders@yearly_converters');
+
 
 // Invoices & Transactions
 $routes->get('/invoices[/{month}]', 'Transactions@invoice_download');
@@ -134,6 +137,7 @@ $routes->get('/api/yesterday', 'Exports@yesterday_stats');
 $routes->get('/api/orders-today', 'Livedata@api_orders_today');
 $routes->get('/api/articles-today', 'Livedata@api_articles_today');
 $routes->get('/api/article/{id}', 'Livedata@api_article');
+$routes->get('/api/article/{id}/live', 'Livedata@live_article');
 $routes->get('/api/stats-today[/{resolution:\d+}]', 'Livedata@api_stats_today');
 $routes->get('/api/active-users', 'Livedata@api_active_users');
 $routes->get('/api/teaser/{date}/{hour}', 'Teaser@api_positions');
@@ -160,6 +164,11 @@ $routes->get('/artikel/{id:\d+}/refresh', 'Articles@refresh');
 $routes->get('/artikel/{id:\d+}/delete', 'Articles@delete');
 $routes->post('/artikel/{id:\d+}', 'Articles@set_type');
 $routes->get('/artikel/compare/{swpID:\d+}/{mozID:\d+}/{lrID:\d+}', 'Livedata@article_compare');
+
+// Push
+$routes->get('/push', 'Push@today');
+$routes->get('/push/archiv', 'Push@latest');
+$routes->get('/push/{id}', 'Push@detail');
 
 // Pages
 $routes->get('/search', 'Search@show');

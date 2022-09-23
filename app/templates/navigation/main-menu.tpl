@@ -53,6 +53,7 @@
 			<ul class="dropdown" aria-label="submenu">
 				<li><a href="/stats/artikel">Artikel-Produktion</a></li>
 				<li><a href="/stats/audience-by-ressort">Audiences nach Ressort</a></li>				
+				<li class="highlight"><a href="/push">Push-Meldungen (Clever-Push)</a></li>
 			</ul>
 		</li>
 
@@ -103,7 +104,7 @@
 		</li>
 
 
-		<li><a href="https://app.kilkaya.com" target="_blank" aria-haspopup="true">Kilkaya (Echtzeit)</a>
+		<li><a href="https://app.kilkaya.com" target="_blank" aria-haspopup="true">Echtzeit (Livedaten)</a>
 			<ul class="dropdown" aria-label="submenu">
 				<li><a href="https://app.kilkaya.com" target="_blank" >Kilkaya - Livedashboards</a></li>
 				<li><a href="/tv" target="_blank">TV Dashboard</a></li>
