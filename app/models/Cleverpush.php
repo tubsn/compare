@@ -27,6 +27,71 @@ class Cleverpush
 	}
 
 
+
+	public function click_stats() {
+
+		$cache = new RequestCache('pushHourly-' . PORTAL , 24*60*60);
+		$cache->cacheDirectory = $this->cacheDirectory;
+		$stats = $cache->get();
+
+		if (!$stats) {
+
+			$notifications = $this->api->notifications($this->from, $this->to, 500);
+
+			$stats = [];
+			foreach ($notifications as $notification) {
+				$statsData = $this->api->notification_stats($notification['_id']);
+				if (empty($statsData)) {continue;}
+
+				$sentAtHour = date("H", strtotime($notification['sentAt']));
+
+				$statsData = $this->clicks_by_hour($statsData);
+				$statsData[$sentAtHour]['created'] = 1;
+
+				array_push($stats, $statsData);
+			}
+
+			$cache->save($stats);
+
+		}
+
+		$out = [];
+		foreach ($this->hours_with_zero() as $hour) {
+
+			$out[$hour]['created'] = 0;
+			$out[$hour]['delivered'] = 0;
+			$out[$hour]['clicks'] = 0;
+			$out[$hour]['clickrate'] = 0;
+			$out[$hour]['clickCreateRate'] = 0;
+
+			foreach ($stats as $set) {
+				if (isset($set[$hour])) {
+					$out[$hour]['delivered'] = $out[$hour]['delivered'] + $set[$hour]['delivered'] ?? 0;
+					$out[$hour]['clicks'] = $out[$hour]['clicks'] + $set[$hour]['clicks'] ?? 0;
+					if (isset($set[$hour]['created'])) {
+						$out[$hour]['created'] = $out[$hour]['created'] + $set[$hour]['created'];
+					}
+				}
+			}
+
+			if ($out[$hour]['created'] > 3) {
+				$out[$hour]['clickrate'] = round($out[$hour]['clicks'] / $out[$hour]['delivered'],4);
+				$out[$hour]['clickCreateRate'] = round($out[$hour]['clicks'] / $out[$hour]['delivered'],4);
+			}
+
+		}
+
+		return $out;
+	}
+
+	private function hours_with_zero() {
+
+		return array_map( function( $hour ) {
+		    return str_pad( $hour, 2, '0', STR_PAD_LEFT );
+		}, range(0, 23) );
+	}
+
+
 	public function stats() {
 
 		$cache = new RequestCache('pushStats-' . PORTAL , 30*60);
@@ -142,7 +207,7 @@ class Cleverpush
 
 		$out['hourly_stats'] = null;
 		if (isset($data['stats'])) {
-			$out['hourly_stats'] = $this->clicks_by_hour($data['stats']);
+			$out['hourly_stats'] = $this->clicks_by_timestamp($data['stats']);
 		}
 
 		$out['article_id'] = $this->extract_id($data['url']);
@@ -165,8 +230,7 @@ class Cleverpush
 		return null;
 	}
 
-	private function clicks_by_hour($stats) {
-
+	private function clicks_by_timestamp($stats) {
 		$out = [];
 		foreach ($stats as $data) {
 			$date = date("Y-m-d H:i", strtotime($data['date']));
@@ -174,6 +238,26 @@ class Cleverpush
 			$out[$date]['delivered'] = $data['delivered'] ?? 0;
 		}
 
+		return $out;
+	}
+
+	private function clicks_by_hour($stats) {
+
+		$out = [];
+		foreach ($stats as $data) {
+
+			$date = date("H", strtotime($data['date']));
+			if (!isset($out[$date]['clicks'])) {$out[$date]['clicks'] = [];}
+			if (!isset($out[$date]['delivered'])) {$out[$date]['delivered'] = [];}
+
+			$out[$date]['clicks'] = $data['clicked'] ?? 0;
+			$out[$date]['delivered'] = $data['delivered'] ?? 0;
+
+			//array_push($out[$date]['clicks'], $data['clicked'] ?? 0);
+			//array_push($out[$date]['delivered'], $data['delivered'] ?? 0);
+		}
+
+		ksort($out);
 		return $out;
 		//return array_column($stats, 'clicked','date');
 

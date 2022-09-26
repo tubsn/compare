@@ -11,8 +11,45 @@ class CleverpushAPI
 	private $apiToken = CLEVERPUSH_APIKEY;
 	private $channelID = CLEVERPUSH_CHANNELID;
 
-	public function __construct() {}
 
+	public function notification($id) {
+
+		$data = $this->curl('/channel/' . $this->channelID. '/notification/' . $id);
+		$notification = $data['notification'];
+		$notification['stats'] = $this->notification_stats($id);
+
+		return $notification;
+
+	}
+
+	public function notification_stats($id) {
+		$data = $this->curl('/channel/' . $this->channelID. '/notification/' . $id . '/hourly-statistics');
+		return $data['statistics'] ?? $data;
+	}
+
+	public function notifications($from = null, $to = null, $limit = 30, $status = null) {
+
+		$parameters = null;
+		$parameters .= '?startDate=' . strtotime($from . '00:00');
+		$parameters .= '&endDate=' . strtotime($to. '23:59');
+		$parameters .= '&limit=' . $limit;
+
+		$data = $this->curl('/channel/' . $this->channelID. '/notifications' . $parameters);
+		return $data['notifications'] ?? $data;
+	}
+
+	public function notifications_today() {
+
+		$parameters = null;
+		$parameters .= '?startDate=' . strtotime('today');
+		$parameters .= '&endDate=' . strtotime('tomorrow');
+		$parameters .= '&limit=100';
+
+		//dd($parameters);
+
+		$data = $this->curl('/channel/' . $this->channelID. '/notifications' . $parameters);
+		return $data['notifications'] ?? $data;
+	}
 
 	public function channel_stats($from = 'first day of this month', $to = 'last day of this month') {
 
@@ -34,45 +71,6 @@ class CleverpushAPI
 
 	public function channels() {
 		//dd($this->curl('/channels'));
-	}
-
-
-	public function notification($id = null) {
-
-		$data = $this->curl('/channel/' . $this->channelID. '/notification/' . $id);
-		$notification = $data['notification'];
-
-		$statsData = $this->curl('/channel/' . $this->channelID. '/notification/' . $id . '/hourly-statistics');
-		$notification['stats'] = $statsData['statistics'];
-
-		return $notification;
-
-	}
-
-	public function notifications($from = null, $to = null, $limit = 30, $status = null) {
-
-		$parameters = null;
-		$parameters .= '?startDate=' . strtotime($from . '00:00');
-		$parameters .= '&endDate=' . strtotime($to. '23:59');
-		$parameters .= '&limit=' . $limit;
-
-		//dd($parameters);
-
-		$data = $this->curl('/channel/' . $this->channelID. '/notifications' . $parameters);
-		return $data['notifications'] ?? $data;
-	}
-
-	public function notifications_today() {
-
-		$parameters = null;
-		$parameters .= '?startDate=' . strtotime('today');
-		$parameters .= '&endDate=' . strtotime('tomorrow');
-		$parameters .= '&limit=100';
-
-		//dd($parameters);
-
-		$data = $this->curl('/channel/' . $this->channelID. '/notifications' . $parameters);
-		return $data['notifications'] ?? $data;
 	}
 
 
