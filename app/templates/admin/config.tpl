@@ -64,6 +64,7 @@ Hier können Artikel, Conversions und Kampagnendaten inklusive Klick- und Kündi
 <div style="display:flex; gap:5px; align-items: start;">
 	<a class="button" href="/export/campaigns">UTM-Kampagnen</a>
 	<a class="button" href="/export/readers">Leserdaten</a>
+	<a class="button" href="/export/sales">Salesdaten</a>
 </div>
 
 </p>

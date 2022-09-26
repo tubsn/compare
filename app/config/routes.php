@@ -168,6 +168,7 @@ $routes->get('/artikel/compare/{swpID:\d+}/{mozID:\d+}/{lrID:\d+}', 'Livedata@ar
 // Push
 $routes->get('/push', 'Push@today');
 $routes->get('/push/archiv', 'Push@latest');
+$routes->get('/push/stats', 'Push@stats');
 $routes->get('/push/{id}', 'Push@detail');
 
 // Pages
@@ -188,6 +189,7 @@ $routes->get('/export/kpis', 'Exports@KPIs');
 $routes->get('/export/json', 'Exports@full_json');
 $routes->get('/export/ressorts', 'Exports@ressort_stats');
 $routes->get('/export/readers', 'Exports@readers');
+$routes->get('/export/sales', 'Exports@sales_data');
 $routes->get('/export/value', 'Exports@value_articles');
 $routes->get('/export/valueaudience', 'Exports@value_articles_by_audience');
 $routes->get('/export/linkpulse/current', 'Exports@linkpulse_current');
