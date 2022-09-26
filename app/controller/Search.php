@@ -18,6 +18,7 @@ class Search extends Controller {
 
 		$query = $_GET['q'] ?? null;
 		$query = htmlspecialchars($query);
+		$query = trim($query);
 		Session::set('referer', '/search' . '?q=' . $query);
 
 		if (empty($query)) {
