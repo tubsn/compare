@@ -29,7 +29,7 @@ class Cleverpush
 
 	public function stats() {
 
-		$cache = new RequestCache('pushStats', 30*60);
+		$cache = new RequestCache('pushStats-' . PORTAL , 30*60);
 		$cache->cacheDirectory = $this->cacheDirectory;
 		$stats = $cache->get();
 
