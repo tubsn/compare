@@ -74,7 +74,7 @@ class Cleverpush
 				}
 			}
 
-			if ($out[$hour]['created'] > 3) {
+			if ($out[$hour]['created'] > 5) {
 				$out[$hour]['clickrate'] = round($out[$hour]['clicks'] / $out[$hour]['delivered'],4);
 				$out[$hour]['clickCreateRate'] = round($out[$hour]['clicks'] / $out[$hour]['delivered'],4);
 			}

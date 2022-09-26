@@ -48,6 +48,7 @@ class Push extends Controller {
 		$this->view->hours = $this->Charts->convert($this->Cleverpush->click_stats());
 		$this->view->charts = $this->Charts;
 		$this->view->title = 'Klickraten nach Uhrzeit';
+		$this->view->info = 'Klicks und Ausspielungen sind abhängig davon welche Kanäle bespielt werden (mehr Kanäle = mehr potentielle Klicks)';
 		$this->view->render('articles/push/stats');
 	}
 
