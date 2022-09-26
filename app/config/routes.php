@@ -167,7 +167,7 @@ $routes->get('/artikel/compare/{swpID:\d+}/{mozID:\d+}/{lrID:\d+}', 'Livedata@ar
 
 // Push
 $routes->get('/push', 'Push@today');
-$routes->get('/push/archiv', 'Push@latest');
+$routes->get('/push/archiv', 'Push@list');
 $routes->get('/push/stats', 'Push@stats');
 $routes->get('/push/{id}', 'Push@detail');
 

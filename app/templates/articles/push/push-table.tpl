@@ -23,7 +23,7 @@
 	<td data-sortdate="<?=$notification['sentAt'] ?? $notification['queuedAt']?>" ><?=formatDate($notification['sentAt'] ?? $notification['queuedAt'],"H:i")?>&nbsp;Uhr</td>
 
 	<?php if ($notification['clicks']): ?>
-	<td class="text-right clickrate-level-<?=$notification['clickrate_level']?>" 
+	<td class="text-right clickrate-level-<?=$notification['clickrate_level']?>"
 		data-sortdate="<?=$notification['clickrate_sort']?>"
 		title="Zugestellt: <?=gnum($notification['delivered'])?> | Klicks: <?=gnum($notification['clicks'])?>">
 		<?=$notification['clickrate']?> %
@@ -32,7 +32,7 @@
 	<td data-sortdate="0" class="text-right">-</td>
 	<?php endif ?>
 
-	<?php if ($notification['article']['type']): ?>
+	<?php if (isset($notification['article']['type'])): ?>
 	<td class="text-center type"><a title="<?=$notification['article']['type']?>" class="type-link" href="/type/<?=urlencode(str_replace('/', '-slash-', $notification['article']['type']))?>"><?=$notification['article']['type']?></a></td>
 	<?php else: ?>
 	<td class="text-center">-</td>
@@ -40,21 +40,21 @@
 
 	<td class=""><a href="/push/<?=$notification['id']?>"><?=$notification['title']?></a></td>
 
-	<?php if ($notification['article']['audience']): ?>
+	<?php if (isset($notification['article']['audience'])): ?>
 	<td class="text-center"><a title="<?=$notification['article']['audience']?>" class="audience-link" href="/audience/<?=urlencode(str_replace('/', '-slash-', $notification['article']['audience']))?>"><?=$notification['article']['audience']?></a></td>
 	<?php else: ?>
 	<td class="text-center">-</td>
 	<?php endif ?>
 
 	<td><a href="/artikel/<?=$notification['article_id'] ?? ''?>"><?=ucfirst($notification['article']['ressort'] ?? $notification['article_id'] ?? '-')?></a></td>
-	
-	<?php if ($notification['article']['pageviews'] > 2500): ?>
+
+	<?php if (isset($notification['article']['pageviews']) && $notification['article']['pageviews'] > 2500): ?>
 	<td class="text-right"><span class="pageviews"><?=gnum($notification['article']['pageviews'])?></span></td>
 	<?php else: ?>
-	<td class="text-right"><?=gnum($notification['article']['pageviews'])?></td>
+	<td class="text-right"><?=gnum($notification['article']['pageviews'] ?? 0)?></td>
 	<?php endif ?>
-	
-	<?php if ($notification['article']['conversions'] > 0): ?>
+
+	<?php if (isset($notification['article']['conversions']) && $notification['article']['conversions'] > 0): ?>
 	<td class="text-left"><span class="conversions"><?=gnum($notification['article']['conversions'])?></span></td>
 	<?php else: ?>
 	<td class="text-left">-</td>

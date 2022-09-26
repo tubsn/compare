@@ -14,13 +14,31 @@ class CleverpushAPI
 	public function __construct() {}
 
 
+	public function channel_stats($from = 'first day of this month', $to = 'last day of this month') {
+
+		$parameters = null;
+		$parameters .= '?startDate=' . strtotime($from . '00:00');
+		$parameters .= '&endDate=' . strtotime($to. '23:59');
+
+		return $this->curl('/channel/' . $this->channelID. '/statistics' . $parameters);
+	}
+
+	public function channel_subscription_stats() {
+		return $this->curl('/channel/' . $this->channelID. '/subscription-count');
+	}
+
+	public function channel_segments() {
+		$data = $this->curl('/channel/' . $this->channelID. '/segments');
+		return $data['segments'] ?? $data;
+	}
+
 	public function channels() {
 		//dd($this->curl('/channels'));
 	}
 
 
 	public function notification($id = null) {
-		
+
 		$data = $this->curl('/channel/' . $this->channelID. '/notification/' . $id);
 		$notification = $data['notification'];
 
@@ -29,10 +47,10 @@ class CleverpushAPI
 
 		return $notification;
 
-	} 
+	}
 
 	public function notifications($from = null, $to = null, $limit = 30, $status = null) {
-		
+
 		$parameters = null;
 		$parameters .= '?startDate=' . strtotime($from . '00:00');
 		$parameters .= '&endDate=' . strtotime($to. '23:59');
@@ -45,7 +63,7 @@ class CleverpushAPI
 	}
 
 	public function notifications_today() {
-		
+
 		$parameters = null;
 		$parameters .= '?startDate=' . strtotime('today');
 		$parameters .= '&endDate=' . strtotime('tomorrow');
