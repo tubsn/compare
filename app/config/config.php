@@ -9,6 +9,15 @@ switch (PORTAL) {
 		define('PORTAL_EPAPER_URL', 'https://epaper.lr-online.de');
 		define('PORTAL_NAME', 'LR');
 
+		define('APP_PRODUCTS', [
+			'ir.lronline.product.year',
+			'ir.lrepaper.product.year',
+			'ir.lrepaper.product.month',
+			'ir.lrepaper.product.month',
+			'ir.lrepaper.product.year',
+			'ir.lronline.product.year',
+		]);
+
 		define('RESSORT_MAPPING', [
 			'cottbus' => 'cos',
 			'elsterwerda' => 'els',

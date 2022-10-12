@@ -47,6 +47,13 @@ javascript:(function(){
 <h3>Neu: Lesezeichen für Livestats als Layer auf der Webseite:</h3>
 <a class="button" href="javascript:(function(){document.body.appendChild(document.createElement('script')).src='//static.lr-digital.de/styles/js/hitmarklet.js';})();">Realtime-Stats</a>
 
+<br><br>
+<hr />
+
+<h3>Auch Neu: Pushcode für Artikel Direktverlinkung in die App vorbereiten:</h3>
+<a class="button" href="javascript:(function(){let artID = parseInt(location.pathname.substr(-13, 8));let path = 'lrapp://online/article/';window.prompt('ArtikelPushCode', path + artID);})();">Pushcode für Artikel</a>
+
+
 
 <br>
 <br><br>

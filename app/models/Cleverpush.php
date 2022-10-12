@@ -30,7 +30,7 @@ class Cleverpush
 
 	public function click_stats() {
 
-		$cache = new RequestCache('pushHourly-' . PORTAL , 24*60*60);
+		$cache = new RequestCache('pushHourly-' . PORTAL, 90*24*60*60);
 		$cache->cacheDirectory = $this->cacheDirectory;
 		$stats = $cache->get();
 

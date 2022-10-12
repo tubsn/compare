@@ -11,7 +11,7 @@ class Test extends Controller {
 
 	public function __construct() {
 		$this->view('DefaultLayout');
-		$this->models('Articles,Orders,Conversions,Analytics,Charts,Readers,Plenigo,Cleverpush');
+		$this->models('Articles,Orders,Conversions,Analytics,Charts,Readers,Plenigo,Cleverpush,Orders,DailyKPIs');
 	}
 
 	public function audience_sizes() {
@@ -19,47 +19,40 @@ class Test extends Controller {
 		dd($this->Readers->audience_sizes());
 	}
 
-	public function optins() {
+	public function api() {
+		dd($this->Plenigo->apple_orders());
+	}
 
-		/*
-		$unsetIDs = $this->Articles->get_unset_ids();
-		$type = null;
+	public function test() {
 
-		foreach ($unsetIDs as $id) {
+		// Sets Conversions in Daily KPIs
 
-			$article = $this->Articles->get($id,['type_lr','ressort']);
+		$startDate = '2022-09-28';
+		$endDate = '2022-10-06';
 
-			switch ($article['type_lr']) {
-				case 'Sport':
-					$type = 'Sport';
-					if ($article['ressort'] = 'energie-cottbus') {$type = 'Fußball';}
-				break;
+		$start = $this->create_date_object($startDate);
+		$end = $this->create_date_object($endDate);
 
-				case 'Politik/Wirtschaft': $type = 'Politik'; break;
-				case 'Crime/Blaulicht': $type = 'Katastrophen'; break;
-				case 'Tourismus': $type = 'Kultur'; break;
-				case 'Geschichte': $type = 'Soziales'; break;
-				case 'Landwirtschaft': $type = 'Wirtschaft'; break;
-				case '': $type = null; break;
-				
-				default: $type = $article['type_lr']; break;
-			}
+		$interval = new \DateInterval('P1D');
+		$period = new \DatePeriod($start, $interval, $end);
 
-			echo $id . ' | OLD: ' . $article['type_lr'] . '| NEW: ' . $type . '<br>';
+		$monthList = [];
+		foreach ($period as $date) {
+			$date = $date->format('Y-m-d');
 
-			//$this->Articles->update(['type' => $type], $id);
+			$this->Orders->from = $date;
+			$this->Orders->to = $date;
+			$conversions = $this->Orders->count();
+			$this->DailyKPIs->update(['conversions' => $conversions],$date);
 
 		}
-		*/
 
-		/*
-		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
-		$plenigo = new PlenigoApi;
-		dd($plenigo->test());
 
-		//$this->view->active = $this->Orders->active_after_days(60);
-		*/
+	}
 
+	private function create_date_object($dateString = null) {
+		if (is_null($dateString)) {return new \DateTime(date('Y-m-d'));}
+		return new \DateTime(date('Y-m-d', strtotime($dateString)));
 	}
 
 

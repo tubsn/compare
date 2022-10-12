@@ -21,7 +21,7 @@ class Push extends Controller {
 		$this->view->notifications = $notifications;
 		$this->view->stats = $this->Cleverpush->stats();
 		$this->view->title = 'Heutige Push-Meldungen über Cleverpush';
-		$this->view->info = '<b>Hinweis:</b> Pageviews und Conversions beziehen sich auf Gesamtdaten des gepushten Artikels! Es werden maximal 1.000 Einträge angezeigt.<br>Die <b>OptOuts sind nur ein Richtwert</b>, die Datenbasis ist ungenau und bezieht sich auf Austragungen von Nutzern bis zu dieser Pushmeldung. <a href="/push/stats">Statistiken (Beta)</a>';
+		$this->view->info = '<b>Hinweis:</b> Pageviews und Conversions beziehen sich auf Gesamtdaten des gepushten Artikels! Es werden maximal 1.000 Einträge angezeigt.<br>Die <b>OptOuts sind nur ein Richtwert</b>, die Datenbasis ist ungenau und bezieht sich auf Austragungen von Nutzern bis zu dieser Pushmeldung. <a href="/push/stats">Statistiken (Beta - Berechnung dauert bis 3min)</a>';
 		$this->view->render('articles/push/list');
 	}
 

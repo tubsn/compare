@@ -33,28 +33,38 @@ require_once ENV_PATH;
 // Load App Config
 require_once CONFIGPATH . 'config.php';
 
-
+$errors = [];
 $cron = new app\controller\CronImports();
 
 try {$cron->feeds();}
-catch (\Exception $e) {echo 'Error: ',  $e->getMessage(), "\n";}
+catch (\Exception $e) {echo 'Error: ',  $e->getMessage(), "\n"; array_push($errors, $e->getMessage());}
 
 try {$cron->import_global_kpis();}
-catch (\Exception $e) {echo 'Error: ',  $e->getMessage(), "\n";}
+catch (\Exception $e) {echo 'Error: ',  $e->getMessage(), "\n"; array_push($errors, $e->getMessage());}
 
 try {$cron->analytics_last_days();}
-catch (\Exception $e) {echo 'Error: ',  $e->getMessage(), "\n";}
+catch (\Exception $e) {echo 'Error: ',  $e->getMessage(), "\n"; array_push($errors, $e->getMessage());}
 
 try {$cron->import_utm_campaigns(5);}
-catch (\Exception $e) {echo 'Error: ',  $e->getMessage(), "\n";}
+catch (\Exception $e) {echo 'Error: ',  $e->getMessage(), "\n"; array_push($errors, $e->getMessage());}
 
 try {$cron->conversions();}
-catch (\Exception $e) {echo 'Error: ',  $e->getMessage(), "\n";}
+catch (\Exception $e) {echo 'Error: ',  $e->getMessage(), "\n"; array_push($errors, $e->getMessage());}
 
 try {$cron->analytics_longtail();}
-catch (\Exception $e) {echo 'Error: ',  $e->getMessage(), "\n";}
+catch (\Exception $e) {echo 'Error: ',  $e->getMessage(), "\n"; array_push($errors, $e->getMessage());}
 
 try {$cron->epaper_import();}
-catch (\Exception $e) {echo 'Error: ',  $e->getMessage(), "\n";}
+catch (\Exception $e) {echo 'Error: ',  $e->getMessage(), "\n"; array_push($errors, $e->getMessage());}
 
 echo 'Jobs Done - Processing-Time: <b>'.round((microtime(true)-APP_START)*1000,2) . '</b>ms' . "\r\n";
+
+if (!empty($errors)) {
+	$mailData['errors'] = $errors;
+	$mailData['runtime'] = round((microtime(true)-APP_START)*1000,2);
+	$mail = new \flundr\message\Email();
+	$mail->subject = 'Fehler beim Import aufgetreten | ' . PORTAL;
+	$mail->from = 'compare@lr-digital.de';
+	$mail->to = DEBUG_MAILS;
+	$mail->send('email/import-errors', $mailData);
+}

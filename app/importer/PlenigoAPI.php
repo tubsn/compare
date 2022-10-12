@@ -35,6 +35,103 @@ class PlenigoAPI
 
 	}
 
+
+	public function app_store_apple($start, $end, $lastID = null) {
+
+		$start = date("Y-m-d", strtotime($start));
+		$end = date("Y-m-d", strtotime($end));
+
+		if ($this->range_too_big($start, $end)) {
+			throw new \Exception("Datespan is too long", 404);
+		}
+
+		$startingAfter = null;
+		if ($lastID) {$startingAfter = '&startingAfter=' . $lastID;}
+
+		$apiQuery = '/appStores/appleAppStore/?startTime=' . $start . 'T00:00:00Z&endTime=' . $end . 'T23:59:59Z&size=100' . $startingAfter;
+		$data = $this->curl($apiQuery);
+
+		$orders = $data['items'];
+		if (empty($orders)) {return;}
+
+		$endOfArrayID = end($orders)['appleAppStorePurchaseId'];
+		if (count($orders) >= 100 && !empty($endOfArrayID)) {
+			$newOrders = call_user_func([$this, __FUNCTION__], $start, $end, $endOfArrayID);
+			if ($newOrders) {$orders = array_merge($orders, $newOrders);}
+		}
+
+		return $orders;
+
+	}
+
+	public function app_store_google($start, $end, $lastID = null) {
+
+		$start = date("Y-m-d", strtotime($start));
+		$end = date("Y-m-d", strtotime($end));
+
+		if ($this->range_too_big($start, $end)) {
+			throw new \Exception("Datespan is too long", 404);
+		}
+
+		$startingAfter = null;
+		if ($lastID) {$startingAfter = '&startingAfter=' . $lastID;}
+
+		$apiQuery = '/appStores/googlePlayStore/?startTime=' . $start . 'T00:00:00Z&endTime=' . $end . 'T23:59:59Z&size=100' . $startingAfter;
+		$data = $this->curl($apiQuery);
+
+		$orders = $data['items'];
+		if (empty($orders)) {return;}
+
+		$endOfArrayID = end($orders)['googlePlayStorePurchaseId'];
+		if (count($orders) >= 100 && !empty($endOfArrayID)) {
+			$newOrders = call_user_func([$this, __FUNCTION__], $start, $end, $endOfArrayID);
+			if ($newOrders) {$orders = array_merge($orders, $newOrders);}
+		}
+
+		return $orders;
+
+	}
+
+	public function app_store_mapped_orders($start, $end, $lastID = null) {
+
+		$start = date("Y-m-d", strtotime($start));
+		$end = date("Y-m-d", strtotime($end));
+
+		$startingAfter = null;
+		if ($lastID) {$startingAfter = '&startingAfter=' . $lastID;}
+
+		$apiQuery = '/appStores/orders/?startTime=' . $start . 'T00:00:00Z&endTime=' . $end . 'T23:59:59Z&size=100' . $startingAfter;
+		$data = $this->curl($apiQuery);
+
+		$orders = $data['items'];
+		if (empty($orders)) {return;}
+
+		$endOfArrayID = end($orders)['appStoreOrderId'];
+		if (count($orders) >= 100 && !empty($endOfArrayID)) {
+			$newOrders = call_user_func([$this, __FUNCTION__], $start, $end, $endOfArrayID);
+			if ($newOrders) {$orders = array_merge($orders, $newOrders);}
+		}
+
+		return $orders;
+
+		/*
+		$start = '2022-10-04';
+
+		$params = '?size=100';
+		$params .= '&startTime=' . $start . 'T00:00:00Z';
+
+		//https://api.plenigo.com/api/v3.0/appStores/googlePlayStore
+		//https://api.plenigo.com/api/v3.0/appStores/appleAppStore
+		//$apiQuery = '/appStores/appleAppStore';
+		$apiQuery = '/appStores/orders';
+		//$apiQuery = '/appStores/googlePlayStore';
+		//$apiQuery = '/appStores/subscriptions';
+		$data = $this->curl($apiQuery.$params);
+		return $data;
+		*/
+
+	}	
+
 	public function invoices($start = 'today', $end = 'today', $lastID = null) {
 
 		$start = date("Y-m-d", strtotime($start));
@@ -152,7 +249,7 @@ class PlenigoAPI
 		return $data;
 	}
 
-	public function app_orders($id ) {
+	public function customer_app_orders($id ) {
 		$data = $this->curl('/customers/' . $id . '/appStoreOrders');
 		return $data;
 	}

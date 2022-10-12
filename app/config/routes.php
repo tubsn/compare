@@ -5,7 +5,7 @@ $routes->get('/', 'Stats@dashboard');
 
 // Teststuff
 $routes->get('/cards', 'Lists@cards');
-$routes->get('/optins', 'Test@optins');
+$routes->get('/test', 'Test@test');
 $routes->get('/sizes', 'Test@audience_sizes');
 $routes->get('/import/topics', 'Import@topics');
 
@@ -73,6 +73,7 @@ $routes->get('/orders/live', 'Livedata@index');
 $routes->get('/orders/yesterday', 'Livedata@orders_yesterday');
 $routes->get('/orders/today', 'Livedata@orders_today');
 
+$routes->get('/orders/app', 'Orders@list_app_orders');
 $routes->get('/orders/payguys', 'LongtermAnalysis@started_payment');
 $routes->get('/orders/sources', 'Livedata@compared_conversion_sources');
 

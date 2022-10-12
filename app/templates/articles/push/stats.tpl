@@ -29,7 +29,7 @@
 	</figure>
 
 	<figure class="mb">
-		<h3 class="text-center" style="margin:0">Pushmeldungen Erstellt</h3>
+		<h3 class="text-center" style="margin:0">Pushmeldungen erstellt</h3>
 		<?=$charts->create([
 			'metric' => $hours['created'],
 			'dimension' => $hours['dimensions'],
@@ -61,7 +61,7 @@
 	</figure>
 
 	<figure class="mb">
-		<h3 class="text-center" style="margin:0">an Nutzer Ausgespielt</h3>
+		<h3 class="text-center" style="margin:0">an Nutzer ausgespielt</h3>
 		<?=$charts->create([
 			'metric' => $hours['delivered'],
 			'dimension' => $hours['dimensions'],

@@ -40,7 +40,9 @@ class RSS_Adapter
 		$article['author'] = $components[0]->AdministrativeMetadata->xpath('Property[@FormalName="Author"]')[0]['Value']->__toString();
 		$article['plus'] = $xml->NewsItem->NewsManagement->accessRights->__toString()  == 'available to subscribers only' ? true : false;
 
-		$timestamp = $xml->NewsItem->Identification->NewsIdentifier->DateId->__toString();
+		$timestamp = $xml->NewsItem->NewsManagement->ThisRevisionCreated->__toString();
+		if (empty($timestamp)) {$timestamp = $xml->NewsItem->Identification->NewsIdentifier->DateId->__toString();}
+
 		$article['pubdate'] = date('Y-m-d H:i:s', strtotime($timestamp));
 
 		if (isset($xml->NewsItem->xpath('NewsComponent[@Duid="leadImage"]//NewsComponent')[0]->ContentItem['Href'])) {

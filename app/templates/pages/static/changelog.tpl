@@ -15,6 +15,22 @@
 
 <hr>
 
+
+
+
+<h2>10.10.2022 - Churn Explorer Erweiterung</h2>
+
+<ul>
+	<li>Im Churn Explorer lassen sich jetzt mehrere Produkte gleichzeitig selektieren, dadurch lassen sich z.B. alle Jahresabos miteinander vergleichen.</li>
+</ul>
+
+<h2>6.10.2022 - App Produkte aus Plenigo</h2>
+
+<ul>
+	<li>App-Käufe und Rechte aus Plenigo angedockt.</li>
+</ul>
+
+
 <h2>22.09.2022 - Integration der Cleverpush API</h2>
 
 <ul>

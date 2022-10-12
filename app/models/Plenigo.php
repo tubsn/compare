@@ -4,6 +4,7 @@ namespace app\models;
 use \flundr\utility\Session;
 use \flundr\cache\RequestCache;
 use app\importer\PlenigoAPI;
+use app\importer\mapping\PlenigoAppStoreMapping;
 
 class Plenigo
 {
@@ -34,6 +35,43 @@ class Plenigo
 		}
 		return $output;
 	}
+
+
+
+	public function appstore_orders($start = 'first day of this month', $end = 'today') {
+
+		$mapper = new PlenigoAppStoreMapping();
+
+		$appStoreOrders = $this->api->app_store_apple($start,$end);
+		$appStoreOrders = array_map([$mapper, 'map_appstore_order'], $appStoreOrders);
+		
+		$playStoreOrders = $this->api->app_store_google($start,$end);
+		$playStoreOrders = array_map([$mapper, 'map_playstore_order'], $playStoreOrders);
+
+		$appOrders = $playStoreOrders + $appStoreOrders;
+
+		$appOrders = array_filter($appOrders, function($order) {
+			if ($order['is_valid_product'] && $order['valid'] && $order['order_type'] == 'Production') {return $order;}
+		});
+
+		usort($appOrders, function($a, $b) {
+			return $a['order_date'] < $b['order_date'];
+		});
+
+		return array_values($appOrders);
+
+	}
+
+	public function appstores_mapped_to_customers($start = 'yesterday', $end = 'yesterday') {
+
+		$appOrders = $this->api->app_store_mapped_orders($start,$end);
+		$mapper = new PlenigoAppStoreMapping();
+		$appOrders = array_map([$mapper, 'map_appstore_order'], $appOrders);
+
+		return $appOrders;
+
+	}
+
 
 	public function customer($id) {
 		return $this->api->customer($id);
@@ -316,6 +354,7 @@ class Plenigo
 		return $new;
 
 	}
+
 
 	private function map_customer($org) {
 

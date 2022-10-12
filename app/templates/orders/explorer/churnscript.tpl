@@ -1,6 +1,8 @@
 <script src="https://unpkg.com/vue@3.2.33/dist/vue.global.prod.js"></script>
 <script>
 
+<?$urlEncodedProducts = array_map('urlencode', $products);?>
+
 document.addEventListener("DOMContentLoaded", function(){
 
 Vue.createApp({
@@ -10,7 +12,6 @@ Vue.createApp({
 			to: '',
 			month: '',
 			compressed: true,
-			product: '',
 			segment: '',
 			testgroup: '',
 			ressort: '',
@@ -24,6 +25,7 @@ Vue.createApp({
 			cancelled: 0,
 			retention: 0,
 			paymethod: '',
+			product: [],
 		}
 	},
 
@@ -53,7 +55,7 @@ Vue.createApp({
 
 	methods: {
 		calculateChurn() {
-			fetch(`/api/explorer?from=${this.from}&to=${this.to}&compressed=${this.compressed}&product=${this.product}&segment=${this.segment}&testgroup=${this.testgroup}&origin=${this.origin}&source_grp=${this.source_grp}&source=${this.source}&ressort=${this.ressort}&type=${this.type}&audience=${this.audience}&days=${this.days}&paymethod=${this.paymethod}`)
+			fetch(`/api/explorer?from=${this.from}&to=${this.to}&compressed=${this.compressed}&product=${this.product}&segment=${this.segment}&testgroup=${this.testgroup}&origin=${this.origin}&source_grp=${this.source_grp}&source=${this.source}&ressort=${this.ressort}&type=${this.type}&audience=${this.audience}&days=${this.days}&paymethod=${this.paymethod}&product2=${this.product2}`)
 			.then(response => response.json())
 			.then(data => {
 				this.orders = data.orders;
@@ -64,6 +66,11 @@ Vue.createApp({
 				ChartExplorer.updateSeries(chart);
 
 			});
+		},
+
+		selectCurrent(selection) {
+			console.log(selection);
+
 		},
 
 		filterMonth() {

@@ -13,7 +13,7 @@ class Orders extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Articles,Orders,Campaigns,Longterm,Charts,Maps');
+		$this->models('Articles,Orders,Plenigo,Campaigns,Longterm,Charts,Maps');
 	}
 
 
@@ -55,7 +55,6 @@ class Orders extends Controller {
 
 	}
 
-
 	public function list_cancellations() {
 
 		Session::set('referer', '/orders/list-cancellactions');
@@ -81,6 +80,12 @@ class Orders extends Controller {
 		$this->view->render('orders/cancellations-list', $viewData);
 
 	}
+
+	public function list_app_orders() {
+		$this->view->orders = $this->Plenigo->appstore_orders();
+		$this->view->render('orders/app/list');
+	}
+
 
 	public function yearly_converters() {
 		dump($this->Orders->count_yearly_into_default_subscription());

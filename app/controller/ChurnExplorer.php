@@ -85,8 +85,11 @@ class ChurnExplorer extends Controller {
 		$cancelFilters = [];
 
 		if (!empty($product)) {
-			array_push($orderFilters, "subscription_internal_title = '$product'");
-			array_push($cancelFilters, "subscription_internal_title = '$product'");
+			// Should be a Comma seperated array
+			$products = explode(',', $product);
+			$productsString = '(subscription_internal_title = \'' . implode('\' || subscription_internal_title = \'', $products) .'\')';
+			array_push($orderFilters, $productsString);
+			array_push($cancelFilters, $productsString);
 		}
 
 		if (!empty($segment)) {

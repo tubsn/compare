@@ -42,7 +42,7 @@ class Newsletter extends Controller {
 			'cvoigt@moz.de', 'matthias.haack@ruppiner-anzeiger.de', 'uwuttke@moz.de', 'kbeiszer@moz.de', 'hroessler@moz.de', 'skretschmer@moz.de'
 		];
 
-		$infoMail->cc = ['sebastian.butt@lr-online.de', 'oht@lr-online.de'];
+		$infoMail->cc = ['oht@lr-online.de'];
 
 		if ($send) {
 			$infoMail->send('newsletter/sport-review', $viewData);
@@ -85,7 +85,7 @@ class Newsletter extends Controller {
 		$infoMail = new Email();
 		$infoMail->subject = PORTAL . '- Nachdreh-Alert am ' . TAGESNAMEN[date('w', strtotime('today'))];
 		$infoMail->to = ['oht@lr-online.de', 'twinkler@moz.de'];
-		$infoMail->cc = ['sebastian.butt@lr-online.de', 'mariell.begemann@lr-online.de'];
+		$infoMail->cc = ['sebastian.butt@lr-online.de'];
 
 		if ($send) {
 			$infoMail->send('newsletter/nachdreh-alert', $viewData);
@@ -122,7 +122,7 @@ class Newsletter extends Controller {
 		$infoMail = new Email();
 		$infoMail->subject = ucfirst($region) . ' - Nachdreh-Alert am ' . TAGESNAMEN[date('w', strtotime('today'))];
 		$infoMail->to = ['harriet.stuermer@lr-online.de'];
-		$infoMail->cc = ['sebastian.butt@lr-online.de'];
+		//$infoMail->cc = ['sebastian.butt@lr-online.de'];
 
 		if ($send) {
 			$infoMail->send('newsletter/nachdreh-alert-filtered', $viewData);
@@ -163,7 +163,7 @@ class Newsletter extends Controller {
 		$infoMail = new Email();
 		$infoMail->subject = 'MOZ - Wochenbericht';
 		$infoMail->to = ['twinkler@moz.de'];
-		$infoMail->cc = ['sebastian.butt@lr-online.de'];
+		//$infoMail->cc = ['sebastian.butt@lr-online.de'];
 
 		if ($send) {
 			$infoMail->send('newsletter/nachdreh-alert-score', $viewData);

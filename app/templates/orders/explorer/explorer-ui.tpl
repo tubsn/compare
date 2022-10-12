@@ -33,8 +33,17 @@
 		</fieldset>
 		</figure>
 
+		<div class="explorer-product">Produkte filtern:
+			<div class="explorer-product-grid">
+				<?php foreach ($products as $productName): ?>
+				<label><input @change="calculateChurn" type="checkbox" v-model="product" value="<?=urlencode($productName)?>"/> <?=str_replace('swpPLUS__', '', $productName)?></label>
+				<?php endforeach; ?>
+			</div>
+		</div>
+
 		<div class="explorer-filter-grid">
 
+<!--
 			<figure>
 			Produkt:
 			<select v-model="product" @change="calculateChurn">
@@ -44,13 +53,23 @@
 				<?php endforeach; ?>
 			</select>
 			</figure>
-
+-->
 			<figure>
-			Ursprung:
+			Quelle:
 			<select v-model="origin" @change="calculateChurn">
 				<option value="">kein Filter</option>
 				<?php foreach ($origins as $originName): ?>
 				<option value="<?=$originName?>"><?=$originName?></option>
+				<?php endforeach; ?>
+			</select>
+			</figure>
+
+			<figure>
+			Zahlmethoden:
+			<select v-model="paymethod" @change="calculateChurn">
+				<option value="">kein Filter</option>
+				<?php foreach ($paymentMethods as $paymentMethodName): ?>
+				<option value="<?=$paymentMethodName?>"><?=ucfirst(strtolower($paymentMethodName))?></option>
 				<?php endforeach; ?>
 			</select>
 			</figure>
@@ -119,6 +138,7 @@
 			</select>
 			</figure>
 
+			<!--
 			<figure>
 			A/B-Testgroup (Drive):
 			<select v-model="testgroup" @change="calculateChurn">
@@ -128,16 +148,7 @@
 				<?php endforeach; ?>
 			</select>
 			</figure>
-
-			<figure>
-			Zahlmethoden:
-			<select v-model="paymethod" @change="calculateChurn">
-				<option value="">kein Filter</option>
-				<?php foreach ($paymentMethods as $paymentMethodName): ?>
-				<option value="<?=$paymentMethodName?>"><?=ucfirst(strtolower($paymentMethodName))?></option>
-				<?php endforeach; ?>
-			</select>
-			</figure>
+			-->
 
 		<!--
 		<figure>
@@ -246,6 +257,11 @@
 .explorer-ui button {padding:.3em .5em; font-family:var(--font-highlight); font-size:.8em; border-right:0; cursor:pointer;}
 
 .explorer-filter-grid {display:grid; grid-template-columns: 1fr 1fr; grid-gap:1em; margin:1em 0}
+
+.explorer-product {margin:1em 0}
+.explorer-product-grid {display:grid; grid-template-columns: 1fr 1fr; grid-gap:.1em; padding: 0.3em; background: #f0f0f0; border-radius: 2px;}
+.explorer-product-grid label {cursor:pointer;}
+
 
 .explorer-results {align-self: stretch;}
 
