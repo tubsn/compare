@@ -20,7 +20,7 @@
 				<li><a href="/tag">nach #-Tags</a></li>
 				<li><a href="/audience">nach Audiences</a></li>
 				<li><a href="/discover">Google Discover Artikel</a></li>
-				<li><a href="/epaper">ePaper Artikel</a></li>				
+				<li><a href="/epaper">ePaper Artikel</a></li>
 			</ul>
 		</li>
 
@@ -52,7 +52,7 @@
 		<li><a href="/stats/audience-by-ressort" aria-haspopup="true">Produktion</a>
 			<ul class="dropdown" aria-label="submenu">
 				<li><a href="/stats/artikel">Artikel-Produktion</a></li>
-				<li><a href="/stats/audience-by-ressort">Audiences nach Ressort</a></li>				
+				<li><a href="/stats/audience-by-ressort">Audiences nach Ressort</a></li>
 				<li class="highlight"><a href="/push">Push-Meldungen (Clever-Push)</a></li>
 			</ul>
 		</li>
@@ -84,6 +84,9 @@
 				<li><a href="/orders/behavior">Kundenverhalten</a></li>
 				<li><a href="/stats/segments">Nutzer-Segmente (DAS)</a></li>
 				<li><a href="/orders/utm">UTM-Kampagnen</a></li>
+				<?php if (PORTAL == 'LR'): ?>
+				<li><a href="/orders/app">Echtzeit Appstores</a></li>
+				<?php endif; ?>
 				<li><a href="/orders/today">Echtzeit Bestelleingang</a></li>
 				<!--<li><a href="/readers/multiple-orders">Mehrfach - Bestellungen</a></li>-->
 				<!--<li><a href="/readers/list">Bestellungen mit Usergroup (Beta)</a></li>-->
@@ -95,7 +98,7 @@
 				<li><a href="/longterm">Abo- / KPI-Entwicklung</a></li>
 				<!--<li><a href="/teasers">Teaser-Statistiken (LR)</a></li>-->
 				<li><a target="_blank" href="https://datastudio.google.com/reporting/e4aaadbb-dd68-404f-866d-5c9beb52e6d3/page/p_25ynp9bisc">Kündigergründe Board</a></li>
-				<li><a href="/readers/multiple-orders">Mehrfachbestellungen</a></li>				
+				<li><a href="/readers/multiple-orders">Mehrfachbestellungen</a></li>
 				<li><a href="/orders/map/local">Abo-Karte</a></li>
 				<li><a href="/readers/map/local">Nutzer-Karte</a></li>
 				<li class="highlight"><a href="/transactions">Plenigo - Buchungen</a></li>

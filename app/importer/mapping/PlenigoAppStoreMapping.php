@@ -8,11 +8,12 @@ class PlenigoAppStoreMapping
 	public $validProducts = APP_PRODUCTS;
 	private $defaultFields = [
 		'order_id' => null,
+		'mapped_order_id' => null,
 		'customer_id' => null,
 		'order_status' => null,
 		'order_title' => null,
 		'order_origin' => 'UNKNOWN',
-		'order_type' => null, // Stage or Live
+		'order_type' => 'Production', // Stage or Live
 		'order_date' => null,
 		'subscription_start_date' => null,
 		'subscription_end_date' => null,
@@ -29,6 +30,7 @@ class PlenigoAppStoreMapping
 
 		$new = $this->defaultFields;
 		$new['order_id'] = $org['googlePlayStorePurchaseId'];
+		$new['mapped_order_id'] = $org['appStoreOrderId'];
 		$new['order_title'] = $org['productId'];
 		$new['order_origin'] = 'PLAYSTORE';
 		$new['valid'] = $org['valid'];
@@ -49,7 +51,9 @@ class PlenigoAppStoreMapping
 			$new['order_date'] = $new['subscription_start_date'] ?? null;
 		}
 
-		if (in_array($org['productId'], $this->validProducts)) {$new['is_valid_product'];}
+		if (in_array($org['productId'], $this->validProducts)) {$new['is_valid_product'] = true;}
+
+		$new['sub_orders'] = $org;
 
 		return $new;
 
@@ -59,22 +63,23 @@ class PlenigoAppStoreMapping
 
 	public function map_appstore_order($org) {
 
-		$new['order_id'] = $org['appleAppStorePurchaseId'] ?? $org['googlePlayStorePurchaseId'] ?? $org['appStoreOrderId'] ?? null;
+		$new = $this->defaultFields;
+
+		$new['order_id'] = $org['appleAppStorePurchaseId'] ?? $org['googlePlayStorePurchaseId'] ?? null;
+		$new['mapped_order_id'] = $org['appStoreOrderId'] ?? null;
+
 		$new['customer_id'] = $org['customerId'] ?? null;
 		$new['order_status'] = $org['status'] ?? $org['receipt']['status'] ?? null;
-		$new['order_title'] = null;
-		
+
 		$new['order_origin'] = 'UNKNOWN';
 		if (isset($org['appleAppStorePurchaseId'])) {$new['order_origin'] = 'APPSTORE';}
 		if (isset($org['googlePlayStorePurchaseId'])) {$new['order_origin'] = 'PLAYSTORE';}
 		if (isset($org['storeType'])) {$new['order_origin'] = $org['storeType'];}
 
-		$new['order_type'] = null;
 		if (isset($org['receipt'])) {
 			$new['order_type'] = $org['receipt']['receiptType'] ?? null;
 		}
 
-		$new['order_date'] = null;		
 		if (isset($org['orderDate'])) {
 			$new['order_date'] = date("Y-m-d H:i:s", strtotime($org['orderDate']));
 		}
@@ -83,12 +88,10 @@ class PlenigoAppStoreMapping
 		$new['subscription_end_date'] = null;
 		$new['subscription_cancellation_date'] = null;
 
-		$new['order_plenigo_refresh_date'] = null;		
 		if (isset($org['changedDate'])) {
 			$new['order_plenigo_refresh_date'] = date("Y-m-d H:i:s", strtotime($org['changedDate']));
 		}
 
-		$new['order_plenigo_added_date'] = null;		
 		if (isset($org['purchaseDate'])) {
 			$new['order_plenigo_added_date'] = date("Y-m-d H:i:s", strtotime($org['purchaseDate']));
 		}
@@ -102,7 +105,7 @@ class PlenigoAppStoreMapping
 		}
 
 		$new['valid'] = $org['valid'] ?? null;
-		$new['is_valid_product'] = null;
+
 		foreach ($new['sub_orders'] as $order) {
 			if (in_array($order['product_id'], $this->validProducts)) {
 				$new['is_valid_product'] = true;
@@ -126,7 +129,7 @@ class PlenigoAppStoreMapping
 
 		$new['access_right'] = $org['accessRightUniqueId'] ?? null;
 		$new['product_id'] = $org['productId'] ?? null;
-		
+
 		$new['expires_date'] = $org['expiresDate'] ?? null;
 		$new['purchase_date'] = $org['purchaseDate'] ?? null;
 		$new['original_purchase_date'] = $org['originalPurchaseDate'] ?? null;
@@ -139,7 +142,7 @@ class PlenigoAppStoreMapping
 			$new['expires_date'] = $org['additionalStoreItemData']['expiresDate'] ?? null;
 			$new['original_purchase_date'] = $org['additionalStoreItemData']['originalPurchaseDate'] ?? null;
 			$new['purchase_date'] = $org['additionalStoreItemData']['purchaseDate'] ?? null;
-			
+
 		}
 
 		return $new;

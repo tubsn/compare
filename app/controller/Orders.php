@@ -83,6 +83,7 @@ class Orders extends Controller {
 
 	public function list_app_orders() {
 		$this->view->orders = $this->Plenigo->appstore_orders();
+		$this->view->title = 'App Store Bestellungen';
 		$this->view->render('orders/app/list');
 	}
 

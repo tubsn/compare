@@ -5,6 +5,7 @@ use \flundr\utility\Session;
 use \flundr\cache\RequestCache;
 use app\importer\PlenigoAPI;
 use app\importer\mapping\PlenigoAppStoreMapping;
+use app\importer\mapping\PlenigoOrderMapping;
 
 class Plenigo
 {
@@ -18,18 +19,19 @@ class Plenigo
 	public function orders($start, $end, $items, $showAll = false) {
 
 		$orders = $this->api->orders($start, $end, $items);
-		
+
 		if (empty($orders)) {return [];}
 
 		if (!$showAll) {$orders = array_filter($orders, [$this, 'remove_free_products']);}
-		
-		$orderData = array_map([$this, 'map_order'], $orders);
-		$subscriptionData = array_map([$this, 'map_subscription_data'], $orders);
-		$customerData = array_map([$this, 'map_customer'], $orders);
+
+		$mapper = new PlenigoOrderMapping();
+		$orderData = array_map([$mapper, 'map_order'], $orders);
+		$subscriptionData = array_map([$mapper, 'map_subscription_data'], $orders);
+		$customerData = array_map([$mapper, 'map_customer'], $orders);
 
 		$output = [];
 		foreach ($orders as $key => $order) {
-			
+
 			$output[$key] = array_merge($orderData[$key], $subscriptionData[$key], $customerData[$key]);
 
 		}
@@ -38,28 +40,43 @@ class Plenigo
 
 
 
-	public function appstore_orders($start = 'first day of this month', $end = 'today') {
+	public function appstore_orders($start = '2022-10-01', $end = 'today') {
 
 		$mapper = new PlenigoAppStoreMapping();
 
 		$appStoreOrders = $this->api->app_store_apple($start,$end);
 		$appStoreOrders = array_map([$mapper, 'map_appstore_order'], $appStoreOrders);
-		
+
 		$playStoreOrders = $this->api->app_store_google($start,$end);
 		$playStoreOrders = array_map([$mapper, 'map_playstore_order'], $playStoreOrders);
 
 		$appOrders = $playStoreOrders + $appStoreOrders;
-
-		$appOrders = array_filter($appOrders, function($order) {
-			if ($order['is_valid_product'] && $order['valid'] && $order['order_type'] == 'Production') {return $order;}
-		});
+		$appOrders = array_filter($appOrders, [$this, 'valid_app_products_and_orders']);
 
 		usort($appOrders, function($a, $b) {
 			return $a['order_date'] < $b['order_date'];
 		});
 
+		foreach ($appOrders as $key => $order) {
+			if (isset($order['mapped_order_id']) && $order['mapped_order_id'] != 0) {
+				$appOrders[$key]['customer_id'] = $this->get_mapped_app_store_customer_id($order['mapped_order_id']);
+			}
+		}
+
 		return array_values($appOrders);
 
+	}
+
+	private function get_mapped_app_store_customer_id($appStoreOrderId) {
+		//$mapper = new PlenigoAppStoreMapping();
+		$data = $this->api->app_store_mapped_order($appStoreOrderId);
+		//dd($mapper->map_appstore_order($data));
+		return $data['customerId'];
+
+	}
+
+	private function valid_app_products_and_orders($order) {
+		if ($order['is_valid_product'] && $order['valid'] && $order['order_type'] == 'Production') {return $order;}
 	}
 
 	public function appstores_mapped_to_customers($start = 'yesterday', $end = 'yesterday') {
@@ -94,10 +111,10 @@ class Plenigo
 		$subscription = $this->active_subscription($order);
 		$subscription['orderDate'] = $order['orderDate']; // Keep original Orderdate
 
-		$subscription = $this->map_subscription_data($subscription);
-
-		$customer = $this->map_customer($order);
-		$order = $this->map_order($order);
+		$mapper = new PlenigoOrderMapping();
+		$subscription = $mapper->map_subscription_data($subscription);
+		$customer = $mapper->map_customer($order);
+		$order = $mapper->map_order($order);
 
 		// Failsafe if there is no OrderID in Plenigo, which seems to happen
 		if (empty($order['order_id'])) {$order['order_id'] = $orderID;}
@@ -124,7 +141,7 @@ class Plenigo
 
 
 	public function transactions($start, $end) {
-		
+
 		$transactions = $this->api->transactions($start, $end);
 
 		// Exclude the Mandate Creations
@@ -148,14 +165,14 @@ class Plenigo
 		if (isset($_GET['paypal'])) {
 			$transactions = array_filter($transactions, function($transaction) {
 				if ($transaction['paymentProvider'] == 'PAYPAL') {return $transaction;}
-			});			
+			});
 		}
 
 		// Debug for Stripe Only
 		if (isset($_GET['stripe'])) {
 			$transactions = array_filter($transactions, function($transaction) {
 				if ($transaction['paymentProvider'] == 'STRIPE') {return $transaction;}
-			});			
+			});
 		}
 
 		// Separating the Mandate-Creations from the rest
@@ -181,7 +198,7 @@ class Plenigo
 	private function filter_failed(array $array) {
 		return array_filter($array, function($entry) {
 			if (
-				$entry['paymentStatus'] == 'FAILURE' 
+				$entry['paymentStatus'] == 'FAILURE'
 				|| $entry['paymentAction'] == 'PAYPAL_REFUND'
 				|| $entry['paymentAction'] == 'CREDIT_CARD_REFUND'
 				|| $entry['paymentAction'] == 'SEPA_VOID'
@@ -192,7 +209,7 @@ class Plenigo
 	private function filter_succes(array $array) {
 		return array_filter($array, function($entry) {
 			if (
-				$entry['paymentStatus'] == 'SUCCESS' 
+				$entry['paymentStatus'] == 'SUCCESS'
 				&& $entry['paymentAction'] != 'PAYPAL_REFUND'
 				&& $entry['paymentAction'] != 'CREDIT_CARD_REFUND'
 				&& $entry['paymentAction'] != 'SEPA_VOID'
@@ -203,7 +220,7 @@ class Plenigo
 	private function filter_chargebacks(array $array) {
 		return array_filter($array, function($entry) {
 			if (
-				$entry['paymentAction'] == 'SEPA_DEBIT_RETURN' 
+				$entry['paymentAction'] == 'SEPA_DEBIT_RETURN'
 				|| $entry['paymentAction'] == 'PAYPAL_REFUND'
 				|| $entry['paymentAction'] == 'CREDIT_CARD_REFUND'
 				|| $entry['paymentAction'] == 'SEPA_VOID'
@@ -243,7 +260,7 @@ class Plenigo
 
 	public function calculate_chargeback_costs($transactions) {
 
-		// Paypal 0 + Transaktionskosten 
+		// Paypal 0 + Transaktionskosten
 		// Stripe 3,5€
 
 		$total = 0;
@@ -254,35 +271,8 @@ class Plenigo
 			if ($transaction['paymentMethod'] == 'CREDIT_CARD') {$amount = 3.5;}
 			$total += $amount;
 		}
-		
+
 		return $total;
-
-	}
-
-
-	private function map_order($org) {
-
-		$new['order_id'] = $org['orderId'];
-		$new['order_date'] = date("Y-m-d H:i:s", strtotime($org['orderDate']));
-		$new['order_title'] = $org['items'][0]['title'];
-		$new['order_price'] = $org['items'][0]['price'];
-		$new['order_payment_method'] = $org['paymentMethod'];
-
-		if (isset($org['data']['sourceUrl'])) {
-
-			$url = $org['data']['sourceUrl'];
-
-			$new['order_source'] = $url;
-			$new['order_origin'] = $this->extract_order_origin($url);
-
-			if ($new['order_origin'] == 'Artikel') {
-				$new['article_id'] = $this->extract_id($url);
-				$new['article_ressort'] = $this->extract_ressort($url);
-			}
-
-		}
-
-		return $new;
 
 	}
 
@@ -301,215 +291,7 @@ class Plenigo
 			$subscription = $subscription['items'][0];
 		}
 
-
-
 		return $subscription;
-
-	}
-
-	private function map_subscription_data($org) {
-
-		if (empty($org)) {return [];}
-
-		$new['subscription_id'] = $org['items'][0]['subscriptionItemId'];
-		$new['subscription_title'] = $org['items'][0]['title'];
-		$new['subscription_internal_title'] = $org['items'][0]['internalTitle'];
-		$new['subscription_product_id'] = $org['items'][0]['productId'];
-		$new['subscription_price'] = $org['items'][0]['price'];
-
-		$new['subscription_status'] = $org['status'];
-		$new['subscription_start_date'] = null;
-		$new['subscription_cancellation_date'] = null;
-		$new['subscription_end_date'] = null;
-
-		/* Date has to be Converted cause Plenigo saves UTC Dates */
-		if (isset($org['startDate'])) {
-			$new['subscription_start_date'] = date("Y-m-d H:i:s", strtotime($org['startDate']));
-		}
-
-		if (isset($org['cancellationDate'])) {
-			$new['subscription_cancellation_date'] = date("Y-m-d H:i:s", strtotime($org['cancellationDate']));
-		}
-		if (isset($org['endDate'])) {
-			$new['subscription_end_date'] = date("Y-m-d H:i:s", strtotime($org['endDate']));
-		}
-
-		$new['cancelled'] = 0;
-		$new['cancellation_reason'] = null;
-		$new['retention'] = null;
-
-		if ($new['subscription_cancellation_date']) {
-			$new['cancelled'] = 1;
-
-			if (!empty($org['cancellationReasonUniqueId'])) {
-				$new['cancellation_reason'] = $org['cancellationReasonUniqueId'];
-			}
-
-			$start = new \DateTime(formatDate($org['orderDate'], 'Y-m-d'));
-			$end = new \DateTime(formatDate($org['cancellationDate'], 'Y-m-d'));
-			$interval = $start->diff($end);
-			$new['retention'] = $interval->format('%r%a');
-		}
-
-		return $new;
-
-	}
-
-
-	private function map_customer($org) {
-
-		if (empty($org['invoiceAddress'])) {
-			$address = $org['items'][0]['deliveryAddress'];
-		}
-
-		else {$address = $org['invoiceAddress'];}
-
-		$new['customer_id'] = $org['invoiceCustomerId'];
-		if (empty($address['city'])) {$new['customer_city'] = null;} else {$new['customer_city'] = $address['city'];}
-		if (empty($address['postcode'])) {$new['customer_postcode'] = null;} else {$new['customer_postcode'] = $address['postcode'];}
-		$new['customer_country'] = $address['country'];
-
-		switch ($address['salutation'] ?? null) {
-			case 'MRS':
-				$new['customer_gender'] = 'female';
-				break;
-			case 'MR':
-				$new['customer_gender'] = 'male';
-				break;
-			case 'FIRM':
-				$new['customer_gender'] = 'company';
-				break;
-			default:
-				$new['customer_gender'] = null;
-				break;
-		}
-
-		return $new;
-
-	}
-
-	private function map_customer_with_invoice_data($org) {
-
-		if (empty($org['invoiceAddress'])) {
-			$address = $org['items'][0]['deliveryAddress'];
-		}
-
-		else {$address = $org['invoiceAddress'];}
-
-		$new['invoice_id'] = $org['invoiceId'];
-		$new['invoice_date'] = $org['invoiceDate'];
-		$new['invoice_type'] = $org['type'];
-		$new['invoice_status'] = $org['status'];
-		$new['invoice_price'] = $org['accumulatedPrice'] ?? null;
-		$new['invoice_payment_method'] = $org['paymentMethod']  ?? null;
-		$new['invoice_transaction_id'] = $org['transactionId'] ?? null;
-		$new['customer_id'] = $org['invoiceCustomerId'];
-		$new['customer_email'] = $org['customerEmail'];
-		$new['customer_firstname'] = $address['firstName'] ?? null;
-		$new['customer_lastname'] = $address['lastName'] ?? null;
-		$new['customer_company'] = $address['companyName'] ?? null;
-
-
-		$new['customer_id'] = $org['invoiceCustomerId'];
-		if (empty($address['city'])) {$new['customer_city'] = null;} else {$new['customer_city'] = $address['city'];}
-		if (empty($address['postcode'])) {$new['customer_postcode'] = null;} else {$new['customer_postcode'] = $address['postcode'];}
-		$new['customer_country'] = $address['country'];
-
-		switch ($address['salutation'] ?? null) {
-			case 'MRS':
-				$new['customer_gender'] = 'female';
-				break;
-			case 'MR':
-				$new['customer_gender'] = 'male';
-				break;
-			case 'FIRM':
-				$new['customer_gender'] = 'company';
-				break;
-			default:
-				$new['customer_gender'] = null;
-				break;
-		}
-
-		return $new;
-
-	}
-
-
-	private function extract_order_origin($url) {
-
-		if (empty($url)) {return 'Extern';}
-
-		$host = parse_url($url, PHP_URL_HOST);
-		$path = parse_url($url, PHP_URL_PATH);
-		$path = trim ($path, '/');
-		$paths = explode('/',$path);
-
-		$testUrls = ['lro-int.swp.de', 'int.swp.de', 'moz-int.swp.de',
-					 'lro.int.red.swp.de', 'int.red.swp.de', 'moz.int.red.swp.de'];
-		if (in_array($host, $testUrls)) {return 'Test';}
-
-		$shopUrls = ['abo.lr-online.de', 'abo.moz.de', 'abo.swp.de'];
-		if (in_array($host, $shopUrls)) {return 'Aboshop';}
-
-		if (strTolower($paths[2] ?? null) == 'kuendigung') {return 'Umwandlung';}
-		if (strTolower($paths[0] ?? null) == 'plus') {return 'Plusseite';}
-
-
-		$pageUrls = ['www.lr-online.de', 'www.moz.de', 'www.swp.de'];
-		if (in_array($host, $pageUrls)) {return 'Artikel';}
-
-		return 'Extern';
-
-	}
-
-
-	private function extract_id($url) {
-		// Regex search for the ID = -8Digits.html
-		$searchPattern = "/-(\d{8}).html/";
-		preg_match($searchPattern, $url, $matches);
-		if (isset($matches[1])) {
-			return $matches[1]; // First Match should be the ID
-		}
-		return null;
-	}
-
-	private function extract_ressort($url) {
-
-		$path = parse_url($url, PHP_URL_PATH);
-		$path = trim ($path, '/');
-		$paths = explode('/',$path);
-
-		$paths = array_filter($paths, function($path) {
-			return strpos($path,'.html') == false ;
-		});
-
-		if (!isset($paths[0])) {return null;}
-
-
-		switch (PORTAL) {
-
-			case 'LR':
-				if ($paths[0] == 'lausitz') {return $paths[1];}
-				if ($paths[0] == 'ratgeber' || $paths[0] == 'blaulicht') {return 'nachrichten';}
-				if (isset($paths[1]) && $paths[1] == 'sport') {return $paths[1];}
-				if (isset($paths[1]) && $paths[1] == 'kultur') {return $paths[1];}
-			break;
-
-			case 'MOZ':
-				if ($paths[0] == 'lokales') {return $paths[1];}
-				if ($paths[0] == 'nachrichten') {return $paths[1];}
-				if (isset($paths[1]) && $paths[1] == 'sport') {return $paths[1];}
-			break;
-
-			case 'SWP':
-				if ($paths[0] == 'suedwesten') {return $paths[2];}
-				if ($paths[0] == 'lokales') {return $paths[1];}
-				if ($paths[0] == 'sport') {return $paths[0];}
-			break;
-
-		}
-
-		return $paths[0] ?? 'unbekannt';
 
 	}
 

@@ -92,6 +92,10 @@ class PlenigoAPI
 
 	}
 
+	public function app_store_mapped_order($id) {
+		return $this->curl('/appStores/orders/' . $id);
+	}
+
 	public function app_store_mapped_orders($start, $end, $lastID = null) {
 
 		$start = date("Y-m-d", strtotime($start));
@@ -130,7 +134,7 @@ class PlenigoAPI
 		return $data;
 		*/
 
-	}	
+	}
 
 	public function invoices($start = 'today', $end = 'today', $lastID = null) {
 
@@ -188,8 +192,8 @@ class PlenigoAPI
 		}
 
 		$cache = new RequestCache('transactions' . PORTAL . $start . $end . $filter, 24*60*60);
-		$cache->cacheDirectory = ROOT . 'cache' . DIRECTORY_SEPARATOR . 'transactions';		
-		
+		$cache->cacheDirectory = ROOT . 'cache' . DIRECTORY_SEPARATOR . 'transactions';
+
 		$transactions = $cache->get();
 		if (!empty($transactions)) {return $transactions;}
 
@@ -262,7 +266,7 @@ class PlenigoAPI
 		$get = '?interval=MONTH&size=12';
 
 		$data = $this->curl('/analytics/transactions' . $get);
-		
+
 		return $data;
 	}
 

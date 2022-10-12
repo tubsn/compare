@@ -13,9 +13,6 @@ switch (PORTAL) {
 			'ir.lronline.product.year',
 			'ir.lrepaper.product.year',
 			'ir.lrepaper.product.month',
-			'ir.lrepaper.product.month',
-			'ir.lrepaper.product.year',
-			'ir.lronline.product.year',
 		]);
 
 		define('RESSORT_MAPPING', [
@@ -57,7 +54,7 @@ switch (PORTAL) {
 			'weisswasser' => 3,
 			'kultur' => 3,
 		*/
-		]);		
+		]);
 
 		define('IMPORT_FEEDS', [
 			'https://www.lr-online.de/?_XML=RSS',
@@ -377,7 +374,7 @@ define('TIMEFRAMES', [
 	'gestern',
 	'letzte 7 Tage',
 	'letzte 30 Tage',
-	'letzte 365 Tage',	
+	'letzte 365 Tage',
 	'aktueller Monat',
 	'letzter Monat',
 	'vorletzter Monat',
