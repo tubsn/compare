@@ -127,7 +127,7 @@ Hier können Artikel, Conversions und Kampagnendaten inklusive Klick- und Kündi
 
 <hr>
 
-	<h3>Linkpulse - Subscriber Daten</h3>
+	<h3>Kilkaya - Subscriber Daten</h3>
 	<p>Subscriberdaten werden täglich um 3 Uhr morgens für alle Artikel der letzten 3 Tage, aktualisiert.</p>
 
 	<form method="get" action="/admin/warmup/subscribers">

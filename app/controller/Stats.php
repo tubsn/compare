@@ -12,7 +12,7 @@ class Stats extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Articles,Conversions,Orders,Plenigo,DailyKPIs,Linkpulse,Charts,ArticlesMeta,Analytics');
+		$this->models('Articles,Conversions,Orders,Plenigo,DailyKPIs,Linkpulse,Charts,ArticlesMeta,Analytics,Longterm,Portals');
 	}
 
 	public function dashboard() {
@@ -302,7 +302,6 @@ class Stats extends Controller {
 
 	}
 
-
 	public function artikel() {
 		Session::set('referer', '/stats/artikel');
 		$viewData['charts'] = $this->Charts;
@@ -371,6 +370,20 @@ class Stats extends Controller {
 		$this->view->render('stats/segments');
 
 	}
+
+
+	public function weekly_review() {
+
+		$data = $this->Portals->weekly();
+
+		$this->view->title = 'Weekly-Review der Mediengruppe Brandenburg';
+		$this->view->templates['footer'] = null;
+		$this->view->render('stats/weekly-review', $data);
+
+	}
+
+
+
 
 
 }

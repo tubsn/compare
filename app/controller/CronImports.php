@@ -40,7 +40,7 @@ class CronImports extends Controller {
 	public function analytics_longtail() {
 
 		$from = date('Y-m-d', strtotime('today -7 days'));
-		$to = date('Y-m-d', strtotime('today -4 day'));
+		$to = date('Y-m-d', strtotime('today -6 day'));
 
 		$articles = $this->Articles->by_date_range($from, $to);
 
@@ -50,6 +50,9 @@ class CronImports extends Controller {
 			$pubDate = formatDate($article['pubdate'],'Y-m-d');
 			$gaData = $this->Analytics->by_article_id($id, $pubDate);
 			unset($gaData['totals']['Itemquantity']); // Don't Overwrite Plenigo Conversions
+
+			// Test for Subscribers 
+			$gaData['totals']['subscriberviews'] = $this->Kilkaya->subscribers($id, $pubDate);
 
 			$this->save_article_stats($gaData, $id);
 

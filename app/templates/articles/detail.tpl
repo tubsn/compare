@@ -27,7 +27,7 @@
 	<figure style="overflow:hidden; max-height:270px;"><?php include tpl('charts/detail/radial_pageviews')?></figure>
 
 	<?php if ($ressortAverage && $ressortAverage != 1): ?>
-		<small>(Ø-Klicks im Ressort: <?=$ressortAverage?>)</small>
+		<small>(Ø-Pageviews im Ressort: <?=$ressortAverage?>)</small>
 	<?php endif; ?>
 
 	<hr style="width:40%"/>

@@ -31,6 +31,16 @@ class PortalImport
 
 	}
 
+	public function sales() {
+
+		$swp = $this->curl('https://reports-swp.lr-digital.de/api/sales');
+		$moz = $this->curl('https://reports-moz.lr-digital.de/api/sales');
+		$lr = $this->curl('https://reports.lr-digital.de/api/sales');
+
+		return ['SWP' => $swp, 'MOZ' => $moz, 'LR' => $lr];
+
+	}
+
 	public function articles($swp = null, $moz = null, $lr = null) {
 
 		$swp = $this->curl('https://reports-swp.lr-digital.de/api/article/' . $swp);
@@ -40,6 +50,18 @@ class PortalImport
 		return ['SWP' => $swp, 'MOZ' => $moz, 'LR' => $lr];
 
 	}
+
+
+	public function weekly($from, $to) {
+
+		$swp = $this->curl('https://reports-swp.lr-digital.de/api/weekly/' . $from . '/' . $to);
+		$moz = $this->curl('https://reports-moz.lr-digital.de/api/weekly/' . $from . '/' . $to);
+		$lr = $this->curl('https://reports.lr-digital.de/api/weekly/' . $from . '/' . $to);
+
+		return ['SWP' => $swp, 'MOZ' => $moz, 'LR' => $lr];
+
+	}
+
 
 
 	private function curl($url) {

@@ -6,7 +6,6 @@ $routes->get('/', 'Stats@dashboard');
 // Teststuff
 $routes->get('/cards', 'Lists@cards');
 $routes->get('/test', 'Test@test');
-$routes->get('/sizes', 'Test@audience_sizes');
 $routes->get('/import/topics', 'Import@topics');
 
 
@@ -94,6 +93,7 @@ $routes->post('/transactions', 'Transactions@index');
 
 // Stats
 $routes->get('/stats', 'Stats@dashboard');
+$routes->get('/stats/weekly', 'Stats@weekly_review');
 $routes->get('/stats/ressort', 'Stats@ressorts');
 $routes->get('/stats/thema', 'Stats@themen');
 $routes->get('/stats/tag', 'Stats@tags');
@@ -111,6 +111,8 @@ $routes->get('/stats/pubtime[/{audience}]', 'Stats@publications');
 
 // Portal Compare
 $routes->get('/portals', 'LongtermAnalysis@all_portals');
+$routes->get('/bbboard', 'LongtermAnalysis@brandenburg');
+$routes->get('/weekly', 'Stats@weekly_review');
 
 // Longterm KPI Overview
 $routes->get('/longterm', 'LongtermAnalysis@overview');
@@ -133,7 +135,9 @@ $routes->get('/api/explorer', 'ChurnExplorer@api');
 // Apis
 $routes->get('/api/orders', 'API@provide_portal_orders');
 $routes->get('/api/kpis', 'API@provide_portal_kpis');
+$routes->get('/api/sales', 'API@provide_portal_sales');
 $routes->get('/api/portals', 'API@provide_combined_kpis');
+$routes->get('/api/weekly/{from:[\d]{4}-[\d]{2}-[\d]{2}?}/{to:[\d]{4}-[\d]{2}-[\d]{2}?}', 'API@weekly');
 $routes->get('/api/yesterday', 'Exports@yesterday_stats');
 $routes->get('/api/orders-today', 'Livedata@api_orders_today');
 $routes->get('/api/articles-today', 'Livedata@api_articles_today');
@@ -149,6 +153,7 @@ $routes->get('/readers/{id:[\d]{12}?}', 'Readers@detail');
 $routes->get('/readers/test/{id}', 'Test@reader');
 $routes->get('/readers/list[/{segment}]', 'Readers@list');
 $routes->get('/readers/sessionlist', 'Readers@session_list');
+$routes->get('/readers/audiences', 'Readers@audience_sizes');
 $routes->get('/readers/multiple-orders', 'Readers@with_multiple_orders');
 $routes->get('/readers/engagement', 'Readers@engagement_alert');
 $routes->get('/readers/map/local', 'Maps@users_local');
@@ -164,6 +169,7 @@ $routes->get('/artikel/{id:\d+}/medium', 'Articles@medium');
 $routes->get('/artikel/{id:\d+}/refresh', 'Articles@refresh');
 $routes->get('/artikel/{id:\d+}/delete', 'Articles@delete');
 $routes->post('/artikel/{id:\d+}', 'Articles@set_type');
+$routes->get('/artikel/production-per-day', 'Articles@production_per_day');
 $routes->get('/artikel/compare/{swpID:\d+}/{mozID:\d+}/{lrID:\d+}', 'Livedata@article_compare');
 
 // Push

@@ -758,6 +758,30 @@ class Articles extends Model
 
 	}
 
+	public function produced_by($field = 'ressort', $dateFormat = '%Y-%m-%d') {
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT DATE_FORMAT(pubdate, '$dateFormat') as date ,count(*) as articles, $field
+			 FROM `articles`
+			 WHERE (DATE(`pubdate`) BETWEEN :startDate AND :endDate)
+			 GROUP BY date, $field
+			"
+		);
+
+		$SQLstatement->execute([':startDate' => $this->from, ':endDate' => $this->to]);
+		$output = $SQLstatement->fetchall();
+		if (empty($output)) {return null;}
+
+		$output = array_group_by($field, $output);
+		
+		foreach ($output as $key => $value) {
+			$output[$key] = array_column($value, 'articles', 'date');
+		}
+
+		return $output;
+
+	}
+
 	public function score_articles($minScore = 100, $filter = null) {
 
 		$minScore = intval($minScore);

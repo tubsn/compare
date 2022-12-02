@@ -16,7 +16,11 @@
 <hr>
 
 
+<h2>17.10.2022 - Neues Dashboard für Brandenburg</h2>
 
+<ul>
+	<li>Es steht jetzt eine Übersichtsseite für den Vergleich von KPIs der Brandenburger Medienhäuser zur Verfügung.</li>
+</ul>
 
 <h2>10.10.2022 - Churn Explorer Erweiterung</h2>
 

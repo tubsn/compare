@@ -34,9 +34,9 @@ class Import extends Controller {
 				// Always Import Articles with Audience
 				if (isset($article['audience']) && !empty($article['audience'])) {return $article;}
 
-				// DPA Artikel Filter
-				$dpaFilterPattern = "/\b(?:dpa)\b/i"; // Filter DPA
-				if (preg_match($dpaFilterPattern,$article['author'])) {return null;}
+				// DPA Artikel Filter deaktiviert 08.11.2022
+				// $dpaFilterPattern = "/\b(?:dpa)\b/i"; // Filter DPA
+				// if (preg_match($dpaFilterPattern,$article['author'])) {return null;}
 
 				if (strtolower($article['ressort']) == 'bilder') {return null;}  // Filter Bildergalerien
 

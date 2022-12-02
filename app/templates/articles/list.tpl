@@ -164,11 +164,12 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 		<div class="indicator plusleser">
 			<div style="width:<?=round($article['subscriberviews'] / $article['pageviews'] * 100)?>%;"><?=round($article['subscriberviews'] / $article['pageviews'] * 100)?></div>
 		</div>
-
 		<div class="indicator-data">
 			<div<?php if ($article['subscriberviews'] > 750): ?> class="subscribers"<?php endif; ?>><?=number_format($article['subscriberviews'],0,'.','.') ?? 0?></div>
 		</div>
 	</td>
+	<?php elseif ($article['subscriberviews'] >= 0): ?>
+	<td><?=$article['subscriberviews']?></td>
 	<?php else: ?>
 	<td><div class="indicator plusleser"><div>0</div></div></td>
 	<?php endif; ?>

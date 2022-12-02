@@ -25,7 +25,7 @@ let ressortRankOptions = {
 				value: {fontSize: '60px', offsetY: -20, color:'#6088b4',},
 				total: {
 					show: true,
-					label: 'Klicks / Pageviews',
+					label: 'Pageviews',
 					formatter: function (w) {
 						return <?=$article['pageviews']?>
 					}

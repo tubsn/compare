@@ -2,7 +2,7 @@
 
 <h1>Import Status</h1>
 
-<p>Hier lassen sich über die Plenigo API alle verfügbaren Orders Importieren. Die Imports sind auf 1x Täglich beschränkt.</p>
+<p>Hier lassen sich über die Plenigo API alle verfügbaren Orders Importieren.</p>
 
 <form style="max-width:500px" method="get" action="" onsubmit="imports.run(event);">
 	<fieldset class="col-2">

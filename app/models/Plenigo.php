@@ -133,8 +133,9 @@ class Plenigo
 
 	public function invoices($start = 'today', $end = 'today') {
 
+		$mapper = new PlenigoOrderMapping();
 		$invoices = $this->api->invoices($start, $end);
-		$invoices = array_map([$this, 'map_customer_with_invoice_data'], $invoices);
+		$invoices = array_map([$mapper, 'map_customer_with_invoice_data'], $invoices);
 
 		return $invoices;
 	}
@@ -287,7 +288,6 @@ class Plenigo
 
 		if (empty($subscription['cancellationDate']) && $subscription['status'] == 'INACTIVE') {
 			$subscription = $this->api->chain($subscription['chainId']);
-			//dd($subscription);
 			$subscription = $subscription['items'][0];
 		}
 

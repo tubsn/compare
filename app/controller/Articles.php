@@ -127,6 +127,19 @@ class Articles extends Controller {
 
 	}
 
+
+	public function production_per_day() {
+
+		$articles = $this->Articles->produced_by('ressort');
+		$this->view->articles = $articles;
+
+		$this->view->navigation = null;
+		$this->view->title = 'Durchschnittlich pro Tag produzierte Artikel';
+		$this->view->render('articles/produced');
+
+	}
+
+
 	public function retresco($id) {
 		// Test Stuff
 		$import = new \app\importer\RetrescoImport();

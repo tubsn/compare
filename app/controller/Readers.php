@@ -47,6 +47,13 @@ class Readers extends Controller {
 
 
 
+	public function audience_sizes() {
+		dd($this->Readers->audience_sizes());
+	}
+
+
+
+
 	public function stats() {
 
 		dd($this->Readers->stats());

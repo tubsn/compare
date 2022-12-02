@@ -33,7 +33,7 @@ $lpMetrics = $charts->implode($data);
 </figure>
 
 
-<h3>Klicks auf die Kampagnen (nur UTM): <b class="conversions"><?=$campaignData->total()?></b></h3>
+<h3>Sessions durch Kampagnen (nur UTM): <b class="conversions"><?=$campaignData->total()?></b></h3>
 
 <style>
 .figures {display:flex;gap:1em; align-items:flex-start;}

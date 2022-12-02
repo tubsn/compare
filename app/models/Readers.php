@@ -352,19 +352,60 @@ class Readers extends Model
 
 
 	public function audience_sizes() {
-		return $this->dwh_audience_sizes();
+
+		//$this->splitt_audience_field('LR_Crime_Fans_Registered');
+
+		$data = $this->dwh_audience_sizes();
+
+		$data = array_map(function($day) {
+			foreach ($day as $key => $value) {
+				if (strTolower($key) == 'datum') {continue;}
+				if (strTolower(substr($key,0,2)) != strTolower(substr(PORTAL,0,2))) {unset($day[$key]);}
+			}
+			return $day;
+
+		}, $data);
+
+		$output = [];
+		foreach ($data as $set) {
+			$key = $set['Datum']; 
+			unset($set['Datum']);
+			$output[$key] = $set;
+		}
+		
+		return $output;
 	}
+
+
+	private function splitt_audience_field($fieldName) {
+		$lastUnderscorePosition = strrpos($fieldName, '_');
+		$firstUnderscorePosition = strpos($fieldName, '_') +1;
+		$name = substr($fieldName,0,$lastUnderscorePosition);
+		$name = substr($name,$firstUnderscorePosition);
+		$name = str_replace('_', ' ', $name);
+		return $name;
+	}
+
 
 	private function dwh_audience_sizes() {
 
+		$cache = new RequestCache('audienceDevelopment' . PORTAL, 60 * 60);
+		$audiences = $cache->get();
+		if (!empty($audiences)) {return $audiences;}
+
 		$bigQueryApi = new BigQuery;
-		$query ="SELECT * FROM `artikel-reports-tool.NDI_Dashboards.dpa_drive_audiences_size` LIMIT 1000";
+		$query = "
+			SELECT * EXCEPT (Datum), FORMAT_DATE('%F', Datum ) AS `Datum`
+			FROM `artikel-reports-tool.NDI_Audiences.dpa_drive_audiences_size` 
+			ORDER BY Datum ASC
+			LIMIT 1000
+			";
 		$data = $bigQueryApi->sql($query);
+		$cache->save($data);
 
 		return  $data;
 
 	}
-
 
 	public function zip_codes() {
 

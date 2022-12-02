@@ -4,7 +4,7 @@
 			<thead>
 			<tr>
 				<th>Date</th>
-				<th>Klicks</th>
+				<th>Pageviews</th>
 				<th>Besuche</th>
 				<th>Conversions</th>
 			</tr>
@@ -29,7 +29,7 @@
 let chartOptions = {
 	series: [
 		{
-			name: 'Klicks', color: '#6088b4',
+			name: 'Pageviews', color: '#6088b4',
 			data: [<?=$chart['pageviews']?>],
 		},{
 			name: 'Besuche', color: '#8aafd7',
@@ -89,7 +89,8 @@ chart.render();
 </script>
 
 
-<h3>Conversions nach Zeit:</h3>
+<h3 style="margin-bottom:0;">Conversions nach Zeit:</h3>
+<small>Abweichungen möglich (nur GA Daten verfügbar)</small>
 <div id="conversionChart"></div>
 
 <script>

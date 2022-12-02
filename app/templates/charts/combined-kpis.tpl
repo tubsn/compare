@@ -4,7 +4,7 @@
 let chartOptions = {
 	series: [
 		{
-			name: 'Klicks', color: '#6088b4',
+			name: 'Pageviews', color: '#6088b4',
 			data: [<?=$pageviews?>],
 		},{
 			name: 'Besuche', color: '#8aafd7',

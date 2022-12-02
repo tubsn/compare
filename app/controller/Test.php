@@ -14,21 +14,25 @@ class Test extends Controller {
 		$this->models('Articles,Orders,Conversions,Analytics,Charts,Readers,Plenigo,Cleverpush,Orders,DailyKPIs');
 	}
 
-	public function audience_sizes() {
-		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
-		dd($this->Readers->audience_sizes());
-	}
-
-	public function api() {
-		dd($this->Plenigo->apple_orders());
-	}
 
 	public function test() {
 
+				
+		$this->Readers->import_user_segments('2022-11-21', '2022-11-23');
+
+		//$this->Plenigo->order_with_details(1270289);
+
+	}
+
+
+
+
+	public function conversionupdater() {
+
 		// Sets Conversions in Daily KPIs
 
-		$startDate = '2022-09-28';
-		$endDate = '2022-10-06';
+		$startDate = '2022-10-07';
+		$endDate = '2022-11-28';
 
 		$start = $this->create_date_object($startDate);
 		$end = $this->create_date_object($endDate);

@@ -20,6 +20,7 @@ class Longterm extends Model
 
 		$this->Portals = new PortalImport();
 		$this->Orders = new Orders();
+		$this->Sales = new SalesKPIs();
 		$this->KPIs = new DailyKPIs();
 		$this->Articles = new Articles();
 
@@ -27,7 +28,7 @@ class Longterm extends Model
 
 	public function portal_KPIs() {
 
-		$cache = new RequestCache('portalkpis', 30*60);
+		$cache = new RequestCache('portalkpis', 24*60*60);
 		$cache->cacheDirectory = ROOT . 'cache' . DIRECTORY_SEPARATOR . 'portals';
 		$portalData = $cache->get();
 
@@ -40,9 +41,24 @@ class Longterm extends Model
 
 	}
 
+	public function portal_SalesKPIs() {
+
+		$cache = new RequestCache('saleskpis', 24*60*60);
+		$cache->cacheDirectory = ROOT . 'cache' . DIRECTORY_SEPARATOR . 'portals';
+		$portalData = $cache->get();
+
+		if (empty($portalData)) {
+			$portalData = $this->Portals->sales();
+			$cache->save($portalData);
+		}
+
+		return $portalData;
+
+	}
+
 	public function portal_orders() {
 
-		$cache = new RequestCache('portalorders', 30*60);
+		$cache = new RequestCache('portalorders', 24*60*60);
 		$cache->cacheDirectory = ROOT . 'cache' . DIRECTORY_SEPARATOR . 'portals';
 		$portalData = $cache->get();
 
@@ -67,12 +83,30 @@ class Longterm extends Model
 
 	}
 
+
+	public function sales($start = null) {
+
+		$cache = new RequestCache('salesdata' . $start . PORTAL, 30*60);
+		$cache->cacheDirectory = ROOT . 'cache' . DIRECTORY_SEPARATOR . 'portals';
+		$cachedData = $cache->get();
+		if ($cachedData) {return $cachedData;}
+
+		if (is_null($start)) {$start = '2020-10-01';}
+		if (date('j') <= 15) {
+			$to = date('Y-m-d', strtotime('last day of last month'));
+		} else {$to = date('Y-m-d', strtotime('today'));}
+
+		return $this->Sales->list();
+
+	}
+
+
 	public function kpis($start = null) {
 
 		$cache = new RequestCache('kpidata' . $start . PORTAL, 30*60);
 		$cache->cacheDirectory = ROOT . 'cache' . DIRECTORY_SEPARATOR . 'portals';
 		$cachedData = $cache->get();
-		//if ($cachedData) {return $cachedData;}
+		if ($cachedData) {return $cachedData;}
 
 		if (is_null($start)) {$start = '2020-10-01';}
 

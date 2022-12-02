@@ -65,6 +65,7 @@ class Discover extends Model
 		if (count($discoverData) > 0 && isset($discoverData[0]['article_id']) && !empty($discoverData[0]['article_id'])) {
 
 			foreach ($discoverData as $article) {
+				if (empty($article['article_id'])) {continue;}
 				$this->create_or_update($article);
 				$this->articleDB->update(['discover' => 1], $article['article_id']);
 			}

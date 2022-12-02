@@ -16,13 +16,13 @@ class Campaigns extends Controller {
 
 	public function all($filter = null) {
 
-		$campaignData = $this->AnalyticsShop->shop_pageviews_filterred_by_utm_campaign($filter);
+		$campaignData = $this->AnalyticsShop->shop_sessions_filterred_by_utm_campaign($filter);
 
 		$this->view->charts = $this->Charts;
 		$this->view->campaignData = $campaignData;
 
 		$this->view->title = 'UTM - Kampagnen Daten (ungesampled)';
-		$this->view->info = '<p>Test</p>';
+		//$this->view->info = '<p>Test</p>';
 		$this->view->render('campaigns/list');
 
 	}
@@ -63,7 +63,6 @@ class Campaigns extends Controller {
 		Landingpageklicks gefiltert nach Campaign: <b>3Monate-fuer3</b><br/>
 		Transaktionen werden noch nicht per UTM getrackt!</p>';
 		$this->view->render('campaigns/facebook');
-
 
 	}
 

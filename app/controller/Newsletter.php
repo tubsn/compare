@@ -84,7 +84,7 @@ class Newsletter extends Controller {
 
 		$infoMail = new Email();
 		$infoMail->subject = PORTAL . '- Nachdreh-Alert am ' . TAGESNAMEN[date('w', strtotime('today'))];
-		$infoMail->to = ['oht@lr-online.de', 'twinkler@moz.de'];
+		$infoMail->to = ['oht@lr.de', 'twinkler@moz.de', 'robert.suesse@lr.de'];
 		$infoMail->cc = ['sebastian.butt@lr-online.de'];
 
 		if ($send) {

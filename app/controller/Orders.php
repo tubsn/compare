@@ -82,8 +82,20 @@ class Orders extends Controller {
 	}
 
 	public function list_app_orders() {
-		$this->view->orders = $this->Plenigo->appstore_orders();
-		$this->view->title = 'App Store Bestellungen';
+
+		$allOrders = $this->Plenigo->appstore_orders();
+
+		$orders = array_filter($allOrders, function($order) {
+			if ($order['order_date'] > '2022-10-04') {return $order;}
+		});
+
+		$preOrders = array_filter($allOrders, function($order) {
+			if ($order['order_date'] < '2022-10-04') {return $order;}
+		});
+
+		$this->view->orders = $orders;
+		$this->view->preOrders = $preOrders;
+		$this->view->title = 'App Bestellungen (' . count($orders) .')';
 		$this->view->render('orders/app/list');
 	}
 

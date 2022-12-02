@@ -20,7 +20,7 @@
 				<li><a href="/tag">nach #-Tags</a></li>
 				<li><a href="/audience">nach Audiences</a></li>
 				<li><a href="/discover">Google Discover Artikel</a></li>
-				<li><a href="/epaper">ePaper Artikel</a></li>
+				<!--<li><a href="/epaper">ePaper Artikel</a></li>-->
 			</ul>
 		</li>
 
@@ -53,7 +53,7 @@
 			<ul class="dropdown" aria-label="submenu">
 				<li><a href="/stats/artikel">Artikel-Produktion</a></li>
 				<li><a href="/stats/audience-by-ressort">Audiences nach Ressort</a></li>
-				<li class="highlight"><a href="/push">Push-Meldungen (Clever-Push)</a></li>
+				<li><a href="/push">Push-Meldungen (Clever-Push)</a></li>
 			</ul>
 		</li>
 
@@ -64,7 +64,7 @@
 				<li><a href="/stats/thema">nach Themen</a></li>
 				<li><a href="/stats/tag">nach #-Tag</a></li>
 				<li><a href="/stats/audience">nach Audiences</a></li>
-				<li><a href="/epaper/stats">ePaper Statistiken</a></li>
+				<!--<li><a href="/epaper/stats">ePaper Statistiken</a></li>-->
 				<li><a href="/stats/pubtime/">Audience Leseverhalten</a></li>
 				<li><a href="/stats/cluster/audiences">Cluster - Audience nach Ressort</a></li>
 				<li><a href="/stats/cluster/types">Cluster - Themen nach Ressort</a></li>
@@ -80,7 +80,7 @@
 				<li><a href="/orders/list-cancellations">Eingehende Kündigungen</a></li>
 				<li><a href="/orders/list-daily">Bestellungen nach Tag</a></li>
 				<li><a href="/orders/clustered">Bestellungen nach Cluster</a></li>
-				<li><a href="/orders/explorer">Churn-Explorer</a></li>
+				<li class="highlight"><a href="/orders/explorer">Churn-Explorer</a></li>
 				<li><a href="/orders/behavior">Kundenverhalten</a></li>
 				<li><a href="/stats/segments">Nutzer-Segmente (DAS)</a></li>
 				<li><a href="/orders/utm">UTM-Kampagnen</a></li>
@@ -96,12 +96,14 @@
 		<li><a href="/portals" aria-haspopup="true">Portaldaten</a>
 			<ul class="dropdown" aria-label="submenu">
 				<li><a href="/longterm">Abo- / KPI-Entwicklung</a></li>
+				<li><a href="/bbboard">Brandenburg Board</a></li>
+				<!--<li><a href="/stats/weekly">Brandenburg Board (Weekly)</a></li>-->
 				<!--<li><a href="/teasers">Teaser-Statistiken (LR)</a></li>-->
 				<li><a target="_blank" href="https://datastudio.google.com/reporting/e4aaadbb-dd68-404f-866d-5c9beb52e6d3/page/p_25ynp9bisc">Kündigergründe Board</a></li>
 				<li><a href="/readers/multiple-orders">Mehrfachbestellungen</a></li>
 				<li><a href="/orders/map/local">Abo-Karte</a></li>
 				<li><a href="/readers/map/local">Nutzer-Karte</a></li>
-				<li class="highlight"><a href="/transactions">Plenigo - Buchungen</a></li>
+				<li><a href="/transactions">Plenigo - Buchungen</a></li>
 				<li><a href="/portals">Portalvergleich</a></li>
 			</ul>
 		</li>

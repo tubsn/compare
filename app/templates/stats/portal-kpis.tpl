@@ -26,6 +26,29 @@
 	]);?>
 </figure>
 
+<?php elseif (PORTAL == 'MOZ'): ?>
+
+<figure class="mb">
+	<h3 class="text-center">aktive Abonnenten</h3>
+	<?=$charts->create([
+		'metric' => [
+			$charts->cut_left($sales['paying'],5),
+			$charts->cut_left($sales['trial1month'],5),
+			$charts->cut_left($sales['trial3for3'],5),
+		    $charts->cut_left($sales['yearly'],5)
+		],
+		'dimension' => $charts->cut_left($sales['dimensions'],5),
+		'color' => ['#1572A1', '#9AD0EC', '#9AD0EC', '#EFDAD7', '#D885A3'],
+		'height' => 450,
+		'legend' => 'top',
+
+		'stacked' => true,
+		'showValues' => false,
+		'name' => ['Vollabo', 'Probe 1 Monat', 'Probe 3 Monate', 'Jahresabos'],
+		'template' => 'charts/default_bar_chart',
+	]);?>
+</figure>
+
 <?php else: ?>
 
 <figure class="mb">

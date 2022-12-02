@@ -10,7 +10,7 @@ class PlenigoAPI
 	const API_BASE_URL = 'https://api.plenigo.com/api/v3.0';
 	private $plenigoToken = PLENIGO_TOKEN;
 	private $client = PORTAL;
-	private $maxDaysPerRequest = 31;
+	private $maxDaysPerRequest = 91;
 
 	public function __construct() {}
 

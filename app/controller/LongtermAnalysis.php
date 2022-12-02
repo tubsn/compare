@@ -50,6 +50,50 @@ class LongtermAnalysis extends Controller {
 
 	}
 
+	public function brandenburg() {
+
+		$orderData = $this->Longterm->portal_orders();
+		$salesData = $this->Longterm->portal_SalesKPIs();
+		$kpiData = $this->Longterm->portal_KPIs();
+
+		// LR has one Month more then the other Portals :/ this causes trouble with the comparisment
+		unset($salesData['LR']['2020-08']);
+
+		$swp['order'] = $this->Charts->convert($orderData['SWP']);
+		$moz['order'] = $this->Charts->convert($orderData['MOZ']);
+		$lr['order'] = $this->Charts->convert($orderData['LR']);
+
+		//dd($lr['order']);
+
+		$swp['kpi'] = $this->Charts->convert($kpiData['SWP']);
+		$moz['kpi'] = $this->Charts->convert($kpiData['MOZ']);
+		$lr['kpi'] = $this->Charts->convert($kpiData['LR']);
+
+		$swp['sales'] = $this->Charts->convert($salesData['SWP']);
+		$moz['sales'] = $this->Charts->convert($salesData['MOZ']);
+		$lr['sales'] = $this->Charts->convert($salesData['LR']);
+
+		$lastYear = date('Y-m-d', strtotime('first day of this month -2 year -1 month'));
+		$firstDate = '2021-04';
+
+		$this->view->salesData = $salesData;
+		$this->view->orderData = $orderData;
+		$this->view->kpiData = $kpiData;
+
+		$this->view->swp = $swp;
+		$this->view->moz = $moz;
+		$this->view->lr = $lr;
+
+		$this->view->charts = $this->Charts;
+
+		$this->view->title = 'Plus-Angebote der Mediengruppe Brandenburg';
+		$this->view->templates['footer'] = null;
+		$this->view->render('stats/portals-bbg');
+
+
+	}
+
+
 	public function all_portals() {
 
 		$orderData = $this->Longterm->portal_orders();

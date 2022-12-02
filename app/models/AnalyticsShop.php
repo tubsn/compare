@@ -57,6 +57,46 @@ class AnalyticsShop
 
 	}
 
+
+	public function shop_sessions_filterred_by_utm_campaign($campaignName = null) {
+
+		$campaign = new UTMCampaign('Sessions');
+
+		$cache = new RequestCache('shop-' . $campaignName . PORTAL , 30 * 60);
+		$cached = $cache->get();
+
+		if ($cached) {
+			$campaign->import($cached);
+			return $campaign;
+		}
+
+		$this->ga->metrics = 'ga:sessions';
+		$this->ga->from = $this->from;
+		$this->ga->to = $this->to;
+
+		$this->ga->dimensions = 'ga:campaign,ga:source,ga:medium,ga:date';
+		$this->ga->sort = '-ga:date';
+
+		if ($campaignName) {
+			$this->ga->filters = 'ga:sessions>0;ga:medium!=(none);ga:campaign==' . $campaignName;
+		}
+
+		else {
+			$this->ga->filters = 'ga:sessions>0;ga:medium!=(none)';
+		}
+
+		$this->ga->maxResults = '1000';
+
+		$gaData = $this->ga->fetch();
+
+		$cache->save($gaData);
+		$campaign->import($gaData);
+
+		return $campaign;
+
+	}
+
+
 	public function shop_pageviews_filterred_by_utm_campaign($campaignName = null) {
 
 		$campaign = new UTMCampaign('Pageviews');
