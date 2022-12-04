@@ -9,7 +9,6 @@ $routes->get('/test', 'Test@test');
 $routes->get('/import/topics', 'Import@topics');
 
 
-
 // Article Lists
 $routes->get('/unclassified/types', 'Lists@unset_only');
 $routes->get('/unclassified/audiences', 'Lists@unset_audience_only');
@@ -176,6 +175,8 @@ $routes->get('/artikel/compare/{swpID:\d+}/{mozID:\d+}/{lrID:\d+}', 'Livedata@ar
 $routes->get('/push', 'Push@today');
 $routes->get('/push/archiv', 'Push@list');
 $routes->get('/push/stats', 'Push@stats');
+$routes->get('/push/stats/topic', 'Push@stats_by_topic');
+$routes->get('/push/import', 'Push@import');
 $routes->get('/push/{id}', 'Push@detail');
 
 // Pages

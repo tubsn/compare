@@ -17,8 +17,8 @@ class Test extends Controller {
 
 	public function test() {
 
-				
-		$this->Readers->import_user_segments('2022-11-21', '2022-11-23');
+
+		//$this->Readers->import_user_segments('2022-11-21', '2022-11-23');
 
 		//$this->Plenigo->order_with_details(1270289);
 

@@ -10,9 +10,28 @@ class Push extends Controller {
 	public function __construct() {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 		$this->view('DefaultLayout');
-		$this->models('Cleverpush,Charts');
+		$this->models('Cleverpush,Charts,Pushes');
 	}
 
+
+	public function stats_by_topic() {
+
+		$notifications = $this->Pushes->clickrate_grouped_by('audience');
+		$notificationsGrouped = $this->Pushes->clickrate_and_time('audience');
+
+		$this->view->stats = $this->Charts->convert($notifications);
+		$this->view->statsGrouped = $this->Charts->convert($notificationsGrouped,1);
+		$this->view->charts = $this->Charts;
+
+		//dd($this->view->statsGrouped);
+
+		$this->view->title = 'Klickraten nach Uhrzeit';
+		$this->view->info = 'Klicks und Ausspielungen sind abhängig davon welche Kanäle bespielt werden (mehr Kanäle = mehr potentielle Klicks)';
+		$this->view->render('articles/push/stats-grouped');
+
+		//dd($notifications);
+
+	}
 
 
 	public function today() {
@@ -42,6 +61,10 @@ class Push extends Controller {
 		$this->view->notification = $notification;
 		$this->view->title = $notification['title'];
 		$this->view->render('articles/push/detail');
+	}
+
+	public function import() {
+		$this->Pushes->import();
 	}
 
 	public function stats() {

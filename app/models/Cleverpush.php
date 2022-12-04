@@ -169,7 +169,7 @@ class Cleverpush
 		$out['thumb'] = $data['mediaUrl'] ?? null;
 		$out['url'] = $data['url'] ?? null;
 		$out['text'] = $data['text'] ?? null;
-		$out['expire'] = date("Y-m-d H:i:s", strtotime($data['expiresAt']));
+		$out['expire'] = date("Y-m-d H:i:s", strtotime($data['expiresAt'] ?? null));
 		$out['created'] = date("Y-m-d H:i:s", strtotime($data['createdAt']));
 		$out['queuedAt'] = date("Y-m-d H:i:s", strtotime($data['queuedAt']));
 
