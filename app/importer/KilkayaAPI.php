@@ -12,6 +12,7 @@ class KilkayaAPI
 	private $bearerToken = KILKAYA_APIKEY;
 	private $queryRuns = 0;
 	private $maxQueryRuns = 15;
+	private $queued = false;
 
 	public $query = null;
 	public $forceResponseWithIndex = false;
@@ -58,6 +59,7 @@ class KilkayaAPI
 	public function run_query($query = null) {
 		$this->handle_query_options($query);
 		$this->call_query_endpoint($this->query);
+
 		return $this->response;
 	}
 
@@ -172,6 +174,9 @@ class KilkayaAPI
 		$this->handle_messages();
 		$this->handle_queued_query();
 
+		// Fixes double Run :/ dunno why works...
+		if (!empty($this->response)) {return;}
+
 		if (!isset($curlData['data'])) {
 			//dump($curlData);
 			throw new \Exception("No Response Data", 404);
@@ -218,9 +223,11 @@ class KilkayaAPI
 			$timeout = 1000 * 200;
 			//echo '<br>Query No. ' . $this->queryRuns . ' - Sleeping for ' . $timeout / 1000 . ' milliseconds';
 			usleep($timeout);
+
 			$this->call_query_endpoint($this->query);
 
 		}
+
 	}
 
 	public function extract_id($url) {
