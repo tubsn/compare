@@ -6,6 +6,8 @@ use flundr\utility\Session;
 class Charts
 {
 
+	private $engine;
+
 	function __construct() {
 		$this->engine = new Chartengine();
 	}
@@ -87,6 +89,38 @@ class Charts
 		return $this->create($data);
 
 	}
+
+	public function cancellations_by_retention_months($height = 400) {
+
+		$orders = new Orders();
+		$data = $orders->cancelled_by_retention_days();
+
+		$out = [];
+		foreach ($data as $day => $value) {
+			$cancelled = $value['cancelled_orders'];
+			$key = round($day/31);
+			$out[$key]['cancelled_orders'] += $cancelled;
+		}
+
+		$orders = $this->convert($out);
+
+		$data = [
+			'metric' => $orders['cancelled_orders'],
+			'dimension' => $orders['dimensions'],
+			'color' => '#f77474',
+			'height' => $height,
+			'showValues' => false,
+			'name' => 'Kündiger',
+			'prefix' => 'Monat ',
+			'template' => 'charts/default_bar_chart',
+		];
+
+		return $this->create($data);
+
+	}
+
+
+
 
 	public function first_day_churns_by($group = 'article_ressort') {
 

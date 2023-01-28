@@ -147,6 +147,7 @@ class ArticleKPIs extends Model
 			 Articles.type as type,
 			 Articles.tag as tag,
 			 Articles.audience as audience,
+			 Articles.userneed as userneed,
 			 Articles.author as author
 
 			 FROM `article_kpis`

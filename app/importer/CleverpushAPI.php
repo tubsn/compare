@@ -9,7 +9,7 @@ class CleverpushAPI
 
 	const API_BASE_URL = 'https://api.cleverpush.com';
 	private $apiToken = CLEVERPUSH_APIKEY;
-	private $channelID = CLEVERPUSH_CHANNELID;
+	public $channelID = CLEVERPUSH_CHANNELID;
 
 
 	public function notification($id) {

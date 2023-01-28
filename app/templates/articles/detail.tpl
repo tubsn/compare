@@ -55,7 +55,7 @@
 
 	<p>Ressort: <a href="/ressort/<?=urlencode($article['ressort'])?>"><?=ucwords($article['ressort'])?></a><br/>
 
-		<?php if (auth_rights('type')): ?>
+		<?php if (auth_rights('author')): ?>
 		Autor: <a href="/author/<?=urlencode($article['author'])?>"><?=$article['author']?></a>
 		<?php else: ?>
 		Autor: <?=$article['author']?>
@@ -84,6 +84,11 @@
 		<?php endif; ?>
 		<?php endif; ?>
 
+		<?php if (auth_rights('userneeds')): ?>
+		<?php if ($article['userneed']): ?>
+		Bedürfnis: <span class="audience"><a class="noline" href="/userneed/<?=urlencode(str_replace('/', '-slash-', $article['userneed']))?>"><?=$article['userneed']?></a></span>
+		<?php endif; ?>		
+		<?php endif ?>
 	</p>
 
 	<?php if (auth_rights('type')): ?>
@@ -139,12 +144,12 @@
 	<h3>Artikelaufrufe:</h3>
 	<?php include tpl('charts/linechart')?>
 
-	<small class="mt text-right block">Letztes Update: <?=formatDate($article['refresh'], 'd.m.Y H:i')?> Uhr (<a class="" href="<?=$article['id']?>/refresh">jetzt aktualisieren</a>)</small>
+	<small class="mt text-right block">Letzter Import: <b><?=formatDate($article['refresh'], 'd.m.Y H:i')?> Uhr</b> <br/>(<a class="" href="<?=$article['id']?>/refresh">Jetzt aktualisieren</a>)</small>
 	<?php else: ?>
 
 	<h3>Detailinformationen:</h3>
-	<p>Hinweis: Für diesen Artikel sind Momentan keine Google Analytics- oder Kündigungsdaten verfügbar. Am Erscheinungstag selbst sehen Sie stattdessen nahezu <a target="_blank" href="https://app5-eu.linkpulse.com/lp/login?redirect=%2Flp%2Fdashboard%3Fid%3D5c5451741f053112bf6fc45d">Echtzeitdaten</a> über Linkpulse.</p>
-	<small class="mt text-right block">Letztes Update: <?=formatDate($article['refresh'], 'd.m.Y H:i')?> Uhr (<a class="" href="<?=$article['id']?>/refresh">jetzt aktualisieren</a>)</small>
+	<p>Hinweis: Für diesen Artikel sind Momentan keine Google Analytics- oder Kündigungsdaten verfügbar. Am Erscheinungstag selbst sehen Sie stattdessen nahezu <a target="_blank" href="https://app.kilkaya.com">Echtzeitdaten</a> über Kulkaya.</p>
+	<small class="mt text-right block">Letztes Update: <b><?=formatDate($article['refresh'], 'd.m.Y H:i')?> Uhr</b> (<a class="" href="<?=$article['id']?>/refresh">jetzt aktualisieren</a>)</small>
 
 	<?php endif; ?>
 </section>

@@ -21,10 +21,10 @@
 </style>
 
 
-<table class="fancy neutral" style="table-layout: fixed; border: 2px solid #404040; max-width:800px; width:100%; margin:0 auto; margin-top:2em; margin-bottom:4em;">
+<table class="fancy neutral" style="table-layout: fixed; border: 2px solid #404040; max-width:800px; width:100%; margin:0 auto; margin-top:2em; margin-bottom:1em;">
 
 	<tr>
-		<th style="text-align:right">Produkt / Monat</th>
+		<th style="text-align:right"></th>
 		<td style="text-align:center; background-color:#ffb9a4"><i>LR+</i></td>
 		<td style="text-align:center; background-color:#9bccee"><i>MOZplus</i></td>
 		<td style="text-align:center; background-color:#e1e1e1"><b><i>BB gesamt</i></b></td>
@@ -32,7 +32,7 @@
 	</tr>
 
 	<tr>
-		<th style="text-align:right">Pageviews</th>
+		<th style="text-align:right">Pageviews*</th>
 
 		<td class="text-center"><?=gnum($LR['pageviews'])?></td>
 		<td class="text-center"><?=gnum($MOZ['pageviews'])?></td>
@@ -40,14 +40,14 @@
 	</tr>		
 
 	<tr>
-		<th style="text-align:right">Subscriberviews</th>
+		<th style="text-align:right">Subscriberviews*</th>
 		<td class="text-center"><?=gnum($LR['subscriberviews'])?></td>
 		<td class="text-center"><?=gnum($MOZ['subscriberviews'])?></td>
 		<td class="text-center"><?=gnum($LR['subscriberviews'] + $MOZ['subscriberviews'])?></td>
 	</tr>
 
 	<tr>
-		<th style="text-align:right">Mediatime</th>
+		<th style="text-align:right">Mediatime*</th>
 		<td class="text-center"><?=gnum($LR['mediatime'])?>&thinsp;s</td>
 		<td class="text-center"><?=gnum($MOZ['mediatime'])?>&thinsp;s</td>
 		<td class="text-center"><?=gnum(($LR['mediatime'] + $MOZ['mediatime']) / 2)?>&thinsp;s</td>
@@ -78,7 +78,7 @@
 	</tr>
 
 	<tr>
-		<th style="text-align:right">über Marketing</th>
+		<th style="text-align:right">über Plus</th>
 		<td class="text-center"><?=gnum($LR['ordersExternal'])?></td>
 		<td class="text-center"><?=gnum($MOZ['ordersExternal'])?></td>
 		<td class="text-center"><?=gnum($LR['ordersExternal'] + $MOZ['ordersExternal'])?></td>
@@ -108,6 +108,8 @@
 	</tr>
 
 </table>
+
+<p class="text-center"><small>*Daten aus Kilkaya (restliche Angaben Compare/Plenigo)</small></p>
 
 
 </main>

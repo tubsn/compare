@@ -6,15 +6,16 @@
 <h1><?=$page['title']?></h1>
 <?php endif; ?>
 
-<p>Übersicht erfasster Bestellungen. Seit dem 23. März 2021 werden die Bestellungen direkt aus Plenigo importiert.</p>
+<p>Übersicht erfasster Bestellungen. Neukunden = Kunden ohne Bestellung seit 23. März 2021.</p>
 
 <p class="light-box" style="margin-bottom:2em;">
 Gesamtbestellungen: <b class="conversions"><?=$numberOfOrders?></b>
-&emsp; davon Plusseite: <b class="blue"><?=$plusOnly?></b>
-&emsp; davon Aboshop: <b class="blue"><?=$aboshopOnly?></b>
-&emsp; davon Jahresabos: <b class="blue"><?=$yearlyOnly?></b>
-&emsp; davon Push: <b class="blue"><?=$pushOnly?></b>
-&emsp; davon Umwandlung: <b title="Nutzer die im Kündigungsprozess ein neues Abo gekauft haben" class="blue"><?=$umwandlungOnly?></b>
+&emsp; davon Neukunden: <b class="blue"><?=$firstTime?></b>
+&emsp; Plusseite: <b class="blue"><?=$plusOnly?></b>
+&emsp; Aboshop: <b class="blue"><?=$aboshopOnly?></b>
+&emsp; Jahresabos: <b class="blue"><?=$yearlyOnly?></b>
+&emsp; Push: <b class="blue"><?=$pushOnly?></b>
+&emsp; Umwandlung: <b title="Nutzer die im Kündigungsprozess ein neues Abo gekauft haben" class="blue"><?=$umwandlungOnly?></b>
 <!--&emsp; davon Extern: <b class="blue"><?=$externalOnly?></b>-->
 &emsp; Gekündigt: <b class="redish"><?=$numberOfCancelled?></b>
 &emsp; Kündigerquote: <b class="orange"><?=round(($numberOfCancelled / $numberOfOrders) * 100)?>&thinsp;%</b>

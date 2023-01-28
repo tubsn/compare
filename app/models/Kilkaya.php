@@ -24,16 +24,26 @@ class Kilkaya
 		return $api->response;
 	}
 
+	public function portal_stats($from, $to) {
+
+		$api = new KilkayaAPI();
+		$api->from = date('Y-m-d', strtotime($from));
+		$api->to = date('Y-m-d', strtotime($to));
+		$api->columns = ['pageview', 'subscriber', 'viewTimeMedian'];
+		$api->run_query();
+		return $api->response;
+	}
+
 
 	public function active_users() {
 
 		$api = new KilkayaAPI();
 
-		$to = date(DATE_ATOM);
-		$to = substr($to,0,-6);
+		$to = date(DATE_ATOM, strtotime('-122seconds')); //Kilkaya API needs some time to gather live Data
+		$to = substr($to,0,-8). '00';
 
-		$from = date(DATE_ATOM, strtotime('-1minute'));
-		$from = substr($from,0,-6);
+		$from = date(DATE_ATOM, strtotime('-122seconds'));
+		$from = substr($from,0,-8). '00';
 
 		$api->exactFrom = $from;
 		$api->exactTo = $to;
@@ -41,7 +51,7 @@ class Kilkaya
 
 		$api->run_query();
 
-		return $api->response['pageviews'];
+		return $api->response['pageviews'] ?? null;
 
 	}
 
@@ -192,6 +202,66 @@ class Kilkaya
 		$api->run_query();
 		return $api->response;
 	}
+
+	public function article_by_day($id, $pubdate) {
+
+		$api = new KilkayaAPI();
+		$api->from = date('Y-m-d', strtotime($pubdate));
+		$api->to = date('Y-m-d');
+		$api->columns = ['pageview', 'subscriber', 'conversion', 'viewTimeMedian', 'viewTime', '_day'];
+		$api->filters = [ ['operator' => 'like', 'field' => 'url', 'value' => '*' . $id . '*'] ];
+
+		$api->run_query();
+		return $this->calculate_article_totals($api->response);
+	}
+
+	public function article_mt($id, $pubdate) {
+
+		$api = new KilkayaAPI();
+		$api->from = date('Y-m-d', strtotime($pubdate));
+		$api->to = date('Y-m-d');
+		$api->columns = ['pageview', 'subscriber', 'conversion', 'viewTimeMedian', 'viewTime'];
+		$api->filters = [ ['operator' => 'like', 'field' => 'url', 'value' => '*' . $id . '*'] ];
+
+		$api->run_query();
+		return $api->response;
+	}
+
+	public function calculate_article_totals($stats) {
+
+		$out['totals']['pageviews'] = array_sum(array_column($stats, 'pageviews'));
+		$out['totals']['subscriberviews'] = array_sum(array_column($stats, 'subscriberviews'));
+		$out['totals']['conversions'] = array_sum(array_column($stats, 'conversions'));
+		$out['totals']['mediatime'] = array_sum(array_column($stats, 'mediatime'));
+
+		//$out['totals']['avgViewTime'] = $out['totals']['pageviews'] / $out['totals']['mediatime'];
+		$out['totals']['avgmediatime'] = $this->median(array_column($stats, 'avgmediatime'));
+		$out['details'] = $stats;
+		return $out;
+	}
+
+
+	public function median($arrInput) {
+
+	    rsort($arrInput); 
+
+	    // Find the middle of count
+	    $size = count($arrInput);
+	    $middle = count($arrInput) / 2; 
+
+	    // Calculate median
+	    if ($size  % 2 != 0){
+	        $median = $arrInput[$middle]; 
+	    }
+	    else{
+	        $median1 = $arrInput[$middle]; 
+	        $median2 = $arrInput[$middle-1]; 
+	        $median = ($median1 + $median2) / 2;
+	    }
+	    return $median; 
+
+	}
+
 
 
 	public function stats_today($id) {

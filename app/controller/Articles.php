@@ -189,8 +189,13 @@ class Articles extends Controller {
 		$lifeTimeTotals['buyintent'] = $this->Analytics->buy_intention_by_article_id($id, $pubDate);
 
 		// Subscribed Readers
-		$subscriberviews = $this->Kilkaya->subscribers($id, $pubDate);
-		$lifeTimeTotals['subscriberviews'] = $subscriberviews;
+		try {
+			$subscriberviews = $this->Kilkaya->subscribers($id, $pubDate);
+			$lifeTimeTotals['subscriberviews'] = $subscriberviews;
+			
+		} catch (\Exception $e) {
+			$lifeTimeTotals['subscriberviews'] = null;			
+		}
 
 		$this->Articles->add_stats($lifeTimeTotals,$id);
 		$this->ArticleKPIs->add($dailyStats,$id);
@@ -214,7 +219,6 @@ class Articles extends Controller {
 		if ($this->days_since($newArticle['pubdate']) >= MAX_IMPORT_RANGE) {
 			throw new \Exception('Artikel zu alt zum Importieren', 404);
 		}
-
 
 		$articles = [$newArticle]; // this has to be an Array of articles
 		return $this->Articles->add_to_database($articles);

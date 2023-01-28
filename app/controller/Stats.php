@@ -46,6 +46,9 @@ class Stats extends Controller {
 		$viewData['averageRetention'] = $this->Orders->average($this->Orders->filter_cancelled($viewData['orders']),'retention');
 
 		$premiumUsers = $this->DailyKPIs->premium_users();
+		$this->view->premiumAvg = null;
+		$this->view->usersAvg = null;
+		$this->view->premiumUsers = null;
 
 		if ($premiumUsers) {
 			$this->view->premiumUsers = $this->Charts->convert($premiumUsers,1);
@@ -139,6 +142,33 @@ class Stats extends Controller {
 		$this->view->title = 'Statistiken nach Audiences';
 		$this->view->class = 'Audience';
 		$this->view->urlPrefix = '/audience/';
+		$this->view->render('stats/content-stats', $viewData);
+
+	}
+
+	public function userneeds() {
+
+		$viewData['articles'] = $this->Articles->count('*', 'userneed');
+		$viewData['plusarticles'] = $this->Articles->sum('plus', 'userneed');
+		$viewData['pageviews'] = $this->Articles->sum('pageviews', 'userneed');
+		$viewData['subscriberviews'] = $this->Articles->sum('subscriberviews', 'userneed');
+		$viewData['mediatime'] = $this->Articles->sum('mediatime', 'userneed');
+		$viewData['sessions'] = $this->Articles->sum('sessions', 'userneed');
+		$viewData['conversions'] = $this->Articles->sum('conversions', 'userneed');
+		$viewData['buyintents'] = $this->Articles->sum('buyintent', 'userneed');
+		$viewData['cancelled'] = $this->Articles->sum('cancelled', 'userneed');
+
+		$viewData['groupedStats'] = $this->Articles->stats_grouped_by($column = 'userneed', $order = 'conversions DESC');
+
+		$viewData['chartOne'] = $this->Charts->get('avg_subscriberviews_by', ['userneed', 'DESC']);
+		$viewData['chartOneTitle'] = 'Durchschnittliche Subscriber nach Bedürfniskategorie';
+		$viewData['chartTwo'] = $this->Charts->get('avg_pageviews_by', ['userneed', 'DESC']);
+		$viewData['chartTwoTitle'] = 'Durchschnittliche Pageviews nach Bedürfniskategorie';
+
+		Session::set('referer', '/stats/userneed');
+		$this->view->title = 'Statistiken nach Bedürfniskategorie';
+		$this->view->class = 'Bendürfniskategorie';
+		$this->view->urlPrefix = '/userneed/';
 		$this->view->render('stats/content-stats', $viewData);
 
 	}
@@ -351,6 +381,47 @@ class Stats extends Controller {
 
 	}
 
+	public function avg_mediatime() {
+
+		$this->DailyKPIs->switch_db(LR_DB_SETTINGS);
+
+		$data = $this->DailyKPIs->mediatime();
+		$chartDataRaw = array_column($data,'avgmediatime','date');
+		$out = [];
+
+		foreach ($data as $set) {
+			$out[$set['date']]['mediatime'] = round($set['avgmediatime'],2);
+			$out[$set['date']]['buddy_mediatime'] = 0;
+			$out[$set['date']]['buddy2_mediatime'] = 0;
+		}
+
+		$this->DailyKPIs->switch_db(MOZ_DB_SETTINGS);
+		$data = $this->DailyKPIs->mediatime();
+		$chartDataRaw = array_column($data,'avgmediatime','date');
+		foreach ($data as $set) {
+			if (isset($set['date'])) {
+				$out[$set['date']]['buddy_mediatime'] = round($set['avgmediatime'] ?? 0,2);
+			}
+			else {
+				$out[$set['date']]['buddy_mediatime'] = 0;
+			}
+		}
+
+		$this->DailyKPIs->switch_db(SWP_DB_SETTINGS);
+		$data = $this->DailyKPIs->mediatime();
+		$chartDataRaw = array_column($data,'avgmediatime','date');
+		foreach ($data as $set) {
+			$out[$set['date']]['buddy2_mediatime'] = round($set['avgmediatime'],2);
+		}
+
+		$this->view->charts = $this->Charts;
+		$this->view->chart = $this->Charts->convert($out);
+
+		$this->view->title = 'AVG Mediatime laut GA';
+		$this->view->render('stats/avg-mediatime');
+
+	}
+
 
 	public function segments() {
 		Session::set('referer', '/stats/segments');
@@ -375,7 +446,6 @@ class Stats extends Controller {
 	public function weekly_review() {
 
 		$data = $this->Portals->weekly();
-
 		$this->view->title = 'Weekly-Review der Mediengruppe Brandenburg';
 		$this->view->templates['footer'] = null;
 		$this->view->render('stats/weekly-review', $data);

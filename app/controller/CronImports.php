@@ -97,6 +97,7 @@ class CronImports extends Controller {
 
 		$this->ArticleMeta->import_drive_data(); // Emotions and Stuff from DPA Drive
 		$this->assign_drive_topics(); // Assigns new Drive Topics to Article Table
+		$this->assign_drive_userneeds(); // Assigns new Drive Userneeds to Article Table
 
 		echo 'Article Import abgeschlossen | ' . date('H:i:s') . "\r\n";
 
@@ -216,11 +217,35 @@ class CronImports extends Controller {
 			return null;
 		}
 
+		$topics = array_filter($topics); // Remove possibly Empty Sets
+		
 		foreach ($topics as $id => $type) {
 			$this->Articles->update(['type' => $type], $id);
 		}
 
 		echo 'Drive Topics zugeordnet | ' . date('H:i:s') . "\r\n";
+
+	}
+
+
+	public function assign_drive_userneeds() {
+
+		$unsetIDs = $this->Articles->get_unset_userneed_ids();
+		$userneeds = $this->ArticleMeta->userneeds_for($unsetIDs);
+
+		// No new Topics found
+		if (empty($userneeds)) {
+			echo 'keine neuen Drive Userneeds zugeordnet | ' . date('H:i:s') . "\r\n";		
+			return null;
+		}
+
+		$userneeds = array_filter($userneeds); // Remove possibly Empty Sets
+
+		foreach ($userneeds as $id => $userneed) {
+			$this->Articles->update(['userneed' => $userneed], $id);
+		}
+
+		echo 'Drive Userneeds zugeordnet | ' . date('H:i:s') . "\r\n";
 
 	}
 

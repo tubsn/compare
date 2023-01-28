@@ -21,7 +21,7 @@
 
 		'stacked' => true,
 		'showValues' => false,
-		'name' => ['Vollabo', 'Probe 1 Monat', 'Probe 3 Monate', '99cent (PrintKombi)', 'Jahresabos'],
+		'name' => ['Vollabo', 'Probe 1 Monat', 'Probe 1+x Monate', '99cent (PrintKombi)', 'Jahresabos'],
 		'template' => 'charts/default_bar_chart',
 	]);?>
 </figure>
@@ -44,7 +44,7 @@
 
 		'stacked' => true,
 		'showValues' => false,
-		'name' => ['Vollabo', 'Probe 1 Monat', 'Probe 3 Monate', 'Jahresabos'],
+		'name' => ['Vollabo', 'Probe 1 Monat', 'Probe 1+x Monate', 'Jahresabos'],
 		'template' => 'charts/default_bar_chart',
 	]);?>
 </figure>
@@ -67,7 +67,7 @@
 
 		'stacked' => true,
 		'showValues' => false,
-		'name' => ['Vollabo', 'Probe 1 Monat', 'Probe 3 Monate', 'Jahresabos'],
+		'name' => ['Vollabo', 'Probe 1 Monat', 'Probe 1+x Monate', 'Jahresabos'],
 		'template' => 'charts/default_bar_chart',
 	]);?>
 </figure>
@@ -109,7 +109,7 @@
 			'stacked' => true,
 			'xfont' => '13px',
 			'showValues' => false,
-			'name' => ['1 Monat Proben', '3 Monats Proben'],
+			'name' => ['1 Monat Proben', '1+x Monats Proben'],
 			'template' => 'charts/default_bar_chart',
 		]);?>
 	</figure>
@@ -146,7 +146,7 @@
 			'stacked' => true,
 			'xfont' => '13px',
 			'showValues' => false,
-			'name' => ['1 Monat Proben', '3 Monats Proben'],
+			'name' => ['1 Monat Proben', '1+x Monats Proben'],
 			'template' => 'charts/default_bar_chart',
 		]);?>
 	</figure>
@@ -605,7 +605,7 @@
 
 </div>
 
-<p class="text-center" style="margin-top:-1em; margin-bottom:4em;">App Nutzer sind <b>aktive User in dem Zeitraum</b> (nicht die Anzahl der App installationen).</p>
+<p class="text-center" style="margin-top:-1em; margin-bottom:4em;">App Nutzer sind <b>aktive User in dem Zeitraum</b> (nicht die Anzahl der App installationen). <br/>Seit Einführung der Hybrid App (LR Oktober 2022, MOZ/SWP Anfang 2023) werden die "Do Not Track"-Features von Apple unterstützt, sodass wir nicht mehr alle Apple Nutzer in der Statistik sehen. Daher gibt es einen Einbruch der Apple-Zahlen.</p>
 
 
 </main>

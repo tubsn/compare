@@ -13,6 +13,42 @@ class CSVImports
 	function __construct() {}
 
 
+	public function import_userneeds_from_csv() {
+
+		$path = ROOT . 'import/temp/userneeds.csv';
+
+		if (!file_exists($path)) {
+			throw new \Exception($path . ' Not found', 500);
+		}
+
+		$data = file($path, FILE_IGNORE_NEW_LINES);
+		$header = str_getcsv(array_shift($data),',');
+
+		$csv = array_map(function($set){
+			return str_getcsv($set,",");
+		},$data);
+
+
+		$csv = array_filter($csv, function($entry) {
+			if ($entry[0] == PORTAL) {return $entry;}
+		});
+
+		foreach ($csv as $key => $row) {
+			$csv[$key] = array_combine($header, $row);
+		}
+
+		$csv = array_column($csv, 'user_need','article_publisher_id');
+		$csv = array_filter($csv);
+
+		$articleDB = new Articles();
+		foreach ($csv as $id => $userneed) {
+			$articleDB->update(['userneed' => $userneed],$id);
+		}
+
+		echo 'jobs done';
+
+	}
+
 
 	public function import_drive_topics() {
 

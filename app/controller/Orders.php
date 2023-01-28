@@ -30,6 +30,7 @@ class Orders extends Controller {
 
 		$viewData['numberOfOrders'] = count($viewData['orders'] ?? []);
 		$viewData['numberOfCancelled'] = count($this->Orders->filter_cancelled($viewData['orders']));
+		$viewData['firstTime'] = count($this->Orders->filter_first_time($viewData['orders']));
 		$viewData['plusOnly'] = count($this->Orders->filter_plus_only($viewData['orders']));
 		$viewData['pushOnly'] = count($this->Orders->filter_push_only($viewData['orders']));
 		$viewData['aboshopOnly'] = count($this->Orders->filter_aboshop($viewData['orders']));
@@ -104,6 +105,17 @@ class Orders extends Controller {
 		dump($this->Orders->count_yearly_into_default_subscription());
 	}
 
+	public function active_customers() {
+
+		$yearly = $this->Orders->yearly_running();
+		$proben = $this->Orders->probe_running();
+
+		echo 'Jahresabos: ' . $yearly;
+		echo '<br>';
+		echo 'Proben: ' . $proben;
+	}
+
+
 	public function utm($field = 'campaign', $campaign = null) {
 
 		Session::set('referer', '/orders/utm');
@@ -131,7 +143,7 @@ class Orders extends Controller {
 		$viewData['numberOfCancelled'] = count($this->Campaigns->filter_cancelled($viewData['campaigns']));
 		$viewData['averageRetention'] = $this->Orders->average($this->Campaigns->filter_cancelled($viewData['campaigns']),'retention');
 
-		$this->view->info = 'Daten aus Google Analytics (ohne Sampling) - Nutzer ohne Tracking-Consent sind ausgeschlossen.';
+		$this->view->info = 'Übersicht erfasster UTM Kampagnen aus Google Analytics. (Nutzer ohne Tracking Consent sind ausgeschlossen). Daten außsschließlich von Paywall und Plusseite!';
 		$this->view->render('orders/list-campaigns', $viewData);
 
 	}

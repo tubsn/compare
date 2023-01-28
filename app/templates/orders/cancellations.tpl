@@ -211,6 +211,11 @@ Auf dieser Seite sind Bestellungen gelistet, <b>die im eingestellten Zeitraum er
 	<?=$charts->get('cancellations_by_retention_days', 400);?>
 </figure>
 
+<figure class="" style="margin-bottom:1em;">
+	<h3 class="text-center">Verteilung - Kündigungszeitpunkt nach Haltedauer in Monaten</h3>
+	<?=$charts->get('cancellations_by_retention_months', 400);?>
+</figure>
+
 
 <div class="col-2" style="grid-template-columns: 1fr 1fr;">
 

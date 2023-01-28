@@ -82,6 +82,23 @@ class ArticleMeta extends Model
 
 	}
 
+	public function userneeds_for($IDs) {
+
+		if (empty($IDs)) {throw new \Exception("No Article IDs given", 404);}
+		$IDs = implode(',', array_map('intval', $IDs)); // Intval for all IDs
+		$table = $this->db->table;
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT article_id as id, userneed FROM `$table` WHERE `article_id` IN ($IDs)"
+		);
+
+		$SQLstatement->execute();
+		$topics = $SQLstatement->fetchall(\PDO::FETCH_KEY_PAIR);
+
+		return $topics;
+
+	}
+
+
 	private function map_topics($topic) {
 
 		// The Topic Mapping is not Used at the moment!!!
@@ -215,6 +232,11 @@ class ArticleMeta extends Model
 			$data['type'] =  "'" . $data['categories']['topic'] . "'";
 		}
 		else {$data['type'] = 'null' ;}
+
+		if (!empty($data['categories']['user_need'])) {
+			$data['userneed'] =  "'" . $data['categories']['user_need'] . "'";
+		}
+		else {$data['userneed'] = 'null' ;}
 
 		$data['article_pad'] = "'" . json_encode($data['article_pad']) . "'";
 		$data['article_preview_pad'] = "'" . json_encode($data['article_preview_pad']) . "'";

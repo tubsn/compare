@@ -136,12 +136,14 @@ class Newsletter extends Controller {
 
 	public function nachdreh_alert_score($send = false) {
 
+		$scoreLimit = 100;
+
 		$start = date('Y-m-d', strtotime('-7days'));
 		$end = date('Y-m-d', strtotime('-1days'));
 
 		$this->Articles->from = date('Y-m-d', strtotime('-7days'));
 		$this->Articles->to = date('Y-m-d', strtotime('-1days'));
-		$viewData['articles'] = $this->Articles->score_articles(100);
+		$viewData['articles'] = $this->Articles->score_articles($scoreLimit);
 
 		if (empty($viewData['articles'])) {
 			throw new \Exception("Keine Artikel in diesem Zeitraum gefunden");
@@ -161,9 +163,9 @@ class Newsletter extends Controller {
 		$viewData['stats']['weekday'] = date('w', strtotime('yesterday'));
 
 		$infoMail = new Email();
-		$infoMail->subject = 'MOZ - Wochenbericht';
-		$infoMail->to = ['twinkler@moz.de'];
-		//$infoMail->cc = ['sebastian.butt@lr-online.de'];
+		$infoMail->subject = PORTAL . ' -  Wochenbericht';
+		$infoMail->to = ['blattkritik@moz.de', 'bbr.red.lr@lr.de', 'lr.med.red@lr.de'];
+		$infoMail->cc = ['sebastian.butt@lr-online.de'];
 
 		if ($send) {
 			$infoMail->send('newsletter/nachdreh-alert-score', $viewData);
@@ -210,5 +212,22 @@ class Newsletter extends Controller {
 		echo '<h3>Versand abgeschlossen</h3>';
 
 	}
+
+
+	public function trigger_weekly_newsletter_sends() {
+
+		echo '<h1>Newsletter - Manager</h1>';
+
+		try {
+			$this->nachdreh_alert_score(true);
+			echo 'Weekly Score Newsletter erfolgreich versand';
+		} catch (\Exception $e) {
+			echo '<b>Weekly Score Newsletter gescheitert:</b> ' . $e->getMessage();
+		}
+
+		echo '<h3>Versand abgeschlossen</h3>';
+
+	}
+
 
 }

@@ -27,7 +27,7 @@ class Livedata extends Controller {
 
 		$this->start = date('Y-m-d', strtotime('today'));
 		$this->end = date('Y-m-d', strtotime('today'));
-		$orders = $this->Plenigo->orders($this->start, $this->end, $maxOrders=100, $includeAppOrders = 0);
+		$orders = $this->Plenigo->orders($this->start, $this->end, $includeAppOrders = 0);
 		$viewData['orders'] = array_reverse($orders);
 
 		$liveData = $this->Kilkaya->today();
@@ -123,7 +123,7 @@ class Livedata extends Controller {
 
 		$from = date('Y-m-d', strtotime('today'));
 		$to = date('Y-m-d', strtotime('today'));
-		$orders = $this->Plenigo->orders($from, $to, $maxOrders=100, $includeAppOrders = 0);
+		$orders = $this->Plenigo->orders($from, $to, $includeAppOrders = 0);
 		$orders = array_reverse($orders);
 
 		header('Access-Control-Allow-Origin: *');
@@ -163,7 +163,7 @@ class Livedata extends Controller {
 
 		$this->gather_get_info();
 		$paidFilter = Session::get('paid_filter');
-		$viewData['orders'] = $this->Plenigo->orders($this->start, $this->end, $this->items, $paidFilter);
+		$viewData['orders'] = $this->Plenigo->orders($this->start, $this->end, $paidFilter);
 		$this->view->render('orders/live/list',$viewData);
 
 	}
@@ -175,7 +175,7 @@ class Livedata extends Controller {
 		$this->start = date('Y-m-d', strtotime('yesterday'));
 		$this->end = date('Y-m-d', strtotime('yesterday'));
 
-		$viewData['orders'] = $this->Plenigo->orders($this->start, $this->end, $this->items, $paidFilter);
+		$viewData['orders'] = $this->Plenigo->orders($this->start, $this->end, $paidFilter);
 		$this->view->title = 'Bestellungen Gestern';
 		$this->view->referer('/orders/yesterday');
 		$this->view->render('orders/live/list',$viewData);
@@ -187,7 +187,7 @@ class Livedata extends Controller {
 		$paidFilter = Session::get('paid_filter');
 
 		$viewData['date'] = $date;
-		$viewData['orders'] = $this->Plenigo->orders($date, $date, $this->items, $paidFilter);
+		$viewData['orders'] = $this->Plenigo->orders($date, $date, $paidFilter);
 
 		$this->view->title = $date . ' - Bestellungen';
 		$this->view->referer('/orders/' . $date);
@@ -203,7 +203,7 @@ class Livedata extends Controller {
 		$this->start = date('Y-m-d', strtotime('today'));
 		$this->end = date('Y-m-d', strtotime('today'));
 
-		$viewData['orders'] = $this->Plenigo->orders($this->start, $this->end, $this->items, $paidFilter);
+		$viewData['orders'] = $this->Plenigo->orders($this->start, $this->end, $paidFilter);
 
 		$this->view->title = 'Bestellungen Heute';
 		$this->view->referer('/orders/today');

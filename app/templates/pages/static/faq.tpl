@@ -15,12 +15,13 @@ Einmal pro Nacht werden aus der Datenbank unseres SSO-Systems (Plenigo) die get�
 
 <p>Leider kam es vor, das die KaufURL nicht korrekt an Plenigo übertragen wurde (zum Beispiel, wenn die Artikel URL länger als 200 Zeichen ist). In dem Fall wissen wir leider überhaupt nicht wie die Conversion zuzuordnen ist. Ein absolut 100% genaues Tracking werden wir daher in naher Zukunft nicht realisieren können. Dennoch ist das SSO System Plenigo (also Compare) grundsätzlich die beste Datenquelle die wir haben.</p>
 
-<p>Weiterhin kann es natürlich auch sein das in dem anderen Tracking System (Linkpulse, Kilkaya oder Google Analytics) eine Fehlzählung erfolgt ist. In der Regel sind das dann zu wenige Conversions z.B. wenn der Nutzer Browser Plugins installiert hat die ein Tracking gänzlich verhindern (z.B. bestimmte Adblocker). Eine zu höhe Conversion Zählung kann darauf zurückzuführen sein, das durch ein uns unbekanntes Fehlverhalten, eine Doppelbuchung ausgeführt wurde, die aber im Plenigo nur einmal gewertet wird. Grundsätzlich gibt es zwischen den Trackingverfahren auch bei Pageviews und Subscriberviews immer mal Abweichungen im Bereich von 5-10%.</p>
+<p>Weiterhin kann es natürlich auch sein das in dem anderen Tracking System (Linkpulse, Kilkaya oder Google Analytics) eine Fehlzählung erfolgt ist. In der Regel sind das dann zu wenige Conversions z.B. wenn der Nutzer Browser Plugins installiert hat die ein Tracking gänzlich verhindern (z.B. bestimmte Adblocker). Eine zu hohe Conversion Zählung kann darauf zurückzuführen sein, dass durch ein uns unbekanntes Fehlverhalten, eine Doppelbuchung ausgeführt wurde, die aber im Plenigo nur einmal gewertet wird. Grundsätzlich gibt es zwischen den Trackingverfahren auch bei Pageviews und Subscriberviews immer mal Abweichungen im Bereich von 5-10%.</p>
 
 <hr>
 
-<h2>Warum unterscheiden sich Klickzahlen und Subscriberviews in anderen Dashboard Systemen?</h2>
-<p>Da Compare hauptsächlich dazu dient Artikel bzw. Gruppierungen von Artikeln (Ressorts, Audiences) miteinander zu vergleichen, werden in den meisten Compare Statistiken nur die Daten von den Artikeln selbst angezeigt. Externe Dashboards können die Gesamtstatistik also die Kombination von Artikeln und Überschsichtsseiten (Indexseiten) darstellen.</p> 
+<h2>Warum unterscheiden sich Klickzahlen in unseren Analyse Systemen?</h2>
+<p>Wir nutzen in Compare eine Vielzahl von Datenquellen für unterschiedliche KPI Daten, die wir meist exklusiv aus diesen Datenquelle beziehen können. Aktuell sind das Kilkaya und Google Analytics. Klickzahlen/Pageviews sind in beiden Quellen vorhanden und weichen Teilweise stark voneinander ab. Bei Kilkaya werden die Pageviews weitgehend ungefiltert erfasst. Hier wirkst sich unter anderem sogenannter Bot-Traffic (also maschinelle Abrufe der Webseite z.B. durch Suchmaschinen Crawler, Hackerangriffe usw.) auf die Klickzahlen aus. Google Analytics filtert diesen durch verschiedene Mechanismen heraus, um ein möglichst realistisches Bild abzugeben. In naher Zukunft können wir über unser neues Datawarehouse "Luna", eigens verwaltete Zähl- und Filterverfahren nutzen. Um möglicherweise ein klareres Bild zu schaffen</p>
+<p>Da Compare hauptsächlich dazu dient Artikel bzw. Gruppierungen von Artikeln (Ressorts, Audiences) miteinander zu vergleichen, werden in den meisten Compare Statistiken nur die Daten von den Artikeln selbst angezeigt. Externe Dashboards können die Gesamtstatistik also die Kombination von Artikeln und Übersichtsseiten (Indexseiten) darstellen.</p> 
 
 <hr>
 
@@ -30,7 +31,7 @@ Einmal pro Nacht werden aus der Datenbank unseres SSO-Systems (Plenigo) die get�
 <hr>
 
 <h2>Warum wird mein Artikel nicht dem richtigen Ressort zugewiesen?</h2>
-<p>Im Compare Tool werden alle Artikel über RSS-Feeds importiert. Dabei wird jeder Artikel nur einmal mit seiner Artikel-ID abgespeichert, um keine Dubletten zu erzeugen. In einigen Fällen kommt es vor, das ein Artikel in mehreren RSS-Feeds vorhanden ist. Zum Beispiel wenn dieser mehreren Ressorts zugewiesen wurde. In dem Fall wird immer das Artikel Ressort des zuletzt importieren RSS-Feeds gesetzt.</p>
+<p>Im Compare Tool werden alle Artikel über RSS-Feeds importiert. Dabei wird jeder Artikel nur einmal mit seiner Artikel-ID abgespeichert, um keine Dubletten zu erzeugen. In einigen Fällen kommt es vor, das ein Artikel in mehreren RSS-Feeds vorhanden ist. Zum Beispiel wenn dieser mehreren Ressorts zugewiesen wurde (Teilort). In dem Fall wird immer das Artikel Ressort des zuletzt importieren RSS-Feeds gesetzt.</p>
 
 <hr>
 

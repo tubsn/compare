@@ -22,6 +22,7 @@ Vue.createApp({
 			source: '',
 			days: 1000,
 			orders: 0,
+			firstTimeOrders: 0,
 			cancelled: 0,
 			retention: 0,
 			paymethod: '',
@@ -36,7 +37,11 @@ Vue.createApp({
 		quote() {
 			if (this.orders == 0) {return 0;}
 			return ((this.cancelled / this.orders)*100).toFixed(2);
-		}
+		},
+		firstTimeOrderQuote() {
+			if (this.orders == 0) {return 0;}
+			return ((this.firstTimeOrders / this.orders)*100).toFixed(2);
+		},		
 	},
 
 	created() {
@@ -44,6 +49,7 @@ Vue.createApp({
 		.then(response => response.json())
 		.then(data => {
 			this.orders = data.orders;
+			this.firstTimeOrders = data.firstTimeOrders;
 			this.cancelled = data.cancelled;
 			this.retention = data.retention;
 
@@ -55,10 +61,11 @@ Vue.createApp({
 
 	methods: {
 		calculateChurn() {
-			fetch(`/api/explorer?from=${this.from}&to=${this.to}&compressed=${this.compressed}&product=${this.product}&segment=${this.segment}&testgroup=${this.testgroup}&origin=${this.origin}&source_grp=${this.source_grp}&source=${this.source}&ressort=${this.ressort}&type=${this.type}&audience=${this.audience}&days=${this.days}&paymethod=${this.paymethod}&product2=${this.product2}`)
+			fetch(`/api/explorer?from=${this.from}&to=${this.to}&compressed=${this.compressed}&product=${this.product}&segment=${this.segment}&testgroup=${this.testgroup}&origin=${this.origin}&source_grp=${this.source_grp}&source=${this.source}&ressort=${this.ressort}&type=${this.type}&audience=${this.audience}&days=${this.days}&paymethod=${this.paymethod}`)
 			.then(response => response.json())
 			.then(data => {
 				this.orders = data.orders;
+				this.firstTimeOrders = data.firstTimeOrders;
 				this.cancelled = data.cancelled;
 				this.retention = data.retention;
 

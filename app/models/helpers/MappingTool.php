@@ -73,6 +73,11 @@ class MappingTool
 			'amp',
 		];
 
+		$combined['Discover/News'] = [
+			'discover',
+			'google news',
+		];
+
 		$combined['Direct'] = [
 			'direct',
 			'intern-tests',
@@ -88,11 +93,9 @@ class MappingTool
 		$combined['Referral'] = [
 			'unknown',
 			'nachrichtenseiten',
-			'discover',
 			'newsfeeds',
 			'vereine',
 			'wikis',
-			'google news',
 		];
 
 		return $combined;
@@ -113,16 +116,19 @@ class MappingTool
 			'l.facebook.com',
 			'social media',
 			'social',
+			'fb_insta_ad',
 		];
 
 		$sources['Instagram'] = [
 			'l.instagram.com',
 			'instagram.com',
 			'instagram',
+			'instagram_story_red',
 		];
 
 		$sources['Google News'] = [
 			'news.google.com',
+			'news.url.google.com',
 			'gnews',
 			'newsshowcase',
 			'googleapis.com',
@@ -216,6 +222,7 @@ class MappingTool
 
 		$sources['Intern-Werbung'] = [
 			'lr',
+			'lrde',
 			'lr-online',
 			'lronline',
 			'print',
@@ -226,10 +233,16 @@ class MappingTool
 			'edge ad',
 			'edge_ad',
 			'edge-ad',
+			'header-ad',
+			'header-bar',
+			'headerline',
 			'plus-werbebalken',
 			'angebote_mozplus',
 			'start-banner',
+			'pr_teaser',
 			'dossierbox',
+			'halfpage-ad',
+			'billboard',
 			'anzeigeplus',
 			'teaser_box',
 			'swpstart',
@@ -247,6 +260,8 @@ class MappingTool
 		];
 
 		$sources['Aboshop'] = [
+			'abo.moz.de',
+			'abo.lr-online.de',
 			'abo.lr-digital.de',
 			'aboshop',
 		];
@@ -258,6 +273,7 @@ class MappingTool
 		$sources['Push'] = [
 			'browser',
 			'push-notification',
+			'web-push',
 		];
 
 		$sources['Search-Other'] = [
@@ -297,11 +313,17 @@ class MappingTool
 			'mobilemailer-bap.gmx.net',
 			'mobilemailer-bs.gmx.net',
 			'mobilemailer-bs.web.de',
+			'lightmailer-bap.gmx.net',
+			'lightmailer-bap.web.de',
+			'lightmailer-bs.web.de',
+			'lightmailer-bs.gmx.net',
 			'my.mail.de',
+			'guerrillamail.com',
 			'deref-1und1.de',
 			'byom.de',
 			'newsletter',
 			'10minutemail.net',
+			'outlook.live.com',
 		];
 
 		return $sources;

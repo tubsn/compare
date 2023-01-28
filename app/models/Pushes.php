@@ -17,6 +17,8 @@ class Pushes extends Model
 	function __construct() {
 		$this->db = new SQLdb(DB_SETTINGS);
 		$this->db->table = 'pushes';
+		$this->db->orderby = 'sent_at';
+		$this->db->limit = 100000;
 
 		$this->from = date('Y-m-d', strtotime(DEFAULT_FROM));
 		$this->to = date('Y-m-d', strtotime(DEFAULT_TO));
@@ -26,6 +28,68 @@ class Pushes extends Model
 
 	}
 
+
+	public function list_with_userneed() {
+
+		$table = $this->db->table;
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT pushes.*, articles.userneed as userneed
+			 FROM $table
+			 LEFT JOIN articles on pushes.article_id = articles.id
+			 #LIMIT 100
+			"
+		);
+		$SQLstatement->execute();
+		$output = $SQLstatement->fetchall();
+		return $output;
+
+	}
+
+	public function clickrate_development($topic = 'politik') {
+
+		$table = $this->db->table;
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT
+				DATE_FORMAT(sent_at,'%Y-%m') as month,
+				sum(clicks) as clicks,
+				sum(delivered) as delivered,
+				round((sum(clicks)/sum(delivered))*100,2) as avgclickrate,
+				count(id) as amount
+			 FROM $table
+			 WHERE DATE(sent_at) BETWEEN :startDate AND :endDate
+			 #AND title like '%ukraine%' or title like '%krieg%' or title like '%putin%' or title like '%moskau%'
+			 #AND title like '%„Wachgehört“%' or title like '%Podcast%'
+			 AND topic like :topic
+			 #AND channel = 'web'
+			 GROUP BY month
+			 #HAVING amount > 2
+			 ORDER BY month ASC
+			"
+		);
+		$SQLstatement->execute([':startDate' => '2020-01-01' , ':endDate' => '2030-01-01', ':topic' => '%'.$topic.'%']);
+		$output = $SQLstatement->fetchall(\PDO::FETCH_UNIQUE);
+		return $output;
+
+	}
+
+	public function distinct_topics() {
+
+		$table = $this->db->table;
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT distinct topic
+			 FROM $table
+			 WHERE topic != ''
+			 ORDER BY topic ASC
+			"
+		);
+		$SQLstatement->execute();
+		$output = $SQLstatement->fetchall(\PDO::FETCH_COLUMN);
+		return $output;
+
+	}
+
+
+
 	public function clickrate_and_time($column = 'topic') {
 
 		$table = $this->db->table;
@@ -33,12 +97,10 @@ class Pushes extends Model
 			"SELECT
 				DATE_FORMAT(sent_at,'%H') as hour,
 				if($column is null, 'leer', $column) as $column,
-				round(avg(clickrate),2) as clickrate
-				##if(clickrate is null, '0', round(avg(clickrate),2)) as clickrate
-
+				round((sum(clicks)/sum(delivered))*100,2) as clickrate
 			 FROM $table
 			 WHERE DATE(sent_at) BETWEEN :startDate AND :endDate
-			 AND channel = 'web'
+			 #AND channel = 'web'
 			 GROUP BY hour, $column
 			 ORDER BY hour ASC
 			"
@@ -60,12 +122,57 @@ class Pushes extends Model
 	}
 
 
+	public function pushes_per_day() {
+
+		$table = $this->db->table;
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT
+				DATE_FORMAT(sent_at,'%Y-%m') as month,
+				round((sum(clicks)/sum(delivered))*100,2) as clickrate,
+				count(id) as amount,
+				round(count(id) / 31,2) as avg_per_day
+			 FROM $table
+			 WHERE DATE(sent_at) BETWEEN :startDate AND :endDate
+			 #AND channel = 'web'
+			 GROUP BY month
+			 ORDER BY month ASC
+			"
+		);
+		$SQLstatement->execute([':startDate' => '2020-01-01' , ':endDate' => '2030-01-01']);
+		$output = $SQLstatement->fetchall(\PDO::FETCH_UNIQUE);
+
+		return $output;
+
+	}
+
+	public function stats() {
+
+		$table = $this->db->table;
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT
+				count(id) as amount,
+				round((sum(clicks)/sum(delivered))*100,2) as clickrate
+			 FROM $table
+			 WHERE DATE(sent_at) BETWEEN :startDate AND :endDate
+			 #AND channel = 'web'
+			"
+		);
+		$SQLstatement->execute([':startDate' => $this->from , ':endDate' => $this->to]);
+		$output = $SQLstatement->fetch();
+
+		return $output;
+
+	}
+
+
 	public function clickrate_grouped_by($column = 'topic') {
 
 		$table = $this->db->table;
 		$SQLstatement = $this->db->connection->prepare(
-			"SELECT if($column is null, 'leer', $column) as $column, count(id) as notifications,
-				round(avg(clickrate),2) as clickrate,
+			"SELECT if($column is null, 'leer', $column) as $column, 
+				count(id) as notifications,
+				#round(avg(clickrate),2) as clickrate,
+				round((sum(clicks)/sum(delivered))*100,2) as clickrate,				
 				round(avg(clicks)) as avg_clicks,
 				sum(clicks) as clicks,
 				round(avg(delivered)) as avg_delivered,
@@ -74,9 +181,11 @@ class Pushes extends Model
 				sum(opt_outs) as opt_outs
 			 FROM $table
 			 WHERE DATE(sent_at) BETWEEN :startDate AND :endDate
-			 AND channel = 'web'
+			 #AND channel = 'web'
+			 AND $column IS NOT NULL
 			 GROUP BY $column
-			 #ORDER BY clickrate DESC
+			 HAVING notifications >= 10
+			 #ORDER BY notifications DESC
 			"
 		);
 		$SQLstatement->execute([':startDate' => $this->from , ':endDate' => $this->to]);
@@ -87,25 +196,34 @@ class Pushes extends Model
 
 
 
-	public function import() {
+	public function import($from = 'today -1month', $to = 'yesterday', $channel = 'web') {
+
+		if (PORTAL != 'LR') {$channel = 'web';} // App is not available for moz or swp
+
+		$validChannels = ['web', 'app'];
+		if (!in_array($channel, $validChannels)) {
+			throw new \Exception("Channel Invalid", 404);
+		}
+
+		$from= date('Y-m-d', strtotime($from));
+		$to = date('Y-m-d', strtotime($to));
 
 		$cp = new Cleverpush();
+		if ($channel == 'app') {$cp->switch_to_app();}
 
-		$cp->from = '2022-10-01';
-		$cp->to = '2022-12-31';
+		$cp->from = $from;
+		$cp->to = $to;
 
-		$list = $cp->list(5000);
+		$list = $cp->list(50000);
 
-		dd($list);
+		$list = array_map(function ($push) use ($channel) {
 
-		$list = array_map(function ($push) {
-
-			if ($push['status'] != 'sent') {return;}
+			if ($push['status'] != 'sent') {return null;}
 
 			$out = [];
 			$out['id'] = $push['id'];
-			$out['channel'] = 'web';
-			$out['portal'] = 'lr';
+			$out['channel'] = $channel;
+			$out['portal'] = strtolower(PORTAL);
 			$out['title'] = $push['title'];
 			$out['text'] = $push['text'];
 			$out['sent_at'] = $push['sentAt'];
@@ -130,6 +248,8 @@ class Pushes extends Model
 
 			return $out;
 		}, $list);
+
+		//dd($list);
 
 		foreach ($list as $entry) {
 			if (empty($entry)) {continue;}

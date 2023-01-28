@@ -135,6 +135,7 @@ class Analytics
 		$this->ga->metrics = 'ga:pageviews, ga:sessions, ga:timeOnPage, ga:avgTimeOnPage';
 		$this->ga->from = $dayCount . 'daysAgo';
 		$this->ga->to = 'today';
+
 		$this->ga->dimensions = 'ga:date';
 		$this->ga->sort = 'ga:date';
 		$this->ga->filters = null;

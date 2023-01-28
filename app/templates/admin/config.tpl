@@ -15,11 +15,11 @@
 	<p>Übersicht zu laufenden UTM Kampagnen und Newsletter Previews
 		<div style="display:flex; gap:5px; align-items: start; margin-bottom:.5em;">
 			<a class="button noline" href="/export/campaigns/30">UTM Kampagnen Übersicht</a>
-			<a class="button noline" href="/campaigns/fbaccelerator">Shop - Accelerator</a>
+			<a class="button noline" href="/campaigns">Shop - Kampagnen</a>
 			<a class="button noline" href="/newsletter/chefredaktion">Chefredaktion Newsletter</a>
 		</div>
 		<div style="display:flex; gap:5px; align-items: start;">
-			<a class="button noline" href="/newsletter/sport">Sport Newsletter</a>
+			<a class="button noline" href="/stats/mediatime">Mediatime</a>
 			<a class="button noline" href="/newsletter/nachdrehalert">Nachdreh-Alert</a>
 			<a class="button noline" href="/newsletter/nachdrehalert-score">Nachdreh-Alert Weekly</a>
 			<a class="button noline" href="https://abo.lr-digital.de/auswertung">Newsletter Auswertung</a>
@@ -44,13 +44,14 @@
 
 <hr />
 
-
+<!--
 <h3>Mini-Stats</h3>
 <p>
 Berechnung von aktiven Jahresabos, die in ein normalabo gewechselt sind (Für Aktive Kunden Statistik).
 </p>
 	<a class="button noline mb" href="/orders/yearlyconverters">Jahresabo Converter</a>
 <hr />
+-->
 
 <h3>Daten-Exports</h3>
 <p>
@@ -61,10 +62,14 @@ Hier können Artikel, Conversions und Kampagnendaten inklusive Klick- und Kündi
 	<a class="button" href="/export/kpis">Portaldaten</a>
 </div>
 
-<div style="display:flex; gap:5px; align-items: start;">
+<div style="display:flex; gap:5px; align-items: start; margin-bottom:.3em;">
 	<a class="button" href="/export/campaigns">UTM-Kampagnen</a>
 	<a class="button" href="/export/readers">Leserdaten</a>
 	<a class="button" href="/export/sales">Salesdaten</a>
+</div>
+
+<div style="display:flex; gap:5px; align-items: start;">
+	<a class="button" href="/export/push">Pushdatan</a>
 </div>
 
 </p>
@@ -109,6 +114,7 @@ Hier können Artikel, Conversions und Kampagnendaten inklusive Klick- und Kündi
 	<a class="button noline" href="/admin/kpisegments">Drive Segment KPIs importieren</a>
 	</p>
 
+<!--
 <hr>
 
 	<h3>Drive Kauf-Usersegmente Importieren</h3>
@@ -124,6 +130,7 @@ Hier können Artikel, Conversions und Kampagnendaten inklusive Klick- und Kündi
 
 	<a class="button noline" href="/admin/warmup/assign-sources">Conversion Referals mappen</a>
 	</p>
+-->
 
 <hr>
 

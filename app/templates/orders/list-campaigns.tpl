@@ -6,7 +6,7 @@
 <h1><?=$page['title']?></h1>
 <?php endif; ?>
 
-<p>Übersicht erfasster UTM Kampagnen aus Google Analytics. (Nutzer ohne Tracking Consent sind ausgeschlossen)</p>
+<p><?=$info?></p>
 
 <p class="light-box" style="margin-bottom:2em;">
 Kampagnenbestellungen: <b class="conversions"><?=$numberOfCampaigns?></b>

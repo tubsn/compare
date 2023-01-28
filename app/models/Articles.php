@@ -105,8 +105,23 @@ class Articles extends Model
 
 		$SQLstatement = $this->db->connection->prepare(
 			"SELECT id FROM `articles` WHERE type IS NULL
-			AND DATE(`pubdate`) BETWEEN :startDate AND :endDate AND type IS NULL
+			AND DATE(`pubdate`) BETWEEN :startDate AND :endDate
 			LIMIT 0, 10000"
+		);
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall(\PDO::FETCH_COLUMN);
+		return $output;
+	}
+
+	public function get_unset_userneed_ids() {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT id FROM `articles` WHERE userneed IS NULL
+			AND DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			LIMIT 0, 100000"
 		);
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
 		$output = $SQLstatement->fetchall(\PDO::FETCH_COLUMN);
@@ -157,6 +172,26 @@ class Articles extends Model
 
 	}	
 
+	public function list_all_userneeds() {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT *
+			 FROM `articles`
+			 WHERE (`userneed` is not NULL or `userneed` != '')
+			 AND DATE(`pubdate`) BETWEEN :startDate AND :endDate
+			 ORDER BY 'pubdate' DESC
+			 LIMIT 0, 25000"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchall();
+		if (empty($output)) {return null;}
+		return $output;
+
+	}	
 
 
 	public function list_by_fuzzy($searchterm, $column, $order = 'pubdate') {

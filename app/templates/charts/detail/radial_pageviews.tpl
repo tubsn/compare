@@ -1,3 +1,9 @@
+
+<!--
+<div style="line-height:0; position:relative;">
+	<img style="position:absolute;top:-8px; left:189px;" src="/styles/img/reenderhat.png">
+</div>
+-->
 <div id="radialPageviews" ></div>
 
 <script>

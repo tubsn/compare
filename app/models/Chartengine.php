@@ -145,7 +145,7 @@ class Chartengine
 
 	private function to_aphex_chart() {
 
-		$metric = null; $dimension = null;
+		$metric = ''; $dimension = '';
 		foreach ($this->data as $data) {
 
 			if (empty($data[$this->groupby])) {continue;}

@@ -192,11 +192,24 @@ class Artikel {
 			});
 		}
 
+		// Icon Load Animation
+		this.loadAnimation();
 
 		// Sort Table Stuff
 		this.sortableTables = document.querySelectorAll('.js-sortable');
 		if (this.sortableTables) {this.tableSort(this.sortableTables);}
 
+	}
+
+	loadAnimation() {
+
+		let icon = document.querySelector('.icon-analytics');
+		if (!icon) {return;}
+		icon.parentNode.addEventListener('click', (e) => {
+			e.preventDefault();
+			icon.src = '/styles/img/load.svg';
+			location.href = icon.parentNode.href;
+		})
 	}
 
 

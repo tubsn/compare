@@ -16,9 +16,28 @@ class Plenigo
 		$this->api = new PlenigoAPI();
 	}
 
-	public function orders($start, $end, $items, $showAll = false) {
+	public function subscriptions($start, $end, $showAll = false) {
 
-		$orders = $this->api->orders($start, $end, $items);
+		$orders = $this->api->changed_subscriptions($start, $end);
+		
+		$mapper = new PlenigoOrderMapping();
+		$orderData = array_map([$mapper, 'map_order'], $orders);
+		$subscriptionData = array_map([$mapper, 'map_subscription_data'], $orders);
+		$customerData = array_map([$mapper, 'map_customer'], $orders);
+
+		$output = [];
+		foreach ($orders as $key => $order) {
+
+			$output[$key] = array_merge($orderData[$key], $subscriptionData[$key], $customerData[$key]);
+
+		}
+		return $output;
+
+	}
+
+	public function orders($start, $end, $showAll = false) {
+
+		$orders = $this->api->orders($start, $end);
 
 		if (empty($orders)) {return [];}
 

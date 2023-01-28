@@ -4,16 +4,56 @@
 
 <ul>
 	<li>Überarbeitung - Compare Startseite: Darstellung der letzten Tags & Bestperformer Artikel des Monats</li>
-	<li>Integration Reha Dashboards (MOZ,LR)</li>
 	<li>Übersicht Hall of Fame Artikel</li>
 	<li>Archiv Artikel die vor einem Monat oder Jahr gut performt haben darstellen</li>
-	<li>Alert Mails - z.B. Kündiger mit Technischem Problem </li>
 </ul>
 
 
 <h1>Changelog</h1>
 
 <hr>
+
+<h2>05.01.2023 - Andocken der DPA-Drive Userneeds</h2>
+
+<ul>
+	<li>Artikel können jetzt auch nach Userneeds gruppiert werden. Dadurch ermöglichen sich neue Auswertungsmöglichkeiten.</li>
+</ul>
+
+<h2>03.01.2023 - Push Klickraten Dashboards</h2>
+
+<ul>
+	<li>Es gibt neue Dashboards zur zeitlichen Entwicklung von Push Klickraten nach Themengebiet.</li>
+</ul>
+
+<h2>14.12.2022 - Einführung Neukunden KPI und Optimierungen</h2>
+
+<ul>
+	<li>Beim Import von Conversions wird jetzt geprüft, ob der Kunde bereits eine Bestellung im System hatte.</li>
+	<li>Daraus lässt sich z.B. im Churn Explorer der Anteil der Neukunden einer Kampagne ausweisen.</li>
+	<li>Der Daten aktualisieren Button in der Artikeldetailansicht wurde hervorgehoben und mit einer Ladeanimation versehen.</li>
+	<li>Im Hauptmenu sind jetzt 3-stufige Navigationsebenen möglich.</li>
+</ul>
+
+<h2>09.12.2022 - Verbesserung KilkayaAPI</h2>
+
+<ul>
+	<li>Über die KilakyaAPI werden jetzt solange Datenabgefragt, bis diese Werte zurückliefert, dies war in der Vergangenheit durch einen Fehler nicht in jedem Fall so.</li>
+	<li>Durch die Verbesserung sollte das TV Dashboard keine "0" Werte mehr anzeigen.</li>
+	<li>zusätzlich wurden vorbereitungen getroffen, die Pageview Daten züknftig nicht mehr per Google Analytics sondern Kilkaya zu importieren. Dies ist noch nicht aktiviert!</li>
+</ul>
+
+<h2>07.12.2022 - Eigene Datenbank für Pushmeldungen</h2>
+
+<ul>
+	<li>Statistiken zu den Pushmeldungen können jetzt über eine eigene Datenbank erstellt werden</li>
+	<li>Dadurch ist es möglich z.b. die Performance von Themengebieten oder Audiences nach Klickrate darzustellen</li>
+</ul>
+
+<h2>10.11.2022 - Verbesserungen an den Push Dashboards</h2>
+
+<ul>
+	<li>Neue Dashboards für Pushmeldungen Verfügbar</li>
+</ul>
 
 
 <h2>17.10.2022 - Neues Dashboard für Brandenburg</h2>

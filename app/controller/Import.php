@@ -99,7 +99,7 @@ class Import extends Controller {
 		}
 
 	}
-
+	
 	public function import_dailyKPI_segments() {
 		$from = date('Y-m-d', strtotime('yesterday -2days'));
 		$to = date('Y-m-d', strtotime('yesterday'));

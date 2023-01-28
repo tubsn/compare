@@ -10,7 +10,7 @@ class PlenigoAPI
 	const API_BASE_URL = 'https://api.plenigo.com/api/v3.0';
 	private $plenigoToken = PLENIGO_TOKEN;
 	private $client = PORTAL;
-	private $maxDaysPerRequest = 91;
+	private $maxDaysPerRequest = 150;
 
 	public function __construct() {}
 
@@ -34,6 +34,28 @@ class PlenigoAPI
 		return $orders;
 
 	}
+
+	public function changed_subscriptions($start, $end, $lastID = null) {
+
+		$startingAfter = null;
+		if ($lastID) {$startingAfter = '&startingAfter=' . $lastID;}
+
+		$apiQuery = '/subscriptions/?startTime=' . $start . 'T00:00:00Z&endTime=' . $end . 'T23:59:59Z&size=100' . $startingAfter;
+		$data = $this->curl($apiQuery);
+
+		$orders = $data['items'];
+		if (empty($orders)) {return;}
+
+		if (count($orders) >= 100) {
+			$lastID = end($orders)['subscriptionId'];
+			$newOrders = $this->orders($start,$end,$lastID);
+			if ($newOrders) {$orders = array_merge($orders, $newOrders);}
+		}
+
+		return $orders;
+
+	}
+
 
 
 	public function app_store_apple($start, $end, $lastID = null) {

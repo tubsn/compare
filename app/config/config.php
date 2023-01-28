@@ -8,6 +8,7 @@ switch (PORTAL) {
 		define('PORTAL_URL_SHORT', 'www.lr.de');
 		define('PORTAL_EPAPER_URL', 'https://epaper.lr-online.de');
 		define('PORTAL_NAME', 'LR');
+		define('PORTAL_COLOR', '#df886d');
 
 		define('APP_PRODUCTS', [
 			'ir.lronline.product.year',
@@ -290,6 +291,7 @@ switch (PORTAL) {
 		define('PORTAL_URL_SHORT', 'www.moz.de');
 		define('PORTAL_EPAPER_URL', 'https://epaper.moz.de');
 		define('PORTAL_NAME', 'MOZ');
+		define('PORTAL_COLOR', '#0967a8');
 
 		define('RESSORT_MAPPING', [
 			'angermuende' => 'ang',
@@ -527,6 +529,7 @@ switch (PORTAL) {
 		define('PORTAL_URL_SHORT', 'www.swp.de');
 		define('PORTAL_EPAPER_URL', 'https://epaper.swp.de');
 		define('PORTAL_NAME', 'SWP');
+		define('PORTAL_COLOR', '#e82560');
 
 		define('IMPORT_FEEDS', [
 			//'https://www.swp.de/?_XML=RSS',
@@ -563,6 +566,10 @@ define('ARTICLE_TAGS', $tags);
 $audiences = file_get_contents(CONFIGPATH . PORTAL .DIRECTORY_SEPARATOR . 'artikel_audiences.txt');
 $audiences = explode_and_trim("\n", $audiences);
 define('ARTICLE_AUDIENCES', $audiences);
+
+define('COLOR_LR', '#df886d');
+define('COLOR_MOZ', '#0967a8');
+define('COLOR_SWP', '#e82560');
 
 define('MAX_IMPORT_RANGE', 365);
 

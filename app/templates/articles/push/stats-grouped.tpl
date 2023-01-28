@@ -10,55 +10,32 @@
 <p><?=$info?></p>
 <?php endif; ?>
 
-<hr>
-
-
-	<figure class="mb">
-		<h3 class="text-center" style="margin:0">Klickraten nach Uhrzeit</h3>
-		<?=$charts->create([
-			'metric' => [
-				$statsGrouped['Amateursportler'],
-				$statsGrouped['Crime-Fans'],
-				$statsGrouped['Familien'],
-				$statsGrouped['FCE-Fans'],
-				$statsGrouped['Foodies'],
-				$statsGrouped['Gesundheitsbewusste'],
-				$statsGrouped['Pendler'],
-				$statsGrouped['Rettungsengel'],
-				$statsGrouped['Unternehmer'],
-				$statsGrouped['leer'],
-			],
-			'dimension' => $statsGrouped['dimensions'],
-			'color' => '#4C3A51',
-			'height' => 450,
-			'area' => false,
-			'stacked' => false,
-			'legend' => 'top',
-			'showValues' => false,
-			'name' => [
-				'Amateursportler',
-				'Crime-Fans',
-				'Familien',
-				'FCE-Fans',
-				'Foodies',
-				'Gesundheitsbewusste',
-				'Pendler',
-				'Rettungsengel',
-				'Unternehmer',
-				'leer',
-			],
-			'template' => 'charts/default_bar_chart',
-		]);?>
-	</figure>
+<p class="light-box" style="margin-bottom:2em;">
+Pushmeldungen im Zeitraum: <b class="blue"><?=gnum($generalStats['amount'])?></b>
+&emsp; Klickrate: <b class="orange"><?=$generalStats['clickrate']?>&thinsp;%</b>
+</p>
 
 
 
-
+<figure class="mb">
+	<h3 class="text-center" style="margin:0">Klickraten zu Produktion</h3>
+	<?=$charts->create([
+		'metric' => [$stats['clickrate'], $stats['notifications']],
+		'dimension' => $stats['dimensions'],
+		'color' => ['#4C3A51','#E7AB79'],
+		'height' => 450,
+		'legend' => 'top',
+		'stacked' => false,
+		'showValues' => false,
+		'name' => ['Klickrate', 'Pushmeldungen'],
+		'template' => 'charts/default_bar_line_chart',
+	]);?>
+</figure>
 
 
 <div class="col-2">
 	<figure class="mb">
-		<h3 class="text-center" style="margin:0">Klickrate</h3>
+		<h3 class="text-center" style="margin:0">⌀-Klickrate</h3>
 		<?=$charts->create([
 			'metric' => $stats['clickrate'],
 			'dimension' => $stats['dimensions'],
@@ -73,7 +50,7 @@
 	</figure>
 
 	<figure class="mb">
-		<h3 class="text-center" style="margin:0">Opt Outs</h3>
+		<h3 class="text-center" style="margin:0">⌀-Opt Outs</h3>
 		<?=$charts->create([
 			'metric' => $stats['avg_opt_outs'],
 			'dimension' => $stats['dimensions'],
@@ -87,6 +64,8 @@
 	</figure>
 
 </div>
+
+
 
 
 <div class="col-2">
@@ -105,7 +84,7 @@
 	</figure>
 
 	<figure class="mb">
-		<h3 class="text-center" style="margin:0">an Nutzer ausgespielt</h3>
+		<h3 class="text-center" style="margin:0">⌀-an Nutzer ausgespielt</h3>
 		<?=$charts->create([
 			'metric' => $stats['avg_delivered'],
 			'dimension' => $stats['dimensions'],
@@ -119,6 +98,26 @@
 	</figure>
 
 </div>
+
+
+
+
+
+<figure class="mb">
+	<h3 class="text-center" style="margin:0">Zeitliche Entwicklung - Pushmeldungen pro Tag</h3>
+	<?=$charts->create([
+		'metric' => [$timeStats['clickrate'], $timeStats['avg_per_day']],
+		'dimension' => $timeStats['dimensions'],
+		'color' => ['#4C3A51','#E7AB79'],		
+		'height' => 450,
+		'legend' => 'top',
+		'stacked' => false,
+		'showValues' => false,
+		'name' => ['Klickrate', '⌀-Pushmeldungen pro Tag'],
+		'template' => 'charts/default_bar_line_chart',
+	]);?>
+</figure>
+
 
 
 

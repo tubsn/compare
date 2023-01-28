@@ -10,7 +10,7 @@ class Exports extends Controller {
 	public function __construct() {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 		$this->view('CSV');
-		$this->models('Articles,Analytics,Conversions,Campaigns,ArticleKPIs,DailyKPIs,Plenigo,Orders,Linkpulse,Readers,SalesKPIs');
+		$this->models('Articles,Analytics,Conversions,Campaigns,ArticleKPIs,DailyKPIs,Plenigo,Orders,Linkpulse,Readers,SalesKPIs,Pushes');
 	}
 
 	public function articles() {
@@ -88,6 +88,12 @@ class Exports extends Controller {
 		$readers = $this->Readers->list();
 		$this->view->title = PORTAL . '-Readers-'.date("dmY").'.csv';
 		$this->view->export($readers);
+	}
+
+	public function push_data() {
+		$push = $this->Pushes->all();
+		$this->view->title = PORTAL . '-Push-'.date("dmY").'.csv';
+		$this->view->export($push);
 	}
 
 	public function value_articles() {

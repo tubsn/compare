@@ -18,8 +18,15 @@
 				<li><a href="/ressort">nach Ressorts</a></li>
 				<li><a href="/type">nach Themen</a></li>
 				<li><a href="/tag">nach #-Tags</a></li>
+
+				<?php if (auth_rights('userneeds')): ?>
+				<li><a href="/userneed/">nach Bedürfniskategorie</a></li>
+				<?php endif ?>
+
 				<li><a href="/audience">nach Audiences</a></li>
+				<?php if (PORTAL == 'LR'): ?>
 				<li><a href="/discover">Google Discover Artikel</a></li>
+				<?php endif ?>
 				<!--<li><a href="/epaper">ePaper Artikel</a></li>-->
 			</ul>
 		</li>
@@ -53,7 +60,17 @@
 			<ul class="dropdown" aria-label="submenu">
 				<li><a href="/stats/artikel">Artikel-Produktion</a></li>
 				<li><a href="/stats/audience-by-ressort">Audiences nach Ressort</a></li>
-				<li><a href="/push">Push-Meldungen (Clever-Push)</a></li>
+				<li><a href="/push">Push-Meldungen (Web)</a></li>
+				<li><a href="/push/app">Push-Meldungen (App)</a></li>
+				<li>
+					<a href="/push/stats/topic">Push-Statistiken</a>
+					<ul class="dropdown-level-2" aria-label="submenu">
+						<li><a href="/push/stats/topic">nach Thema</a></li>
+						<li><a href="/push/stats/audience">nach Audience</a></li>
+						<li><a href="/push/stats/tag">nach #-Tag</a></li>
+						<li><a href="/push/stats/development">Klickraten-Entwicklung</a></li>
+					</ul>
+				</li>
 			</ul>
 		</li>
 
@@ -64,6 +81,9 @@
 				<li><a href="/stats/thema">nach Themen</a></li>
 				<li><a href="/stats/tag">nach #-Tag</a></li>
 				<li><a href="/stats/audience">nach Audiences</a></li>
+				<?php if (auth_rights('userneeds')): ?>
+				<li><a href="/stats/userneed">nach Bedürfniskategorie</a></li>
+				<?php endif ?>				
 				<!--<li><a href="/epaper/stats">ePaper Statistiken</a></li>-->
 				<li><a href="/stats/pubtime/">Audience Leseverhalten</a></li>
 				<li><a href="/stats/cluster/audiences">Cluster - Audience nach Ressort</a></li>
@@ -135,6 +155,7 @@
 				<li><a href="/admin/cluster">Cluster-Manager</a></li>
 				<li><a href="/unclassified/types">Unbestimmte Themen</a></li>
 				<li><a href="/admin/discover">Discover-Import</a></li>
+				<li><a href="/admin/push">Push-Import</a></li>
 				<li><a href="/admin/orders">Conversion-Import</a></li>
 			</ul>
 

@@ -37,7 +37,11 @@ Pushmeldungen: <b><?=count($notifications)?></b>
 </p>
 
 <p class="text-center">
+<?php if ($app): ?>
+<a class="button" href="/push/app/archiv">zum Pushmeldungs-Archiv</a>
+<?php else: ?>	
 <a class="button" href="/push/archiv">zum Pushmeldungs-Archiv</a>
+<?php endif ?>
 </p>
 <style>
 .calendar-timeframe, .calendar-datepicker {display:none;}

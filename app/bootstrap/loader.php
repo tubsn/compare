@@ -3,8 +3,8 @@ date_default_timezone_set('Europe/Berlin');
 setlocale(LC_TIME, "de_DE");
 
 define('APP_START', microtime(true));
-//error_reporting(E_ALL);
-error_reporting(E_ALL ^ E_DEPRECATED);
+error_reporting(E_ALL);
+//error_reporting(E_ALL ^ E_DEPRECATED);
 
 // Pathing
 define('ROOT', dirname(__DIR__,2) . DIRECTORY_SEPARATOR);
@@ -14,7 +14,7 @@ $subdomain = explode('.', $_SERVER['HTTP_HOST'])[0] ?? 'LR';
 switch ($subdomain) {
 	case 'reports-moz': define('ENV_PATH', ROOT . '.env-moz'); break;
 	case 'reports-swp': define('ENV_PATH', ROOT . '.env-swp'); break;
-	case 'reports-test': define('ENV_PATH', ROOT . '.env-test'); break;	
+	case 'reports-test': define('ENV_PATH', ROOT . '.env-test'); break;
 	default: define('ENV_PATH', ROOT . '.env');	break;
 }
 

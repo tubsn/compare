@@ -189,6 +189,10 @@
 				<td class="text-right">{{ orders }}</td>
 			</tr>
 			<tr>
+				<td>Neukunden:</td>
+				<td :title="firstTimeOrders" class="text-right">{{ firstTimeOrderQuote }}&thinsp;%</td>
+			</tr>
+			<tr>
 				<td>Kündigungen:</td>
 				<td class="text-right">{{ cancelled }}</td>
 			</tr>

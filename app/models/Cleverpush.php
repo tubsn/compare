@@ -26,6 +26,9 @@ class Cleverpush
 
 	}
 
+	public function switch_to_app() {
+		$this->api->channelID = CLEVERPUSH_CHANNELID_APP;
+	}
 
 
 	public function click_stats() {
@@ -227,6 +230,14 @@ class Cleverpush
 		if (isset($matches[1])) {
 			return $matches[1]; // First Match should be the ID
 		}
+
+		// For App Pushes
+		$searchPattern = "/article\/(\d{8})/";
+		preg_match($searchPattern, $url, $matches);
+		if (isset($matches[1])) {
+			return $matches[1]; // First Match should be the ID
+		}
+
 		return null;
 	}
 

@@ -27,7 +27,7 @@ class ChurnExplorer extends Controller {
 		$this->Articles->from = '2000-01-01';
 		$this->Articles->to = date('Y-m-d');
 
-		$this->view->title = 'The Ultimate Churn-Rate Explorer phew phew!';
+		$this->view->title = 'Churn-Rate Explorer';
 		$this->view->months = array_reverse($this->month_list());
 		$this->view->segments = $this->Orders->order_segments();
 		$this->view->products = $this->Orders->product_titles();
@@ -141,10 +141,15 @@ class ChurnExplorer extends Controller {
 			array_push($cancelFilters, "conversions.retention < $retention");
 		}
 
+		$firstTimeOrderFilters = $orderFilters;
+		array_push($firstTimeOrderFilters, "conversions.order_first = 1");
+
 		$orders = $this->Orders->count_with_article_join($this->build($orderFilters));
+		$firstTimeOrders = $this->Orders->count_with_article_join($this->build($firstTimeOrderFilters));
 		$cancelled = $this->Orders->cancelled_by_retention_days_with_article_join($this->build($cancelFilters));
 
 		$data['orders'] = $orders;
+		$data['firstTimeOrders'] = $firstTimeOrders;
 		$data['cancelled'] = $this->sum($cancelled);
 		$data['retentiondays'] = array_sum(array_keys($cancelled));
 		$data['retention'] = 0;

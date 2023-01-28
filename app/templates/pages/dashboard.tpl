@@ -91,8 +91,8 @@ Artikel: <b><?=$articles?></b>
 <figure class="mb">
 	<h3 class="text-center">Ø-Besucher pro Tag</h3>
 	<?=$charts->create([
-		'metric' => $premiumUsers['users'],
-		'dimension' => $premiumUsers['dimensions'],
+		'metric' => $premiumUsers['users'] ?? [],
+		'dimension' => $premiumUsers['dimensions'] ?? [],
 		'color' => '#2F5772',
 		'height' => 300,
 		'legend' => 'top',
@@ -109,8 +109,8 @@ Artikel: <b><?=$articles?></b>
 <figure class="mb">
 	<h3 class="text-center">Daily Active Subscribers (Ø-Abonnenten am Tag)</h3>
 	<?=$charts->create([
-		'metric' => $premiumUsers['subscribers'],
-		'dimension' => $premiumUsers['dimensions'],
+		'metric' => $premiumUsers['subscribers'] ?? [],
+		'dimension' => $premiumUsers['dimensions'] ?? [],
 		'color' => '#d99fd2',
 		'height' => 300,
 		'legend' => 'top',
@@ -125,8 +125,8 @@ Artikel: <b><?=$articles?></b>
 </figure>
 </div>
 
-
+<!--
 <p class="text-center" style="margin-bottom:2em; ">(<b>Achtung:</b> Die Daily Active Subscribers für August 2022 mussten aufgrund eines Trackingproblems mit Füllwerten ergänzt werden)</p>
-
+-->
 
 </main>

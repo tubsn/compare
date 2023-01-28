@@ -27,7 +27,24 @@ class Admin extends Controller {
 		$this->view->render('admin/config', $viewData);
 	}
 
+
+	public function push_import() {
+
+		if (!Auth::has_right('type')) {
+			throw new \Exception("Sie haben keine Berechtigung diese Seite aufzurufen", 403);
+		}
+
+		$this->view->title = 'Push-Imports';
+		$this->view->render('admin/push-import');
+
+	}
+
+
 	public function discover_upload() {
+		
+		if (!Auth::has_right('type')) {
+			throw new \Exception("Sie haben keine Berechtigung diese Seite aufzurufen", 403);
+		}
 
 		if (isset($_FILES['uploads']) && is_array($_FILES['uploads'])) {
 			$filePath = $_FILES['uploads']['tmp_name'][0];

@@ -31,13 +31,6 @@ class Portals extends Model
 
 	public function weekly() {
 
-		/*
-		if (Session::get('timeframe') != 'aktuelle Woche') {
-			Session::set('from', date('Y-m-d', strtotime('monday this week')));
-			Session::set('to', date('Y-m-d', strtotime('sunday this week')));
-		}
-		*/
-
 		$data = $this->Portals->weekly($this->from,$this->to);
 		return $data;
 

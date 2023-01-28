@@ -178,9 +178,7 @@ class KilkayaAPI
 		if (!empty($this->response)) {return;}
 
 		if (!isset($curlData['data'])) {
-			//dump($curlData);
 			throw new \Exception("No Response Data", 404);
-
 		}
 
 		if (isset($curlData['data'])) {
@@ -206,6 +204,7 @@ class KilkayaAPI
 	public function handle_messages() {
 
 		if ($this->responseMessage) {
+			if ($this->responseMessage == 'Query was delayed') {return;}
 			Log::error('KilkayaAPI: ' . $this->responseMessage);
 		}
 

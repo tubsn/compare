@@ -327,6 +327,28 @@ class DailyKPIs extends Model
 
 	}
 
+	public function switch_db($dbSettings) {
+		$this->db = new SQLdb($dbSettings);
+		$this->db->table = 'daily_kpis';
+		$this->db->primaryIndex = 'date';
+		$this->db->orderby = 'date';
+	}
+
+	public function mediatime() {
+
+		$from = strip_tags($this->from);
+		$to = strip_tags($this->to);
+		$tablename = $this->db->table;
+
+		$SQLstatement = $this->db->connection->prepare(
+			"SELECT date, avgmediatime FROM $tablename
+			WHERE DATE(`date`) BETWEEN :startDate AND :endDate"
+		);
+
+		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
+		$output = $SQLstatement->fetchAll();
+		return $output;
+	}
 
 
 	public function import($daysAgo = 5) {
@@ -334,6 +356,8 @@ class DailyKPIs extends Model
 		$ga = new Analytics();
 		$gaKPIs = $ga->page_data($daysAgo);
 		$gaKPIs = array_map([$this, 'ga_adapter'], $gaKPIs);
+
+		//dd($gaKPIs);
 
 		foreach ($gaKPIs as $data) {
 			if ($this->get($data['date'])) {

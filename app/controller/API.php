@@ -10,9 +10,22 @@ class API extends Controller {
 
 	public function __construct() {
 		$this->view('DefaultLayout');
-		$this->models('Longterm,Articles,Orders,DailyKPIs');
+		$this->models('Longterm,Articles,Orders,DailyKPIs,Kilkaya,Readers');
 		header('Access-Control-Allow-Origin: *');
 	}
+
+	public function get_reader($id) {
+
+		$this->Orders->from = '2000-01-01';
+
+		$reader = $this->Readers->get($id);
+
+		//$orders = $this->Orders->by_customer($id);
+		//$activeOrder = $this->Readers->filter_active($orders);
+
+		$this->view->json($reader);
+	}
+
 
 	public function provide_portal_orders() {
 		$this->view->json($this->Longterm->orders());
@@ -49,9 +62,16 @@ class API extends Controller {
 		$ghostArticles = $this->Articles->count_with_filter('(conversions IS NULL OR conversions=0) AND (subscriberviews IS NULL OR subscriberviews<100)');
 		$ghostQuote = percentage($ghostArticles,$articles,1);
 
+		/* Data from Google Analytics
 		$pageviews = $this->DailyKPIs->sum('pageviews');
 		$subscriberviews = $this->DailyKPIs->sum('subscriberviews');
 		$mediatime = round($this->DailyKPIs->avg('avgmediatime'),1);
+		*/
+
+		$kilkayaStats = $this->Kilkaya->portal_stats($from,$to);
+		$pageviews = $kilkayaStats['pageviews'];
+		$subscriberviews = $kilkayaStats['subscriberviews'];
+		$mediatime =  $kilkayaStats['avgmediatime'];
 
 		$orders = $this->Orders->count();
 		$ordersYearly = $this->Orders->count("subscription_internal_title like '%12M%'");

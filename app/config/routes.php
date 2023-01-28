@@ -19,6 +19,8 @@ $routes->get('/ressort/{ressort}', 'Lists@ressort');
 $routes->get('/ressort', 'Lists@ressort');
 $routes->get('/type/{type}', 'Lists@type');
 $routes->get('/type', 'Lists@type');
+$routes->get('/userneed/{userneed}', 'Lists@userneed');
+$routes->get('/userneed', 'Lists@userneed');
 $routes->get('/audience/{audience}', 'Lists@audience');
 $routes->get('/audience', 'Lists@audience');
 $routes->get('/tag/{tag}', 'Lists@tag');
@@ -83,6 +85,7 @@ $routes->get('/orders/subscription/{id:\d+}', 'Livedata@subscription');
 $routes->post('/orders/set_date', 'Livedata@set_date');
 $routes->post('/orders/set_paid_filter', 'Livedata@set_paid_filter');
 $routes->get('/orders/yearlyconverters', 'Orders@yearly_converters');
+$routes->get('/orders/active-customers', 'Orders@active_customers');
 
 
 // Invoices & Transactions
@@ -94,6 +97,7 @@ $routes->post('/transactions', 'Transactions@index');
 $routes->get('/stats', 'Stats@dashboard');
 $routes->get('/stats/weekly', 'Stats@weekly_review');
 $routes->get('/stats/ressort', 'Stats@ressorts');
+$routes->get('/stats/userneed', 'Stats@userneeds');
 $routes->get('/stats/thema', 'Stats@themen');
 $routes->get('/stats/tag', 'Stats@tags');
 $routes->get('/stats/audience', 'Stats@audiences');
@@ -105,6 +109,7 @@ $routes->get('/stats/cluster/tags', 'Stats@cluster_tags');
 
 $routes->get('/stats/artikel', 'Stats@artikel');
 $routes->get('/stats/segments', 'Stats@segments');
+$routes->get('/stats/mediatime', 'Stats@avg_mediatime');
 $routes->get('/stats/pubtime[/{audience}]', 'Stats@publications');
 
 
@@ -144,6 +149,7 @@ $routes->get('/api/article/{id}', 'Livedata@api_article');
 $routes->get('/api/article/{id}/live', 'Livedata@live_article');
 $routes->get('/api/stats-today[/{resolution:\d+}]', 'Livedata@api_stats_today');
 $routes->get('/api/active-users', 'Livedata@api_active_users');
+//$routes->get('/api/reader/{id}', 'API@get_reader');
 $routes->get('/api/teaser/{date}/{hour}', 'Teaser@api_positions');
 $routes->get('/showip', 'API@showip');
 
@@ -173,10 +179,15 @@ $routes->get('/artikel/compare/{swpID:\d+}/{mozID:\d+}/{lrID:\d+}', 'Livedata@ar
 
 // Push
 $routes->get('/push', 'Push@today');
+$routes->get('/push/app', 'Push@today_app');
+$routes->get('/push/app/archiv', 'Push@list_app');
 $routes->get('/push/archiv', 'Push@list');
 $routes->get('/push/stats', 'Push@stats');
-$routes->get('/push/stats/topic', 'Push@stats_by_topic');
+$routes->get('/push/stats/development', 'Push@development');
+$routes->get('/push/stats/time', 'Push@time_stats');
+$routes->get('/push/stats/{column}', 'Push@stats_by');
 $routes->get('/push/import', 'Push@import');
+$routes->post('/push/import', 'Push@import');
 $routes->get('/push/{id}', 'Push@detail');
 
 // Pages
@@ -198,6 +209,7 @@ $routes->get('/export/json', 'Exports@full_json');
 $routes->get('/export/ressorts', 'Exports@ressort_stats');
 $routes->get('/export/readers', 'Exports@readers');
 $routes->get('/export/sales', 'Exports@sales_data');
+$routes->get('/export/push', 'Exports@push_data');
 $routes->get('/export/value', 'Exports@value_articles');
 $routes->get('/export/valueaudience', 'Exports@value_articles_by_audience');
 $routes->get('/export/linkpulse/current', 'Exports@linkpulse_current');
@@ -220,6 +232,7 @@ $routes->get('/teasers[/{date}]', 'Teaser@index');
 $routes->get('/admin', 'Admin@index');
 $routes->post('/admin', 'Admin@save_config');
 $routes->get('/admin/import', 'Import@feeds');
+$routes->get('/admin/push', 'Admin@push_import');
 $routes->get('/admin/discover', 'Admin@discover_upload');
 $routes->post('/admin/discover', 'Admin@discover_upload');
 $routes->get('/admin/experimentdata', 'Import@experiment_data');
@@ -237,6 +250,7 @@ $routes->get('/admin/warmup/sources[/{daysago}]', 'Warmup@enrich_conversions_wit
 $routes->get('/admin/warmup/buyintents[/{daysago}]', 'Warmup@enrich_article_with_buy_intents');
 $routes->get('/admin/warmup/{weeksago}', 'Warmup@weeks_ago');
 $routes->get('/admin/mailsend', 'Newsletter@trigger_newsletter_sends');
+$routes->get('/admin/mailsend/weekly', 'Newsletter@trigger_weekly_newsletter_sends');
 
 // Manual Segment imports
 $routes->get('/segments', 'Import@segments');

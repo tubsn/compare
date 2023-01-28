@@ -407,6 +407,7 @@ class Orders extends Model
 
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
 		$output = $SQLstatement->fetch();
+
 		return $output['orders'];
 
 	}
@@ -664,6 +665,7 @@ class Orders extends Model
 
 		$SQLstatement->execute([':startDate' => $from, ':endDate' => $to]);
 		$orders = $SQLstatement->fetchall(\PDO::FETCH_UNIQUE);
+
 		return $orders;
 
 	}
@@ -734,10 +736,34 @@ class Orders extends Model
 		return $combined;
 	}
 
+	public function is_first_order($customerID, $orderDate) {
+
+		$SQLstatement = $this->db->connection->prepare(
+
+			"SELECT * FROM conversions
+			 WHERE customer_id = :customerID
+			 AND order_date < :orderDate"
+		);
+
+		$SQLstatement->execute([':customerID' => $customerID, ':orderDate' => $orderDate]);
+		$orders = $SQLstatement->fetchall();
+
+		if (count($orders) == 0) {return true;}
+		return false;
+	}
+
+
 	public function filter_cancelled($orders) {
 		if (empty($orders)) {return [];}
 		return array_filter($orders, function($order) {
 			if ($order['cancelled']) {return $order;}
+		});
+	}
+
+	public function filter_first_time($orders) {
+		if (empty($orders)) {return [];}
+		return array_filter($orders, function($order) {
+			if ($order['order_first']) {return $order;}
 		});
 	}
 
@@ -825,7 +851,7 @@ class Orders extends Model
 		}
 
 		$plenigo = new Plenigo();
-		$orderList = $plenigo->orders($date, $date, 100);
+		$orderList = $plenigo->orders($date, $date);
 
 		if ($ignoreCancelled) {
 			$orderList = $this->filter_cancelled_from($orderList);
@@ -839,6 +865,9 @@ class Orders extends Model
 
 		// Save to DB
 		foreach ($detailedOrders as $order) {
+
+			// Check if the Order is a first time Customer
+			$order['order_first'] = $this->is_first_order($order['customer_id'], $order['order_date']);
 
 			$this->create_or_update($order);
 
@@ -874,6 +903,49 @@ class Orders extends Model
 
 		sort($orders);
 		return $orders;
+
+	}
+
+
+	public function yearly_running() {
+
+		$SQLstatement = $this->db->connection->prepare(
+			"
+			 SELECT count(*) as abos
+			 FROM `conversions`
+			 #WHERE subscription_internal_title like '%12m%'
+			 WHERE subscription_price > 10
+			 AND (subscription_end_date IS NULL OR subscription_end_date = '' OR subscription_end_date >= NOW())
+			"
+		);
+
+		$SQLstatement->execute();
+		$output = $SQLstatement->fetch(\PDO::FETCH_COLUMN);
+
+		return $output;
+
+	}
+
+	public function probe_running() {
+
+		$probepreis = 7;
+		if (PORTAL == 'SWP') {$probepreis = 9;}
+
+		$SQLstatement = $this->db->connection->prepare(
+			"
+			 SELECT count(*) as abos
+			 FROM `conversions`
+			 WHERE subscription_price < $probepreis
+			 AND LENGTH(order_id) < 10
+			 AND (subscription_end_date IS NULL OR subscription_end_date = '' OR subscription_end_date >= NOW())
+			 AND order_date <= NOW()
+			"
+		);
+
+		$SQLstatement->execute();
+		$output = $SQLstatement->fetch(\PDO::FETCH_COLUMN);
+
+		return $output;
 
 	}
 

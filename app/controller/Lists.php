@@ -232,18 +232,18 @@ class Lists extends Controller {
 
 		$ressortList = $this->Articles->list_distinct('ressort');
 
-		if ($ressortList[0] == 'bilder') {
+		if (isset($ressortList[0]) && $ressortList[0] == 'bilder') {
 			$temp = array_shift($ressortList);
 			array_push($ressortList, $temp);
 		}
 
-		if ($ressortList[0] == 'blaulicht') {
+		if (isset($ressortList[0]) && $ressortList[0] == 'blaulicht') {
 			$temp = array_shift($ressortList);
 			array_push($ressortList, $temp);
 		}
 
 
-		if ($ressort == null) {$ressort = $ressortList[0];}
+		if ($ressort == null && isset($ressortList[0])) {$ressort = $ressortList[0];}
 
 		$ressort = $this->decode_url($ressort);
 
@@ -359,6 +359,33 @@ class Lists extends Controller {
 		$this->view->info = null;
 		$this->view->render('articles/list', $viewData);
 
+	}
+
+
+	public function userneed($userneed = null) {
+		Session::set('referer', '/userneed/'.$userneed);
+
+		$viewData['userneedList'] = $this->Articles->list_distinct('userneed');
+		if (is_null($userneed)) {$userneed = $viewData['userneedList'][0] ?? '';}
+
+		$userneed = $this->decode_url($userneed);
+		$viewData['articles'] = $this->Articles->list_by($userneed, 'userneed');
+		$viewData['primaryChart'] = $this->ArticleKPIs->combined_kpis_filtered_chart($userneed, 'userneed');
+
+		$count = 0;
+		if (is_array($viewData['articles'])) {$count = count($viewData['articles']);}
+
+		$viewData['pageviews'] = $this->Articles->sum_up($viewData['articles'],'pageviews');
+		$viewData['buyintents'] = $this->Articles->sum_up($viewData['articles'],'buyintent');
+		$viewData['subscriberviews'] = $this->Articles->sum_up($viewData['articles'],'subscriberviews');
+		$viewData['avgmediatime'] = $this->Articles->average_up($viewData['articles'],'avgmediatime');
+		$viewData['conversions'] = $this->Articles->sum_up($viewData['articles'],'conversions');
+		$viewData['cancelled'] = $this->Articles->sum_up($viewData['articles'],'cancelled');
+		$viewData['numberOfArticles'] = $count;
+
+		$this->view->navigation = 'navigation/userneed-menu';
+		$this->view->title = $userneed . ' - Artikel: ' . $count;
+		$this->view->render('articles/list', $viewData);
 	}
 
 
