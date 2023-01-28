@@ -11,6 +11,7 @@ class Push extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 		$this->view('DefaultLayout');
 		$this->models('Cleverpush,Charts,Pushes');
+		$this->view->app = false;
 	}
 
 
@@ -81,7 +82,7 @@ class Push extends Controller {
 	}
 
 	public function today_app() {
-		$this->view->app = true;		
+		$this->view->app = true;
 		$this->Cleverpush->switch_to_app();
 		$this->today();
 	}

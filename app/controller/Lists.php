@@ -391,6 +391,9 @@ class Lists extends Controller {
 
 	public function top5() {
 		Session::set('referer', '/top5');
+		$this->view->info = 'Gelb = Artikel nur in einer Topliste, Grün = Artikel in mehreren Toplisten';
+		$this->view->title = 'Top5 - Artikel';
+
 		$viewData['list']['conversions'] = $this->Articles->conversions_only(5);
 		$viewData['list']['subscriberviews'] = $this->Articles->subscriber_only(5);
 		$viewData['list']['mediatime'] = $this->Articles->mediatime_only($minimum = 150, $limit=5);
@@ -398,6 +401,7 @@ class Lists extends Controller {
 
 		$ids = [];
 		foreach ($viewData['list'] as $articles) {
+			if (is_null($articles)) {break;}
 			$ids = array_merge($ids,array_column($articles,'id'));
 		}
 
@@ -405,8 +409,8 @@ class Lists extends Controller {
 		$multipleIDs = array_filter($countedIDs, function($id) {return $id > 1;});
 
 		foreach ($viewData['list'] as $type => $list) {
+			if (is_null($viewData['list'][$type])) {break;}
 			$viewData['list'][$type] = array_map(function($article) use ($multipleIDs) {
-
 				$article['multiple'] = null;
 
 				if (in_array($article['id'], array_keys($multipleIDs))) {
@@ -418,8 +422,6 @@ class Lists extends Controller {
 			}, $viewData['list'][$type]);
 		}
 
-		$this->view->info = 'Gelb = Artikel nur in einer Topliste, Grün = Artikel in mehreren Toplisten';
-		$this->view->title = 'Top5 - Artikel';
 		$this->view->render('pages/top5list', $viewData);
 	}
 
@@ -454,6 +456,7 @@ class Lists extends Controller {
 	}
 
 	private function decode_url($urlString) {
+		if (is_null($urlString)) {return $urlString;}
 		$urlString = urldecode($urlString);
 		$urlString = strip_tags($urlString);
 		$urlString = str_replace("-slash-", "/", $urlString);

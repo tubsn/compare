@@ -174,9 +174,9 @@ Artikel: <b><?=$numberOfArticles?></b> &emsp; Pageviews: <b class="blue"><?=numb
 	<td><div class="indicator plusleser"><div>0</div></div></td>
 	<?php endif; ?>
 
-	<td><span class="<?php if ($article['avgmediatime'] > 150): ?>greenbg<?php endif; ?>"><?=number_format($article['avgmediatime'],0,'.','.') ?? 0?></span></td>
+	<td><span class="<?php if ($article['avgmediatime'] > 150): ?>greenbg<?php endif; ?>"><?=gnum($article['avgmediatime'])?></span></td>
 
-	<td class="text-right"><div<?php if ($article['conversions'] > 0): ?> class="conversions"<?php endif; ?>><?=number_format($article['conversions'],0,'.','.')?></div></td>
+	<td class="text-right"><div<?php if ($article['conversions'] > 0): ?> class="conversions"<?php endif; ?>><?=gnum($article['conversions'])?></div></td>
 
 
 	<td class="narrower"><div<?php if ($article['cancelled'] > 0): ?> class="cancelled"<?php endif; ?>><?=$article['cancelled'] ?? '-'?></div></td>

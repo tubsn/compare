@@ -10,6 +10,12 @@ use \flundr\cache\RequestCache;
 class Longterm extends Model
 {
 
+	public $Portals;
+	public $Orders;
+	public $Sales;
+	public $KPIs;
+	public $Articles;
+
 	public $from = '0000-00-00';
 	public $to = '3000-01-01';
 
@@ -141,7 +147,7 @@ class Longterm extends Model
 			$spielmacher = $this->Articles->count_with_filter('conversions>0 AND subscriberviews>=100');
 			$geister = $this->Articles->count_with_filter('(conversions IS NULL OR conversions=0) AND (subscriberviews IS NULL OR subscriberviews < 100)');
 
-			$avgmediatime = $this->KPIs->avg('avgmediatime');
+			$avgmediatime = $this->KPIs->avg('avgmediatime') ?? 0;
 
 			$output[$dimension]['sessions'] = $sessions;
 			$output[$dimension]['pageviews'] = $pageviews;

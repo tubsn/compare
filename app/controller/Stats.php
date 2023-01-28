@@ -20,9 +20,9 @@ class Stats extends Controller {
 		Session::set('referer', '/');
 
 		$viewData['articles'] = $this->Articles->count('*');
-		$viewData['subscriberviews'] = $this->DailyKPIs->sum('subscriberviews');
-		$viewData['avgmediatime'] = $this->Articles->average('avgmediatime');
-		$viewData['pageviews'] = $this->DailyKPIs->sum('pageviews');
+		$viewData['subscriberviews'] = $this->DailyKPIs->sum('subscriberviews') ?? 0;
+		$viewData['avgmediatime'] = $this->Articles->average('avgmediatime') ?? 0;
+		$viewData['pageviews'] = $this->DailyKPIs->sum('pageviews') ?? 0;
 
 		// Mediatime
 		$viewData['mediatime'] = $this->Articles->sum('mediatime');
@@ -203,7 +203,7 @@ class Stats extends Controller {
 
 		Session::set('referer', '/valueable');
 
-		$this->view->wertschoepfend = $this->Articles->value_articles($groupedBy);
+		$this->view->wertschoepfend = $this->Articles->value_articles($groupedBy) ?? [];
 
 		$artikel = array_column($this->view->wertschoepfend,'artikel');
 		$spielmacher = array_column($this->view->wertschoepfend,'spielmacher');
@@ -430,7 +430,10 @@ class Stats extends Controller {
 		$premiumUsers = $this->DailyKPIs->premium_users();
 		$premiumUsersQuote = $this->DailyKPIs->quote_of_premium_users();
 
-		$this->view->maxChartHeight = ceil(max(array_column($premiumUsersQuote,'reg_quote')));
+		$this->view->maxChartHeight = 400;
+		if ($premiumUsersQuote) {
+			$this->view->maxChartHeight = ceil(max(array_column($premiumUsersQuote,'reg_quote')));
+		}
 
 		$this->view->charts = $this->Charts;
 		$this->view->segments = $this->Charts->convert($segments,1);

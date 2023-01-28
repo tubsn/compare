@@ -10,6 +10,8 @@ use \flundr\utility\Session;
 class Cleverpush
 {
 
+	public $api;
+	public $Articles;
 	public $from = '0000-00-00';
 	public $to = '3000-01-01';
 	public $cacheDirectory = ROOT . 'cache' . DIRECTORY_SEPARATOR . 'push';
@@ -264,13 +266,10 @@ class Cleverpush
 			$out[$date]['clicks'] = $data['clicked'] ?? 0;
 			$out[$date]['delivered'] = $data['delivered'] ?? 0;
 
-			//array_push($out[$date]['clicks'], $data['clicked'] ?? 0);
-			//array_push($out[$date]['delivered'], $data['delivered'] ?? 0);
 		}
 
 		ksort($out);
 		return $out;
-		//return array_column($stats, 'clicked','date');
 
 	}
 

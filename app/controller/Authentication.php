@@ -11,6 +11,8 @@ use flundr\auth\Auth;
 
 class Authentication extends Controller {
 
+	private $loginHandler;
+
 	public function __construct() {
 		$this->view('LoginLayout');
 		$this->loginHandler = new LoginHandler();
