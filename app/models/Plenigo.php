@@ -19,9 +19,32 @@ class Plenigo
 	public function subscriptions($start, $end, $showAll = false) {
 
 		$orders = $this->api->changed_subscriptions($start, $end);
+
+
+		$orders = array_filter($orders, function($order) {
+
+			// do not Include Orders			
+			if (isset($order['type']) && $order['type'] == 'ORDER') {return false;}
+
+			// Cancelations only
+			if (!empty($order['cancellationDate'])) {
+				return $order;
+			}
+
+		});
+
+		return $orders;
 		
 		$mapper = new PlenigoOrderMapping();
-		$orderData = array_map([$mapper, 'map_order'], $orders);
+		$orderData = array_map([$mapper, 'map_running_subscription'], $orders);
+	
+
+
+
+
+
+
+		/*
 		$subscriptionData = array_map([$mapper, 'map_subscription_data'], $orders);
 		$customerData = array_map([$mapper, 'map_customer'], $orders);
 
@@ -31,6 +54,7 @@ class Plenigo
 			$output[$key] = array_merge($orderData[$key], $subscriptionData[$key], $customerData[$key]);
 
 		}
+		*/
 		return $output;
 
 	}
@@ -58,6 +82,10 @@ class Plenigo
 	}
 
 
+
+	public function currently_active_subscriptions() {
+		return $this->api->currently_active_subscriptions();
+	}
 
 	public function appstore_orders($start = '2022-10-01', $end = 'today') {
 
@@ -294,6 +322,10 @@ class Plenigo
 
 		return $total;
 
+	}
+
+	public function get_chain($id) {
+		return $this->api->chain($id);
 	}
 
 

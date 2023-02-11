@@ -31,6 +31,39 @@ class PlenigoOrderMapping
 
 	}
 
+	public function map_running_subscription($org) {
+
+
+		dd($org);
+
+
+		$new['order_id'] = $org['orderId'];
+		$new['order_date'] = date("Y-m-d H:i:s", strtotime($org['orderDate']));
+		$new['order_title'] = $org['items'][0]['title'];
+		$new['order_price'] = $org['items'][0]['price'];
+		$new['order_payment_method'] = $org['paymentMethod'];
+
+		if (isset($org['data']['sourceUrl'])) {
+
+			$url = $org['data']['sourceUrl'];
+
+			$new['order_source'] = $url;
+			$new['order_origin'] = $this->extract_order_origin($url);
+
+			if ($new['order_origin'] == 'Artikel') {
+				$new['article_id'] = $this->extract_id($url);
+				$new['article_ressort'] = $this->extract_ressort($url);
+			}
+
+		}
+
+		return $new;
+
+	}
+
+
+
+
 	public function map_subscription_data($org) {
 
 		if (empty($org)) {return [];}

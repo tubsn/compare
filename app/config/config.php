@@ -293,6 +293,10 @@ switch (PORTAL) {
 		define('PORTAL_NAME', 'MOZ');
 		define('PORTAL_COLOR', '#0967a8');
 
+		define('APP_PRODUCTS', [
+			'ir.mozonline.product.year',
+		]);
+
 		define('RESSORT_MAPPING', [
 			'angermuende' => 'ang',
 			'bad-belzig' => 'bel',
@@ -530,6 +534,10 @@ switch (PORTAL) {
 		define('PORTAL_EPAPER_URL', 'https://epaper.swp.de');
 		define('PORTAL_NAME', 'SWP');
 		define('PORTAL_COLOR', '#e82560');
+
+		define('APP_PRODUCTS', [
+			'ir.swponline.product.year',
+		]);
 
 		define('IMPORT_FEEDS', [
 			//'https://www.swp.de/?_XML=RSS',

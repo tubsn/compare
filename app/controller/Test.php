@@ -18,27 +18,19 @@ class Test extends Controller {
 
 	public function test() {
 
-
-		/*
-
-		$start = 'yesterday';
-		$end = 'today';
+		$start = 'yesterday -1 day';
+		$end = 'yesterday -1 day';
 
 		$start = date("Y-m-d", strtotime($start));
 		$end = date("Y-m-d", strtotime($end));
 
 		$data = $this->Plenigo->subscriptions($start,$end);
 
+		echo count($data);
 
 		dd($data);
-		*/
-
 
 		//$this->Readers->import_user_segments('2023-01-02', '2023-01-04');
-
-		//$data = $this->Pushes->list_with_userneed();
-		//$this->view->csv($data);
-		//dd($data);
 
 	}
 

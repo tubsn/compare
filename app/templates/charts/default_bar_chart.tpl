@@ -117,7 +117,7 @@ let ChartOptions<?=$id?> = {
 
 	},
 	states: {active: {allowMultipleDataPointsSelection: false}},
-	grid: {row: {colors: ['#e5e5e5', 'transparent'], opacity: 0.2}},
+	grid: {row: {colors: ['#e5e5e5', 'transparent'], opacity: 0.2}, xaxis: {lines: {show: false}}},
 	xaxis: {
 		categories: [<?=$dimension?>],
 		<?php if (isset($tickamount)): ?>tickAmount: <?=$tickamount?>,<?php endif; ?>

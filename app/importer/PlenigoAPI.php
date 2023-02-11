@@ -57,6 +57,12 @@ class PlenigoAPI
 	}
 
 
+	public function currently_active_subscriptions() {
+		$end = date("Y-m-d", strtotime('today'));
+		$apiQuery = '/analytics/subscriptions/active?calculationDate=' . $end . 'T23:59:59Z&interval=MONTH&size=12';
+		return $this->curl($apiQuery);
+	}
+
 
 	public function app_store_apple($start, $end, $lastID = null) {
 

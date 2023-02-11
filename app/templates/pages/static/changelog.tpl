@@ -13,10 +13,12 @@
 
 <hr>
 
+<h2>28.01.2023 - Interne Updates für PHP 8.2 kompatibilität</h2>
+
 <h2>05.01.2023 - Andocken der DPA-Drive Userneeds</h2>
 
 <ul>
-	<li>Artikel können jetzt auch nach Userneeds gruppiert werden. Dadurch ermöglichen sich neue Auswertungsmöglichkeiten.</li>
+	<li>Artikel können jetzt auch nach Userneeds gruppiert werden. Dadurch ergeben sich neue Auswertungsmöglichkeiten.</li>
 </ul>
 
 <h2>03.01.2023 - Push Klickraten Dashboards</h2>

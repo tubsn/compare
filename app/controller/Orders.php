@@ -105,6 +105,10 @@ class Orders extends Controller {
 		dump($this->Orders->count_yearly_into_default_subscription());
 	}
 
+	public function subscription_chain($id) {
+		dd($this->Plenigo->get_chain($id));
+	}
+
 	public function active_customers() {
 
 		$yearly = $this->Orders->yearly_running();

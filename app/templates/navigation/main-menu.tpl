@@ -104,9 +104,7 @@
 				<li><a href="/orders/behavior">Kundenverhalten</a></li>
 				<li><a href="/stats/segments">Nutzer-Segmente (DAS)</a></li>
 				<li><a href="/orders/utm">UTM-Kampagnen</a></li>
-				<?php if (PORTAL == 'LR'): ?>
 				<li><a href="/orders/app">Echtzeit Appstores</a></li>
-				<?php endif; ?>
 				<li><a href="/orders/today">Echtzeit Bestelleingang</a></li>
 				<!--<li><a href="/readers/multiple-orders">Mehrfach - Bestellungen</a></li>-->
 				<!--<li><a href="/readers/list">Bestellungen mit Usergroup (Beta)</a></li>-->

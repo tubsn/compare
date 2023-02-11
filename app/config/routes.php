@@ -76,6 +76,7 @@ $routes->get('/orders/today', 'Livedata@orders_today');
 $routes->get('/orders/app', 'Orders@list_app_orders');
 $routes->get('/orders/payguys', 'LongtermAnalysis@started_payment');
 $routes->get('/orders/sources', 'Livedata@compared_conversion_sources');
+$routes->get('/orders/chain/{id:\d+}', 'Orders@subscription_chain');
 
 $routes->get('/orders/{id:\d{7}}', 'Livedata@order');
 $routes->get('/orders/{date:[\d]{4}-[\d]{2}-[\d]{2}?}', 'Livedata@orders_date');
