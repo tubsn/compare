@@ -12,23 +12,15 @@ class Test extends Controller {
 
 	public function __construct() {
 		$this->view('DefaultLayout');
-		$this->models('Articles,ArticleMeta,Orders,Conversions,Analytics,Charts,Readers,Plenigo,Cleverpush,Orders,DailyKPIs,Kilkaya,Pushes');
+		$this->models('Articles,ArticleMeta,Orders,Subscriptions,Conversions,Analytics,Charts,Readers,Plenigo,Cleverpush,Orders,DailyKPIs,Kilkaya,Pushes');
 	}
 
 
 	public function test() {
 
-		$start = 'yesterday -1 day';
-		$end = 'yesterday -1 day';
+		$this->Subscriptions->update_last_days();
 
-		$start = date("Y-m-d", strtotime($start));
-		$end = date("Y-m-d", strtotime($end));
-
-		$data = $this->Plenigo->subscriptions($start,$end);
-
-		echo count($data);
-
-		dd($data);
+		//$this->DailyKPIs->count_conversiontable_to_daily_kpis('today', 'today');
 
 		//$this->Readers->import_user_segments('2023-01-02', '2023-01-04');
 
@@ -102,40 +94,6 @@ class Test extends Controller {
 
 	}
 
-
-
-
-	public function conversionupdater() {
-
-		// Sets Conversions in Daily KPIs
-
-		$startDate = '2022-10-07';
-		$endDate = '2022-11-28';
-
-		$start = $this->create_date_object($startDate);
-		$end = $this->create_date_object($endDate);
-
-		$interval = new \DateInterval('P1D');
-		$period = new \DatePeriod($start, $interval, $end);
-
-		$monthList = [];
-		foreach ($period as $date) {
-			$date = $date->format('Y-m-d');
-
-			$this->Orders->from = $date;
-			$this->Orders->to = $date;
-			$conversions = $this->Orders->count();
-			$this->DailyKPIs->update(['conversions' => $conversions],$date);
-
-		}
-
-
-	}
-
-	private function create_date_object($dateString = null) {
-		if (is_null($dateString)) {return new \DateTime(date('Y-m-d'));}
-		return new \DateTime(date('Y-m-d', strtotime($dateString)));
-	}
 
 
 	public function reader($id) {

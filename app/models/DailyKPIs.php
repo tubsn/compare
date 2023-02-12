@@ -4,6 +4,7 @@ namespace app\models;
 use \flundr\database\SQLdb;
 use \flundr\mvc\Model;
 use \flundr\utility\Session;
+use app\models\Orders;
 
 class DailyKPIs extends Model
 {
@@ -387,6 +388,40 @@ class DailyKPIs extends Model
 		}
 
 	}
+
+
+	public function count_conversiontable_to_daily_kpis($from, $to) {
+
+		$Orders = new Orders();
+
+		$start = $this->create_date_object($from);
+		$end = $this->create_date_object($to);
+		$end->setTime(0,0,1); // set Date to +1second / next day to include itself 
+
+		$interval = new \DateInterval('P1D');
+		$period = new \DatePeriod($start, $interval, $end);
+
+		$monthList = [];
+		foreach ($period as $date) {
+			$date = $date->format('Y-m-d');
+
+			$Orders->from = $date;
+			$Orders->to = $date;
+			$conversions = $Orders->count();
+			$this->update(['conversions' => $conversions],$date);
+
+		}
+
+
+	}
+
+	private function create_date_object($dateString = null) {
+		if (is_null($dateString)) {return new \DateTime(date('Y-m-d'));}
+		return new \DateTime(date('Y-m-d', strtotime($dateString)));
+	}
+
+
+
 
 	private function ga_adapter($in) {
 		$out['date'] = date('Y-m-d', strtotime($in['Date']));

@@ -6,6 +6,7 @@ use \flundr\cache\RequestCache;
 use app\importer\PlenigoAPI;
 use app\importer\mapping\PlenigoAppStoreMapping;
 use app\importer\mapping\PlenigoOrderMapping;
+use app\importer\mapping\PlenigoSubscriptionMapping;
 
 class Plenigo
 {
@@ -16,48 +17,6 @@ class Plenigo
 		$this->api = new PlenigoAPI();
 	}
 
-	public function subscriptions($start, $end, $showAll = false) {
-
-		$orders = $this->api->changed_subscriptions($start, $end);
-
-
-		$orders = array_filter($orders, function($order) {
-
-			// do not Include Orders			
-			if (isset($order['type']) && $order['type'] == 'ORDER') {return false;}
-
-			// Cancelations only
-			if (!empty($order['cancellationDate'])) {
-				return $order;
-			}
-
-		});
-
-		return $orders;
-		
-		$mapper = new PlenigoOrderMapping();
-		$orderData = array_map([$mapper, 'map_running_subscription'], $orders);
-	
-
-
-
-
-
-
-		/*
-		$subscriptionData = array_map([$mapper, 'map_subscription_data'], $orders);
-		$customerData = array_map([$mapper, 'map_customer'], $orders);
-
-		$output = [];
-		foreach ($orders as $key => $order) {
-
-			$output[$key] = array_merge($orderData[$key], $subscriptionData[$key], $customerData[$key]);
-
-		}
-		*/
-		return $output;
-
-	}
 
 	public function orders($start, $end, $showAll = false) {
 
@@ -85,6 +44,52 @@ class Plenigo
 
 	public function currently_active_subscriptions() {
 		return $this->api->currently_active_subscriptions();
+	}
+
+	public function changed_subscriptions($start, $end, $showAll = false) {
+
+		$subscriptions = $this->api->changed_subscriptions($start, $end);
+		$subscriptions = array_filter($subscriptions, function($subscription) {
+			if (isset($subscription['type']) && $subscription['type'] == 'ORDER') {return false;} // do not Include Orders			
+			if ($this->is_ignored_successor($subscription)) {return false;}
+			return $subscription;
+		});
+
+		$cancellationsByDay = $this->extract_cancellations_by_day($subscriptions);
+
+		$mapper = new PlenigoSubscriptionMapping();
+		$subscriptions = array_map([$mapper, 'map_multiple_subscriptions'], $subscriptions);
+
+		return ['subscriptions' => $subscriptions, 'cancellations' => $cancellationsByDay];
+	}
+
+
+	private function is_ignored_successor($subscription) {
+		// Detects successor Subscriptions which can't exist 
+		// if the user has cancelled the precursor subscription
+		if ($subscription['status'] != 'IGNORED') {return false;}
+		if (!$subscription['cancellationDate']) {return false;} // This should prevent "Umwandlungen" to be irgnored
+		if (strtotime($subscription['startDate']) > strtotime($subscription['cancellationDate'])) {return true;}
+		return false;
+	}
+
+	private function extract_cancellations_by_day($subscriptions) {
+
+		// At this point Subscriptions still include auto-ending Subscriptions
+		// True Cancellations have to be filtered by the matching timestamps
+		$cancellations = array_filter($subscriptions, function($subscription) {
+			if (!$subscription['cancellationDate']) {return false;}
+			$cancelAndChangeDateDifference = strtotime($subscription['changedDate']) - strtotime($subscription['cancellationDate']);	
+			if ($cancelAndChangeDateDifference < 10) {return $subscription;}
+		});
+
+		$cancellationDates = array_column($cancellations, 'cancellationDate');
+		$cancellationDates = array_map(function($cancellation) {
+			return date("Y-m-d", strtotime($cancellation));
+		}, $cancellationDates);
+
+		return array_count_values($cancellationDates);	
+
 	}
 
 	public function appstore_orders($start = '2022-10-01', $end = 'today') {

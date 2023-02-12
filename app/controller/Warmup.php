@@ -11,7 +11,7 @@ class Warmup extends Controller {
 		if (!Auth::logged_in() && !Auth::valid_ip()) {Auth::loginpage();}
 
 		$this->view('DefaultLayout');
-		$this->models('Analytics,Linkpulse,Kilkaya,Articles,ArticleMeta,Conversions,ArticleKPIs,Orders,Readers,Campaigns');
+		$this->models('Analytics,Linkpulse,Kilkaya,Articles,ArticleMeta,Conversions,Subscriptions,ArticleKPIs,Orders,Readers,Campaigns');
 	}
 
 
@@ -113,7 +113,7 @@ class Warmup extends Controller {
 	public function conversions($daysago = 3) {
 
 		/*
-		still need to implement functionality :S
+		still need to implement days ago functionality :S
 		*/
 		$dates = [];
 		array_push($dates, date('Y-m-d', strtotime('today')));
@@ -136,6 +136,13 @@ class Warmup extends Controller {
 		echo 'wenn dieser Text erscheint hats geklappt...<br/>';
 		echo 'Processing-Time: <b>'.round((microtime(true)-APP_START)*1000,2) . '</b>ms';
 
+	}
+
+
+	public function update_subscriptions() {
+		$updated = $this->Subscriptions->update_last_days();
+		echo count($updated) . ' Bestellungen aktualisiert.<br/>';
+		echo 'Processing-Time: <b>'.round((microtime(true)-APP_START)*1000,2) . '</b>ms';		
 	}
 
 

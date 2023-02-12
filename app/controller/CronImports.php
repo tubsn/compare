@@ -7,7 +7,7 @@ use app\importer\ArticleImport;
 class CronImports extends Controller {
 
 	public function __construct() {
-		$this->models('Analytics,Linkpulse,Kilkaya,Articles,ArticleMeta,Conversions,Readers,ArticleKPIs,Orders,DailyKPIs,Campaigns,Epaper');
+		$this->models('Analytics,Linkpulse,Kilkaya,Articles,ArticleMeta,Conversions,Subscriptions,Readers,ArticleKPIs,Orders,DailyKPIs,Campaigns,Epaper');
 	}
 
 
@@ -80,12 +80,14 @@ class CronImports extends Controller {
 
 			$articles = $import->rss($feed);
 
+			/* Filter DPA Articles
 			$articles = array_filter($articles, function($article) {
 				$dpaFilterPattern = "/\b(?:dpa)\b/i"; // Filter DPA
 				if (preg_match($dpaFilterPattern,$article['author'])) {return null;}
 				if ($article['ressort'] == 'Bilder') {return null;}  // Filter Bildergalerien
 				return $article;
 			});
+			*/
 
 			$articles = array_values($articles); // Reindex the array Keys
 
@@ -168,9 +170,14 @@ class CronImports extends Controller {
 
 		$this->enrich_conversions_with_ga();
 		$this->enrich_conversions_with_drive_data();
-		$this->enrich_conversoins_with_referals();
-
+		$this->enrich_conversions_with_referals();
 		echo 'Conversions angereichert | ' . date('H:i:s') . "\r\n";
+
+		$updatedSubscriptions = $this->update_subscriptions();
+		echo $updatedSubscriptions . ' Subscriptions erneuert | ' . date('H:i:s') . "\r\n";
+
+		$this->DailyKPIs->count_conversiontable_to_daily_kpis('yesterday -3 days', 'yesterday');
+		echo 'Pushed Conversions to DailyKPIs | ' . date('H:i:s') . "\r\n";		
 
 	}
 
@@ -191,7 +198,7 @@ class CronImports extends Controller {
 
 	}
 
-	public function enrich_conversoins_with_referals() {
+	public function enrich_conversions_with_referals() {
 		$this->Orders->assign_sources(3);
 	}
 
@@ -205,6 +212,9 @@ class CronImports extends Controller {
 
 	}
 
+	public function update_subscriptions() {
+		return $this->Subscriptions->update_last_days();
+	}
 
 	public function assign_drive_topics() {
 

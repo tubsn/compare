@@ -48,7 +48,7 @@ class PlenigoAPI
 
 		if (count($orders) >= 100) {
 			$lastID = end($orders)['subscriptionId'];
-			$newOrders = $this->orders($start,$end,$lastID);
+			$newOrders = $this->changed_subscriptions($start,$end,$lastID);
 			if ($newOrders) {$orders = array_merge($orders, $newOrders);}
 		}
 

@@ -867,7 +867,7 @@ class Orders extends Model
 		foreach ($detailedOrders as $order) {
 
 			// Check if the Order is a first time Customer
-			$order['order_first'] = $this->is_first_order($order['customer_id'], $order['order_date']);
+			$order['order_first'] = intval($this->is_first_order($order['customer_id'], $order['order_date']));
 			$this->create_or_update($order);
 
 			if (isset($order['article_id'])) {

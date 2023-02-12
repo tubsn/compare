@@ -243,6 +243,7 @@ $routes->get('/admin/orders', 'Import@order_import_form');
 $routes->get('/admin/topics', 'Warmup@topic_clusters');
 $routes->get('/admin/warmup', 'Warmup@daterange');
 $routes->get('/admin/warmup_conversions[/{daysago}]', 'Warmup@conversions');
+$routes->get('/admin/warmup/subscriptions', 'Warmup@update_subscriptions');
 $routes->get('/admin/warmup/subscribers', 'Warmup@subscribers');
 $routes->get('/admin/warmup/readers', 'Warmup@readers');
 $routes->get('/admin/warmup/assign-sources', 'Warmup@assign_sources');

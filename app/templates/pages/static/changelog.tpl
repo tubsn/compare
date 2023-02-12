@@ -5,13 +5,23 @@
 <ul>
 	<li>Überarbeitung - Compare Startseite: Darstellung der letzten Tags & Bestperformer Artikel des Monats</li>
 	<li>Übersicht Hall of Fame Artikel</li>
-	<li>Archiv Artikel die vor einem Monat oder Jahr gut performt haben darstellen</li>
+	<li>Archiv Artikel die vor einem Monat oder Jahr gut performt haben darstellen - Fortlaufendes Tracking nötig</li>
+	<li>Ablösung für Google Analytics Tracking Daten durch Datewarehouse oder Kilkaya</li>
 </ul>
 
 
 <h1>Changelog</h1>
 
 <hr>
+
+<h2>12.02.2023 - Einführung der Subscription Updates</h2>
+
+<ul>
+	<li>Laufende Abos werden jetzt über die PlenigoAPI Subscription Schnittstelle fortlaufend aktualisiert. So werden änderungen an Abos wie z.B. eine Kündigung sofort in die Datenbank geschrieben. Hierdurch entfällt zukünftig der Monatliche import der der Conversiondaten. <b>Hinweis:</b> die Aktualisierung ist nur für Abos möglich, die in der Conversiondatenbank einen Ursprungskauf besitzen (alle Orders seit Plenigo V3 Umstellung 23.März 2021).</li>
+	<li>Abos vor diesem Datum können leider weiterhin nicht ausgewiesen werden.</li>
+	<li>Die Neue Logik ermöglicht zusätzlich die erfassung eingegangener Kündigungen pro Kalendertag. Es stehen damit neue KPIs z.B. für den Netto Zugang an Abos pro Monat zur verfügung.</li>
+</ul>
+
 
 <h2>28.01.2023 - Interne Updates für PHP 8.2 kompatibilität</h2>
 
