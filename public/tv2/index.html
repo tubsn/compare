@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Compare Live-Dashboard</title>
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed&display=swap" rel="stylesheet">
+
+
+
+	<link rel="stylesheet" type="text/css" media="all" href="defaults.css" />
+	<link rel="stylesheet" type="text/css" media="all" href="live.css" />
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+<body>
+
+<header class="header-grid">
+
+	<!--
+	<div><span class="stats-today highlight js-pageviews-today">-</span> &nbsp;<span class="small">Pageviews</span></div>
+	<div><span class="stats-today highlight js-subscribers-today">-</span> &nbsp;<span class="small">Subscriberviews</span></div>
+	<div><span class="stats-today highlight js-orders-today">-</span> &nbsp;<span class="small">Conversions<span></div>
+	-->
+	<div style="font-size: .6em;line-height: 100%; margin-right:3em;">Plus | Mediengruppe BB<br>Livedashboard</div>
+
+	<div class="highlight">LR</div>
+	<div class="highlight">MOZ</div>
+			<!--<div>LR: <span class="js-today-portal-conversions-lr marked"></span></div>
+			<div>MOZ: <span class="js-today-portal-conversions-moz marked"></span></div>
+		-->
+
+
+	<div class="clock-container"><div class="js-clock clock"></div></div>
+
+</header>
+
+
+<main class="main-grid">
+
+
+<!--
+	<div>
+		<h1 class="text-center">Liveclicks:</h1>
+		<div class="clicks-today highlight"><span class="js-active-users">-</span></div>
+
+		<h3 class="text-center">
+<script>
+let portalShort = 'LR';
+let url = window.location.toString();
+if (url.includes('-swp')) {portalShort = 'SWP';}
+if (url.includes('-moz')) {portalShort = 'MOZ';}
+document.writeln(portalShort);
+</script>
+		Vortag:
+	</h3>
+		<div class="container-black fullwidth">
+			Pageviews: <span class="js-yesterday-pageviews marked"></span><br>
+			Sub-views: <span class="js-yesterday-subscribers marked"></span><br>
+			Conversions:&nbsp;<span class="js-yesterday-orders marked"></span><br>
+		</div>
+
+		<h3 class="text-center">Conversions Heute:</h3>
+		<div class="container-black fullwidth">
+			LR: <span class="js-today-portal-conversions-lr marked"></span><br>
+			MOZ: <span class="js-today-portal-conversions-moz marked"></span><br>
+			SWP: <span class="js-today-portal-conversions-swp marked"></span>
+		</div>
+
+	</div>
+-->
+
+	<div>
+
+		<figure style="display:flex; gap:1em; text-align:left">
+
+			<div style="width:100%;">
+
+				<div style="font-size:1.8em">Conversions: <span class="js-today-portal-conversions-lr marked"></span>
+				<span style="font-size:0.6em">(<span class="js-yesterday-orders"></span>)</span>
+				</div>
+
+				<span class="marked js-pageviews-today">0</span> Pageviews
+				<span style="font-size:0.6em">(<span class="js-yesterday-pageviews">0</span>)</span>
+				<br>
+				<span class="marked js-subscribers-today">0</span> Subscriberviews
+				<span style="font-size:0.6em">(<span class="js-yesterday-subscribers">0</span>)</span>
+			</div>
+
+
+			<div style="width:100%;">
+
+				<div style="font-size:1.8em">Conversions: <span class="js-today-portal-conversions-moz marked"></span>
+				<span style="font-size:0.6em">(<span class="js-yesterday-orders-moz"></span>)</span>
+				</div>
+
+
+				<span class="marked js-pageviews-today-moz">0</span> Pageviews
+				<span style="font-size:0.6em">(<span class="js-yesterday-pageviews-moz">0</span>)</span>
+				<br>
+				<span class="marked js-subscribers-today-moz">0</span> Subscriberviews
+				<span style="font-size:0.6em">(<span class="js-yesterday-subscribers-moz">0</span>)</span>
+			</div>
+
+
+
+		</figure>
+
+
+		<figure style="display:flex; gap:1em;">
+			<div class="js-articles-today articles-list container-black"></div>
+			<div class="js-articles-today-moz articles-list container-black"></div>
+		</figure>
+
+	</div>
+
+	<div class="chart-area">
+		<h3 class="text-center smaller">Conversion-Entwicklung</h3>
+		<div id="ChartOrders" class="mb"></div>
+
+		<h3 class="text-center smaller">Geister-Quote</h3>
+		<div id="ChartGeister" class="mb"></div>
+
+		<h3 class="text-center smaller">Subscriberviews Entwicklung</h3>
+		<div id="ChartSubscribers" class="mb"></div>
+	</div>
+
+</main>
+
+<script type="text/javascript" src="barchart.js"></script>
+<script type="text/javascript" src="linechart.js"></script>
+<script type="text/javascript" src="linechart-today.js"></script>
+<script type="text/javascript" src="main.js"></script>
+
+</body>
+</html>

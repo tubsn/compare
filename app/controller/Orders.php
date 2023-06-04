@@ -84,7 +84,9 @@ class Orders extends Controller {
 
 	public function list_app_orders() {
 
-		$allOrders = $this->Plenigo->appstore_orders();
+		$allOrders = $this->Plenigo->appstore_orders('today -3 month', 'today');
+
+		// LR App Start 2022-10-04
 
 		$orders = array_filter($allOrders, function($order) {
 			if ($order['order_date'] > '2022-10-04') {return $order;}
@@ -256,6 +258,20 @@ class Orders extends Controller {
 		$this->view->render('orders/cancellations', $viewData);
 
 	}
+
+
+	public function behavior_month_only() {
+
+		$this->view->charts = $this->Charts;
+		$this->view->longterm = $this->Longterm->chartdata('orders');
+
+		//dd($this->view->longterm);
+		$this->view->render('orders/cancellation_in_month');		
+
+	}
+
+
+
 
 
 }

@@ -176,6 +176,11 @@ class Livedata extends Controller {
 		$this->end = date('Y-m-d', strtotime('yesterday'));
 
 		$viewData['orders'] = $this->Plenigo->orders($this->start, $this->end, $paidFilter);
+
+		if (is_array($viewData['orders']) && count($viewData['orders']) > 0) {
+			$this->view->revenue = array_sum(array_column($viewData['orders'],'order_price'));
+		}
+
 		$this->view->title = 'Bestellungen Gestern';
 		$this->view->referer('/orders/yesterday');
 		$this->view->render('orders/live/list',$viewData);
@@ -188,6 +193,10 @@ class Livedata extends Controller {
 
 		$viewData['date'] = $date;
 		$viewData['orders'] = $this->Plenigo->orders($date, $date, $paidFilter);
+
+		if (is_array($viewData['orders']) && count($viewData['orders']) > 0) {
+			$this->view->revenue = array_sum(array_column($viewData['orders'],'order_price'));
+		}
 
 		$this->view->title = $date . ' - Bestellungen';
 		$this->view->referer('/orders/' . $date);
@@ -204,6 +213,10 @@ class Livedata extends Controller {
 		$this->end = date('Y-m-d', strtotime('today'));
 
 		$viewData['orders'] = $this->Plenigo->orders($this->start, $this->end, $paidFilter);
+
+		if (is_array($viewData['orders']) && count($viewData['orders']) > 0) {
+			$this->view->revenue = array_sum(array_column($viewData['orders'],'order_price'));
+		}
 
 		$this->view->title = 'Bestellungen Heute';
 		$this->view->referer('/orders/today');

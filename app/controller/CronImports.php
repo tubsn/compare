@@ -89,6 +89,12 @@ class CronImports extends Controller {
 			});
 			*/
 
+			$articles = array_filter($articles, function($article) {
+				if ($article['ressort'] == 'a') {return null;}  // Filter PR Articles
+				return $article;
+			});
+
+
 			$articles = array_values($articles); // Reindex the array Keys
 
 			$this->Articles->add_to_database($articles);

@@ -65,6 +65,7 @@ $routes->get('/orders', 'Orders@list');
 $routes->get('/orders/list-cancellations', 'Orders@list_cancellations');
 $routes->get('/orders/list-daily', 'Orders@list_by_day');
 $routes->get('/orders/behavior', 'Orders@customer_behavior');
+$routes->get('/orders/behavior_month', 'Orders@behavior_month_only');
 $routes->get('/orders/clustered', 'Orders@clustered');
 $routes->get('/orders/utm[/{field}/{campaign}]', 'Orders@utm');
 $routes->get('/orders/import/{date:[\d]{4}-[\d]{2}-[\d]{2}?}', 'Import@order_import');
@@ -73,6 +74,7 @@ $routes->get('/orders/live', 'Livedata@index');
 $routes->get('/orders/yesterday', 'Livedata@orders_yesterday');
 $routes->get('/orders/today', 'Livedata@orders_today');
 
+$routes->get('/orders/avg-daily', 'Stats@avg_orders_by_day');
 $routes->get('/orders/app', 'Orders@list_app_orders');
 $routes->get('/orders/payguys', 'LongtermAnalysis@started_payment');
 $routes->get('/orders/sources', 'Livedata@compared_conversion_sources');
@@ -117,6 +119,7 @@ $routes->get('/stats/pubtime[/{audience}]', 'Stats@publications');
 // Portal Compare
 $routes->get('/portals', 'LongtermAnalysis@all_portals');
 $routes->get('/bbboard', 'LongtermAnalysis@brandenburg');
+$routes->get('/bbboard/active-customers', 'LongtermAnalysis@brandenburg_customers');
 $routes->get('/weekly', 'Stats@weekly_review');
 
 // Longterm KPI Overview
@@ -156,7 +159,6 @@ $routes->get('/showip', 'API@showip');
 
 // Readers
 $routes->get('/readers/{id:[\d]{12}?}', 'Readers@detail');
-$routes->get('/readers/test/{id}', 'Test@reader');
 $routes->get('/readers/list[/{segment}]', 'Readers@list');
 $routes->get('/readers/sessionlist', 'Readers@session_list');
 $routes->get('/readers/audiences', 'Readers@audience_sizes');

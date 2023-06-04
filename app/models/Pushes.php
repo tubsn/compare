@@ -60,7 +60,7 @@ class Pushes extends Model
 			 #AND title like '%ukraine%' or title like '%krieg%' or title like '%putin%' or title like '%moskau%'
 			 #AND title like '%„Wachgehört“%' or title like '%Podcast%'
 			 AND topic like :topic
-			 #AND channel = 'web'
+			 #AND channel = 'app'
 			 GROUP BY month
 			 #HAVING amount > 2
 			 ORDER BY month ASC
@@ -92,6 +92,16 @@ class Pushes extends Model
 
 	public function clickrate_and_time($column = 'topic') {
 
+		$filter = '';
+
+		if (isset($_GET['apponly'])) {
+			$filter = "AND channel = 'app'";
+		}
+
+		if (isset($_GET['webonly'])) {
+			$filter = "AND channel = 'web'";
+		}
+
 		$table = $this->db->table;
 		$SQLstatement = $this->db->connection->prepare(
 			"SELECT
@@ -100,7 +110,7 @@ class Pushes extends Model
 				round((sum(clicks)/sum(delivered))*100,2) as clickrate
 			 FROM $table
 			 WHERE DATE(sent_at) BETWEEN :startDate AND :endDate
-			 #AND channel = 'web'
+			 $filter
 			 GROUP BY hour, $column
 			 ORDER BY hour ASC
 			"
@@ -124,6 +134,16 @@ class Pushes extends Model
 
 	public function pushes_per_day() {
 
+		$filter = '';
+
+		if (isset($_GET['apponly'])) {
+			$filter = "AND channel = 'app'";
+		}
+
+		if (isset($_GET['webonly'])) {
+			$filter = "AND channel = 'web'";
+		}		
+
 		$table = $this->db->table;
 		$SQLstatement = $this->db->connection->prepare(
 			"SELECT
@@ -133,7 +153,7 @@ class Pushes extends Model
 				round(count(id) / 31,2) as avg_per_day
 			 FROM $table
 			 WHERE DATE(sent_at) BETWEEN :startDate AND :endDate
-			 #AND channel = 'web'
+			 $filter
 			 GROUP BY month
 			 ORDER BY month ASC
 			"
@@ -167,6 +187,16 @@ class Pushes extends Model
 
 	public function clickrate_grouped_by($column = 'topic') {
 
+		$filter = '';
+
+		if (isset($_GET['apponly'])) {
+			$filter = "AND channel = 'app'";
+		}
+
+		if (isset($_GET['webonly'])) {
+			$filter = "AND channel = 'web'";
+		}
+
 		$table = $this->db->table;
 		$SQLstatement = $this->db->connection->prepare(
 			"SELECT if($column is null, 'leer', $column) as $column, 
@@ -181,7 +211,7 @@ class Pushes extends Model
 				sum(opt_outs) as opt_outs
 			 FROM $table
 			 WHERE DATE(sent_at) BETWEEN :startDate AND :endDate
-			 #AND channel = 'web'
+			 $filter
 			 AND $column IS NOT NULL
 			 GROUP BY $column
 			 HAVING notifications >= 10

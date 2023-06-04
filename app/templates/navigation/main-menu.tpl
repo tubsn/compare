@@ -118,6 +118,7 @@
 				<!--<li><a href="/stats/weekly">Brandenburg Board (Weekly)</a></li>-->
 				<!--<li><a href="/teasers">Teaser-Statistiken (LR)</a></li>-->
 				<li><a target="_blank" href="https://datastudio.google.com/reporting/e4aaadbb-dd68-404f-866d-5c9beb52e6d3/page/p_25ynp9bisc">Kündigergründe Board</a></li>
+				<li><a target="_blank" href="https://lookerstudio.google.com/u/0/reporting/e163e3aa-a4d4-42cb-b864-6821bba905a7/page/fAJ0C">Management Board</a></li>
 				<li><a href="/readers/multiple-orders">Mehrfachbestellungen</a></li>
 				<li><a href="/orders/map/local">Abo-Karte</a></li>
 				<li><a href="/readers/map/local">Nutzer-Karte</a></li>

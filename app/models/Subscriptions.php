@@ -8,6 +8,7 @@ use \flundr\cache\RequestCache;
 use \app\models\Plenigo;
 use \app\models\Orders;
 use \app\models\DailyKPIs;
+use \app\models\Conversions;
 
 class Subscriptions extends Model
 {
@@ -53,11 +54,40 @@ class Subscriptions extends Model
 		foreach ($changed['subscriptions'] as $subscription) {
 			if ($subscription['order_id']) {
 				array_push($updatedOrderIDs, $subscription['order_id']);
+
+				// Calculate the Retention Date
+				if ($subscription['subscription_cancellation_date']) {
+					$currentOrder = $Orders->get($subscription['order_id'],['order_date']);
+					$start = new \DateTime(formatDate($currentOrder['order_date'], 'Y-m-d'));
+					$end = new \DateTime(formatDate($subscription['subscription_cancellation_date'], 'Y-m-d'));
+					$interval = $start->diff($end);
+					$subscription['retention'] = $interval->format('%r%a');
+				}
+
 				$Orders->update($subscription, $subscription['order_id']);
 			}
 		}
 
+		foreach ($updatedOrderIDs as $orderID) {
+			$this->update_article_table($orderID);
+		}
+
 		return $updatedOrderIDs;
+
+	}
+
+	private function update_article_table($orderID) {
+
+		$Orders = new Orders();
+		$order = $Orders->get($orderID);
+		if (empty($order)) {return;}
+
+		if (isset($order['article_id'])) {
+			$conversions = new Conversions();
+			$conversions->articleID = $order['article_id'];
+			$conversions->collect();
+			$conversions->update_article();
+		}
 
 	}
 

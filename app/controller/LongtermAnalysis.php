@@ -5,6 +5,7 @@ use flundr\mvc\Controller;
 use flundr\utility\Session;
 use flundr\auth\Auth;
 use flundr\cache\RequestCache;
+use flundr\date\Datepicker;
 
 class LongtermAnalysis extends Controller {
 
@@ -50,7 +51,31 @@ class LongtermAnalysis extends Controller {
 
 	}
 
-	public function brandenburg() {
+	public function brandenburg($overwriteTemplate = null) {
+
+		$templateName = 'stats/portals-bbg';
+		if ($overwriteTemplate) {
+			$templateName = $overwriteTemplate;
+		}
+
+		$datepicker = new Datepicker();
+		$maxAge = '2020-02-01';
+		$monthList = $datepicker->months($maxAge);
+		array_shift($monthList);
+		$this->view->months = $monthList;
+
+		$titleSuffix = ' - aktueller Monat';
+		if (!empty($_GET['month'])) {
+			$selection = $_GET['month'];
+			if (isset($this->view->months[$selection])) {
+				$selectedMonth = $this->view->months[$selection];
+				$this->view->selectedMonth = $selection;
+				$this->view->selectedStart = $selectedMonth['start'];
+				$this->view->selectedEnd = $selectedMonth['end'];
+				$titleSuffix = ' - <em>' . $selection . '</em>';
+			}
+		}
+
 
 		$orderData = $this->Longterm->portal_orders();
 		$salesData = $this->Longterm->portal_SalesKPIs();
@@ -88,9 +113,14 @@ class LongtermAnalysis extends Controller {
 
 		$this->view->title = 'Plus-Angebote der Mediengruppe Brandenburg';
 		$this->view->templates['footer'] = null;
-		$this->view->render('stats/portals-bbg');
+		$this->view->render($templateName);
 
 
+	}
+
+
+	public function brandenburg_customers() {
+		return $this->brandenburg('stats/portals-bbg-single-chart-active');
 	}
 
 

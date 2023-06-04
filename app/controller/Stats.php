@@ -456,6 +456,26 @@ class Stats extends Controller {
 	}
 
 
+	public function avg_orders_by_day() {
+
+		$premiumUsers = $this->DailyKPIs->premium_users();
+		$this->view->premiumAvg = null;
+		$this->view->usersAvg = null;
+		$this->view->premiumUsers = null;
+
+		if ($premiumUsers) {
+			$this->view->premiumUsers = $this->Charts->convert($premiumUsers,1);
+
+			$registeredUsers = array_column($premiumUsers,'subscribers');
+			$allUsers = array_column($premiumUsers,'users');
+			$this->view->usersAvg = round(array_sum($allUsers)/count($allUsers));
+			$this->view->premiumAvg = round(array_sum($registeredUsers)/count($registeredUsers));
+		}
+
+
+		dd($this->view->usersAvg);
+
+	}
 
 
 

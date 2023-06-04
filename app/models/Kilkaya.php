@@ -215,6 +215,7 @@ class Kilkaya
 		return $this->calculate_article_totals($api->response);
 	}
 
+	// I cannot Calculate the avg Mediatime so another Call is needed
 	public function article_mt($id, $pubdate) {
 
 		$api = new KilkayaAPI();

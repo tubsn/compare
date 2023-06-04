@@ -1,22 +1,33 @@
 <main>
 
-<h1 class="text-center"><?=$page['title']?></h1>
-<!--<p class="nt text-center">Hinweis: Für Einige Kennzahlen stehen nicht alle Zeiträume zur Verfügung und sind daher abgeschnitten.</p>-->
-
 <?php 
-$lastMonth = date('Y-m', strtotime('last month'));
-$lastMonthWord = date('M', strtotime('last month'));
+$lastMonth = date('Y-m', strtotime('first day of last month'));
+$lastMonthWord = date('M', strtotime('first day of last month'));
 
 $previousMonth = date('Y-m', strtotime('last month -1 month'));
 $previousMonthWord = date('M', strtotime('last month -1 month'));
 
-$lrSales = $salesData['LR'][date('Y-m', strtotime('last month'))];
-$lrSales1 = $salesData['LR'][date('Y-m', strtotime('last month -1 month'))];
-$lrSales2 = $salesData['LR'][date('Y-m', strtotime('last month -2 month'))];
+$lrSales = $salesData['LR'][date('Y-m', strtotime('first day of last month'))];
+$lrSales1 = $salesData['LR'][date('Y-m', strtotime('first day of last month -1 month'))];
+$lrSales2 = $salesData['LR'][date('Y-m', strtotime('first day of last month -2 month'))];
 
-$mozSales = $salesData['MOZ'][date('Y-m', strtotime('last month'))];
-$mozSales1 = $salesData['MOZ'][date('Y-m', strtotime('last month -1 month'))];
-$mozSales2 = $salesData['MOZ'][date('Y-m', strtotime('last month -2 month'))];
+$mozSales = $salesData['MOZ'][date('Y-m', strtotime('first day of last month'))];
+$mozSales1 = $salesData['MOZ'][date('Y-m', strtotime('first day of last month -1 month'))];
+$mozSales2 = $salesData['MOZ'][date('Y-m', strtotime('first day of last month -2 month'))];
+
+if (isset($selectedStart)) {
+	$lastMonthWord = substr($selectedMonth,0,-5);
+
+	$lrSales = $salesData['LR'][substr($selectedStart,0,7)];
+	$lrSales1 = $salesData['LR'][date('Y-m', strtotime($selectedStart . ' -1 month'))];
+	$lrSales2 = $salesData['LR'][date('Y-m', strtotime($selectedStart . ' -2 month'))];
+
+	$mozSales = $salesData['MOZ'][substr($selectedStart,0,7)];
+	$mozSales1 = $salesData['MOZ'][date('Y-m', strtotime($selectedStart . ' -1 month'))];
+	$mozSales2 = $salesData['MOZ'][date('Y-m', strtotime($selectedStart . ' -2 month'))];
+}
+
+$gesamtActive = $lrSales['active'] + $mozSales['active'];
 
 function diff($value1, $value2){
 	$num = $value1 - $value2;
@@ -36,11 +47,18 @@ function diff($value1, $value2){
 	.moz {color: #0967a8;}
 	.backdrop {opacity: 0.8;}
 	.backdrop:hover {opacity: 1;}
+	.js-portal-select {display:none !important;}
 </style>
 
+<?php include tpl('navigation/month-picker');?>
 
-<div class="col-2" style="grid-template-columns: 1fr 1fr; margin-bottom:1em;">
 
+<h1 class="text-left"><?=$page['title']?> | aktive Abos: <?=gnum($gesamtActive)?></h1>
+<!--<p class="nt text-center">Hinweis: Für Einige Kennzahlen stehen nicht alle Zeiträume zur Verfügung und sind daher abgeschnitten.</p>-->
+
+<div class="col-2" style="grid-template-columns: 3fr 2fr; margin-bottom:1em;">
+
+<figure>
 <table class="fancy neutral wide compact" style="table-layout: fixed; border: 2px solid #404040;">
 
 	<tr>
@@ -96,6 +114,38 @@ function diff($value1, $value2){
 
 </table>
 
+<p style="margin-top: -1em; color: #777; margin-bottom: 1em; font-size: 0.7em; text-align:right;"><i>Tabellendaten zum Stichtag Monatsende</i></p>
+</figure>
+
+
+	<figure>
+		<h3 class="text-center">
+			Netto Zuwachs <small>(LR: <span class="lr"><?=gnum($lrSales['netto'])?></span> | MOZ: <span class="moz"><?=gnum($mozSales['netto'])?></span>)</small>
+		</h3>
+		<?=$charts->create([
+			'metric' => [$charts->cut_left($lr['sales']['netto'],5),
+			 			 $charts->cut_left($moz['sales']['netto'],5),],
+			'dimension' => $charts->cut_left($lr['sales']['dimensions'],5),
+			'color' => ['#df886d', '#0967a8'],
+			'height' => 250,
+			//'legend' => 'top',
+			'area' => false,
+			'stacked' => true,
+			'showValues' => false,
+			'name' => ['LR', 'MOZ'],
+			'template' => 'charts/default_bar_chart',
+		]);?>
+	</figure>
+
+
+
+
+
+
+
+
+
+<!--
 <table class="fancy neutral wide compact backdrop" style="table-layout: fixed;">
 
 	<tr>
@@ -150,107 +200,13 @@ function diff($value1, $value2){
 	</tr>
 
 </table>
-
+-->
 
 </div>
 
 
-<p style="margin-top: -3em; color: #777;margin-bottom: 1em;font-size: 0.7em; text-align:right;"><i>Tabellendaten zum Stichtag Monatsende</i></p>
 
 <hr>
-
-<!--
-<figure style="margin-bottom:2em; overflow-y: hidden;">
-
-	<table class="fancy neutral wide compact" style="table-layout: fixed;">
-
-		<tr>
-			<th style="text-align:right">Produkt / Monat</th>
-			<td style="text-align:center; background-color:#ffb9a4"><i>LR+ | <?=$lastMonthWord?></i></td>
-			<td style="text-align:center; background-color:#9bccee"><i>MOZplus | <?=$lastMonthWord?></i></td>
-			<td style="text-align:center; background-color:#e1e1e1; border-right:1px solid black"><b><i>BBG gesamt | <?=$lastMonthWord?></i></b></td>
-			<td style="text-align:center; background-color:#ffb9a4"><i>LR+ | <?=$previousMonthWord?></i></td>
-			<td style="text-align:center; background-color:#9bccee"><i>MOZplus | <?=$previousMonthWord?></i></td>
-			<td style="text-align:center; background-color:#e1e1e1"><b><i>BBG gesamt | <?=$previousMonthWord?></i></b></td>
-
-		</tr>
-
-		<tr>
-			<th style="text-align:right">Conversions (Bestellungen)</th>
-
-			<td class="text-center"><?=gnum($lrSales['active'])?><?=diff($lrSales['active'], $lrSales1['active'])?></td>
-			<td class="text-center"><?=gnum($mozSales['active'])?><?=diff($mozSales['active'], $mozSales1['active'])?></td>
-			<td class="text-center" style="border-right:1px solid black"><?=gnum($lrSales['active'] + $mozSales['active'])?>
-				<?=diff($lrSales['active'] + $mozSales['active'], $lrSales1['active'] + $mozSales1['active'])?></td>
-
-			<td class="text-center"><?=gnum($lrSales1['active'])?><?=diff($lrSales1['active'], $lrSales2['active'])?></td>
-			<td class="text-center"><?=gnum($mozSales1['active'])?><?=diff($mozSales1['active'], $mozSales2['active'])?></td>
-			<td class="text-center"><?=gnum($lrSales1['active'] + $mozSales1['active'])?>
-				<?=diff($lrSales1['active'] + $mozSales1['active'], $lrSales2['active'] + $mozSales2['active'])?></td>
-		</tr>		
-
-		<tr>
-			<th style="text-align:right">Proben</th>
-			<td class="text-center"><?=gnum($lrSales['trial1month'])?><?=diff($lrSales['trial1month'], $lrSales1['trial1month'])?></td>
-			<td class="text-center"><?=gnum($mozSales['trial1month'])?><?=diff($mozSales['trial1month'], $mozSales1['trial1month'])?></td>
-			<td class="text-center" style="border-right:1px solid black"><?=gnum($lrSales['trial1month'] + $mozSales['trial1month'])?>
-				<?=diff($lrSales['trial1month'] + $mozSales['trial1month'], $lrSales1['trial1month'] + $mozSales1['trial1month'])?></td>
-
-			<td class="text-center"><?=gnum($lrSales1['trial1month']+$lrSales1['trial3for3'])?><?=diff($lrSales1['trial1month']+$lrSales1['trial3for3'], $lrSales2['trial1month']+$lrSales2['trial3for3'])?></td>
-			<td class="text-center"><?=gnum($mozSales1['trial1month']+$mozSales1['trial3for3'])?><?=diff($mozSales1['trial1month']+$mozSales1['trial3for3'], $mozSales2['trial1month']+$mozSales2['trial3for3'])?></td>
-			<td class="text-center"><?=gnum($lrSales1['trial1month']+$lrSales1['trial3for3'] + $mozSales1['trial1month']+$mozSales1['trial3for3'])?>
-				<?=diff($lrSales1['trial1month']+$lrSales1['trial3for3']+$mozSales1['trial1month']+$mozSales1['trial3for3'],
-				 $lrSales2['trial1month']+$lrSales2['trial3for3']+$mozSales2['trial1month']+$mozSales2['trial3for3'])?></td>
-
-
-		</tr>
-
-		<tr>
-			<th style="text-align:right">Jahresabos</th>
-			<td class="text-center"><?=gnum($lrSales['yearly'])?><?=diff($lrSales['yearly'], $lrSales1['yearly'])?></td>
-			<td class="text-center"><?=gnum($mozSales['yearly'])?><?=diff($mozSales['yearly'], $mozSales1['yearly'])?></td>
-			<td class="text-center" style="border-right:1px solid black"><?=gnum($lrSales['yearly'] + $mozSales['yearly'])?>
-				<?=diff($lrSales['yearly'] + $mozSales['yearly'], $lrSales1['yearly'] + $mozSales1['yearly'])?></td>
-
-			<td class="text-center"><?=gnum($lrSales1['yearly'])?><?=diff($lrSales1['yearly'], $lrSales2['yearly'])?></td>
-			<td class="text-center"><?=gnum($mozSales1['yearly'])?><?=diff($mozSales1['yearly'], $mozSales2['yearly'])?></td>
-			<td class="text-center"><?=gnum($lrSales1['yearly'] + $mozSales1['yearly'])?>
-				<?=diff($lrSales1['yearly'] + $mozSales1['yearly'], $lrSales2['yearly'] + $mozSales2['yearly'])?></td>
-		</tr>
-
-		<tr>
-			<th style="text-align:right">Vollabos</th>
-
-			<td class="text-center"><?=gnum($lrSales['paying'])?><?=diff($lrSales['paying'], $lrSales1['paying'])?></td>
-			<td class="text-center"><?=gnum($mozSales['paying'])?><?=diff($mozSales['paying'], $mozSales1['paying'])?></td>
-			<td class="text-center" style="border-right:1px solid black"><?=gnum($lrSales['paying'] + $mozSales['paying'])?>
-				<?=diff($lrSales['paying'] + $mozSales['paying'], $lrSales1['paying'] + $mozSales1['paying'])?></td>
-
-			<td class="text-center"><?=gnum($lrSales1['paying'])?><?=diff($lrSales1['paying'], $lrSales2['paying'])?></td>
-			<td class="text-center"><?=gnum($mozSales1['paying'])?><?=diff($mozSales1['paying'], $mozSales2['paying'])?></td>
-			<td class="text-center"><?=gnum($lrSales1['paying'] + $mozSales1['paying'])?>
-				<?=diff($lrSales1['paying'] + $mozSales1['paying'], $lrSales2['paying'] + $mozSales2['paying'])?></td>
-		</tr>
-
-		<tr>
-			<th style="text-align:right">Aktive Kunden</th>
-			<td class="text-center"><?=gnum($lrSales['active'])?><?=diff($lrSales['active'], $lrSales1['active'])?></td>
-			<td class="text-center"><?=gnum($mozSales['active'])?><?=diff($mozSales['active'], $mozSales1['active'])?></td>
-			<td class="text-center" style="border-right:1px solid black"><?=gnum($lrSales['active'] + $mozSales['active'])?>
-				<?=diff($lrSales['active'] + $mozSales['active'], $lrSales1['active'] + $mozSales1['active'])?></td>
-
-			<td class="text-center"><?=gnum($lrSales1['active'])?><?=diff($lrSales1['active'], $lrSales2['active'])?></td>
-			<td class="text-center"><?=gnum($mozSales1['active'])?><?=diff($mozSales1['active'], $mozSales2['active'])?></td>
-			<td class="text-center"><?=gnum($lrSales1['active'] + $mozSales1['active'])?>
-				<?=diff($lrSales1['active'] + $mozSales1['active'], $lrSales2['active'] + $mozSales2['active'])?></td>
-		</tr>
-
-
-	</table>
-
-</figure>
--->
-
 
 
 <!--<h1 class="text-center">Kundenentwicklung</h1>-->

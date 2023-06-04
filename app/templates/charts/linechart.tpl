@@ -56,7 +56,7 @@ let chartOptions = {
 		crosshairs: {show: true},
 		tooltip: {enabled: false}
 	},
-	grid: {row: {colors: ['#e5e5e5', 'transparent'], opacity: 0.2}},
+	grid: {row: {colors: ['#e5e5e5', 'transparent'], opacity: 0.2}, xaxis: {lines: {show: false}}},
 	legend: {show:false},
 
 }

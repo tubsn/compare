@@ -2,7 +2,7 @@
 
 <?php include tpl('orders/live/date-selection');?>
 
-<h1><?=$page['title'] ?? 'Bestellungen'?>: <?=count($orders)?></h1>
+<h1><?=$page['title'] ?? 'Bestellungen'?>: <?=count($orders)?> | Umsatz: <?=gnum($revenue ?? 0,2)?> €</h1>
 
 <table class="fancy js-sortable wide">
 <thead>

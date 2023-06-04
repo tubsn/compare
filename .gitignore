@@ -11,6 +11,7 @@
 /public/tv
 /public/maps
 /public/assets
+/public/user.ini
 .env
 .env*
 composer.lock

@@ -6,6 +6,7 @@ switch (PORTAL) {
 
 		define('PORTAL_URL', 'https://www.lr-online.de'); // used for Article Imports
 		define('PORTAL_URL_SHORT', 'www.lr.de');
+		define('PORTAL_PUBLISHER_ID', 'lausitzer');
 		define('PORTAL_EPAPER_URL', 'https://epaper.lr-online.de');
 		define('PORTAL_NAME', 'LR');
 		define('PORTAL_COLOR', '#df886d');
@@ -289,11 +290,45 @@ switch (PORTAL) {
 
 		define('PORTAL_URL', 'https://www.moz.de');
 		define('PORTAL_URL_SHORT', 'www.moz.de');
+		define('PORTAL_PUBLISHER_ID', 'maerkisches');
 		define('PORTAL_EPAPER_URL', 'https://epaper.moz.de');
 		define('PORTAL_NAME', 'MOZ');
 		define('PORTAL_COLOR', '#0967a8');
 
 		define('APP_PRODUCTS', [
+			'epaper.moz.hen',
+			'epaper.moz.ora',
+			'epaper.moz.gra',
+			'epaper.moz.neu',
+			'epaper.moz.fra',
+			'epaper.moz.see',
+			'epaper.moz.eih',
+			'epaper.moz.erk',
+			'epaper.moz.fue',
+			'epaper.moz.bee',
+			'epaper.moz.str',
+			'epaper.moz.ber',
+			'epaper.moz.frw',
+			'epaper.moz.ebw',
+			'epaper.moz.swt',
+			'epaper.moz.ang',
+			'ir.mozonline.product.year',
+			'EHEN.monatspass',
+			'EORA.monatspass',
+			'EGRA.monatspass',
+			'ENEU.monatspass',
+			'EFRA.monatspass',
+			'ESEE.monatspass',
+			'EEIH.monatspass',
+			'EERK.monatspass',
+			'EFUE.monatspass',
+			'EBEE.monatspass',
+			'ESTR.monatspass',
+			'EBER.monatspass',
+			'EFRW.monatspass',
+			'EEBW.monatspass',
+			'ESWT.monatspass',
+			'EANG.monatspass',
 			'ir.mozonline.product.year',
 		]);
 
@@ -531,12 +566,36 @@ switch (PORTAL) {
 
 		define('PORTAL_URL', 'https://www.swp.de');
 		define('PORTAL_URL_SHORT', 'www.swp.de');
+		define('PORTAL_PUBLISHER_ID', 'suedwestpresse');		
 		define('PORTAL_EPAPER_URL', 'https://epaper.swp.de');
 		define('PORTAL_NAME', 'SWP');
 		define('PORTAL_COLOR', '#e82560');
 
 		define('APP_PRODUCTS', [
+			'epaper_zak_monatsabo',
+			'ESZAK.monatspass',
 			'ir.swponline.product.year',
+			'epaper_hoz_monatsabo',
+			'epaper_alb_monatsabo',
+			'epaper_rn_monatsabo',
+			'epaper_muv_monatsabo',
+			'epaper_nkr_monatsabo',
+			'epaper_hot_monatsabo',
+			'epaper_ht_monatsabo',
+			'epaper_gz_monatsabo',
+			'epaper_nwz_monatsabo',
+			'epaper_swp_monatsabo',
+			'ir.swponline.product.year',
+			'EHOZ.monatspass',
+			'EALB.monatspass',
+			'ERN.monatspass',
+			'EMUV.monatspass',
+			'ENKR.monatspass',
+			'EHOT.monatspass',
+			'EHT.monatspass',
+			'EGZ.monatspass',
+			'ENWZ.monatspass',
+			'ESWP.monatspass',
 		]);
 
 		define('IMPORT_FEEDS', [
@@ -548,7 +607,7 @@ switch (PORTAL) {
 			'https://www.swp.de/lokales/geislingen/?_XML=RSS',
 			'https://www.swp.de/lokales/schwaebisch-hall/?_XML=RSS',
 			'https://www.swp.de/lokales/crailsheim/?_XML=RSS',
-			'https://www.swp.de/lokales/thema/gaildorf?_XML=RSS',
+			'https://www.swp.de/thema/gaildorf/?_XML=RSS',
 			'https://www.swp.de/lokales/ehingen/?_XML=RSS',
 			'https://www.swp.de/lokales/metzingen/?_XML=RSS',
 			'https://www.swp.de/lokales/reutlingen/?_XML=RSS',

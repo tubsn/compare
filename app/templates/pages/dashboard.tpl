@@ -1,7 +1,7 @@
 <main>
 
-<!--<p class="box text-center mbig"><b>Hinweis:</b> zur Zeit gibt es vermehrt unterschiede in der Datenmessung von Kilkaya und Google Analytics. Dies betrifft <b>vorallem Pageviews und Subscriberviews</b>, die Conversiondaten sind davon nicht betroffen. Es ist schwer zu sgaen welche Daten die "besseren" sind. Wir versuchen das Problem einzugrenzen.</p>
--->
+<!--<p class="box text-center mbig"><b>Hinweis:</b> seit dem 7.März gibt es Trackingprobleme bei den Daily Active Subscribers. Wir aktualisieren die Daten schnellstmöglich.</p>-->
+
 
 <?php include tpl('navigation/date-picker');?>
 

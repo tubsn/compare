@@ -16,7 +16,7 @@
 				<option <?=(session('timeframe') == 'aktuelle Woche') ? 'selected' : ''?>>aktuelle Woche</option>
 				<option <?=(session('timeframe') == 'letzte Woche') ? 'selected' : ''?>>letzte Woche</option>
 				<option <?=(session('timeframe') == 'vorletzte Woche') ? 'selected' : ''?>>vorletzte Woche</option>
-
+				<option <?=(session('timeframe') == 'letzter Monat') ? 'selected' : ''?>>letzter Monat</option>
 			</select>
 		</form>
 

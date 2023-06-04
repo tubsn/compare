@@ -10,55 +10,22 @@ use app\importer\CleverpushAPI;
 
 class Test extends Controller {
 
+	//dd($this->Readers->drive_active_user_segments('2023-03-06','2023-03-10'));
+	//$readers = $this->Readers->drive_active_user_segments_newdb('2023-03-06','2023-03-10');
+	//dd($this->Readers->import_user_segments('2023-03-01', '2023-03-16'));
+
 	public function __construct() {
 		$this->view('DefaultLayout');
 		$this->models('Articles,ArticleMeta,Orders,Subscriptions,Conversions,Analytics,Charts,Readers,Plenigo,Cleverpush,Orders,DailyKPIs,Kilkaya,Pushes');
 	}
 
+	public function importstuff() {
+		//dd($this->Readers->import_user_segments('2023-05-25', '2023-05-27'));
+		//$this->DailyKPIs->import(3);
+	}
+
 
 	public function test() {
-
-		$this->Subscriptions->update_last_days();
-
-		//$this->DailyKPIs->count_conversiontable_to_daily_kpis('today', 'today');
-
-		//$this->Readers->import_user_segments('2023-01-02', '2023-01-04');
-
-	}
-
-
-
-
-	public function import_userneeds() {
-
-		$this->ArticleMeta->import_drive_data();
-
-		///$articles = $this->Articles->list_all_userneeds();
-		//dd($articles);
-
-		$unsetIDs = $this->Articles->get_unset_userneed_ids();
-		$userneeds = $this->ArticleMeta->userneeds_for($unsetIDs);
-
-		// No new Topics found
-		if (empty($userneeds)) {
-			echo 'keine neuen Drive Userneeds zugeordnet | ' . date('H:i:s') . "\r\n";
-			return null;
-		}
-
-		$userneeds = array_filter($userneeds);
-
-
-		foreach ($userneeds as $id => $userneed) {
-			$this->Articles->update(['userneed' => $userneed], $id);
-		}
-
-		echo 'Drive Userneeds zugeordnet | ' . date('H:i:s') . "\r\n";
-
-	}
-
-
-
-	public function kilkayaimporttest() {
 
 
 
@@ -89,17 +56,7 @@ class Test extends Controller {
 
 		dd($stats);
 
-		//$this->DailyKPIs->import();
-		//$this->Readers->import_user_segments('2022-11-21', '2022-11-23');
-
 	}
-
-
-
-	public function reader($id) {
-		dd($this->Readers->live_from_api($id));
-	}
-
 
 
 }

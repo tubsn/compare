@@ -219,81 +219,33 @@ class ArticleMeta extends Model
 
 	public function import_drive_data() {
 		$drive = $this->drive_data_from_bigquery();
-		$drive = array_map([$this, 'map_drive_data'], $drive);
-	}
 
-
-	private function map_drive_data($data) {
-
-		$data = ['article_id' => $data['article_publisher_id']] + $data;
-		unset($data['article_publisher_id']);
-
-		if (!empty($data['categories']['topic'])) {
-			$data['type'] =  "'" . $data['categories']['topic'] . "'";
+		foreach ($drive as $article) {
+			$this->create_or_update($article);
 		}
-		else {$data['type'] = 'null' ;}
-
-		if (!empty($data['categories']['user_need'])) {
-			$data['userneed'] =  "'" . $data['categories']['user_need'] . "'";
-		}
-		else {$data['userneed'] = 'null' ;}
-
-		$data['article_pad'] = "'" . json_encode($data['article_pad']) . "'";
-		$data['article_preview_pad'] = "'" . json_encode($data['article_preview_pad']) . "'";
-		$data['article_emotion'] = "'" . json_encode($data['article_emotion']) . "'";
-		$data['article_preview_emotion'] = "'" . json_encode($data['article_preview_emotion']) . "'";
-		$data['categories'] = "'" . json_encode($data['categories']) . "'";
-
-		$this->save($data);
 
 	}
-
-
-	private function save($data) {
-
-		$table = $this->db->table;
-		$keys = array_keys($data);
-
-		$data = implode(", ",$data);
-		$keys = implode(", ",$keys);
-
-		$stmt = $this->db->connection->prepare(
-			"INSERT INTO `$table` ($keys) VALUES ($data)
-			ON DUPLICATE KEY UPDATE
-			`article_id`=VALUES(`article_id`),
-			`article_pad`=VALUES(`article_pad`),
-			`article_preview_pad`=VALUES(`article_preview_pad`),
-			`article_emotion`=VALUES(`article_emotion`),
-			`article_preview_emotion`=VALUES(`article_preview_emotion`),
-			`categories`=VALUES(`categories`),
-			`type`=VALUES(`type`)"
-		);
-
-		$stmt->execute();
-
-	}
-
 
 	private function drive_data_from_bigquery() {
 		$bigQueryApi = new BigQuery;
 		$publisher = PORTAL;
 		$query =
 			"SELECT
-			article_publisher_id,
+			article_publisher_id as article_id,
 			article_length,
 			header_length,
 			number_of_words,
-			article_pad,
-			article_preview_pad,
-			article_emotion,
-			article_preview_emotion,
-			categories
-			FROM `artikel-reports-tool.DPA_Drive.dpa_drive_articles`
+			article_locality,
+			article_genre,
+			article_user_need as userneed,
+			article_topic as type
+			FROM `artikel-reports-tool.DPA_DriveV2.dpa_drive_articles`
 			WHERE publisher = '$publisher'
-			and published_at_local >= DATE_SUB(CURRENT_DATE, INTERVAL 3 DAY)
+			and published_at_local >= DATE_SUB(CURRENT_DATE, INTERVAL 4 DAY)
 			LIMIT 5000";
 		$data = $bigQueryApi->sql($query);
 		return  $data;
 	}
+
 
 }

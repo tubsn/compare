@@ -97,9 +97,14 @@ class Plenigo
 		$mapper = new PlenigoAppStoreMapping();
 
 		$appStoreOrders = $this->api->app_store_apple($start,$end);
+
+		if (empty($appStoreOrders)) {$appStoreOrders = [];}
 		$appStoreOrders = array_map([$mapper, 'map_appstore_order'], $appStoreOrders);
 
 		$playStoreOrders = $this->api->app_store_google($start,$end);
+
+
+		if (empty($playStoreOrders)) {$playStoreOrders = [];}
 		$playStoreOrders = array_map([$mapper, 'map_playstore_order'], $playStoreOrders);
 
 		$appOrders = $playStoreOrders + $appStoreOrders;

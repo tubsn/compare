@@ -247,9 +247,24 @@ class Readers extends Model
 	}
 
 	public function import_user_segments($from, $to) {
+
+		$dailyKPIs = new DailyKPIs();
+		$days = $this->drive_active_user_segments($from, $to);
+
+		foreach ($days as $day) {
+			//$date = $day['date']; unset($day['date']);
+			$dailyKPIs->create_or_update($day);
+		}
+
+		return $days;
+	}
+
+	public function import_user_segments_old($from, $to) {
 		$segments = $this->drive_active_user_segments($from, $to);
 		$this->save_segments_to_db($segments);
+		return $segments;
 	}
+
 
 	private function save_segments_to_db($csv) {
 
@@ -294,7 +309,48 @@ class Readers extends Model
 
 	}
 
-	private function drive_active_user_segments($from, $to) {
+	public function drive_active_user_segments($from, $to) {
+
+		$bigQueryApi = new BigQuery;
+		$publisher = PORTAL_PUBLISHER_ID;
+
+		$query =
+			"
+			SELECT DATE(`start_tstamp`) AS `date`,
+
+			count(distinct domain_userid) as users,
+			count(distinct if(user_type = 'premium', domain_userid, null)) as subscribers,
+
+			count(distinct if(user_engagement_group = 'champion', domain_userid, null)) as champions,
+			count(distinct if(user_engagement_group = 'champion' and user_engagement_group = 'champion', domain_userid, null)) as champions_reg,
+
+			count(distinct if(user_engagement_group = 'loyal', domain_userid, null)) as loyals,
+			count(distinct if(user_engagement_group = 'premium' and user_engagement_group = 'loyal', domain_userid, null)) as loyals_reg,
+
+			count(distinct if(user_engagement_group = 'high-usage-irregular', domain_userid, null)) as high_usage_irregulars,
+			count(distinct if(user_engagement_group = 'premium' and user_engagement_group = 'high-usage-irregular', domain_userid, null)) as high_usage_irregulars_reg,
+
+			count(distinct if(user_engagement_group = 'low-usage-irregular', domain_userid, null)) as low_usage_irregulars,
+			count(distinct if(user_engagement_group = 'premium' and user_engagement_group = 'low-usage-irregular', domain_userid, null)) as low_usage_irregulars_reg,
+
+			count(distinct if(user_engagement_group = 'fly-by', domain_userid, null)) as flybys,
+			count(distinct if(user_engagement_group = 'premium' and user_engagement_group = 'fly-by', domain_userid, null)) as flybys_reg,
+
+			FROM `artikel-reports-tool.DPA_DriveV2.dpa_drive_sessions` 
+			WHERE DATE(start_tstamp) >= '$from' AND DATE(start_tstamp) <= '$to'
+			AND publisher_id = '$publisher'
+			GROUP BY date
+			ORDER BY date ASC
+			LIMIT 5000
+		";
+
+		$data = $bigQueryApi->sql($query);
+		return  $data;
+
+	}
+
+
+	private function drive_active_user_segments_old_drive_DB($from, $to) {
 
 		$bigQueryApi = new BigQuery;
 		$publisher = PORTAL;
@@ -326,7 +382,6 @@ class Readers extends Model
 
 		$data = $bigQueryApi->sql($query);
 		return  $data;
-
 
 	}
 
